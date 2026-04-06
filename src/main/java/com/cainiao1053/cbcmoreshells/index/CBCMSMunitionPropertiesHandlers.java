@@ -22,6 +22,7 @@ public class CBCMSMunitionPropertiesHandlers {
 	public static final RackedShrapnelProjectilePropertiesHandler RACKED_SHRAPNEL_PROJECTILE = new RackedShrapnelProjectilePropertiesHandler();
 	public static final DualCannonPropertiesHandler DUAL_CANNON_PROPERTIES = new DualCannonPropertiesHandler();
 	public static final DualCannonIncendiaryPropertiesHandler DUAL_CANNON_INCENDIARY_PROPERTIES = new DualCannonIncendiaryPropertiesHandler();
+	public static final ReductiveTorpedoPropertiesHandler REDUCTIVE_TORPEDO_PROJECTILE = new ReductiveTorpedoPropertiesHandler();
 
 	public static final AntiairAutocannonProjectilePropertiesHandler ANTIAIR_AUTOCANNON = new AntiairAutocannonProjectilePropertiesHandler();
 

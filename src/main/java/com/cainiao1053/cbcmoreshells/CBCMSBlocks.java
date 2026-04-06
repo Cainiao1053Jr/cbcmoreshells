@@ -132,6 +132,8 @@ import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.racked_torpedo.
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.racked_torpedo.RackedTorpedoBlockItem;
 import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.medium_range_torpedo.MediumRangeTorpedoBlock;
 import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.medium_range_torpedo.MediumRangeTorpedoBlockItem;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reductive_medium_range_torpedo.ReductiveMediumRangeTorpedoBlock;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reductive_medium_range_torpedo.ReductiveMediumRangeTorpedoBlockItem;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.content.decoration.copycat.CopycatPanelBlock;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
@@ -579,6 +581,19 @@ public class CBCMSBlocks {
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Long Range Shrapnel Torpedo")
 			.item(LongRangeShrapnelTorpedoBlockItem::new)
+			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
+			.build()
+			.register();
+
+	public static final BlockEntry<ReductiveMediumRangeTorpedoBlock> REDUCTIVE_MEDIUM_RANGE_TORPEDO = REGISTRATE
+			.block("reductive_medium_range_torpedo", ReductiveMediumRangeTorpedoBlock::new)
+			.transform(shell(MapColor.COLOR_YELLOW))
+			.transform(axeOrPickaxe())
+			.transform(CBCBuilderTransformers.projectile("projectile/reductive_medium_range_torpedo"))
+			.transform(CBCBuilderTransformers.safeNbt())
+			.loot(CBCBuilderTransformers.shellLoot())
+			.lang("Medium Range Torpedo")
+			.item(ReductiveMediumRangeTorpedoBlockItem::new)
 			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
 			.build()
 			.register();

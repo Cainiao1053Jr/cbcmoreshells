@@ -4,6 +4,8 @@ import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.DualCannonBlock;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.equipments.DualCannonChargerAttachment;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.material.DualCannonMaterialProperties;
+import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.ReductiveTorpedoProperties;
+import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.TorpedoProperties;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.config.DualCannonIncendiaryProperties;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.config.DualCannonProperties;
 import com.simibubi.create.foundation.item.TooltipHelper;
@@ -136,14 +138,41 @@ public class CBCMSTooltip {
 	}
 
 	public static void appendTorpedoInfo(ItemStack stack, @Nullable Level level, List<Component> tooltip,
-											 TooltipFlag flag, float torpSpeed, float buoyancyFactor, float lifetime) {
+										 TooltipFlag flag, TorpedoProperties properties) {
 		if (!Screen.hasShiftDown()) {
 			return;
 		}
+		float torpSpeed = properties.torpedoProperties().torpedoSpeed();
+		float buoyancyFactor = properties.torpedoProperties().buoyancyFactor();
+		int lifetime = properties.lifetime();
+		int explosiveCooldown = properties.torpedoProperties().explosionCooldown();
+		int reloadTime = properties.torpedoProperties().reloadTime();
 		TooltipHelper.Palette palette = getPalette(level, stack);
 		String key1 = stack.getDescriptionId() + ".tooltip.torpInfo";
 		tooltip.add(Components.translatable(key1).withStyle(ChatFormatting.GRAY));
-		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main", String.format("%.1f",torpSpeed*38.8),buoyancyFactor,String.format("%.1f",lifetime*torpSpeed)), palette.primary(), palette.highlight(), 1));
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main", String.format("%.1f",torpSpeed*38.8),
+				buoyancyFactor,String.format("%.1f",lifetime*torpSpeed),String.format("%.1f",explosiveCooldown*torpSpeed), String.format("%.1f",((float)reloadTime /20))
+		), palette.primary(), palette.highlight(), 1));
+	}
+
+	public static void appendReductiveTorpedoInfo(ItemStack stack, @Nullable Level level, List<Component> tooltip,
+										 TooltipFlag flag, ReductiveTorpedoProperties properties) {
+		if (!Screen.hasShiftDown()) {
+			return;
+		}
+		float torpSpeed = properties.torpedoProperties().torpedoSpeed();
+		float buoyancyFactor = properties.torpedoProperties().buoyancyFactor();
+		int lifetime = properties.lifetime();
+		int explosiveCooldown = properties.torpedoProperties().explosionCooldown();
+		float reduction = properties.reductiveProjectileProperties().percentReduction();
+		int reloadTime = properties.torpedoProperties().reloadTime();
+		TooltipHelper.Palette palette = getPalette(level, stack);
+		String key1 = stack.getDescriptionId() + ".tooltip.torpInfo";
+		tooltip.add(Components.translatable(key1).withStyle(ChatFormatting.GRAY));
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main", String.format("%.1f",torpSpeed*38.8),
+				buoyancyFactor,String.format("%.1f",lifetime*torpSpeed),String.format("%.1f",explosiveCooldown*torpSpeed),String.format("%.1f",((float)reloadTime /20)),
+				String.format("%.1f",reduction)
+		), palette.primary(), palette.highlight(), 1));
 	}
 
 	public static void appendBallisticInfo(ItemStack stack, @Nullable Level level, List<Component> tooltip,

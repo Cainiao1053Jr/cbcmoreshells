@@ -37,7 +37,7 @@ public class MediumRangeTorpedoProjectile extends FuzedCannonTorpedoProjectile {
 	@Override
 	protected void detonate(Position position) {
 		float explosivePower = this.getAllProperties().explosion().explosivePower();
-		if (getTickInWater() > 30){explosivePower *=4;}
+		if (normalDetonate()){explosivePower *=4;}
 
 		ShellExplosion explosion = new ShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
 			position.y(), position.z(), explosivePower, false,

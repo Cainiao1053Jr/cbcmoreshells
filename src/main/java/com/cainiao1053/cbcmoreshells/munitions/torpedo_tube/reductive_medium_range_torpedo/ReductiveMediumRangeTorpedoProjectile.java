@@ -1,33 +1,36 @@
-package com.cainiao1053.cbcmoreshells.munitions.big_cannon.sharpnel_torpedo;
+package com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reductive_medium_range_torpedo;
+
+import javax.annotation.Nonnull;
 
 import com.cainiao1053.cbcmoreshells.CBCMSBlocks;
-import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
 import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
+import com.cainiao1053.cbcmoreshells.munitions.big_cannon.AbstractCannonTorpedoProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.big_cannon.AbstractReductiveTorpedoProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.FuzedCannonTorpedoProjectile;
-import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.SharpnelTorpedoProperties;
+import com.cainiao1053.cbcmoreshells.munitions.big_cannon.ShellessFuzedBigCannonProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.BigCannonShellessShellProperties;
+import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.ReductiveTorpedoProperties;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.TorpedoProjectilePropertiesComponent;
+import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.TorpedoProperties;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.Vec3;
 import rbasamoyai.createbigcannons.CreateBigCannons;
 import rbasamoyai.createbigcannons.config.CBCConfigs;
 import rbasamoyai.createbigcannons.munitions.ShellExplosion;
 import rbasamoyai.createbigcannons.munitions.big_cannon.config.BigCannonFuzePropertiesComponent;
+//import rbasamoyai.createbigcannons.munitions.big_cannon.config.BigCannonProjectilePropertiesComponent;
 import rbasamoyai.createbigcannons.munitions.config.components.BallisticPropertiesComponent;
 import rbasamoyai.createbigcannons.munitions.config.components.EntityDamagePropertiesComponent;
-import rbasamoyai.createbigcannons.munitions.fragment_burst.CBCProjectileBurst;
 
-import javax.annotation.Nonnull;
-
-public class SharpnelTorpedoProjectile extends FuzedCannonTorpedoProjectile {
+public class ReductiveMediumRangeTorpedoProjectile extends AbstractReductiveTorpedoProjectile {
 
 	protected int lifetime = this.getAllProperties().lifetime();
 
-	public SharpnelTorpedoProjectile(EntityType<? extends SharpnelTorpedoProjectile> type, Level level) {
+	public ReductiveMediumRangeTorpedoProjectile(EntityType<? extends ReductiveMediumRangeTorpedoProjectile> type, Level level) {
 		super(type, level);
 	}
 
@@ -35,24 +38,24 @@ public class SharpnelTorpedoProjectile extends FuzedCannonTorpedoProjectile {
 
 	@Override
 	protected void detonate(Position position) {
-		Vec3 oldDelta = this.getDeltaMovement().normalize().scale(4);
-		SharpnelTorpedoProperties properties = this.getAllProperties();
-		int burstCount = 0;
-		if (normalDetonate()){burstCount =properties.torpedoBurst().burstProjectileCount();}
+		float explosivePower = this.getAllProperties().explosion().explosivePower();
+		if (normalDetonate()){
+			explosivePower *=4;
+			if(explodeOnShip(this.position(), this.level())){
+				reduceReloadTime();
+				playSoundOnHit(this.level());
+			}
+		}
 
-		ShellExplosion explosion = new ShellExplosion(this.level(), null, this.indirectArtilleryFire(false), position.x(),
-				position.y(), position.z(), properties.explosion().explosivePower(), false,
-				CBCConfigs.SERVER.munitions.damageRestriction.get().explosiveInteraction());
-
-
+		ShellExplosion explosion = new ShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
+			position.y(), position.z(), explosivePower, false,
+			CBCConfigs.SERVER.munitions.damageRestriction.get().explosiveInteraction());
 		CreateBigCannons.handleCustomExplosion(this.level(), explosion);
-		CBCProjectileBurst.spawnConeBurst(this.level(), CBCMSEntityTypes.TORPEDO_BURST.get(), new Vec3(position.x(), position.y(), position.z()),
-				oldDelta, burstCount, properties.torpedoBurst().burstSpread());
 	}
 
 	@Override
 	public BlockState getRenderedBlockState() {
-		return CBCMSBlocks.SHARPNEL_TORPEDO.getDefaultState().setValue(BlockStateProperties.FACING, Direction.NORTH);
+		return CBCMSBlocks.MEDIUM_RANGE_TORPEDO.getDefaultState().setValue(BlockStateProperties.FACING, Direction.NORTH);
 	}
 
 	@Nonnull
@@ -86,8 +89,8 @@ public class SharpnelTorpedoProjectile extends FuzedCannonTorpedoProjectile {
 		return this.getAllProperties().ballistics();
 	}
 
-	protected SharpnelTorpedoProperties getAllProperties() {
-		return CBCMSMunitionPropertiesHandlers.SHRAPNEL_TORPEDO_PROJECTILE.getPropertiesOf(this);
+	protected ReductiveTorpedoProperties getAllProperties() {
+		return CBCMSMunitionPropertiesHandlers.REDUCTIVE_TORPEDO_PROJECTILE.getPropertiesOf(this);
 	}
 
 }

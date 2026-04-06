@@ -1,13 +1,16 @@
 package com.cainiao1053.cbcmoreshells.munitions.big_cannon;
 
+import com.cainiao1053.cbcmoreshells.cannon_control.contraption.MountedTorpedoTubeContraption;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.TorpedoProjectilePropertiesComponent;
 import com.mojang.math.Constants;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
@@ -241,6 +244,16 @@ public abstract class AbstractCannonTorpedoProjectile extends AbstractCannonProj
 		return new ImpactResult(outcome, shatter);
 	}
 
+	public void onShoot(MountedTorpedoTubeContraption contraption, ServerLevel level){}
+
+	public BlockPos getBreechPos(MountedTorpedoTubeContraption contraption){
+		Direction pushDirection = contraption.initialOrientation();
+		Direction extractDirection = pushDirection.getOpposite();
+		BlockPos startPos = contraption.getStartPos();
+		BlockPos breechPos = startPos.relative(extractDirection);
+		return breechPos;
+	}
+
 	@Override
 	protected DamageSource getEntityDamage(Entity entity) {
 		return new CannonDamageSource(CannonDamageSource.getDamageRegistry(this.level()).getHolderOrThrow(CBCDamageTypes.BIG_CANNON_PROJECTILE), this.getDamageProperties().ignoresEntityArmor());
@@ -250,6 +263,12 @@ public abstract class AbstractCannonTorpedoProjectile extends AbstractCannonProj
 	public float minimumChargePower() { return this.getBigCannonProjectileProperties().minimumChargePower(); }
 	public boolean canSquib() { return this.getBigCannonProjectileProperties().canSquib(); }
 	public float addedRecoil() { return this.getBigCannonProjectileProperties().addedRecoil(); }
+	public int getReloadTime(){
+		return this.getBigCannonProjectileProperties().reloadTime();
+	}
+	public int getExplosionCooldown(){
+		return this.getBigCannonProjectileProperties().explosionCooldown();
+	}
 
 	public float getBuoyancyFactor(){return this.getBigCannonProjectileProperties().buoyancyFactor();}
 	public float getTorpedoSpeed(){return this.getBigCannonProjectileProperties().torpedoSpeed();}

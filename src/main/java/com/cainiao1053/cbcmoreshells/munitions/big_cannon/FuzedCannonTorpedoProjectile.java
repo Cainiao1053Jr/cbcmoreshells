@@ -141,6 +141,10 @@ public abstract class FuzedCannonTorpedoProjectile extends AbstractCannonTorpedo
 		return this.tickInWater;
 	}
 
+	public boolean normalDetonate() {
+		return (getTorpedoSpread() > this.getExplosionCooldown());
+	}
+
 	@Override
 	public boolean canLingerInGround() {
 		return !this.level().isClientSide && this.level().hasChunkAt(this.blockPosition()) && this.fuze.getItem() instanceof FuzeItem FuzeItem && FuzeItem.canLingerInGround(this.fuze, this);

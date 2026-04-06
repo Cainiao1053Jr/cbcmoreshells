@@ -23,5 +23,6 @@
   "shrapnel_count": 78,
   "buoyancy_factor": 0.14,
   "torpedo_speed": 1.09,
-  "torpedo_spread": 6.5
+  "torpedo_spread": 6.5,
+  "reload_time": 480
 }

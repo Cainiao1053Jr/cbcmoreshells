@@ -69,6 +69,7 @@ import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.medium_range_torpedo
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.baguette_shot.BaguetteShotProjectile;
 
 
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reductive_medium_range_torpedo.ReductiveMediumRangeTorpedoProjectile;
 import com.simibubi.create.content.contraptions.render.OrientedContraptionEntityRenderer;
 import com.tterrag.registrate.util.entry.EntityEntry;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
@@ -125,6 +126,8 @@ public class CBCMSEntityTypes {
 	public static final EntityEntry<MediumRangeDeepwaterTorpedoTypeBProjectile> MEDIUM_RANGE_DEEPWATER_TORPEDO_TYPEB = torpedoProjectile("medium_range_deepwater_torpedo_typeb", MediumRangeDeepwaterTorpedoTypeBProjectile::new, "Medium Range Deepwater Torpedo Type B", CBCMSMunitionPropertiesHandlers.TORPEDO_PROJECTILE);
 	public static final EntityEntry<DeepwaterShrapnelTorpedoProjectile> DEEPWATER_SHRAPNEL_TORPEDO = torpedoProjectile("deepwater_shrapnel_torpedo", DeepwaterShrapnelTorpedoProjectile::new, "Deepwater Shrapnel Torpedo", CBCMSMunitionPropertiesHandlers.SHRAPNEL_TORPEDO_PROJECTILE);
 	public static final EntityEntry<LongRangeShrapnelTorpedoProjectile> LONG_RANGE_SHRAPNEL_TORPEDO = torpedoProjectile("long_range_shrapnel_torpedo", LongRangeShrapnelTorpedoProjectile::new, "Long Range Shrapnel Torpedo", CBCMSMunitionPropertiesHandlers.SHRAPNEL_TORPEDO_PROJECTILE);
+	public static final EntityEntry<ReductiveMediumRangeTorpedoProjectile> REDUCTIVE_MEDIUM_RANGE_TORPEDO = torpedoProjectile("reductive_medium_range_torpedo", ReductiveMediumRangeTorpedoProjectile::new, "Reductive Medium Range Torpedo", CBCMSMunitionPropertiesHandlers.REDUCTIVE_TORPEDO_PROJECTILE);
+
 
 	public static final EntityEntry<HEBombProjectile> HE_BOMB = rackedProjectile("he_bomb", HEBombProjectile::new, "HE Bomb", CBCMSMunitionPropertiesHandlers.RACKED_PROJECTILE);
 	public static final EntityEntry<HEBouncingBombProjectile> HE_BOUNCING_BOMB = rackedProjectile("he_bouncing_bomb", HEBouncingBombProjectile::new, "HE Bouncing Bomb", CBCMSMunitionPropertiesHandlers.RACKED_PROJECTILE);

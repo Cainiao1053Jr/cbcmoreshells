@@ -429,6 +429,7 @@ public class MountedTorpedoTubeContraption extends AbstractMountedCannonContrapt
 			projectile.shoot(vec.x, vec.y, vec.z, torpVel, projectile.getTorpedoSpread());
 			projectile.xRotO = projectile.getXRot();
 			projectile.yRotO = projectile.getYRot();
+			projectile.onShoot(this, level);
 
 			projectile.addUntouchableEntity(entity, 1);
 

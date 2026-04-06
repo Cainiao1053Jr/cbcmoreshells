@@ -21,5 +21,7 @@
   "deflection": 0.70,
   "buoyancy_factor": 0.18,
   "torpedo_speed": 1.27,
-  "torpedo_spread": 7.5
+  "torpedo_spread": 7.5,
+  "reload_time": 450,
+  "explosion_cooldown": 35
 }

@@ -1,4 +1,4 @@
-package com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.medium_range_torpedo;
+package com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reductive_medium_range_torpedo;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,7 @@ import javax.annotation.Nullable;
 import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
 import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.FuzedTorpedoProjectileBlockItem;
+import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.ReductiveTorpedoProperties;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.TorpedoProperties;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.utility.Components;
@@ -27,22 +28,21 @@ import rbasamoyai.createbigcannons.munitions.big_cannon.ProjectileBlockItem;
 import rbasamoyai.createbigcannons.munitions.fuzes.FuzeItem;
 import com.cainiao1053.cbcmoreshells.base.CBCMSTooltip;
 
-import static com.cainiao1053.cbcmoreshells.CBCMSEntityTypes.CANNON_TORPEDO;
-import static com.cainiao1053.cbcmoreshells.CBCMSEntityTypes.MEDIUM_RANGE_TORPEDO;
+import static com.cainiao1053.cbcmoreshells.CBCMSEntityTypes.*;
 import static com.cainiao1053.cbcmoreshells.base.CBCMSTooltip.addHoldShift;
 import static rbasamoyai.createbigcannons.base.CBCTooltip.getPalette;
 
-public class MediumRangeTorpedoBlockItem extends FuzedTorpedoProjectileBlockItem {
+public class ReductiveMediumRangeTorpedoBlockItem extends FuzedTorpedoProjectileBlockItem {
 
-	public MediumRangeTorpedoBlockItem(Block block, Properties properties) {
+	public ReductiveMediumRangeTorpedoBlockItem(Block block, Properties properties) {
 		super(block, properties);
 	}
 
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
 		super.appendHoverText(stack, level, tooltip, flag);
-		TorpedoProperties properties = CBCMSMunitionPropertiesHandlers.TORPEDO_PROJECTILE.getPropertiesOf(MEDIUM_RANGE_TORPEDO.get());
-		CBCMSTooltip.appendTorpedoInfo(stack, level, tooltip, flag, properties);
+		ReductiveTorpedoProperties properties = CBCMSMunitionPropertiesHandlers.REDUCTIVE_TORPEDO_PROJECTILE.getPropertiesOf(REDUCTIVE_MEDIUM_RANGE_TORPEDO.get());
+		CBCMSTooltip.appendReductiveTorpedoInfo(stack, level, tooltip, flag, properties);
 
 	}
 

@@ -99,7 +99,8 @@ public class TorpedoCannonMountPoint extends AllArmInteractionPointTypes.Deposit
 			if (!firstInfo.state().isAir()) return stack;
 			if (!simulate) {
 				loadProjectile(stack, munition, poce, bigCannon);
-				breech.setLoadingCooldown(getLoadingCooldown());
+				int reloadTime = ((TorpedoProjectileBlock<?>) munition).getProjectile(poce.level(), stack).getReloadTime();
+				breech.setLoadingCooldown(reloadTime);
 			}
 			ItemStack copy = stack.copy();
 			copy.shrink(1);

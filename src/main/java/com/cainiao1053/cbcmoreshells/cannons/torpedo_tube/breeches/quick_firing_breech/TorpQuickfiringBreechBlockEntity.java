@@ -118,6 +118,10 @@ public class TorpQuickfiringBreechBlockEntity extends SmartBlockEntity implement
 		this.loadingCooldown = value;
 	}
 
+	public int getLoadingCooldown() {
+		return this.loadingCooldown;
+	}
+
 	public static int getOpeningTime() {
 		return CBCConfigs.SERVER.cannons.quickfiringBreechOpeningCooldown.get()*5+20;
 	}

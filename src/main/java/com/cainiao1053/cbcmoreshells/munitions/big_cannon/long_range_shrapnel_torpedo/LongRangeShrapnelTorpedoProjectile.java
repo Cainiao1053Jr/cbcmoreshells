@@ -38,7 +38,7 @@ public class LongRangeShrapnelTorpedoProjectile extends FuzedCannonTorpedoProjec
 		Vec3 oldDelta = this.getDeltaMovement().normalize().scale(4);
 		SharpnelTorpedoProperties properties = this.getAllProperties();
 		int burstCount = 0;
-		if (getTickInWater() > 30){burstCount =properties.torpedoBurst().burstProjectileCount();}
+		if (normalDetonate()){burstCount =properties.torpedoBurst().burstProjectileCount();}
 
 		ShellExplosion explosion = new ShellExplosion(this.level(), null, this.indirectArtilleryFire(false), position.x(),
 				position.y(), position.z(), properties.explosion().explosivePower(), false,
