@@ -54,55 +54,55 @@ public class CBCMSItems {
 
 	public static final ItemEntry<ReloadCombatCommandItem> RELOAD_COMBAT_COMMAND = REGISTRATE.item("reload_combat_command", ReloadCombatCommandItem::new)
 			.properties(properties -> properties.stacksTo(1)
-					.durability(40)
+					.durability(80)
 					.rarity(Rarity.RARE))
 			.register();
 
 	public static final ItemEntry<RangeCombatCommandItem> RANGE_COMBAT_COMMAND = REGISTRATE.item("range_combat_command", RangeCombatCommandItem::new)
 			.properties(properties -> properties.stacksTo(1)
-					.durability(40)
+					.durability(80)
 					.rarity(Rarity.RARE))
 			.register();
 
 	public static final ItemEntry<SpreadCombatCommandItem> SPREAD_COMBAT_COMMAND = REGISTRATE.item("spread_combat_command", SpreadCombatCommandItem::new)
 			.properties(properties -> properties.stacksTo(1)
-					.durability(40)
+					.durability(80)
 					.rarity(Rarity.RARE))
 			.register();
 
 	public static final ItemEntry<DamageCombatCommandItem> DAMAGE_COMBAT_COMMAND = REGISTRATE.item("damage_combat_command", DamageCombatCommandItem::new)
 			.properties(properties -> properties.stacksTo(1)
-					.durability(40)
+					.durability(80)
 					.rarity(Rarity.RARE))
 			.register();
 
 	public static final ItemEntry<GamblerCombatCommandItem> GAMBLER_COMBAT_COMMAND = REGISTRATE.item("gambler_combat_command", GamblerCombatCommandItem::new)
 			.properties(properties -> properties.stacksTo(1)
-					.durability(24)
+					.durability(48)
 					.rarity(Rarity.EPIC))
 			.register();
 
 	public static final ItemEntry<BerserkerCombatCommandItem> BERSERKER_COMBAT_COMMAND = REGISTRATE.item("berserker_combat_command", BerserkerCombatCommandItem::new)
 			.properties(properties -> properties.stacksTo(1)
-					.durability(32)
+					.durability(64)
 					.rarity(Rarity.EPIC))
 			.register();
 
 	public static final ItemEntry<MyopiaCombatCommandItem> MYOPIA_COMBAT_COMMAND = REGISTRATE.item("myopia_combat_command", MyopiaCombatCommandItem::new)
 			.properties(properties -> properties.stacksTo(1)
-					.durability(32)
+					.durability(64)
 					.rarity(Rarity.EPIC))
 			.register();
 
 	public static final ItemEntry<SniperCombatCommandItem> SNIPER_COMBAT_COMMAND = REGISTRATE.item("sniper_combat_command", SniperCombatCommandItem::new)
 			.properties(properties -> properties.stacksTo(1)
-					.durability(32)
+					.durability(64)
 					.rarity(Rarity.EPIC))
 			.register();
 
 	public static final ItemEntry<AssasinCombatCommandItem> ASSASSIN_COMBAT_COMMAND = REGISTRATE.item("assassin_combat_command", AssasinCombatCommandItem::new)
 			.properties(properties -> properties.stacksTo(1)
-					.durability(24)
+					.durability(48)
 					.rarity(Rarity.EPIC))
 			.register();
 

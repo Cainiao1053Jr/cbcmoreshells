@@ -26,6 +26,9 @@ import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.ListTag;
+import net.minecraft.nbt.NbtUtils;
+import net.minecraft.nbt.Tag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
@@ -69,26 +72,32 @@ public class CombatCommandBaseItem extends Item {
 		//if(!level.isClientSide){
 			if(!player.isShiftKeyDown()){
 			}else{
-					MountedDualCannonContraption cannon = findNearestCannon(level,player.position(),32);
-					if(cannon==null){
-						player.getCooldowns().addCooldown(this, 40);
-						//createMaterial(player.getItemInHand(hand));
-						if(!level.isClientSide){
-							Component msg = Component.translatable("item.cbcmoreshells.combat_command_base.change_material_fail");
-							player.sendSystemMessage(msg);
-						}
-						return super.use(level, player, hand);
-					}
-					this.recordedMaterial = cannon.getCannonMaterial();
-					tag.putString("Material", recordedMaterial.name().toString());
-					stack.setTag(tag);
-					if(!level.isClientSide){
-						Component matName = Component.translatable(
-								"block.cbcmoreshells.material." + recordedMaterial.name().getPath()
-						);
-						Component msg = Component.translatable("item.cbcmoreshells.combat_command_base.change_material", matName);
-						player.sendSystemMessage(msg);
-					}
+//					MountedDualCannonContraption cannon = findNearestCannon(level,player.position(),32);
+//					if(cannon==null){
+//						player.getCooldowns().addCooldown(this, 40);
+//						//createMaterial(player.getItemInHand(hand));
+//						if(!level.isClientSide){
+//							Component msg = Component.translatable("item.cbcmoreshells.combat_command_base.change_material_fail");
+//							player.sendSystemMessage(msg);
+//						}
+//						return super.use(level, player, hand);
+//					}
+//					this.recordedMaterial = cannon.getCannonMaterial();
+//					tag.putString("Material", recordedMaterial.name().toString());
+//					stack.setTag(tag);
+//					if(!level.isClientSide){
+//						Component matName = Component.translatable(
+//								"block.cbcmoreshells.material." + recordedMaterial.name().getPath()
+//						);
+//						Component msg = Component.translatable("item.cbcmoreshells.combat_command_base.change_material", matName);
+//						player.sendSystemMessage(msg);
+//					}
+				tag.remove("Positions");
+				stack.setTag(tag);
+				if (!level.isClientSide()) {
+					player.sendSystemMessage(Component.translatable(
+							"item.cbcmoreshells.combat_command_base.positions_cleared"));
+				}
 
 			}
 		//}
@@ -108,8 +117,40 @@ public class CombatCommandBaseItem extends Item {
 			BlockPos pos = context.getClickedPos();
 			BlockEntity be = context.getLevel().getBlockEntity(pos);
 			if(be instanceof CannonMountBlockEntity mount){
-				
+				ListTag list = tag.contains("Positions", Tag.TAG_LIST)
+						? tag.getList("Positions", Tag.TAG_COMPOUND)
+						: new ListTag();
+				boolean alreadyAdded = false;
+				for (int i = 0; i < list.size(); i++) {
+					if (NbtUtils.readBlockPos(list.getCompound(i)).equals(pos)) {
+						alreadyAdded = true;
+						break;
+					}
+				}
+				if (!alreadyAdded) {
+					list.add(NbtUtils.writeBlockPos(pos));
+					tag.put("Positions", list);
+					stack.setTag(tag);
+					if (!context.getLevel().isClientSide()) {
+						player.sendSystemMessage(Component.translatable(
+								"item.cbcmoreshells.combat_command_base.add_position", pos.getX(), pos.getY(), pos.getZ()));
+					}
+				} else {
+					if (!context.getLevel().isClientSide()) {
+						player.sendSystemMessage(Component.translatable(
+								"item.cbcmoreshells.combat_command_base.position_already_added"));
+					}
+				}
+				return InteractionResult.SUCCESS;
 			}
+		} else {
+				tag.remove("Positions");
+				stack.setTag(tag);
+				if (!context.getLevel().isClientSide()) {
+					player.sendSystemMessage(Component.translatable(
+							"item.cbcmoreshells.combat_command_base.positions_cleared"));
+				}
+				return InteractionResult.SUCCESS;
 		}
 		return super.useOn(context);
 	}
