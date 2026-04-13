@@ -1,9 +1,10 @@
 package com.cainiao1053.cbcmoreshells.munitions.big_cannon;
 
-import com.cainiao1053.cbcmoreshells.api.vs.ValkyrienSkies;
+import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
 import com.cainiao1053.cbcmoreshells.cannon_control.contraption.MountedTorpedoTubeContraption;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.breeches.quick_firing_breech.TorpQuickfiringBreechBlockEntity;
 import com.cainiao1053.cbcmoreshells.index.CBCMSSoundEvents;
+import com.cainiao1053.cbcmoreshells.utils.VSShipUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -11,7 +12,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.valkyrienskies.core.api.ships.Ship;
 
 
 public abstract class AbstractReductiveTorpedoProjectile extends FuzedCannonTorpedoProjectile {
@@ -22,31 +22,42 @@ public abstract class AbstractReductiveTorpedoProjectile extends FuzedCannonTorp
 
 	public void reduceReloadTime() {
 		if(this.torpedoTube == null) {
+			//Cbcmoreshells.LOGGER.info("Torpedo tube is null!");
 			return;
 		}
 		BlockPos breechPos = getBreechPos(this.torpedoTube);
 		if(this.torpedoTube.presentBlockEntities.get(breechPos) instanceof TorpQuickfiringBreechBlockEntity breech){
 			int currentCooldown  = breech.getLoadingCooldown();
 			if(currentCooldown < 20) {
+				//Cbcmoreshells.LOGGER.info("Cooldown too short!");
 				return;
 			}
 			int newReloadTime = Math.max(currentCooldown - (int)(this.getReloadTime() * getReductionPercentage()), 20);
+			//Cbcmoreshells.LOGGER.info("old Reload time: " + breech.getLoadingCooldown());
+			//Cbcmoreshells.LOGGER.info("new Reload time: " + newReloadTime);
 			breech.setLoadingCooldown(newReloadTime);
+		}else{
+			//Cbcmoreshells.LOGGER.info("No such be!");
 		}
 	}
 
 	public boolean explodeOnShip(Vec3 pos, Level level) {
+		if (!(level instanceof ServerLevel serverLevel)) return false;
 		AABB box = AABB.ofSize(pos, 4, 4, 4);
-		Iterable<Ship> ships = ValkyrienSkies.getShipsIntersecting(level, box);
-		for(Ship ship : ships) {
-			return true;
-		}
-		return false;
+		return VSShipUtils.hasShipInAABB(serverLevel, box);
 	}
 
 	public void playSoundOnHit(Level level) {
 		Vec3 pos = this.torpedoTube.entity.position();
-		level.playLocalSound(pos.x, pos.y, pos.z, CBCMSSoundEvents.SERVICEBELL.getMainEvent(), SoundSource.AMBIENT, 3.5f, 1.2f, false);
+		level.playSound(
+				null,
+				new BlockPos((int)pos.x, (int)pos.y, (int)pos.z),
+				CBCMSSoundEvents.SERVICEBELL.getMainEvent(),
+				SoundSource.NEUTRAL,
+				3.5f,
+				1.2f
+		);
+		//level.playLocalSound(pos.x, pos.y, pos.z, CBCMSSoundEvents.SERVICEBELL.getMainEvent(), SoundSource.AMBIENT, 3.5f, 1.2f, false);
 	}
 
 	public float getReductionPercentage(){

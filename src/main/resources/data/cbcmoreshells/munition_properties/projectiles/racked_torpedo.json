@@ -22,7 +22,7 @@
   "projectile_spread": 0.3,
   "explosion_cooldown": 12,
   "buoyancy_factor": 0.27,
-  "steady_state_vel": 0.76,
+  "steady_state_vel": 1.34,
   "water_damp": 0.18,
   "reload_time": 350
 }

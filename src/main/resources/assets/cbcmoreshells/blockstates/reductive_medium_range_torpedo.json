@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "cbcmoreshells:block/reductive_medium_range_torpedo",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "cbcmoreshells:block/reductive_medium_range_torpedo",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "cbcmoreshells:block/reductive_medium_range_torpedo",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "cbcmoreshells:block/reductive_medium_range_torpedo",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "cbcmoreshells:block/reductive_medium_range_torpedo"
+    },
+    "facing=west": {
+      "model": "cbcmoreshells:block/reductive_medium_range_torpedo",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

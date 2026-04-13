@@ -1,0 +1,6 @@
+{
+  "parent": "cbcmoreshells:block/torpedo",
+  "textures": {
+    "text": "cbcmoreshells:block/projectile/slow_long_range_torpedo"
+  }
+}

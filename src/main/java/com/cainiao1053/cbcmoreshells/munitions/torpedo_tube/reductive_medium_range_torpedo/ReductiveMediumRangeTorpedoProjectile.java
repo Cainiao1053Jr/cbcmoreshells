@@ -3,6 +3,7 @@ package com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reductive_medium_ra
 import javax.annotation.Nonnull;
 
 import com.cainiao1053.cbcmoreshells.CBCMSBlocks;
+import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
 import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.AbstractCannonTorpedoProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.AbstractReductiveTorpedoProjectile;
@@ -14,6 +15,7 @@ import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.TorpedoProjecti
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.TorpedoProperties;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
@@ -41,7 +43,7 @@ public class ReductiveMediumRangeTorpedoProjectile extends AbstractReductiveTorp
 		float explosivePower = this.getAllProperties().explosion().explosivePower();
 		if (normalDetonate()){
 			explosivePower *=4;
-			if(explodeOnShip(this.position(), this.level())){
+			if(explodeOnShip(new Vec3(position.x(), position.y(), position.z()), this.level())){
 				reduceReloadTime();
 				playSoundOnHit(this.level());
 			}
@@ -54,8 +56,13 @@ public class ReductiveMediumRangeTorpedoProjectile extends AbstractReductiveTorp
 	}
 
 	@Override
+	public float getReductionPercentage() {
+		return getAllProperties().reductiveProjectileProperties().percentReduction();
+	}
+
+	@Override
 	public BlockState getRenderedBlockState() {
-		return CBCMSBlocks.MEDIUM_RANGE_TORPEDO.getDefaultState().setValue(BlockStateProperties.FACING, Direction.NORTH);
+		return CBCMSBlocks.REDUCTIVE_MEDIUM_RANGE_TORPEDO.getDefaultState().setValue(BlockStateProperties.FACING, Direction.NORTH);
 	}
 
 	@Nonnull

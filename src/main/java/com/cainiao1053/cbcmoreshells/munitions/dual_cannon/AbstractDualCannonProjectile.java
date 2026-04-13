@@ -1,6 +1,7 @@
 package com.cainiao1053.cbcmoreshells.munitions.dual_cannon;
 
 import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
+import com.cainiao1053.cbcmoreshells.cannon_control.contraption.MountedDualCannonContraption;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.config.DualCannonPropertiesComponent;
 import com.cainiao1053.cbcmoreshells.network.CBCMSNetworkImpl;
 import com.cainiao1053.cbcmoreshells.network.ClientboundCBCMSSplashPacket;
@@ -72,7 +73,9 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 	private double zOldT;
 	private int traced = 0;
 
-	Logger LOGGER = Cbcmoreshells.LOGGER;
+	private MountedDualCannonContraption contraption;
+	private boolean hitTarget = false;
+
 	@Override
 	protected void defineSynchedData() {
 		super.defineSynchedData();
@@ -219,6 +222,8 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 	protected ImpactResult calculateBlockPenetration(ProjectileContext projectileContext, BlockState state, BlockHitResult blockHitResult) {
 		BlockPos pos = blockHitResult.getBlockPos();
 		Vec3 hitLoc = blockHitResult.getLocation();
+
+		reduceCooldownOnHit(pos);
 
 		BallisticPropertiesComponent ballistics = this.getBallisticProperties();
 		BlockArmorPropertiesProvider blockArmor = BlockArmorPropertiesHandler.getProperties(state);
@@ -378,6 +383,28 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 		return super.onImpactFluid(projectileContext, blockState, fluidState, impactPos, fluidHitResult);
 	}
 
+	public void onShoot(MountedDualCannonContraption contraption, ServerLevel level) {
+		setShootContraption(contraption);
+	}
+
+	public void setShootContraption(MountedDualCannonContraption contraption) {
+		this.contraption = contraption;
+	}
+
+	public void reduceCooldownOnHit(BlockPos hitPos){
+		if(hitTarget){
+			return;
+		}
+		if(!hitShip(hitPos)){
+			return;
+		}
+		if(this.contraption == null){
+			return;
+		}
+		contraption.reduceCooldown(getCooldownReductionRate());
+		hitTarget = true;
+	}
+
 	public float addedChargePower() { return this.getDualCannonProjectileProperties().addedChargePower(); }
 	public float minimumChargePower() { return this.getDualCannonProjectileProperties().minimumChargePower(); }
 	public boolean canSquib() { return this.getDualCannonProjectileProperties().canSquib(); }
@@ -390,6 +417,9 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 	public float getMaximumMomentum(){return this.getDualCannonProjectileProperties().maximumMomentum();}
 	public float getMaximumMass(){return this.getBallisticProperties().durabilityMass();}
 	public float getReloadTimeCoef(){return this.getDualCannonProjectileProperties().reloadTimeCoef();}
+	public float getCooldownReductionRate(){
+		return this.getDualCannonProjectileProperties().cooldownReductionRate();
+	}
 
 	public void setLifetime(int lifetime){
 		this.maxAge = lifetime;
@@ -401,6 +431,13 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 	}
 
 	public float getDurabilityModifier(){return this.durabilityMassModifier;}
+
+	public boolean hitShip(BlockPos pos){
+		if(Math.abs(pos.getX()) > 10000000 || Math.abs(pos.getZ()) > 10000000){//guess what, I save 100000 iterations
+			return true;
+		}
+		return false;
+	}
 
 	@Nonnull protected abstract DualCannonPropertiesComponent getDualCannonProjectileProperties();
 

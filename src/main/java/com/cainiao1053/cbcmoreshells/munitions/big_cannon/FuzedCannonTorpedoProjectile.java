@@ -57,15 +57,10 @@ public abstract class FuzedCannonTorpedoProjectile extends AbstractCannonTorpedo
 			if (this.ageRemaining <= 0)
 				this.expireProjectile();
 		}
-
-		if(tickInWater < 35) {
-			FluidState fluidState = this.level().getFluidState(this.blockPosition());
-			if(!fluidState.isEmpty()) {
-				tickInWater += 1;
-			}
+		FluidState fluidState = this.level().getFluidState(this.blockPosition());
+		if(!fluidState.isEmpty()) {
+			tickInWater += 1;
 		}
-
-
 	}
 
 	@Override
@@ -142,7 +137,7 @@ public abstract class FuzedCannonTorpedoProjectile extends AbstractCannonTorpedo
 	}
 
 	public boolean normalDetonate() {
-		return (getTorpedoSpread() > this.getExplosionCooldown());
+		return (getTickInWater() > this.getExplosionCooldown());
 	}
 
 	@Override

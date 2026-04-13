@@ -26,5 +26,6 @@
   "maximum_momentum": 10,
   "fire_chance": 0.12,
   "fire_range": 3,
-  "reload_time_coef": 1
+  "reload_time_coef": 1,
+  "cooldown_reduction_rate": 2
 }

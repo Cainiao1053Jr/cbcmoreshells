@@ -69,6 +69,8 @@ public class NormalSAPShellProjectile extends FuzedDualCannonProjectile {
 		BlockPos pos = blockHitResult.getBlockPos();
 		Vec3 hitLoc = blockHitResult.getLocation();
 
+		reduceCooldownOnHit(pos);
+
 		BallisticPropertiesComponent ballistics = this.getBallisticProperties();
 		BlockArmorPropertiesProvider blockArmor = BlockArmorPropertiesHandler.getProperties(state);
 		//boolean unbreakable = projectileContext.griefState() == CBCCfgMunitions.GriefState.NO_DAMAGE || state.getDestroySpeed(this.level(), pos) == -1;

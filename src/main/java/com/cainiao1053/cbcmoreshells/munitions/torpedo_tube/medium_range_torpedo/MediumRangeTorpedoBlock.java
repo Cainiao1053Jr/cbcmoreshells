@@ -1,6 +1,7 @@
 package com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.medium_range_torpedo;
 
 import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
+import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.GeneralCannonTorpedoBlock;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.ShellessShellBlock;
 import net.minecraft.world.entity.EntityType;
@@ -16,7 +17,7 @@ public class MediumRangeTorpedoBlock extends GeneralCannonTorpedoBlock<MediumRan
 
 	@Override
 	public boolean isBaseFuze() {
-		return CBCMunitionPropertiesHandlers.COMMON_SHELL_BIG_CANNON_PROJECTILE.getPropertiesOf(this.getAssociatedEntityType()).fuze().baseFuze();
+		return CBCMSMunitionPropertiesHandlers.TORPEDO_PROJECTILE.getPropertiesOf(this.getAssociatedEntityType()).fuze().baseFuze();
 	}
 
 	@Override

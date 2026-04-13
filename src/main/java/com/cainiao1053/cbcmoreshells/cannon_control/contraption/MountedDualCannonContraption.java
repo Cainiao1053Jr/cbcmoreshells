@@ -89,6 +89,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
 	private float commandDurationModifier = 1;
 	private int barrelInverter = 1;
 	private float additionalSpreadCoef = 1;
+	private boolean reduceCooldownOnHit = true;
 
 	Logger LOGGER = Cbcmoreshells.LOGGER;
 
@@ -269,7 +270,9 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
 //			//if (this.mortarDelay == 0) this.actuallyFireDropMortar();
 //		}
 		if(this.commandCooldown>0){
-			commandCooldown--;
+			if(!this.reduceCooldownOnHit){
+				commandCooldown--;
+			}
 		}else if(this.commandLeft>0){
 			commandLeft--;
 			if(commandLeft==0){
@@ -473,7 +476,9 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
 			projectile.shoot(vec.x, vec.y, vec.z,
 			projectile.getInitVel(), //init vel
 			(Math.max(projectile.getProjectileSpread() - spreadSub*subLength,
-					projectile.getProjectileMinimumSpread()+minimumSpread))*this.commandSpreadModifier * this.equipmentSpreadModifier * this.additionalSpreadCoef); //spread
+					projectile.getProjectileMinimumSpread()+minimumSpread))*this.commandSpreadModifier * this.equipmentSpreadModifier * this.additionalSpreadCoef
+			); //spread
+			projectile.onShoot(this, level);
 
 			projectile.xRotO = projectile.getXRot();
 			projectile.yRotO = projectile.getYRot();
@@ -505,7 +510,9 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
 			secondary_projectile.shoot(vec.x, vec.y, vec.z,
 			secondary_projectile.getInitVel(), //init vel
 			(secondary_projectile.getProjectileMinimumSpread()+Math.max(secondary_projectile.getProjectileSpread()
-					- spreadSub*subLength, minimumSpread))*this.commandSpreadModifier * this.equipmentSpreadModifier * this.additionalSpreadCoef); //spread
+					- spreadSub*subLength, minimumSpread))*this.commandSpreadModifier * this.equipmentSpreadModifier * this.additionalSpreadCoef
+			); //spread
+			secondary_projectile.onShoot(this, level);
 
 			secondary_projectile.xRotO = secondary_projectile.getXRot();
 			secondary_projectile.yRotO = secondary_projectile.getYRot();
@@ -683,6 +690,13 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
 		return this.commandLeft;
 	}
 
+	public void reduceCooldown(float reductionRate){
+		int reduction = (int)(this.cannonMaterial.properties().reloadTimeModifier()*50*reductionRate);
+		if(this.reduceCooldownOnHit && this.commandCooldown > 0){
+			this.commandCooldown -= reduction;
+		}
+	}
+
 	public boolean getCommandActivation(){
 		return this.commandEffect;
 	}
@@ -789,6 +803,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
 		tag.putFloat("equipmentLifetimeModifier", this.equipmentLifetimeModifier);
 		tag.putFloat("commandCooldownModifier", this.commandCooldownModifier);
 		tag.putFloat("commandDurationModifier", this.commandDurationModifier);
+		tag.putBoolean("reduceCooldownOnHit", this.reduceCooldownOnHit);
 		return tag;
 	}
 
@@ -810,6 +825,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
 		this.equipmentLifetimeModifier = tag.getFloat("equipmentLifetimeModifier");
 		this.commandCooldownModifier = tag.getFloat("commandCooldownModifier");
 		this.commandDurationModifier = tag.getFloat("commandDurationModifier");
+		this.reduceCooldownOnHit = tag.getBoolean("reduceCooldownOnHit");
 	}
 
 	@Override

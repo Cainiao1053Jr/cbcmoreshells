@@ -16,13 +16,13 @@
   "explosive_power": 3.5,
   "max_charges": 10,
   "penetration": 2.5,
-  "lifetime": 385,
+  "lifetime": 474,
   "toughness": 1,
   "deflection": 0.70,
   "buoyancy_factor": 0.14,
-  "torpedo_speed": 1.09,
-  "torpedo_spread": 7.0,
-  "reload_time": 600,
-  "explosion_cooldown": 80,
-  "percent_reduction": 0.75
+  "torpedo_speed": 1.055,
+  "torpedo_spread": 6,
+  "reload_time": 500,
+  "explosion_cooldown": 90,
+  "percent_reduction": 0.25
 }

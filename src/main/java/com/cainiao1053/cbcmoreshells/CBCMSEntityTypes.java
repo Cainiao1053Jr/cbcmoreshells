@@ -65,11 +65,26 @@ import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.he_bouncing_bom
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.he_loitering_rocket.HELoiteringRocketProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.he_rocket.HERocketProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.racked_torpedo.RackedTorpedoProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.early_torpedo.EarlyTorpedoProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.gambler_medium_range_torpedo.GamblerMediumRangeTorpedoProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.highspeed_long_range_torpedo.HighspeedLongRangeTorpedoProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.light_high_speed_torpedo.LightHighSpeedTorpedoProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.medium_range_torpedo.MediumRangeTorpedoProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.baguette_shot.BaguetteShotProjectile;
 
 
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.primary_torpedo.PrimaryTorpedoProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reductive_highspeed_torpedo.ReductiveHighspeedTorpedoProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reductive_long_range_torpedo.ReductiveLongRangeTorpedoProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reductive_medium_range_torpedo.ReductiveMediumRangeTorpedoProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reignforced_medium_range_torpedo.ReinforcedMediumRangeTorpedoProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reignforced_reductive_short_range_torpedo.ReinforcedReductiveShortRangeTorpedoProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reignforced_short_range_torpedo.ReinforcedShortRangeTorpedoProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reinforced_long_range_torpedo.ReinforcedLongRangeTorpedoProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reinforced_reductive_medium_range_torpedo.ReinforcedReductiveMediumRangeTorpedoProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.short_range_torpedo.ShortRangeTorpedoProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.slow_long_range_torpedo.SlowLongRangeTorpedoProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.ultraspeed_torpedo.UltraspeedTorpedoProjectile;
 import com.simibubi.create.content.contraptions.render.OrientedContraptionEntityRenderer;
 import com.tterrag.registrate.util.entry.EntityEntry;
 import com.tterrag.registrate.util.nullness.NonNullConsumer;
@@ -127,6 +142,21 @@ public class CBCMSEntityTypes {
 	public static final EntityEntry<DeepwaterShrapnelTorpedoProjectile> DEEPWATER_SHRAPNEL_TORPEDO = torpedoProjectile("deepwater_shrapnel_torpedo", DeepwaterShrapnelTorpedoProjectile::new, "Deepwater Shrapnel Torpedo", CBCMSMunitionPropertiesHandlers.SHRAPNEL_TORPEDO_PROJECTILE);
 	public static final EntityEntry<LongRangeShrapnelTorpedoProjectile> LONG_RANGE_SHRAPNEL_TORPEDO = torpedoProjectile("long_range_shrapnel_torpedo", LongRangeShrapnelTorpedoProjectile::new, "Long Range Shrapnel Torpedo", CBCMSMunitionPropertiesHandlers.SHRAPNEL_TORPEDO_PROJECTILE);
 	public static final EntityEntry<ReductiveMediumRangeTorpedoProjectile> REDUCTIVE_MEDIUM_RANGE_TORPEDO = torpedoProjectile("reductive_medium_range_torpedo", ReductiveMediumRangeTorpedoProjectile::new, "Reductive Medium Range Torpedo", CBCMSMunitionPropertiesHandlers.REDUCTIVE_TORPEDO_PROJECTILE);
+	public static final EntityEntry<LightHighSpeedTorpedoProjectile> LIGHT_HIGH_SPEED_TORPEDO = torpedoProjectile("light_high_speed_torpedo", LightHighSpeedTorpedoProjectile::new, "LIGHT_HIGH_SPEED_TORPEDO", CBCMSMunitionPropertiesHandlers.TORPEDO_PROJECTILE);
+	public static final EntityEntry<ReinforcedShortRangeTorpedoProjectile> REINFORCED_SHORT_RANGE_TORPEDO = torpedoProjectile("reinforced_short_range_torpedo", ReinforcedShortRangeTorpedoProjectile::new, "REINFORCED_SHORT_RANGE_TORPEDO", CBCMSMunitionPropertiesHandlers.TORPEDO_PROJECTILE);
+	public static final EntityEntry<ShortRangeTorpedoProjectile> SHORT_RANGE_TORPEDO = torpedoProjectile("short_range_torpedo", ShortRangeTorpedoProjectile::new, "SHORT_RANGE_TORPEDO", CBCMSMunitionPropertiesHandlers.TORPEDO_PROJECTILE);
+	public static final EntityEntry<ReinforcedReductiveShortRangeTorpedoProjectile> REINFORCED_REDUCTIVE_SHORT_RANGE_TORPEDO = torpedoProjectile("reinforced_reductive_short_range_torpedo", ReinforcedReductiveShortRangeTorpedoProjectile::new, "REINFORCED_REDUCTIVE_SHORT_RANGE_TORPEDO", CBCMSMunitionPropertiesHandlers.REDUCTIVE_TORPEDO_PROJECTILE);
+	public static final EntityEntry<ReinforcedMediumRangeTorpedoProjectile> REINFORCED_MEDIUM_RANGE_TORPEDO = torpedoProjectile("reinforced_medium_range_torpedo", ReinforcedMediumRangeTorpedoProjectile::new, "REINFORCED_MEDIUM_RANGE_TORPEDO", CBCMSMunitionPropertiesHandlers.TORPEDO_PROJECTILE);
+	public static final EntityEntry<EarlyTorpedoProjectile> EARLY_TORPEDO = torpedoProjectile("early_torpedo", EarlyTorpedoProjectile::new, "EARLY_TORPEDO", CBCMSMunitionPropertiesHandlers.TORPEDO_PROJECTILE);
+	public static final EntityEntry<PrimaryTorpedoProjectile> PRIMARY_TORPEDO = torpedoProjectile("primary_torpedo", PrimaryTorpedoProjectile::new, "PRIMARY_TORPEDO", CBCMSMunitionPropertiesHandlers.TORPEDO_PROJECTILE);
+	public static final EntityEntry<ReinforcedReductiveMediumRangeTorpedoProjectile> REINFORCED_REDUCTIVE_MEDIUM_RANGE_TORPEDO = torpedoProjectile("reinforced_reductive_medium_range_torpedo", ReinforcedReductiveMediumRangeTorpedoProjectile::new, "REINFORCED_REDUCTIVE_MEDIUM_RANGE_TORPEDO", CBCMSMunitionPropertiesHandlers.REDUCTIVE_TORPEDO_PROJECTILE);
+	public static final EntityEntry<ReductiveLongRangeTorpedoProjectile> REDUCTIVE_LONG_RANGE_TORPEDO = torpedoProjectile("reductive_long_range_torpedo", ReductiveLongRangeTorpedoProjectile::new, "REDUCTIVE_LONG_RANGE_TORPEDO", CBCMSMunitionPropertiesHandlers.REDUCTIVE_TORPEDO_PROJECTILE);
+	public static final EntityEntry<ReinforcedLongRangeTorpedoProjectile> REINFORCED_LONG_RANGE_TORPEDO = torpedoProjectile("reinforced_long_range_torpedo", ReinforcedLongRangeTorpedoProjectile::new, "REINFORCED_LONG_RANGE_TORPEDO", CBCMSMunitionPropertiesHandlers.TORPEDO_PROJECTILE);
+	public static final EntityEntry<GamblerMediumRangeTorpedoProjectile> GAMBLER_MEDIUM_RANGE_TORPEDO = torpedoProjectile("gambler_medium_range_torpedo", GamblerMediumRangeTorpedoProjectile::new, "GAMBLER_MEDIUM_RANGE_TORPEDO", CBCMSMunitionPropertiesHandlers.REDUCTIVE_TORPEDO_PROJECTILE);
+	public static final EntityEntry<UltraspeedTorpedoProjectile> ULTRASPEED_TORPEDO = torpedoProjectile("ultraspeed_torpedo", UltraspeedTorpedoProjectile::new, "ULTRASPEED_TORPEDO", CBCMSMunitionPropertiesHandlers.TORPEDO_PROJECTILE);
+	public static final EntityEntry<ReductiveHighspeedTorpedoProjectile> REDUCTIVE_HIGHSPEED_TORPEDO = torpedoProjectile("reductive_highspeed_torpedo", ReductiveHighspeedTorpedoProjectile::new, "REDUCTIVE_HIGHSPEED_TORPEDO", CBCMSMunitionPropertiesHandlers.REDUCTIVE_TORPEDO_PROJECTILE);
+	public static final EntityEntry<SlowLongRangeTorpedoProjectile> SLOW_LONG_RANGE_TORPEDO = torpedoProjectile("slow_long_range_torpedo", SlowLongRangeTorpedoProjectile::new, "SLOW_LONG_RANGE_TORPEDO", CBCMSMunitionPropertiesHandlers.TORPEDO_PROJECTILE);
+	public static final EntityEntry<HighspeedLongRangeTorpedoProjectile> HIGHSPEED_LONG_RANGE_TORPEDO = torpedoProjectile("highspeed_long_range_torpedo", HighspeedLongRangeTorpedoProjectile::new, "HIGHSPEED_LONG_RANGE_TORPEDO", CBCMSMunitionPropertiesHandlers.TORPEDO_PROJECTILE);
 
 
 	public static final EntityEntry<HEBombProjectile> HE_BOMB = rackedProjectile("he_bomb", HEBombProjectile::new, "HE Bomb", CBCMSMunitionPropertiesHandlers.RACKED_PROJECTILE);

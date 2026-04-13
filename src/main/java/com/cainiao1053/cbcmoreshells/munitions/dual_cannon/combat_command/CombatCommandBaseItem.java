@@ -24,6 +24,7 @@ import com.simibubi.create.foundation.utility.Lang;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
+import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
@@ -36,9 +37,11 @@ import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.slf4j.Logger;
+import rbasamoyai.createbigcannons.cannon_control.cannon_mount.CannonMountBlockEntity;
 import rbasamoyai.createbigcannons.munitions.FuzedProjectileBlockItem;
 import rbasamoyai.createbigcannons.munitions.big_cannon.ProjectileBlockItem;
 import rbasamoyai.createbigcannons.munitions.fuzes.FuzeItem;
@@ -65,7 +68,6 @@ public class CombatCommandBaseItem extends Item {
 		CompoundTag tag = stack.getOrCreateTag();
 		//if(!level.isClientSide){
 			if(!player.isShiftKeyDown()){
-
 			}else{
 					MountedDualCannonContraption cannon = findNearestCannon(level,player.position(),32);
 					if(cannon==null){
@@ -96,6 +98,19 @@ public class CombatCommandBaseItem extends Item {
 
 	@Override
 	public InteractionResult useOn(UseOnContext context) {
+		ItemStack stack = context.getItemInHand();
+		CompoundTag tag = stack.getOrCreateTag();
+		Player player = context.getPlayer();
+		if(player == null){
+			return InteractionResult.PASS;
+		}
+		if(!player.isShiftKeyDown()){
+			BlockPos pos = context.getClickedPos();
+			BlockEntity be = context.getLevel().getBlockEntity(pos);
+			if(be instanceof CannonMountBlockEntity mount){
+				
+			}
+		}
 		return super.useOn(context);
 	}
 

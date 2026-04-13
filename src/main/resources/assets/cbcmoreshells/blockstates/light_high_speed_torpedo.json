@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "cbcmoreshells:block/light_high_speed_torpedo",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "cbcmoreshells:block/light_high_speed_torpedo",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north": {
+      "model": "cbcmoreshells:block/light_high_speed_torpedo",
+      "x": 90
+    },
+    "facing=south": {
+      "model": "cbcmoreshells:block/light_high_speed_torpedo",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "cbcmoreshells:block/light_high_speed_torpedo"
+    },
+    "facing=west": {
+      "model": "cbcmoreshells:block/light_high_speed_torpedo",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

@@ -130,10 +130,40 @@ import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.he_rocket.HERoc
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.he_rocket.HERocketBlockItem;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.racked_torpedo.RackedTorpedoBlock;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.racked_torpedo.RackedTorpedoBlockItem;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.early_torpedo.EarlyTorpedoBlock;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.early_torpedo.EarlyTorpedoBlockItem;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.gambler_medium_range_torpedo.GamblerMediumRangeTorpedoBlock;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.gambler_medium_range_torpedo.GamblerMediumRangeTorpedoBlockItem;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.highspeed_long_range_torpedo.HighspeedLongRangeTorpedoBlock;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.highspeed_long_range_torpedo.HighspeedLongRangeTorpedoBlockItem;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.light_high_speed_torpedo.LightHighSpeedTorpedoBlock;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.light_high_speed_torpedo.LightHighSpeedTorpedoBlockItem;
 import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.medium_range_torpedo.MediumRangeTorpedoBlock;
 import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.medium_range_torpedo.MediumRangeTorpedoBlockItem;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.primary_torpedo.PrimaryTorpedoBlock;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.primary_torpedo.PrimaryTorpedoBlockItem;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reductive_highspeed_torpedo.ReductiveHighspeedTorpedoBlock;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reductive_highspeed_torpedo.ReductiveHighspeedTorpedoBlockItem;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reductive_long_range_torpedo.ReductiveLongRangeTorpedoBlock;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reductive_long_range_torpedo.ReductiveLongRangeTorpedoBlockItem;
 import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reductive_medium_range_torpedo.ReductiveMediumRangeTorpedoBlock;
 import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reductive_medium_range_torpedo.ReductiveMediumRangeTorpedoBlockItem;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reignforced_medium_range_torpedo.ReinforcedMediumRangeTorpedoBlock;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reignforced_medium_range_torpedo.ReinforcedMediumRangeTorpedoBlockItem;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reignforced_reductive_short_range_torpedo.ReinforcedReductiveShortRangeTorpedoBlock;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reignforced_reductive_short_range_torpedo.ReinforcedReductiveShortRangeTorpedoBlockItem;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reignforced_short_range_torpedo.ReinforcedShortRangeTorpedoBlock;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reignforced_short_range_torpedo.ReinforcedShortRangeTorpedoBlockItem;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reinforced_long_range_torpedo.ReinforcedLongRangeTorpedoBlock;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reinforced_long_range_torpedo.ReinforcedLongRangeTorpedoBlockItem;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reinforced_reductive_medium_range_torpedo.ReinforcedReductiveMediumRangeTorpedoBlock;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reinforced_reductive_medium_range_torpedo.ReinforcedReductiveMediumRangeTorpedoBlockItem;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.short_range_torpedo.ShortRangeTorpedoBlock;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.short_range_torpedo.ShortRangeTorpedoBlockItem;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.slow_long_range_torpedo.SlowLongRangeTorpedoBlock;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.slow_long_range_torpedo.SlowLongRangeTorpedoBlockItem;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.ultraspeed_torpedo.UltraspeedTorpedoBlock;
+import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.ultraspeed_torpedo.UltraspeedTorpedoBlockItem;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.content.decoration.copycat.CopycatPanelBlock;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
@@ -449,6 +479,7 @@ public class CBCMSBlocks {
 			.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Medium Range Torpedo")
+			.addLayer(() -> RenderType::translucent)
 			.item(MediumRangeTorpedoBlockItem::new)
 			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
 			.build()
@@ -476,6 +507,7 @@ public class CBCMSBlocks {
 			.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Long Range Torpedo")
+			.addLayer(() -> RenderType::translucent)
 			.item(LongRangeTorpedoBlockItem::new)
 			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
 			.build()
@@ -489,6 +521,7 @@ public class CBCMSBlocks {
 			.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Medium Range Deepwater Torpedo")
+			.addLayer(() -> RenderType::translucent)
 			.item(MediumRangeDeepwaterTorpedoBlockItem::new)
 			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
 			.build()
@@ -515,6 +548,7 @@ public class CBCMSBlocks {
 			.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Highspeed Torpedo")
+			.addLayer(() -> RenderType::translucent)
 			.item(HighspeedTorpedoBlockItem::new)
 			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
 			.build()
@@ -593,10 +627,208 @@ public class CBCMSBlocks {
 			.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Medium Range Torpedo")
+			.addLayer(() -> RenderType::translucent)
 			.item(ReductiveMediumRangeTorpedoBlockItem::new)
 			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
 			.build()
 			.register();
+
+	public static final BlockEntry<LightHighSpeedTorpedoBlock> LIGHT_HIGH_SPEED_TORPEDO = REGISTRATE
+			.block("light_high_speed_torpedo", LightHighSpeedTorpedoBlock::new)
+			.transform(shell(MapColor.COLOR_YELLOW))
+			.transform(axeOrPickaxe())
+			.transform(CBCBuilderTransformers.projectile("projectile/light_high_speed_torpedo"))
+			.transform(CBCBuilderTransformers.safeNbt())
+			.loot(CBCBuilderTransformers.shellLoot())
+			.addLayer(() -> RenderType::translucent)
+			.item(LightHighSpeedTorpedoBlockItem::new)
+			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
+			.build()
+			.register();
+
+	public static final BlockEntry<ReinforcedShortRangeTorpedoBlock> REINFORCED_SHORT_RANGE_TORPEDO = REGISTRATE
+			.block("reinforced_short_range_torpedo", ReinforcedShortRangeTorpedoBlock::new)
+			.transform(shell(MapColor.COLOR_YELLOW))
+			.transform(axeOrPickaxe())
+			.transform(CBCBuilderTransformers.projectile("projectile/reinforced_short_range_torpedo"))
+			.transform(CBCBuilderTransformers.safeNbt())
+			.loot(CBCBuilderTransformers.shellLoot())
+			.addLayer(() -> RenderType::translucent)
+			.item(ReinforcedShortRangeTorpedoBlockItem::new)
+			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
+			.build()
+			.register();
+
+	public static final BlockEntry<ShortRangeTorpedoBlock> SHORT_RANGE_TORPEDO = REGISTRATE
+			.block("short_range_torpedo", ShortRangeTorpedoBlock::new)
+			.transform(shell(MapColor.COLOR_YELLOW))
+			.transform(axeOrPickaxe())
+			.transform(CBCBuilderTransformers.projectile("projectile/short_range_torpedo"))
+			.transform(CBCBuilderTransformers.safeNbt())
+			.loot(CBCBuilderTransformers.shellLoot())
+			.addLayer(() -> RenderType::translucent)
+			.item(ShortRangeTorpedoBlockItem::new)
+			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
+			.build()
+			.register();
+
+	public static final BlockEntry<ReinforcedReductiveShortRangeTorpedoBlock> REINFORCED_REDUCTIVE_SHORT_RANGE_TORPEDO = REGISTRATE
+			.block("reinforced_reductive_short_range_torpedo", ReinforcedReductiveShortRangeTorpedoBlock::new)
+			.transform(shell(MapColor.COLOR_YELLOW))
+			.transform(axeOrPickaxe())
+			.transform(CBCBuilderTransformers.projectile("projectile/reinforced_reductive_short_range_torpedo"))
+			.transform(CBCBuilderTransformers.safeNbt())
+			.loot(CBCBuilderTransformers.shellLoot())
+			.addLayer(() -> RenderType::translucent)
+			.item(ReinforcedReductiveShortRangeTorpedoBlockItem::new)
+			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
+			.build()
+			.register();
+
+	public static final BlockEntry<EarlyTorpedoBlock> EARLY_TORPEDO = REGISTRATE
+			.block("early_torpedo", EarlyTorpedoBlock::new)
+			.transform(shell(MapColor.COLOR_YELLOW))
+			.transform(axeOrPickaxe())
+			.transform(CBCBuilderTransformers.projectile("projectile/early_torpedo"))
+			.transform(CBCBuilderTransformers.safeNbt())
+			.loot(CBCBuilderTransformers.shellLoot())
+			.addLayer(() -> RenderType::translucent)
+			.item(EarlyTorpedoBlockItem::new)
+			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
+			.build()
+			.register();
+
+	public static final BlockEntry<ReinforcedMediumRangeTorpedoBlock> REINFORCED_MEDIUM_RANGE_TORPEDO = REGISTRATE
+			.block("reinforced_medium_range_torpedo", ReinforcedMediumRangeTorpedoBlock::new)
+			.transform(shell(MapColor.COLOR_YELLOW))
+			.transform(axeOrPickaxe())
+			.transform(CBCBuilderTransformers.projectile("projectile/reinforced_medium_range_torpedo"))
+			.transform(CBCBuilderTransformers.safeNbt())
+			.loot(CBCBuilderTransformers.shellLoot())
+			.addLayer(() -> RenderType::translucent)
+			.item(ReinforcedMediumRangeTorpedoBlockItem::new)
+			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
+			.build()
+			.register();
+
+	public static final BlockEntry<PrimaryTorpedoBlock> PRIMARY_TORPEDO = REGISTRATE
+			.block("primary_torpedo", PrimaryTorpedoBlock::new)
+			.transform(shell(MapColor.COLOR_YELLOW))
+			.transform(axeOrPickaxe())
+			.transform(CBCBuilderTransformers.projectile("projectile/primary_torpedo"))
+			.transform(CBCBuilderTransformers.safeNbt())
+			.loot(CBCBuilderTransformers.shellLoot())
+			.addLayer(() -> RenderType::translucent)
+			.item(PrimaryTorpedoBlockItem::new)
+			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
+			.build()
+			.register();
+
+	public static final BlockEntry<ReinforcedReductiveMediumRangeTorpedoBlock> REINFORCED_REDUCTIVE_MEDIUM_RANGE_TORPEDO = REGISTRATE
+			.block("reinforced_reductive_medium_range_torpedo", ReinforcedReductiveMediumRangeTorpedoBlock::new)
+			.transform(shell(MapColor.COLOR_YELLOW))
+			.transform(axeOrPickaxe())
+			.transform(CBCBuilderTransformers.projectile("projectile/reinforced_reductive_medium_range_torpedo"))
+			.transform(CBCBuilderTransformers.safeNbt())
+			.loot(CBCBuilderTransformers.shellLoot())
+			.addLayer(() -> RenderType::translucent)
+			.item(ReinforcedReductiveMediumRangeTorpedoBlockItem::new)
+			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
+			.build()
+			.register();
+
+	public static final BlockEntry<ReductiveLongRangeTorpedoBlock> REDUCTIVE_LONG_RANGE_TORPEDO = REGISTRATE
+			.block("reductive_long_range_torpedo", ReductiveLongRangeTorpedoBlock::new)
+			.transform(shell(MapColor.COLOR_YELLOW))
+			.transform(axeOrPickaxe())
+			.transform(CBCBuilderTransformers.projectile("projectile/reductive_long_range_torpedo"))
+			.transform(CBCBuilderTransformers.safeNbt())
+			.loot(CBCBuilderTransformers.shellLoot())
+			.addLayer(() -> RenderType::translucent)
+			.item(ReductiveLongRangeTorpedoBlockItem::new)
+			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
+			.build()
+			.register();
+
+	public static final BlockEntry<ReinforcedLongRangeTorpedoBlock> REINFORCED_LONG_RANGE_TORPEDO = REGISTRATE
+			.block("reinforced_long_range_torpedo", ReinforcedLongRangeTorpedoBlock::new)
+			.transform(shell(MapColor.COLOR_YELLOW))
+			.transform(axeOrPickaxe())
+			.transform(CBCBuilderTransformers.projectile("projectile/reinforced_long_range_torpedo"))
+			.transform(CBCBuilderTransformers.safeNbt())
+			.loot(CBCBuilderTransformers.shellLoot())
+			.addLayer(() -> RenderType::translucent)
+			.item(ReinforcedLongRangeTorpedoBlockItem::new)
+			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
+			.build()
+			.register();
+
+	public static final BlockEntry<GamblerMediumRangeTorpedoBlock> GAMBLER_MEDIUM_RANGE_TORPEDO = REGISTRATE
+			.block("gambler_medium_range_torpedo", GamblerMediumRangeTorpedoBlock::new)
+			.transform(shell(MapColor.COLOR_YELLOW))
+			.transform(axeOrPickaxe())
+			.transform(CBCBuilderTransformers.projectile("projectile/gambler_medium_range_torpedo"))
+			.transform(CBCBuilderTransformers.safeNbt())
+			.loot(CBCBuilderTransformers.shellLoot())
+			.addLayer(() -> RenderType::translucent)
+			.item(GamblerMediumRangeTorpedoBlockItem::new)
+			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
+			.build()
+			.register();
+
+	public static final BlockEntry<UltraspeedTorpedoBlock> ULTRASPEED_TORPEDO = REGISTRATE
+			.block("ultraspeed_torpedo", UltraspeedTorpedoBlock::new)
+			.transform(shell(MapColor.COLOR_YELLOW))
+			.transform(axeOrPickaxe())
+			.transform(CBCBuilderTransformers.projectile("projectile/ultraspeed_torpedo"))
+			.transform(CBCBuilderTransformers.safeNbt())
+			.loot(CBCBuilderTransformers.shellLoot())
+			.addLayer(() -> RenderType::translucent)
+			.item(UltraspeedTorpedoBlockItem::new)
+			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
+			.build()
+			.register();
+
+	public static final BlockEntry<ReductiveHighspeedTorpedoBlock> REDUCTIVE_HIGHSPEED_TORPEDO = REGISTRATE
+			.block("reductive_highspeed_torpedo", ReductiveHighspeedTorpedoBlock::new)
+			.transform(shell(MapColor.COLOR_YELLOW))
+			.transform(axeOrPickaxe())
+			.transform(CBCBuilderTransformers.projectile("projectile/reductive_highspeed_torpedo"))
+			.transform(CBCBuilderTransformers.safeNbt())
+			.loot(CBCBuilderTransformers.shellLoot())
+			.addLayer(() -> RenderType::translucent)
+			.item(ReductiveHighspeedTorpedoBlockItem::new)
+			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
+			.build()
+			.register();
+
+	public static final BlockEntry<SlowLongRangeTorpedoBlock> SLOW_LONG_RANGE_TORPEDO = REGISTRATE
+			.block("slow_long_range_torpedo", SlowLongRangeTorpedoBlock::new)
+			.transform(shell(MapColor.COLOR_YELLOW))
+			.transform(axeOrPickaxe())
+			.transform(CBCBuilderTransformers.projectile("projectile/slow_long_range_torpedo"))
+			.transform(CBCBuilderTransformers.safeNbt())
+			.loot(CBCBuilderTransformers.shellLoot())
+			.addLayer(() -> RenderType::translucent)
+			.item(SlowLongRangeTorpedoBlockItem::new)
+			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
+			.build()
+			.register();
+
+	public static final BlockEntry<HighspeedLongRangeTorpedoBlock> HIGHSPEED_LONG_RANGE_TORPEDO = REGISTRATE
+			.block("highspeed_long_range_torpedo", HighspeedLongRangeTorpedoBlock::new)
+			.transform(shell(MapColor.COLOR_YELLOW))
+			.transform(axeOrPickaxe())
+			.transform(CBCBuilderTransformers.projectile("projectile/highspeed_long_range_torpedo"))
+			.transform(CBCBuilderTransformers.safeNbt())
+			.loot(CBCBuilderTransformers.shellLoot())
+			.addLayer(() -> RenderType::translucent)
+			.item(HighspeedLongRangeTorpedoBlockItem::new)
+			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
+			.build()
+			.register();
+
+	/// /// /// ///
 
 	public static final BlockEntry<HEBombBlock> HE_BOMB = REGISTRATE
 			.block("he_bomb", HEBombBlock::new)

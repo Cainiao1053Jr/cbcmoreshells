@@ -50,6 +50,22 @@
     "cbcmoreshells:normal_incendiary_he_shell",
     "cbcmoreshells:apbc_shell",
     "cbcmoreshells:normal_apbc_shell",
-    "cbcmoreshells:extended_antiair_he_shell"
+    "cbcmoreshells:extended_antiair_he_shell",
+    "cbcmoreshells:reductive_medium_range_torpedo",
+    "cbcmoreshells:light_high_speed_torpedo",
+    "cbcmoreshells:reinforced_short_range_torpedo",
+    "cbcmoreshells:short_range_torpedo",
+    "cbcmoreshells:reinforced_reductive_short_range_torpedo",
+    "cbcmoreshells:reinforced_medium_range_torpedo",
+    "cbcmoreshells:early_torpedo",
+    "cbcmoreshells:primary_torpedo",
+    "cbcmoreshells:reinforced_reductive_medium_range_torpedo",
+    "cbcmoreshells:reductive_long_range_torpedo",
+    "cbcmoreshells:reinforced_long_range_torpedo",
+    "cbcmoreshells:gambler_medium_range_torpedo",
+    "cbcmoreshells:ultraspeed_torpedo",
+    "cbcmoreshells:reductive_highspeed_torpedo",
+    "cbcmoreshells:slow_long_range_torpedo",
+    "cbcmoreshells:highspeed_long_range_torpedo"
   ]
 }

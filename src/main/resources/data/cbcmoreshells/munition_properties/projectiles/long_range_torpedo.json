@@ -1,11 +1,11 @@
 {
-  "entity_damage": 10.0,
+  "entity_damage": 100.0,
   "durability_mass": 0.1,
   "renders_invulnerable": false,
   "ignores_invulnerability": true,
   "ignores_entity_armor": true,
   "gravity": -0.03,
-  "drag": 0.15,
+  "drag": 0.16,
   "quadratic_drag": false,
   "knockback": 2,
   "added_charge_power": 1,
@@ -16,12 +16,13 @@
   "explosive_power": 3.25,
   "max_charges": 10,
   "penetration": 2.5,
-  "lifetime": 962,
+  "lifetime": 746,
   "toughness": 1,
   "deflection": 0.70,
-  "buoyancy_factor": 0.13,
-  "torpedo_speed": 1.09,
-  "torpedo_spread": 8.5,
-  "reload_time": 560,
-  "explosion_cooldown": 35
+  "buoyancy_factor": 0.18,
+  "torpedo_speed": 1.005,
+  "torpedo_spread": 6,
+  "reload_time": 600,
+  "explosion_cooldown": 50,
+  "percent_reduction": 0
 }
