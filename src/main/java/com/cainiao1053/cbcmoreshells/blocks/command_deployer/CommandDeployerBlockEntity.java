@@ -52,12 +52,11 @@ public class CommandDeployerBlockEntity extends SmartBlockEntity {
     }
 
     public final SmartInventory inventory = new SmartInventory(1, this);
+    private List<BlockPos> cachedPositions = new ArrayList<>();
 
     @Override
     public void addBehaviours(List<BlockEntityBehaviour> list) {
     }
-
-    Logger LOGGER = Cbcmoreshells.LOGGER;
 
     @Override
     public void tick() {
@@ -182,17 +181,24 @@ public class CommandDeployerBlockEntity extends SmartBlockEntity {
             return;
         }
         CompoundTag tag = stack.getOrCreateTag();
-        if (!tag.contains("Positions", Tag.TAG_LIST)) return;
-        ListTag positions = tag.getList("Positions", Tag.TAG_COMPOUND);
-        if (positions.isEmpty()) return;
+        if (tag.contains("Positions", Tag.TAG_LIST)) {
+            ListTag positionsTag = tag.getList("Positions", Tag.TAG_COMPOUND);
+            if (!positionsTag.isEmpty()) {
+                cachedPositions = new ArrayList<>();
+                for (int i = 0; i < positionsTag.size(); i++) {
+                    cachedPositions.add(NbtUtils.readBlockPos(positionsTag.getCompound(i)));
+                }
+                setChanged();
+            }
+        }
+        if (cachedPositions.isEmpty()) return;
 
         Vec3 selfPos = Vec3.atCenterOf(this.worldPosition);
         int activatedCannonCount = 0;
         int maxUse = ccb.getMaximumUseAtOnce();
         List<MountedDualCannonContraption> availableDualCannon = new ArrayList<>();
 
-        for (int i = 0; i < positions.size(); i++) {
-            BlockPos mountPos = NbtUtils.readBlockPos(positions.getCompound(i));
+        for (BlockPos mountPos : cachedPositions) {
             BlockEntity be = level.getBlockEntity(mountPos);
             if (!(be instanceof CannonMountBlockEntity mount)) continue;
             PitchOrientedContraptionEntity poce = mount.getContraption();
@@ -317,12 +323,24 @@ public class CommandDeployerBlockEntity extends SmartBlockEntity {
     public void write(CompoundTag compound, boolean clientPacket) {
         super.write(compound, clientPacket);
         compound.put("Inventory", inventory.serializeNBT());
+        ListTag posList = new ListTag();
+        for (BlockPos pos : cachedPositions) {
+            posList.add(NbtUtils.writeBlockPos(pos));
+        }
+        compound.put("CachedPositions", posList);
     }
 
     @Override
     protected void read(CompoundTag compound, boolean clientPacket) {
         super.read(compound, clientPacket);
         inventory.deserializeNBT(compound.getCompound("Inventory"));
+        cachedPositions = new ArrayList<>();
+        if (compound.contains("CachedPositions", Tag.TAG_LIST)) {
+            ListTag posList = compound.getList("CachedPositions", Tag.TAG_COMPOUND);
+            for (int i = 0; i < posList.size(); i++) {
+                cachedPositions.add(NbtUtils.readBlockPos(posList.getCompound(i)));
+            }
+        }
     }
 
     public Vector3d getPositionShip() {
