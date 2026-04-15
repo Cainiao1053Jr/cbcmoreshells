@@ -1,0 +1,7 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(javap -classpath \"C:\\\\Users\\\\59512\\\\.gradle/caches/forge_gradle/deobf_dependencies/com/rbasamoyai/createbigcannons/5.8.2-dev+mc.1.20.1-forge-build.150_mapped_official_1.20.1/createbigcannons-5.8.2-dev+mc.1.20.1-forge-build.150_mapped_official_1.20.1.jar\" -c rbasamoyai.createbigcannons.munitions.fuzes.TimedFuzeItem)"
+    ]
+  }
+}

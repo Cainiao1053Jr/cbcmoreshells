@@ -58,10 +58,24 @@ public class ShipProximityFuzeItem extends FuzeItem implements MenuProvider {
 	@Override
 	public boolean onProjectileTick(ItemStack stack, AbstractCannonProjectile projectile) {
 		CompoundTag tag = stack.getOrCreateTag();
+
+		// Countdown after proximity activation.
+		if (tag.getBoolean("Activated")) {
+			int timer = tag.getInt("FuzeTimer");
+			if (timer <= 0) return true;
+			tag.putInt("FuzeTimer", timer - 1);
+			return false;
+		}
+
 		int airTime = tag.getInt("AirTime");
 		if (airTime > CBCConfigs.SERVER.munitions.proximityFuzeArmingTime.get()) tag.putBoolean("Armed", true);
 		tag.putInt("AirTime", ++airTime);
 		return false;
+	}
+
+	@Override
+	public boolean canLingerInGround(ItemStack stack, AbstractCannonProjectile projectile) {
+		return stack.getOrCreateTag().getBoolean("Activated");
 	}
 
 	@Override
@@ -70,25 +84,35 @@ public class ShipProximityFuzeItem extends FuzeItem implements MenuProvider {
 		CompoundTag tag = stack.getOrCreateTag();
 		if (!tag.contains("Armed")) return false;
 
-		double l = Math.max(tag.getInt("DetonationDistance"), 1);
+		int time = Math.max(tag.getInt("DetonationDistance"), 1);
 		Vec3 dir = projectile.getOrientation().normalize();
 		//Vec3 right = dir.cross(new Vec3(Direction.UP.step()));
 		//Vec3 up = dir.cross(right);
-		dir = dir.scale(l);
+		dir = dir.scale(2);
 		//double reach = Math.max(projectile.getBbWidth(), projectile.getBbHeight()) * 0.5;
 
+		// Sweep the AABB along this tick's displacement so fast-moving projectiles
+		// don't tunnel through ships between ticks.
+		Vec3 tickDisplacement = end.subtract(start);
 		AABB currentMovementRegion = projectile.getBoundingBox()
 			.expandTowards(dir.scale(1.75))
 			.inflate(4)
-			.move(start.subtract(projectile.position()));
+			.move(start.subtract(projectile.position()))
+			.expandTowards(tickDisplacement);
 
 		//List<Entity> entities = projectile.level().getEntities(projectile, currentMovementRegion, projectile::canHitEntity);
 		var shipWorldCore = VSGameUtilsKt.getShipObjectWorld((ServerLevel) projectile.level());
 
-		for(var ship :shipWorldCore.getLoadedShips()){
+		for (var ship : shipWorldCore.getLoadedShips()) {
 			AABBdc shipABdc = ship.getWorldAABB();
 			AABB shipAABB = toAABB(shipABdc);
-			if(currentMovementRegion.intersects(shipAABB)){
+			if (currentMovementRegion.intersects(shipAABB)) {
+				// Don't detonate immediately; start the fixed-tick countdown instead.
+				if(time > 1){
+					tag.putBoolean("Activated", true);
+					tag.putInt("FuzeTimer", Math.max(time - 2, 0));
+					return false;
+				}
 				return true;
 			}
 		}

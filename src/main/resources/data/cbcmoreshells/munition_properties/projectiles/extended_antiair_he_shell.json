@@ -18,7 +18,7 @@
   "deflection": 0.01,
   "base_fuze": false,
   "explosive_power": 4.0,
-  "initial_vel": 10.0,
+  "initial_vel": 12.0,
   "projectile_spread": 8,
   "minimum_spread": 1.1,
   "smash_toughness": 0,
