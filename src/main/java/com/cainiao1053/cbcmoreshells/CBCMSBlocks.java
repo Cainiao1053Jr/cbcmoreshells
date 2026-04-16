@@ -1528,6 +1528,16 @@ public class CBCMSBlocks {
 			.item(SingleCannonBlockItem::new).build()
 			.register();
 
+	public static final BlockEntry<DualCannonBodyBlock> WIDE_STEEL_SINGLE_CANNON_MAGAZINE = REGISTRATE
+			.block("wide_steel_single_cannon_magazine", p -> DualCannonBodyBlock.singleMedium(p, CBCMSDualCannonMaterials.WIDE_SINGLE_STEEL))
+			.transform(CBCBuilderTransformers.cannonChamber("wide_single_steel", true))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.STEEL_DUAL_CANNON_CHAMBER)))
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
 	public static final BlockEntry<DualCannonQuickfiringBreechBlock> WIDE_STEEL_SINGLE_CANNON_QUICKFIRING_BREECH = REGISTRATE
 			.block("wide_steel_single_cannon_quickfiring_breech", p -> DualCannonQuickfiringBreechBlock.singleWide(p, CBCMSDualCannonMaterials.WIDE_SINGLE_STEEL, wideSteelSingleSlidingBreech()))
 			.lang("Wide Steel Single Cannon Quick-Firing Breech")

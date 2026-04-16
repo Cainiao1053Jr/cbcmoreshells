@@ -3,6 +3,7 @@ package com.cainiao1053.cbcmoreshells.munitions.dual_cannon.extended_ap_shot;
 import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
 import com.cainiao1053.cbcmoreshells.base.CBCMSTooltip;
 import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.FuzedDualCannonProjectileBlockItem;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.config.DualCannonProperties;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.utility.Components;
@@ -23,7 +24,7 @@ import static com.cainiao1053.cbcmoreshells.CBCMSEntityTypes.EXTENDED_AP_SHOT;
 import static com.cainiao1053.cbcmoreshells.base.CBCMSTooltip.addHoldShift;
 import static rbasamoyai.createbigcannons.base.CBCTooltip.getPalette;
 
-public class ExtendedAPShotBlockItem extends ProjectileBlockItem {
+public class ExtendedAPShotBlockItem extends FuzedDualCannonProjectileBlockItem {
 
 	public ExtendedAPShotBlockItem(Block block, Properties properties) {
 		super(block, properties);
@@ -32,16 +33,16 @@ public class ExtendedAPShotBlockItem extends ProjectileBlockItem {
 	@Override
 	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
 		super.appendHoverText(stack, level, tooltip, flag);
-		boolean desc = Screen.hasShiftDown();
-		if (!desc) {
-			addHoldShift(desc, tooltip);
-			return;
-		}
-		String key1 = "block."+Cbcmoreshells.MODID+".dual_cannon_projectile.tooltip.title";
-		TooltipHelper.Palette palette = getPalette(level, stack);
-		tooltip.add(Components.translatable(key1).withStyle(ChatFormatting.GRAY));
-		String key2 = "block."+Cbcmoreshells.MODID+".dual_cannon_projectile.tooltip.desc";
-		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key2), palette.primary(), palette.highlight(), 1));
+//		boolean desc = Screen.hasShiftDown();
+//		if (!desc) {
+//			addHoldShift(desc, tooltip);
+//			return;
+//		}
+//		String key1 = "block."+Cbcmoreshells.MODID+".dual_cannon_projectile.tooltip.title";
+//		TooltipHelper.Palette palette = getPalette(level, stack);
+//		tooltip.add(Components.translatable(key1).withStyle(ChatFormatting.GRAY));
+//		String key2 = "block."+Cbcmoreshells.MODID+".dual_cannon_projectile.tooltip.desc";
+//		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key2), palette.primary(), palette.highlight(), 1));
 
 		DualCannonProperties properties = CBCMSMunitionPropertiesHandlers.DUAL_CANNON_PROPERTIES.getPropertiesOf(EXTENDED_AP_SHOT.get());
 		CBCMSTooltip.appendInertDualCannonProjectileInfo(stack, level, tooltip, flag, properties);

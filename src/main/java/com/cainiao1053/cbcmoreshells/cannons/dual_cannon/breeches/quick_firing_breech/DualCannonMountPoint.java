@@ -83,8 +83,14 @@ public class DualCannonMountPoint extends AllArmInteractionPointTypes.DepositOnl
 				magazine.setStackInSlot(i, stack);
 				ItemStack copy = stack.copy();
 				copy.shrink(1);
+				float reloadTimeModifier = bigCannon.getReloadTimeModifier();
+				float reloadTimeCoef = ((DualCannonProjectileBlock<?>) munition).getProjectile(poce.level(), stack).getReloadTimeCoef();
+				breech.setLoadingCooldown(getLoadingCooldown(reloadTimeModifier*reloadTimeCoef));
 				return copy;
 			}
+			float reloadTimeModifier = bigCannon.getReloadTimeModifier();
+			float reloadTimeCoef = ((DualCannonProjectileBlock<?>) munition).getProjectile(poce.level(), stack).getReloadTimeCoef();
+			breech.setLoadingCooldown(getLoadingCooldown(reloadTimeModifier*reloadTimeCoef));
 			return stack;
 		}
 

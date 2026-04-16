@@ -12,7 +12,8 @@ public class CBCMSTags {
 	public static class CBCMSBlockTags {
 		public static final TagKey<Block>
 			COMBAT_COMMAND_EQUIPMENT = makeTag("combat_command_equipment"),
-		    RACK_STABILIZER = makeTag("rack_stabilizer")
+		    RACK_STABILIZER = makeTag("rack_stabilizer"),
+			MAGAZINE_EQUIPMENT = makeTag("magazine_equipment")
 			;
 
 		public static TagKey<Block> makeTag(String path) {
