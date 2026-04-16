@@ -73,9 +73,8 @@ public class MountedTorpedoTubeContraption extends AbstractMountedCannonContrapt
 	public boolean hasFired = false;
 	public boolean hasWeldedPenalty = false;
 
-	protected int mortarDelay = 0;
-	protected ItemStack cachedMortarRound = ItemStack.EMPTY;
-	Logger LOGGER = Cbcmoreshells.LOGGER;
+	//protected int mortarDelay = 0;
+	//protected ItemStack cachedMortarRound = ItemStack.EMPTY;
 
 	@Override
 	public boolean assemble(Level level, BlockPos pos) throws AssemblyException {
@@ -228,10 +227,10 @@ public class MountedTorpedoTubeContraption extends AbstractMountedCannonContrapt
 		BlockPos endPos = this.startPos.relative(this.initialOrientation.getOpposite());
 		if (this.presentBlockEntities.get(endPos) instanceof TorpQuickfiringBreechBlockEntity qfbreech)
 			qfbreech.tickAnimation();
-		if (!level.isClientSide && this.isDropMortar() && this.mortarDelay > 0) {
-			--this.mortarDelay;
-			//if (this.mortarDelay == 0) this.actuallyFireDropMortar();
-		}
+//		if (!level.isClientSide && this.isDropMortar() && this.mortarDelay > 0) {
+//			--this.mortarDelay;
+//			//if (this.mortarDelay == 0) this.actuallyFireDropMortar();
+//		}
 	}
 
 	@Override
@@ -567,10 +566,10 @@ public class MountedTorpedoTubeContraption extends AbstractMountedCannonContrapt
 	@Override
 	public void addPassengersToWorld(Level world, StructureTransform transform, List<Entity> seatedEntities) {
 		super.addPassengersToWorld(world, transform, seatedEntities);
-		if (!world.isClientSide && this.isDropMortar() && this.cachedMortarRound != null && !this.cachedMortarRound.isEmpty() && this.entity != null) {
-			Vec3 pos = this.entity.toGlobalVector(Vec3.atCenterOf(this.startPos), 0);
-			world.addFreshEntity(new ItemEntity(world, pos.x, pos.y, pos.z, this.cachedMortarRound.copy()));
-		}
+//		if (!world.isClientSide && this.isDropMortar() && this.cachedMortarRound != null && !this.cachedMortarRound.isEmpty() && this.entity != null) {
+//			Vec3 pos = this.entity.toGlobalVector(Vec3.atCenterOf(this.startPos), 0);
+//			world.addFreshEntity(new ItemEntity(world, pos.x, pos.y, pos.z, this.cachedMortarRound.copy()));
+//		}
 	}
 
 	protected @Nullable Ship getShipOn(Level level, BlockPos pos) {
@@ -592,8 +591,8 @@ public class MountedTorpedoTubeContraption extends AbstractMountedCannonContrapt
 		CompoundTag tag = super.writeNBT(clientData);
 		tag.putString("CannonMaterial", this.cannonMaterial == null ? CBCMSTorpedoTubeMaterials.CAST_IRON.name().toString() : this.cannonMaterial.name().toString());
 		if (this.hasWeldedPenalty) tag.putBoolean("WeldedCannon", true);
-		if (this.mortarDelay > 0) tag.putInt("MortarDelay", this.mortarDelay);
-		if (this.cachedMortarRound != null && !this.cachedMortarRound.isEmpty()) tag.put("CachedMortarRound", this.cachedMortarRound.save(new CompoundTag()));
+		//if (this.mortarDelay > 0) tag.putInt("MortarDelay", this.mortarDelay);
+		//if (this.cachedMortarRound != null && !this.cachedMortarRound.isEmpty()) tag.put("CachedMortarRound", this.cachedMortarRound.save(new CompoundTag()));
 		if (this.hasFired) tag.putBoolean("HasFired", true);
 		return tag;
 	}
@@ -604,8 +603,8 @@ public class MountedTorpedoTubeContraption extends AbstractMountedCannonContrapt
 		this.cannonMaterial = TorpedoTubeMaterial.fromNameOrNull(CBCUtils.location(tag.getString("CannonMaterial")));
 		this.hasWeldedPenalty = tag.contains("WeldedCannon");
 		if (this.cannonMaterial == null) this.cannonMaterial = CBCMSTorpedoTubeMaterials.CAST_IRON;
-		this.mortarDelay = Math.max(0, tag.getInt("MortarDelay"));
-		this.cachedMortarRound = tag.contains("CachedMortarRound", Tag.TAG_COMPOUND) ? ItemStack.of(tag.getCompound("CachedMortarRound")) : ItemStack.EMPTY;
+		//this.mortarDelay = Math.max(0, tag.getInt("MortarDelay"));
+		//this.cachedMortarRound = tag.contains("CachedMortarRound", Tag.TAG_COMPOUND) ? ItemStack.of(tag.getCompound("CachedMortarRound")) : ItemStack.EMPTY;
 		this.hasFired = tag.contains("HasFired");
 	}
 

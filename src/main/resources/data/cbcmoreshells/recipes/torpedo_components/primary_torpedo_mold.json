@@ -1,0 +1,19 @@
+{
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "item": "cbcmoreshells:primary_torpedo_mold"
+    },
+    {
+      "item": "create:iron_sheet"
+    }
+  ],
+  "results": [
+    {
+      "item": "cbcmoreshells:primary_torpedo_component"
+    },
+    {
+      "item": "cbcmoreshells:primary_torpedo_mold"
+    }
+  ]
+}

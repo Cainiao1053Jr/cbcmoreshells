@@ -1,0 +1,22 @@
+{
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "item": "cbcmoreshells:ultraspeed_torpedo_mold"
+    },
+    {
+      "item": "create:iron_sheet"
+    },
+    {
+      "item": "create:copper_sheet"
+    }
+  ],
+  "results": [
+    {
+      "item": "cbcmoreshells:ultraspeed_torpedo_component"
+    },
+    {
+      "item": "cbcmoreshells:ultraspeed_torpedo_mold"
+    }
+  ]
+}

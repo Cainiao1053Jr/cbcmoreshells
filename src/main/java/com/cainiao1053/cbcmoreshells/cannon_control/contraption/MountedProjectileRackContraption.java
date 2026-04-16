@@ -85,10 +85,8 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 	private BlockState breechState = null;
 	protected boolean hasStabilizer = false;
 
-	Logger LOGGER = Cbcmoreshells.LOGGER;
-
-	protected int mortarDelay = 0;
-	protected ItemStack cachedMortarRound = ItemStack.EMPTY;
+	//protected int mortarDelay = 0;
+	//protected ItemStack cachedMortarRound = ItemStack.EMPTY;
 
 	//private List<BlockPos> rackPoses = new ArrayList();
 
@@ -263,10 +261,10 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 		BlockPos endPos = this.startPos.relative(this.initialOrientation.getOpposite());
 		if (this.presentBlockEntities.get(endPos) instanceof ProjectileRackQuickfiringBreechBlockEntity qfbreech)
 			qfbreech.tickAnimation();
-		if (!level.isClientSide && this.isDropMortar() && this.mortarDelay > 0) {
-			--this.mortarDelay;
-			//if (this.mortarDelay == 0) this.actuallyFireDropMortar();
-		}
+//		if (!level.isClientSide && this.isDropMortar() && this.mortarDelay > 0) {
+//			--this.mortarDelay;
+//			//if (this.mortarDelay == 0) this.actuallyFireDropMortar();
+//		}
 	}
 
 	@Override
@@ -708,10 +706,10 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 	@Override
 	public void addPassengersToWorld(Level world, StructureTransform transform, List<Entity> seatedEntities) {
 		super.addPassengersToWorld(world, transform, seatedEntities);
-		if (!world.isClientSide && this.isDropMortar() && this.cachedMortarRound != null && !this.cachedMortarRound.isEmpty() && this.entity != null) {
-			Vec3 pos = this.entity.toGlobalVector(Vec3.atCenterOf(this.startPos), 0);
-			world.addFreshEntity(new ItemEntity(world, pos.x, pos.y, pos.z, this.cachedMortarRound.copy()));
-		}
+//		if (!world.isClientSide && this.isDropMortar() && this.cachedMortarRound != null && !this.cachedMortarRound.isEmpty() && this.entity != null) {
+//			Vec3 pos = this.entity.toGlobalVector(Vec3.atCenterOf(this.startPos), 0);
+//			world.addFreshEntity(new ItemEntity(world, pos.x, pos.y, pos.z, this.cachedMortarRound.copy()));
+//		}
 	}
 
 	@Override
@@ -729,8 +727,8 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 		CompoundTag tag = super.writeNBT(clientData);
 		tag.putString("CannonMaterial", this.cannonMaterial == null ? CBCMSProjectileRackMaterials.CAST_IRON.name().toString() : this.cannonMaterial.name().toString());
 		if (this.hasWeldedPenalty) tag.putBoolean("WeldedCannon", true);
-		if (this.mortarDelay > 0) tag.putInt("MortarDelay", this.mortarDelay);
-		if (this.cachedMortarRound != null && !this.cachedMortarRound.isEmpty()) tag.put("CachedMortarRound", this.cachedMortarRound.save(new CompoundTag()));
+		//if (this.mortarDelay > 0) tag.putInt("MortarDelay", this.mortarDelay);
+		//if (this.cachedMortarRound != null && !this.cachedMortarRound.isEmpty()) tag.put("CachedMortarRound", this.cachedMortarRound.save(new CompoundTag()));
 		if (this.hasFired) tag.putBoolean("HasFired", true);
 		tag.putBoolean("hasStabilizer", this.hasStabilizer);
 		return tag;
@@ -742,8 +740,8 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 		this.cannonMaterial = ProjectileRackMaterial.fromNameOrNull(CBCUtils.location(tag.getString("CannonMaterial")));
 		this.hasWeldedPenalty = tag.contains("WeldedCannon");
 		if (this.cannonMaterial == null) this.cannonMaterial = CBCMSProjectileRackMaterials.CAST_IRON;
-		this.mortarDelay = Math.max(0, tag.getInt("MortarDelay"));
-		this.cachedMortarRound = tag.contains("CachedMortarRound", Tag.TAG_COMPOUND) ? ItemStack.of(tag.getCompound("CachedMortarRound")) : ItemStack.EMPTY;
+		//this.mortarDelay = Math.max(0, tag.getInt("MortarDelay"));
+		//this.cachedMortarRound = tag.contains("CachedMortarRound", Tag.TAG_COMPOUND) ? ItemStack.of(tag.getCompound("CachedMortarRound")) : ItemStack.EMPTY;
 		this.hasFired = tag.contains("HasFired");
 		this.hasStabilizer = tag.getBoolean("hasStabilizer");
 	}

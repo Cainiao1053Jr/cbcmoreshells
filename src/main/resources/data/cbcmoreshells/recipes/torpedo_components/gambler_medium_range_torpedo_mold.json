@@ -1,0 +1,22 @@
+{
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "item": "cbcmoreshells:gambler_medium_range_torpedo_mold"
+    },
+    {
+      "item": "create:iron_sheet"
+    },
+    {
+      "item": "create:iron_sheet"
+    }
+  ],
+  "results": [
+    {
+      "item": "cbcmoreshells:gambler_medium_range_torpedo_component"
+    },
+    {
+      "item": "cbcmoreshells:gambler_medium_range_torpedo_mold"
+    }
+  ]
+}

@@ -6,10 +6,13 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 import com.simibubi.create.Create;
+import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
+import com.tterrag.registrate.util.entry.ItemEntry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
@@ -30,9 +33,6 @@ public class ModGroup {
 				CBCMSBlocks.Inferior_HE_SHELL.asStack(),
 				CBCMSBlocks.SAP_SHELL.asStack(),
 				CBCMSBlocks.HESH_SHELL.asStack(),
-				CBCMSBlocks.SHELLESS_HE_SHELL.asStack(),
-				CBCMSBlocks.SHELLESS_AP_SHOT.asStack(),
-				CBCMSBlocks.SHELLESS_SAP_SHELL.asStack(),
 				CBCMSBlocks.APFSDS_SHOT.asStack(),
 				CBCMSBlocks.ANTIAIR_HE_SHELL.asStack(),
 				CBCMSBlocks.ANTIAIR_SHRAPNEL_SHELL.asStack(),
@@ -42,7 +42,7 @@ public class ModGroup {
 				CBCMSBlocks.BAKED_APFSDS_SHOT.asStack(),
 				CBCMSBlocks.BAGUETTE_SHOT.asStack(),
 				CBCMSBlocks.INCENDIARY_HE_SHELL.asStack(),
-				CBCMSBlocks.SHELLESS_INCENDIARY_HE_SHELL.asStack(),
+
 				CBCMSBlocks.MEDIUM_RANGE_TORPEDO_TYPEB.asStack(),
 				CBCMSBlocks.MEDIUM_RANGE_DEEPWATER_TORPEDO_TYPEB.asStack(),
 
@@ -228,8 +228,17 @@ public class ModGroup {
 				CBCMSBlocks.DISH_PLATE.asStack(),
 				CBCMSBlocks.ROUND_DISH_PLATE.asStack(),
 
-				CBCMSBlocks.ANTIBLAST_COPYCAT_PANEL.asStack()
+				CBCMSBlocks.ANTIBLAST_COPYCAT_PANEL.asStack(),
+
+					CBCMSItems.TORPEDO_HEAD.asStack(),
+					CBCMSItems.REINFORCED_TORPEDO_HEAD.asStack()
 			));
+			for (ItemEntry<Item> mold : CBCMSItems.TORPEDO_MOLDS.values()) {
+				output.accept(mold.asStack());
+			}
+//			for (ItemEntry<SequencedAssemblyItem> component : CBCMSItems.TORPEDO_COMPONENTS.values()) {
+//				output.accept(component.asStack());
+//			}
 		})
 		.build());
 

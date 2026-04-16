@@ -20,6 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.items.ItemStackHandler;
 import rbasamoyai.createbigcannons.cannon_control.cannon_mount.CannonMountBlockEntity;
 import rbasamoyai.createbigcannons.cannon_control.cannon_mount.ExtendsCannonMount;
 import rbasamoyai.createbigcannons.cannon_control.contraption.AbstractMountedCannonContraption;
@@ -69,6 +70,23 @@ public class DualCannonMountPoint extends AllArmInteractionPointTypes.DepositOnl
 		BlockPos breechPos = startPos.relative(extractDirection);
 		if (!(bigCannon.presentBlockEntities.get(breechPos) instanceof DualCannonQuickfiringBreechBlockEntity breech) || !breech.canBeAutomaticallyLoaded())
 			return stack;
+
+		//Magazine behavior
+		if(bigCannon.hasMagazine()){
+			ItemStackHandler magazine = bigCannon.getCachedMunition();
+			int maxSlots = magazine.getSlots();
+			for(int i = 0; i < maxSlots; i++){
+				ItemStack projectile = magazine.getStackInSlot(i);
+				if(!projectile.isEmpty()){
+					continue;
+				}
+				magazine.setStackInSlot(i, stack);
+				ItemStack copy = stack.copy();
+				copy.shrink(1);
+				return copy;
+			}
+			return stack;
+		}
 
 		BlockPos nextPos = startPos.relative(pushDirection);
 		int barrelLength = 0;

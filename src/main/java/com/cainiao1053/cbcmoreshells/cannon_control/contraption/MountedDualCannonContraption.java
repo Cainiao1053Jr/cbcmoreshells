@@ -46,6 +46,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.items.ItemStackHandler;
 import org.slf4j.Logger;
 import rbasamoyai.createbigcannons.CBCTags;
 import rbasamoyai.createbigcannons.cannon_control.ControlPitchContraption;
@@ -91,10 +92,11 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
 	private float additionalSpreadCoef = 1;
 	private boolean reduceCooldownOnHit = true;
 
-	Logger LOGGER = Cbcmoreshells.LOGGER;
+	private boolean hasMagazine = false;
+	private ItemStackHandler cachedMunition = new ItemStackHandler(4);
 
-	protected int mortarDelay = 10;
-	protected ItemStack cachedMortarRound = ItemStack.EMPTY;
+	//protected int mortarDelay = 10;
+	//protected ItemStack cachedMortarRound = ItemStack.EMPTY;
 
 	@Override
 	public boolean assemble(Level level, BlockPos pos) throws AssemblyException {
@@ -443,18 +445,10 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
 		float horizontalOffset = this.cannonMaterial.properties().barrelGap()/2 * this.barrelInverter;
 		Vec3 horizontalOffsetVec = vec.yRot((float)Math.PI/2).scale(horizontalOffset);
 
-		//if (propelCtx.chargesUsed < minimumSpread) propelCtx.chargesUsed = minimumSpread;
-
 		float recoilMagnitude = 0;
 
 		int barrelLifetime = (this.cannonMaterial.properties().addedLifetime());
 		float durabilityMassModifier = this.cannonMaterial.properties().durabilityMassModifier()*this.commandDurabilityMassModifier * this.equipmentDurabilityModifier;
-
-//		Cbcmoreshells.LOGGER.info("final durability mass" + durabilityMassModifier);
-//		Cbcmoreshells.LOGGER.info("final lifetime" + barrelLifetime);
-//		Cbcmoreshells.LOGGER.info("final reload" + this.equipmentReloadModifier);
-//		Cbcmoreshells.LOGGER.info("command left" + this.commandLeft);
-//		Cbcmoreshells.LOGGER.info("command cooldown" + this.commandCooldown);
 		if (projectile != null) {
 			if (projectile instanceof IntegratedPropellantProjectile integPropel && !projectileBlocks.isEmpty()) {
 				if (!propelCtx.addIntegratedPropellant(integPropel, projectileBlocks.get(0), this.initialOrientation) && canFail) {
@@ -571,6 +565,14 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
 			return CBCMSSoundEvents.DUAL_CANNON_2.getMainEvent();
 		}
 		return CBCMSSoundEvents.DUAL_CANNON_3.getMainEvent();
+	}
+
+	public boolean hasMagazine(){
+		return this.hasMagazine;
+	}
+
+	public ItemStackHandler getCachedMunition(){
+		return this.cachedMunition;
 	}
 
 	public float getAdditionalSpreadCoef(){
@@ -770,10 +772,10 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
 	@Override
 	public void addPassengersToWorld(Level world, StructureTransform transform, List<Entity> seatedEntities) {
 		super.addPassengersToWorld(world, transform, seatedEntities);
-		if (!world.isClientSide && this.isDropMortar() && this.cachedMortarRound != null && !this.cachedMortarRound.isEmpty() && this.entity != null) {
-			Vec3 pos = this.entity.toGlobalVector(Vec3.atCenterOf(this.startPos), 0);
-			world.addFreshEntity(new ItemEntity(world, pos.x, pos.y, pos.z, this.cachedMortarRound.copy()));
-		}
+//		if (!world.isClientSide && this.isDropMortar() && this.cachedMortarRound != null && !this.cachedMortarRound.isEmpty() && this.entity != null) {
+//			Vec3 pos = this.entity.toGlobalVector(Vec3.atCenterOf(this.startPos), 0);
+//			world.addFreshEntity(new ItemEntity(world, pos.x, pos.y, pos.z, this.cachedMortarRound.copy()));
+//		}
 	}
 
 	@Override
@@ -791,8 +793,8 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
 		CompoundTag tag = super.writeNBT(clientData);
 		tag.putString("CannonMaterial", this.cannonMaterial == null ? CBCMSDualCannonMaterials.CAST_IRON.name().toString() : this.cannonMaterial.name().toString());
 		if (this.hasWeldedPenalty) tag.putBoolean("WeldedCannon", true);
-		if (this.mortarDelay > 0) tag.putInt("MortarDelay", this.mortarDelay);
-		if (this.cachedMortarRound != null && !this.cachedMortarRound.isEmpty()) tag.put("CachedMortarRound", this.cachedMortarRound.save(new CompoundTag()));
+		//if (this.mortarDelay > 0) tag.putInt("MortarDelay", this.mortarDelay);
+		//if (this.cachedMortarRound != null && !this.cachedMortarRound.isEmpty()) tag.put("CachedMortarRound", this.cachedMortarRound.save(new CompoundTag()));
 		if (this.hasFired) tag.putBoolean("HasFired", true);
 		if (this.commandEffect) tag.putBoolean("CommandEffect", true);
 		tag.putInt("CommandCooldown", this.commandCooldown);
@@ -813,8 +815,8 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
 		this.cannonMaterial = DualCannonMaterial.fromNameOrNull(CBCUtils.location(tag.getString("CannonMaterial")));
 		this.hasWeldedPenalty = tag.contains("WeldedCannon");
 		if (this.cannonMaterial == null) this.cannonMaterial = CBCMSDualCannonMaterials.CAST_IRON;
-		this.mortarDelay = Math.max(0, tag.getInt("MortarDelay"));
-		this.cachedMortarRound = tag.contains("CachedMortarRound", Tag.TAG_COMPOUND) ? ItemStack.of(tag.getCompound("CachedMortarRound")) : ItemStack.EMPTY;
+		//this.mortarDelay = Math.max(0, tag.getInt("MortarDelay"));
+		//this.cachedMortarRound = tag.contains("CachedMortarRound", Tag.TAG_COMPOUND) ? ItemStack.of(tag.getCompound("CachedMortarRound")) : ItemStack.EMPTY;
 		this.hasFired = tag.contains("HasFired");
 		this.commandEffect = tag.contains("CommandEffect");
 		this.commandCooldown = tag.getInt("CommandCooldown");

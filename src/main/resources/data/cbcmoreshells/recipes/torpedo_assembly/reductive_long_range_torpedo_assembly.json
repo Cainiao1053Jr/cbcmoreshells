@@ -1,0 +1,143 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "cbcmoreshells:reductive_long_range_torpedo_component"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "chance": 120.0,
+      "item": "cbcmoreshells:reductive_long_range_torpedo"
+    },
+    {
+      "chance": 3.0,
+      "item": "create:iron_sheet"
+    },
+    {
+      "chance": 1.0,
+      "item": "cbcmoreshells:normal_he_shell"
+    },
+    {
+      "chance": 1.0,
+      "item": "minecraft:cod"
+    },
+    {
+      "chance": 5.0,
+      "item": "create:shaft"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+         "item": "cbcmoreshells:assembled_reductive_long_range_torpedo_component"
+        },
+        {
+          "item": "create:brass_ingot"
+        }
+      ],
+      "results": [
+        {
+          "item": "cbcmoreshells:assembled_reductive_long_range_torpedo_component"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+         "item": "cbcmoreshells:assembled_reductive_long_range_torpedo_component"
+        },
+        {
+          "item": "create:cogwheel"
+        }
+      ],
+      "results": [
+        {
+          "item": "cbcmoreshells:assembled_reductive_long_range_torpedo_component"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+         "item": "cbcmoreshells:assembled_reductive_long_range_torpedo_component"
+        },
+        {
+          "item": "create:propeller"
+        }
+      ],
+      "results": [
+        {
+          "item": "cbcmoreshells:assembled_reductive_long_range_torpedo_component"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+         "item": "cbcmoreshells:assembled_reductive_long_range_torpedo_component"
+        },
+        {
+          "item": "create:fluid_tank"
+        }
+      ],
+      "results": [
+        {
+          "item": "cbcmoreshells:assembled_reductive_long_range_torpedo_component"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+         "item": "cbcmoreshells:assembled_reductive_long_range_torpedo_component"
+        },
+        {
+          "item": "cbcmoreshells:torpedo_head"
+        }
+      ],
+      "results": [
+        {
+          "item": "cbcmoreshells:assembled_reductive_long_range_torpedo_component"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+         "item": "cbcmoreshells:assembled_reductive_long_range_torpedo_component"
+        },
+        {
+          "item": "create:electron_tube"
+        }
+      ],
+      "results": [
+        {
+          "item": "cbcmoreshells:assembled_reductive_long_range_torpedo_component"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+         "item": "cbcmoreshells:assembled_reductive_long_range_torpedo_component"
+        }
+      ],
+      "results": [
+        {
+          "item": "cbcmoreshells:assembled_reductive_long_range_torpedo_component"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "cbcmoreshells:assembled_reductive_long_range_torpedo_component"
+  }
+}

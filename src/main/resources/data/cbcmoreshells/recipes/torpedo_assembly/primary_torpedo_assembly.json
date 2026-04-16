@@ -1,0 +1,131 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "cbcmoreshells:primary_torpedo_component"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "chance": 120.0,
+      "item": "cbcmoreshells:primary_torpedo"
+    },
+    {
+      "chance": 8.0,
+      "item": "create:iron_sheet"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+         "item": "cbcmoreshells:assembled_primary_torpedo_component"
+        },
+        {
+          "item": "create:brass_ingot"
+        }
+      ],
+      "results": [
+        {
+          "item": "cbcmoreshells:assembled_primary_torpedo_component"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+         "item": "cbcmoreshells:assembled_primary_torpedo_component"
+        },
+        {
+          "item": "create:cogwheel"
+        }
+      ],
+      "results": [
+        {
+          "item": "cbcmoreshells:assembled_primary_torpedo_component"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+         "item": "cbcmoreshells:assembled_primary_torpedo_component"
+        },
+        {
+          "item": "create:propeller"
+        }
+      ],
+      "results": [
+        {
+          "item": "cbcmoreshells:assembled_primary_torpedo_component"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+         "item": "cbcmoreshells:assembled_primary_torpedo_component"
+        },
+        {
+          "item": "minecraft:copper_ingot"
+        }
+      ],
+      "results": [
+        {
+          "item": "cbcmoreshells:assembled_primary_torpedo_component"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+         "item": "cbcmoreshells:assembled_primary_torpedo_component"
+        },
+        {
+          "item": "minecraft:gunpowder"
+        }
+      ],
+      "results": [
+        {
+          "item": "cbcmoreshells:assembled_primary_torpedo_component"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+         "item": "cbcmoreshells:assembled_primary_torpedo_component"
+        },
+        {
+          "item": "minecraft:gunpowder"
+        }
+      ],
+      "results": [
+        {
+          "item": "cbcmoreshells:assembled_primary_torpedo_component"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+         "item": "cbcmoreshells:assembled_primary_torpedo_component"
+        }
+      ],
+      "results": [
+        {
+          "item": "cbcmoreshells:assembled_primary_torpedo_component"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "cbcmoreshells:assembled_primary_torpedo_component"
+  }
+}

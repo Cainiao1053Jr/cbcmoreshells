@@ -1,0 +1,22 @@
+{
+  "type": "create:compacting",
+  "ingredients": [
+    {
+      "item": "cbcmoreshells:reductive_long_range_torpedo_mold"
+    },
+    {
+      "item": "create:iron_sheet"
+    },
+    {
+      "item": "create:iron_sheet"
+    }
+  ],
+  "results": [
+    {
+      "item": "cbcmoreshells:reductive_long_range_torpedo_component"
+    },
+    {
+      "item": "cbcmoreshells:reductive_long_range_torpedo_mold"
+    }
+  ]
+}

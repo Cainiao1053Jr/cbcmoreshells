@@ -1,0 +1,79 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "create:iron_sheet"
+  },
+  "loops": 1,
+  "results": [
+    {
+      "chance": 120.0,
+      "item": "cbcmoreshells:torpedo_head"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+         "item": "cbcmoreshells:assembled_torpedo_head"
+        },
+        {
+          "item": "createbigcannons:packed_gunpowder"
+        }
+      ],
+      "results": [
+        {
+          "item": "cbcmoreshells:assembled_torpedo_head"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+         "item": "cbcmoreshells:assembled_torpedo_head"
+        },
+        {
+          "item": "minecraft:redstone"
+        }
+      ],
+      "results": [
+        {
+          "item": "cbcmoreshells:assembled_torpedo_head"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+         "item": "cbcmoreshells:assembled_torpedo_head"
+        },
+        {
+          "item": "create:brass_nugget"
+        }
+      ],
+      "results": [
+        {
+          "item": "cbcmoreshells:assembled_torpedo_head"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+         "item": "cbcmoreshells:assembled_torpedo_head"
+        }
+      ],
+      "results": [
+        {
+          "item": "cbcmoreshells:assembled_torpedo_head"
+        }
+      ]
+    }
+  ],
+  "transitionalItem": {
+    "item": "cbcmoreshells:assembled_torpedo_head"
+  }
+}
