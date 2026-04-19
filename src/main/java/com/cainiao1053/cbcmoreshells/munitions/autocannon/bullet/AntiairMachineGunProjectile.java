@@ -1,7 +1,7 @@
 package com.cainiao1053.cbcmoreshells.munitions.autocannon.bullet;
 
 import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
-import com.cainiao1053.cbcmoreshells.api.vs.ValkyrienSkies;
+//import com.cainiao1053.cbcmoreshells.api.vs.ValkyrienSkies;
 import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
 import com.cainiao1053.cbcmoreshells.munitions.autocannon.config.AntiairAutocannonProjectileProperties;
 import net.minecraft.core.BlockPos;
@@ -77,15 +77,12 @@ public class AntiairMachineGunProjectile extends AbstractAutocannonProjectile {
 
 		double shipVel = 0;
 		Vector3dc shipPos = new Vector3d(0,0,0);
-		Ship ship = getShipOn(level(),pos);
-		if(ship != null) {
-			shipVel = ship.getVelocity().length() + 4;
-			shipPos = ship.getTransform().getPositionInWorld();
-		}
+//		Ship ship = getShipOn(level(),pos);
+//		if(ship != null) {
+//			shipVel = ship.getVelocity().length() + 4;
+//			shipPos = ship.getTransform().getPositionInWorld();
+//		}
 
-//		LOGGER.info("ship" + ship);
-//		LOGGER.info("shipvel" + shipVel);
-//		LOGGER.info("shippos" + shipPos);
 
 		double penetration = 2.4 * (shipVel + 4) * Math.max(Math.min(shipPos.y()-80,240),40)/160;
 
@@ -98,18 +95,9 @@ public class AntiairMachineGunProjectile extends AbstractAutocannonProjectile {
 
 		Vec3 normal = CBCUtils.getSurfaceNormalVector(this.level(), blockHitResult);
 		double incidence = Math.max(0, curVel.normalize().dot(normal.reverse()));
-//		double velMag = curVel.length();
-//		double mass = this.getProjectileMass();
-//		double bonusMomentum = 1 + Math.max(0, (velMag - CBCConfigs.SERVER.munitions.minVelocityForPenetrationBonus.getF())
-//				* CBCConfigs.SERVER.munitions.penetrationBonusScale.getF());
-//		double momentum = mass * velMag * incidence * bonusMomentum;
 		double penetrativeEffect = penetration * incidence;
 		boolean destroy = penetrativeEffect>blockArmor.toughness(this.level(),state,pos,true);
 
-//		LOGGER.info("pen: " + penetration);
-//		LOGGER.info("peneff" + penetrativeEffect);
-//		LOGGER.info("armor: " + blockArmor.toughness(this.level(),state,pos,false));
-//		LOGGER.info("destroy: " + destroy);
 
 		double hardnessPenalty = Math.max(blockArmor.hardness(this.level(), state, pos, true) - ballistics.penetration(), 0);
 
@@ -157,7 +145,7 @@ public class AntiairMachineGunProjectile extends AbstractAutocannonProjectile {
 		return new ImpactResult(outcome, !this.level().isClientSide && (shatter || outcome != ImpactResult.KinematicOutcome.BOUNCE));
 	}
 
-	protected @Nullable Ship getShipOn(Level level, BlockPos pos) {
-		return ValkyrienSkies.getShipManagingBlock(level, pos);
-	}
+//	protected @Nullable Ship getShipOn(Level level, BlockPos pos) {
+//		return ValkyrienSkies.getShipManagingBlock(level, pos);
+//	}
 }

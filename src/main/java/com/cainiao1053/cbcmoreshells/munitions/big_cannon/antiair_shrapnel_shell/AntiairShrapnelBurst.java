@@ -1,6 +1,6 @@
 package com.cainiao1053.cbcmoreshells.munitions.big_cannon.antiair_shrapnel_shell;
 
-import com.cainiao1053.cbcmoreshells.api.vs.ValkyrienSkies;
+//import com.cainiao1053.cbcmoreshells.api.vs.ValkyrienSkies;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -67,11 +67,11 @@ public class AntiairShrapnelBurst extends CBCProjectileBurst {
 		if (!this.level().isClientSide && state.getDestroySpeed(this.level(), pos) != -1 && this.canDestroyBlock(state)) {
 			double shipVel = 0;
 			Vector3dc shipPos = new Vector3d(0,0,0);
-			Ship ship = getShipOn(level(),pos);
-			if(ship != null) {
-				shipVel = ship.getVelocity().length();
-				shipPos = ship.getTransform().getPositionInWorld();
-			}
+//			Ship ship = getShipOn(level(),pos);
+//			if(ship != null) {
+//				shipVel = ship.getVelocity().length();
+//				shipPos = ship.getTransform().getPositionInWorld();
+//			}
 			double penetration = 0.6 * (shipVel) * Math.max(Math.min(shipPos.y()-80,240),40)/160;
 
 			Vec3 curVel = new Vec3(subProjectile.velocity()[0], subProjectile.velocity()[1], subProjectile.velocity()[2]);
@@ -108,8 +108,8 @@ public class AntiairShrapnelBurst extends CBCProjectileBurst {
 			this.getProperties().damage().ignoresEntityArmor());
 	}
 
-	protected @Nullable Ship getShipOn(Level level, BlockPos pos) {
-		return ValkyrienSkies.getShipManagingBlock(level, pos);
-	}
+//	protected @Nullable Ship getShipOn(Level level, BlockPos pos) {
+//		return ValkyrienSkies.getShipManagingBlock(level, pos);
+//	}
 
 }

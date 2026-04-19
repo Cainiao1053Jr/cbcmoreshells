@@ -3,7 +3,7 @@ package com.cainiao1053.cbcmoreshells.blocks.landing_indicator;
 
 import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
 import com.cainiao1053.cbcmoreshells.CbcmoreshellsClient;
-import com.cainiao1053.cbcmoreshells.api.vs.ValkyrienSkies;
+//import com.cainiao1053.cbcmoreshells.api.vs.ValkyrienSkies;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.utility.Color;
@@ -76,9 +76,9 @@ public class LandingIndicatorBlockEntity extends SmartBlockEntity {
 
     @OnlyIn(Dist.CLIENT)
     protected void tickClient(){
-        if(getShipOn() == null){
-            return;
-        }
+//        if(getShipOn() == null){
+//            return;
+//        }
         if(!getBlockState().getValue(BlockStateProperties.POWERED)){
             return;
         }
@@ -130,8 +130,8 @@ public class LandingIndicatorBlockEntity extends SmartBlockEntity {
         return new Vector3d(front.x, front.y, front.z);
     }
 
-    public @Nullable Ship getShipOn(){
-        return ValkyrienSkies.getShipManagingBlock(level, getBlockPos());
-    }
+//    public @Nullable Ship getShipOn(){
+//        return ValkyrienSkies.getShipManagingBlock(level, getBlockPos());
+//    }
 
 }

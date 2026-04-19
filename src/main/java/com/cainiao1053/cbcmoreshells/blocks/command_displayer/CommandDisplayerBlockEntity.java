@@ -3,7 +3,7 @@ package com.cainiao1053.cbcmoreshells.blocks.command_displayer;
 
 import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
 import com.cainiao1053.cbcmoreshells.CbcmoreshellsClient;
-import com.cainiao1053.cbcmoreshells.api.vs.ValkyrienSkies;
+//import com.cainiao1053.cbcmoreshells.api.vs.ValkyrienSkies;
 import com.cainiao1053.cbcmoreshells.cannon_control.contraption.MountedDualCannonContraption;
 import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.OrientedContraptionEntity;
@@ -131,13 +131,13 @@ public class CommandDisplayerBlockEntity extends SmartBlockEntity {
             return;
         }
         AABB box;
-        if (getShipOn() == null) {
-            BlockPos pos = getBlockPos();
-            box = AABB.ofSize(new Vec3(pos.getX(), pos.getY(), pos.getZ()), 32, 16, 32);
-        } else {
-            box = toAABB(getShipOn().getWorldAABB());
-        }
-        searchForCannons(level, box);
+//        if (getShipOn() == null) {
+//            BlockPos pos = getBlockPos();
+//            box = AABB.ofSize(new Vec3(pos.getX(), pos.getY(), pos.getZ()), 32, 16, 32);
+//        } else {
+//            box = toAABB(getShipOn().getWorldAABB());
+//        }
+//        searchForCannons(level, box);
     }
 
     public void searchForCannons(Level level, AABB box) {
@@ -221,8 +221,8 @@ public class CommandDisplayerBlockEntity extends SmartBlockEntity {
         return new Vector3d(front.x, front.y, front.z);
     }
 
-    public @Nullable Ship getShipOn() {
-        return ValkyrienSkies.getShipManagingBlock(level, getBlockPos());
-    }
+//    public @Nullable Ship getShipOn() {
+//        return ValkyrienSkies.getShipManagingBlock(level, getBlockPos());
+//    }
 
 }
