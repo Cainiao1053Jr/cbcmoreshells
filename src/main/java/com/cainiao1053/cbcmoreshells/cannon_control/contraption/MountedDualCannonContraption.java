@@ -40,6 +40,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -97,8 +98,8 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
     private boolean reduceCooldownOnHit = true;
 
     private boolean hasMagazine = false;
-    private int magazineReloadDelay = 10;
-    private ItemStackHandler cachedMunition = new ItemStackHandler(4);
+    private int magazineReloadDelay = 20;
+    private ItemStackHandler cachedMunition = new ItemStackHandler(3);
 
     @Override
     public boolean assemble(Level level, BlockPos pos) throws AssemblyException {
@@ -235,17 +236,17 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
     }
 
     public void addCommandEquipmentModification() {
-        this.equipmentLifetimeModifier += DualCannonChargerAttachment.LIFETIME_MODIFICATION;
-        this.equipmentReloadModifier += DualCannonChargerAttachment.RELOAD_TIME_MODIFICATION;
-        this.equipmentSpreadModifier += DualCannonChargerAttachment.SPREAD_MODIFICATION;
-        this.equipmentDurabilityModifier += DualCannonChargerAttachment.DURABILITY_MASS_MODIFICATION;
-        this.commandCooldownModifier = DualCannonChargerAttachment.COMMAND_COOLDOWN_MODIFICATION;
-        this.commandDurationModifier = DualCannonChargerAttachment.COMMAND_DURATION_MODIFICATION;
+        this.equipmentLifetimeModifier += -0.07F;
+        this.equipmentReloadModifier += 0.1F;
+        this.equipmentSpreadModifier += 0.1F;
+        this.equipmentDurabilityModifier += -0.08F;
+        this.commandCooldownModifier = 2.0F;
+        this.commandDurationModifier = 3.0F;
     }
 
-    public void installMagazine(){
+    public void installMagazine() {
         this.hasMagazine = true;
-        this.equipmentReloadModifier -= 0.15f;
+        this.equipmentReloadModifier += 0.18F;
     }
 
     private boolean isValidCannonBlock(LevelAccessor level, BlockState state, BlockPos pos) {
@@ -300,30 +301,38 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
         magazineAutoLoad();
     }
 
-    protected void magazineAutoLoad(){
-        if(!this.hasMagazine){
-            return;
-        }
-        if(this.magazineReloadDelay > 0){
-            return;
-        }
-        this.magazineReloadDelay = 10;
-        ItemStack loaded = getLoadedMunition();
-        if(loaded == null || !loaded.isEmpty()){
-            return;
-        }
-        int magazineSlots = cachedMunition.getSlots();
-        for(int i=0; i<magazineSlots; i++){
-            ItemStack stack = cachedMunition.getStackInSlot(i);
-            if(stack.isEmpty()){
-                continue;
+    protected void magazineAutoLoad() {
+        if (this.hasMagazine) {
+            if (this.magazineReloadDelay > 0) {
+                --this.magazineReloadDelay;
+            } else {
+                this.magazineReloadDelay = Math.min((int)(this.getCannonMaterial().properties().reloadTimeModifier() * 12.0F), 40);
+                ItemStack loaded = this.getLoadedMunition();
+                if (loaded != null && loaded.isEmpty()) {
+                    int magazineSlots = this.cachedMunition.getSlots();
+
+                    for(int i = 0; i < magazineSlots; ++i) {
+                        ItemStack stack = this.cachedMunition.getStackInSlot(i);
+                        if (!stack.isEmpty()) {
+                            Item var7 = stack.getItem();
+                            if (var7 instanceof BlockItem) {
+                                BlockItem blockItem = (BlockItem)var7;
+                                Block var8 = blockItem.getBlock();
+                                if (var8 instanceof BigCannonMunitionBlock) {
+                                    BigCannonMunitionBlock munition = (BigCannonMunitionBlock)var8;
+                                    if (munition instanceof DualCannonProjectileBlock) {
+                                        DualCannonMountPoint.loadProjectile(stack, munition, this.entity, this);
+                                    }
+                                }
+                            }
+
+                            this.cachedMunition.setStackInSlot(i, ItemStack.EMPTY);
+                            return;
+                        }
+                    }
+
+                }
             }
-            //if(munition.getItem() instanceof FuzedDualCannonProjectileBlockItem projItem){}
-            if ((stack.getItem() instanceof BlockItem blockItem) && (blockItem.getBlock() instanceof BigCannonMunitionBlock munition)){
-                DualCannonMountPoint.loadProjectile(stack, munition,  this.entity, this);
-            }
-            cachedMunition.setStackInSlot(i, ItemStack.EMPTY);
-            return;
         }
     }
 
@@ -861,7 +870,9 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
         tag.putFloat("commandDurationModifier", this.commandDurationModifier);
         tag.putBoolean("reduceCooldownOnHit", this.reduceCooldownOnHit);
         tag.putBoolean("hasMagazine", this.hasMagazine);
-        tag.put("magazine", cachedMunition.serializeNBT());
+        if (this.hasMagazine){
+            tag.put("magazine", cachedMunition.serializeNBT());
+        }
         return tag;
     }
 

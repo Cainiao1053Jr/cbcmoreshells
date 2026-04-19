@@ -457,5 +457,14 @@
 "item.cbcmoreshells.torpedo_head":"鱼雷战斗部",
 "item.cbcmoreshells.reinforced_torpedo_head":"烈性鱼雷战斗部",
 "item.cbcmoreshells.assembled_torpedo_head":"组装中的鱼雷战斗部",
-"item.cbcmoreshells.assembled_reinforced_torpedo_head":"组装中的烈性鱼雷战斗部"
+"item.cbcmoreshells.assembled_reinforced_torpedo_head":"组装中的烈性鱼雷战斗部",
+"block.cbcmoreshells.steel_single_cannon_magazine_breech": "细钢单管弹夹炮闩",
+"block.cbcmoreshells.wide_steel_single_cannon_magazine_breech": "宽钢单管弹夹炮闩",
+"block.cbcmoreshells.brass_single_cannon_magazine_breech": "细黄铜单管弹夹炮闩",
+"block.cbcmoreshells.large_brass_single_cannon_magazine_breech": "超宽黄铜单管弹夹炮闩",
+"block.cbcmoreshells.wide_brass_single_cannon_magazine_breech": "宽黄铜单管弹夹炮闩",
+"block.cbcmoreshells.wide_slate_alloy_single_cannon_magazine_breech": "宽板岩合金单管弹夹炮闩",
+"block.cbcmoreshells.slate_alloy_single_cannon_magazine_breech": "细板岩合金单管弹夹炮闩",
+"block.cbcmoreshells.military_slate_alloy_single_cannon_magazine_breech": "细军用板岩合金单管弹夹炮闩",
+"block.cbcmoreshells.wide_military_slate_alloy_single_cannon_magazine_breech": "宽军用板岩合金单管弹夹炮闩"
 }
