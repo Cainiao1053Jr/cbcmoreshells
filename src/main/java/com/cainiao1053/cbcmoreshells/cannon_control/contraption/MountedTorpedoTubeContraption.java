@@ -1,7 +1,6 @@
 package com.cainiao1053.cbcmoreshells.cannon_control.contraption;
 
-import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
-import com.cainiao1053.cbcmoreshells.api.vs.ValkyrienSkies;
+//import com.cainiao1053.cbcmoreshells.api.vs.ValkyrienSkies;
 import com.cainiao1053.cbcmoreshells.cannon_control.cannon_types.CBCMSCannonContraptionTypes;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.ITorpedoTubeBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.TorpedoTubeBlock;
@@ -22,7 +21,6 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundLevelParticlesPacket;
 import net.minecraft.server.level.ServerLevel;
@@ -31,8 +29,6 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
@@ -43,8 +39,7 @@ import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemp
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
-import org.slf4j.Logger;
-import org.valkyrienskies.core.api.ships.Ship;
+//import org.valkyrienskies.core.api.ships.Ship;
 import rbasamoyai.createbigcannons.CBCTags;
 import rbasamoyai.createbigcannons.cannon_control.ControlPitchContraption;
 import rbasamoyai.createbigcannons.cannon_control.cannon_types.ICannonContraptionType;
@@ -227,10 +222,6 @@ public class MountedTorpedoTubeContraption extends AbstractMountedCannonContrapt
 		BlockPos endPos = this.startPos.relative(this.initialOrientation.getOpposite());
 		if (this.presentBlockEntities.get(endPos) instanceof TorpQuickfiringBreechBlockEntity qfbreech)
 			qfbreech.tickAnimation();
-//		if (!level.isClientSide && this.isDropMortar() && this.mortarDelay > 0) {
-//			--this.mortarDelay;
-//			//if (this.mortarDelay == 0) this.actuallyFireDropMortar();
-//		}
 	}
 
 	@Override
@@ -406,18 +397,18 @@ public class MountedTorpedoTubeContraption extends AbstractMountedCannonContrapt
 			}
 
 			float torpVel = projectile.getTorpedoSpeed();
-			Ship ship = getShipOn(level, this.anchor);
-			if(ship !=null){
-				Vector3dc shipVel = ship.getVelocity().div(20, new Vector3d());
-				Vector3dc shipVelInShip = ship.getWorldToShip().transformDirection(shipVel, new Vector3d());
-				Vec3 shipVelVec3 = new Vec3(shipVelInShip.x(), shipVelInShip.y(), shipVelInShip.z());
-				double scale = shipVelVec3.dot(vec);
-				Vec3 proj = new Vec3(vec.x() * scale, vec.y() * scale, vec.z() * scale);
-				Vec3 rej = shipVelVec3.subtract(proj);
-				Vec3 vecOut = vec.scale(torpVel).subtract(rej); //extract normal
-				torpVel =(float) vecOut.length();
-				vec = vecOut.normalize();
-			}
+			//Ship ship = getShipOn(level, this.anchor);
+//			if(ship !=null){
+//				Vector3dc shipVel = ship.getVelocity().div(20, new Vector3d());
+//				Vector3dc shipVelInShip = ship.getWorldToShip().transformDirection(shipVel, new Vector3d());
+//				Vec3 shipVelVec3 = new Vec3(shipVelInShip.x(), shipVelInShip.y(), shipVelInShip.z());
+//				double scale = shipVelVec3.dot(vec);
+//				Vec3 proj = new Vec3(vec.x() * scale, vec.y() * scale, vec.z() * scale);
+//				Vec3 rej = shipVelVec3.subtract(proj);
+//				Vec3 vecOut = vec.scale(torpVel).subtract(rej); //extract normal
+//				torpVel =(float) vecOut.length();
+//				vec = vecOut.normalize();
+//			}
 			StructureBlockInfo muzzleInfo = this.blocks.get(currentPos);
 			if (canFail && muzzleInfo != null && !muzzleInfo.state().isAir()) {
 				this.fail(currentPos, level, entity, null, (int) propelCtx.chargesUsed);
@@ -572,9 +563,9 @@ public class MountedTorpedoTubeContraption extends AbstractMountedCannonContrapt
 //		}
 	}
 
-	protected @Nullable Ship getShipOn(Level level, BlockPos pos) {
-		return ValkyrienSkies.getShipManagingBlock(level, pos);
-	}
+//	protected @Nullable Ship getShipOn(Level level, BlockPos pos) {
+//		return ValkyrienSkies.getShipManagingBlock(level, pos);
+//	}
 
 	@Override
 	public Vec3 getInteractionVec(PitchOrientedContraptionEntity poce) {
