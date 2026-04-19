@@ -199,7 +199,7 @@ public class CBCMSBlocks {
 
 	static { ModGroup.useModTab(ModGroup.MAIN_TAB_KEY); }
 
-	//////// Log cannon blocks ////////
+	
 	public static final BlockEntry<InferiorHEShellBlock> Inferior_HE_SHELL = REGISTRATE
 			.block("inferior_he_shell", InferiorHEShellBlock::new)
 			.transform(shell(MapColor.COLOR_RED))
