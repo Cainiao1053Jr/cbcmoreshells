@@ -155,7 +155,7 @@ public class DualCannonMountPoint extends AllArmInteractionPointTypes.DepositOnl
 					}
 
 					ItemStack copy = stack.copy();
-					copy.setCount(1);
+					copy.shrink(1);
 					return copy;
 				}
 			}
