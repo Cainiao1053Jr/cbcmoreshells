@@ -1,0 +1,8 @@
+{
+  "parent": "cbcmoreshells:block/wide_single_cannon_magazine_breech",
+  "textures": {
+    "top": "cbcmoreshells:block/dual_cannon/slate_alloy_dual_cannon_qf_top",
+		"side": "cbcmoreshells:block/dual_cannon/slate_alloy_dual_cannon_chamber_side",
+		"front": "cbcmoreshells:block/dual_cannon/slate_alloy_dual_cannon_front"
+  }
+}

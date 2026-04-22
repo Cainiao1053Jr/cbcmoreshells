@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "cbcmoreshells:block/steel_single_cannon_magazine_breech",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "cbcmoreshells:block/steel_single_cannon_magazine_breech",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "cbcmoreshells:block/steel_single_cannon_magazine_breech"
+    },
+    "facing=south": {
+      "model": "cbcmoreshells:block/steel_single_cannon_magazine_breech",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "cbcmoreshells:block/steel_single_cannon_magazine_breech",
+      "x": 90
+    },
+    "facing=west": {
+      "model": "cbcmoreshells:block/steel_single_cannon_magazine_breech",
+      "y": 270
+    }
+  }
+}
