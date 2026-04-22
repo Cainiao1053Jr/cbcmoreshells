@@ -13,6 +13,7 @@ import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Explosion;
@@ -31,6 +32,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import rbasamoyai.createbigcannons.cannons.big_cannons.BigCannonBlock;
 import rbasamoyai.createbigcannons.config.CBCConfigs;
+import rbasamoyai.createbigcannons.index.CBCDataComponents;
 import rbasamoyai.createbigcannons.munitions.big_cannon.BigCannonMunitionBlock;
 import rbasamoyai.createbigcannons.munitions.big_cannon.BigCannonProjectileBlockEntity;
 import rbasamoyai.createbigcannons.utils.CBCUtils;
@@ -48,12 +50,17 @@ public abstract class RackedProjectileBlock<ENTITY extends AbstractRackedProject
 		this.shapes = this.makeShapes();
 	}
 
-	public static ItemStack getTracerFromItemStack(ItemStack stack, HolderLookup.Provider registries) {
-		CustomData blockEntityData = stack.get(DataComponents.BLOCK_ENTITY_DATA);
-		if (blockEntityData == null) return ItemStack.EMPTY;
-		CompoundTag tag = blockEntityData.copyTag();
-		if (!tag.contains("Tracer")) return ItemStack.EMPTY;
-		return ItemStack.parseOptional(registries, tag.getCompound("Tracer"));
+//	public static ItemStack getTracerFromItemStack(ItemStack stack) {
+//		CustomData blockEntityData = stack.get(DataComponents.BLOCK_ENTITY_DATA);
+//		if (blockEntityData == null) return ItemStack.EMPTY;
+//		CompoundTag tag = blockEntityData.copyTag();
+//		if (!tag.contains("Tracer")) return ItemStack.EMPTY;
+//		return ItemStack.parseOptional(tag.getCompound("Tracer"));
+//	}
+
+	public static ItemStack getTracerFromItemStack(ItemStack stack) {
+		ItemContainerContents items = stack.getOrDefault(CBCDataComponents.TRACER, ItemContainerContents.EMPTY);
+		return items.copyOne();
 	}
 
 	@Override

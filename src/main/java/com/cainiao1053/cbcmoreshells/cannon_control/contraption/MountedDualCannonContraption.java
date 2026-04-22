@@ -18,11 +18,12 @@ import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.DualCannonProjectileB
 import com.cainiao1053.cbcmoreshells.network.CBCMSNetworkImpl;
 import com.cainiao1053.cbcmoreshells.network.ClientboundCannonCmdSyncPacket;
 import com.google.common.collect.ImmutableList;
+import com.simibubi.create.api.contraption.ContraptionType;
 import com.simibubi.create.content.contraptions.AssemblyException;
-import com.simibubi.create.content.contraptions.ContraptionType;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -45,7 +46,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import rbasamoyai.createbigcannons.CBCTags;
 import rbasamoyai.createbigcannons.cannon_control.ControlPitchContraption;
 import rbasamoyai.createbigcannons.cannon_control.cannon_types.ICannonContraptionType;
@@ -198,6 +199,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
         this.anchor = pos;
 
         this.startPos = this.startPos.subtract(pos);
+        HolderLookup.Provider registries = level.registryAccess();
         boolean combatCommandEquipmentPresent = false;
         boolean magazineEquipmentPresent = false;
         for (StructureBlockInfo blockInfo : cannonBlocks) {
@@ -206,7 +208,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
             this.getBlocks().put(localPos, localBlockInfo);
 
             if (blockInfo.nbt() == null) continue;
-            BlockEntity be = BlockEntity.loadStatic(localPos, blockInfo.state(), blockInfo.nbt());
+            BlockEntity be = BlockEntity.loadStatic(localPos, blockInfo.state(), blockInfo.nbt(), registries);
             this.presentBlockEntities.put(localPos, be);
             if (be instanceof IDualCannonBlockEntity cbe && cbe.cannonBehavior().isWelded())
                 this.hasWeldedPenalty = true;
@@ -359,7 +361,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
         BlockPos currentPos = this.startPos.immutable();
         int count = 0;
         int maxSafeCharges = this.getMaxSafeCharges();
-        boolean canFail = !CBCConfigs.SERVER.failure.disableAllFailure.get();
+        boolean canFail = !CBCConfigs.server().failure.disableAllFailure.get();
         float spreadSub = this.cannonMaterial.properties().spreadReductionPerBarrel();
         int subLength = 0;
         boolean airGapPresent = false;
@@ -372,6 +374,8 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
         BlockPos assemblyPos = null;
 
         float minimumSpread = this.cannonMaterial.properties().minimumSpread();
+
+        HolderLookup.Provider registries = level.registryAccess();
 
         while (this.presentBlockEntities.get(currentPos) instanceof IDualCannonBlockEntity cbe) {
             BigCannonBehavior behavior = cbe.cannonBehavior();
@@ -418,7 +422,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
                         this.fail(currentPos, level, entity, behavior.blockEntity, (int) propelCtx.chargesUsed);
                     return;
                 }
-                this.consumeBlock(behavior, currentPos);
+                this.consumeBlock(behavior, currentPos, registries);
                 if (cannonInfo.state().is(CBCTags.CBCBlockTags.REDUCES_SPREAD)) {
                     //propelCtx.spread = Math.max(propelCtx.spread - spreadSub, minimumSpread);
                     subLength++;
@@ -438,7 +442,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
                     this.fail(currentPos, level, entity, behavior.blockEntity, (int) 4);
                     return;
                 } else {
-                    this.consumeBlock(behavior, currentPos);
+                    this.consumeBlock(behavior, currentPos, registries);
                 }
             }
             currentPos = currentPos.relative(this.initialOrientation);
@@ -566,7 +570,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
         }
 
         recoilMagnitude += propelCtx.recoil;
-        recoilMagnitude *= CBCConfigs.SERVER.cannons.bigCannonRecoilScale.getF();
+        recoilMagnitude *= CBCConfigs.server().cannons.bigCannonRecoilScale.getF();
         if (controller != null) controller.onRecoil(vec.scale(-recoilMagnitude), entity);
 
         this.hasFired = true;
@@ -576,7 +580,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
         float tone = 2 + soundPower * -8 + level.random.nextFloat() * 4f - 2f;
         //float pitch = Math.min(1.5f/((this.cannonMaterial.properties().durabilityMassModifier()-1)/1.6f+1),2);
         float pitch = 1;
-        double shakeDistance = propelCtx.chargesUsed * CBCConfigs.SERVER.cannons.bigCannonBlastDistanceMultiplier.getF();
+        double shakeDistance = propelCtx.chargesUsed * CBCConfigs.server().cannons.bigCannonBlastDistanceMultiplier.getF();
         float volume = 14;
         Vec3 plumePos = spawnPos.subtract(vec);
         propelCtx.smokeScale = Math.max(1, propelCtx.smokeScale);
@@ -595,12 +599,12 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
                 player.connection.send(blastWavePacket);
         }
 
-        if (projectile != null && CBCConfigs.SERVER.munitions.projectilesCanChunkload.get()) {
+        if (projectile != null && CBCConfigs.server().munitions.projectilesCanChunkload.get()) {
             ChunkPos cpos1 = new ChunkPos(BlockPos.containing(projectile.position()));
             RitchiesProjectileLib.queueForceLoad(level, cpos1.x, cpos1.z);
         }
 
-        if (secondary_projectile != null && CBCConfigs.SERVER.munitions.projectilesCanChunkload.get()) {
+        if (secondary_projectile != null && CBCConfigs.server().munitions.projectilesCanChunkload.get()) {
             ChunkPos cpos2 = new ChunkPos(BlockPos.containing(secondary_projectile.position()));
             RitchiesProjectileLib.queueForceLoad(level, cpos2.x, cpos2.z);
         }
@@ -640,8 +644,8 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
     }
 
 
-    private void consumeBlock(BigCannonBehavior behavior, BlockPos pos) {
-        this.consumeBlock(behavior, pos, BigCannonBehavior::removeBlock);
+    private void consumeBlock(BigCannonBehavior behavior, BlockPos pos, HolderLookup.Provider registries) {
+        this.consumeBlock(behavior, pos, BigCannonBehavior::removeBlock, registries);
     }
 
     public DualCannonMaterial getCannonMaterial() {
@@ -676,9 +680,9 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
         return new CannonPose(muzzleWorld, forwardUnit, munitionCount);
     }
 
-    private void consumeBlock(BigCannonBehavior behavior, BlockPos pos, Consumer<BigCannonBehavior> action) {
+    private void consumeBlock(BigCannonBehavior behavior, BlockPos pos, Consumer<BigCannonBehavior> action, HolderLookup.Provider registries) {
         action.accept(behavior);
-        CompoundTag tag = behavior.blockEntity.saveWithFullMetadata();
+        CompoundTag tag = behavior.blockEntity.saveWithFullMetadata(registries);
         tag.remove("x");
         tag.remove("y");
         tag.remove("z");
@@ -690,11 +694,11 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
     }
 
     private static boolean rollSquib(RandomSource random) {
-        float f = CBCConfigs.SERVER.failure.squibChance.getF();
+        float f = CBCConfigs.server().failure.squibChance.getF();
         return f != 0 && random.nextFloat() <= f;
     }
 
-    private void squibBlocks(BlockPos currentPos, List<StructureBlockInfo> projectileBlocks) {
+    private void squibBlocks(BlockPos currentPos, List<StructureBlockInfo> projectileBlocks, HolderLookup.Provider registries) {
         for (int i = 0; i < projectileBlocks.size(); ++i) {
             BlockPos pos = currentPos.relative(this.initialOrientation, i);
             StructureBlockInfo cannonInfo1 = this.blocks.get(pos);
@@ -704,7 +708,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
             if (cannonInfo1 != null && be1 instanceof IDualCannonBlockEntity cbe1) {
                 BigCannonBehavior behavior1 = cbe1.cannonBehavior();
                 behavior1.loadBlock(projBlock);
-                CompoundTag tag = behavior1.blockEntity.saveWithFullMetadata();
+                CompoundTag tag = behavior1.blockEntity.saveWithFullMetadata(registries);
                 tag.remove("x");
                 tag.remove("y");
                 tag.remove("z");
@@ -784,23 +788,23 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
     }
 
     private static boolean rollBarrelBurst(RandomSource random) {
-        float f = CBCConfigs.SERVER.failure.barrelChargeBurstChance.getF();
+        float f = CBCConfigs.server().failure.barrelChargeBurstChance.getF();
         return f != 0 && random.nextFloat() <= f;
     }
 
     private static boolean rollOverloadBurst(RandomSource random) {
-        float f = CBCConfigs.SERVER.failure.overloadBurstChance.getF();
+        float f = CBCConfigs.server().failure.overloadBurstChance.getF();
         return f != 0 && random.nextFloat() <= f;
     }
 
     private static boolean rollFailToIgnite(RandomSource random) {
-        float f = CBCConfigs.SERVER.failure.interruptedIgnitionChance.getF();
+        float f = CBCConfigs.server().failure.interruptedIgnitionChance.getF();
         return f != 0 && random.nextFloat() <= f;
     }
 
     public void fail(BlockPos localPos, Level level, PitchOrientedContraptionEntity entity, @Nullable BlockEntity failed, int charges) {
         Vec3 failurePoint = entity.toGlobalVector(Vec3.atCenterOf(localPos), 1.0f);
-        float failScale = CBCConfigs.SERVER.failure.failureExplosionPower.getF();
+        float failScale = CBCConfigs.server().failure.failureExplosionPower.getF();
         if (this.cannonMaterial.properties().failureMode() == DualCannonMaterialProperties.FailureMode.RUPTURE) {
             int failInt = Mth.ceil(failScale);
             BlockPos startPos = localPos.relative(this.initialOrientation.getOpposite(), failInt);
@@ -846,8 +850,8 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
     }
 
     @Override
-    public CompoundTag writeNBT(boolean clientData) {
-        CompoundTag tag = super.writeNBT(clientData);
+    public CompoundTag writeNBT(HolderLookup.Provider registries, boolean spawnPacket) {
+        CompoundTag tag = super.writeNBT(registries, spawnPacket);
         tag.putString("CannonMaterial", this.cannonMaterial == null ? CBCMSDualCannonMaterials.CAST_IRON.name().toString() : this.cannonMaterial.name().toString());
         if (this.hasWeldedPenalty) tag.putBoolean("WeldedCannon", true);
         //if (this.mortarDelay > 0) tag.putInt("MortarDelay", this.mortarDelay);
@@ -865,7 +869,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
         tag.putBoolean("reduceCooldownOnHit", this.reduceCooldownOnHit);
         tag.putBoolean("hasMagazine", this.hasMagazine);
         if (this.hasMagazine){
-            tag.put("magazine", cachedMunition.serializeNBT());
+            tag.put("magazine", cachedMunition.serializeNBT(registries));
         }
         return tag;
     }
@@ -897,7 +901,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
 
     @Override
     public ContraptionType getType() {
-        return CBCMSContraptionTypes.DUAL_CANNON;
+        return CBCMSContraptionTypes.DUAL_CANNON.value();
     }
 
     public boolean isDropMortar() {

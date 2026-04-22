@@ -2,6 +2,7 @@ package com.cainiao1053.cbcmoreshells.munitions.racked_projectile;
 
 import net.minecraft.core.Position;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -115,7 +116,9 @@ public abstract class FuzedRackedProjectile extends AbstractRackedProjectile {
 	@Override
 	public void readAdditionalSaveData(CompoundTag tag) {
 		super.readAdditionalSaveData(tag);
-		this.fuze = ItemStack.of(tag.getCompound("Fuze"));
+		this.fuze = tag.contains("Fuze", Tag.TAG_COMPOUND)
+			? ItemStack.parseOptional(this.level().registryAccess(), tag.getCompound("Fuze"))
+			: ItemStack.EMPTY;
 		//this.tooManyCharges = tag.getBoolean("TooManyCharges");
 		//this.ageRemaining = tag.getInt("Age");
 	}
@@ -144,3 +147,4 @@ public abstract class FuzedRackedProjectile extends AbstractRackedProjectile {
 	}
 
 }
+

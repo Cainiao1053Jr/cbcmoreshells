@@ -3,13 +3,18 @@ package com.cainiao1053.cbcmoreshells.munitions.racked_projectile;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
@@ -18,6 +23,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import rbasamoyai.createbigcannons.index.CBCDataComponents;
 import rbasamoyai.createbigcannons.index.CBCItems;
 import rbasamoyai.createbigcannons.munitions.big_cannon.FuzedBlockEntity;
 import rbasamoyai.createbigcannons.munitions.fuzes.FuzeItem;
@@ -32,14 +38,15 @@ public abstract class FuzedRackedProjectileBlock<BLOCK_ENTITY extends FuzedBlock
 	}
 
 	public static ItemStack getFuzeFromItemStack(ItemStack stack) {
-		return ItemStack.of(stack.getOrCreateTag().getCompound("BlockEntityTag").getCompound("Fuze"));
+		ItemContainerContents items = stack.getOrDefault(CBCDataComponents.FUZE, ItemContainerContents.EMPTY);
+		return items.copyOne();
 	}
 
 	@Override
 	public AbstractRackedProjectile getProjectile(Level level, List<StructureBlockInfo> projectileBlocks) {
 		FuzedRackedProjectile projectile = this.getAssociatedEntityType().create(level);
-		projectile.setTracer(getTracerFromBlocks(projectileBlocks));
-		projectile.setFuze(getFuzeFromBlocks(projectileBlocks));
+		projectile.setTracer(getTracerFromBlocks(projectileBlocks, level.registryAccess()));
+		projectile.setFuze(getFuzeFromBlocks(projectileBlocks, level.registryAccess()));
 		return projectile;
 	}
 
@@ -51,12 +58,24 @@ public abstract class FuzedRackedProjectileBlock<BLOCK_ENTITY extends FuzedBlock
 		return projectile;
 	}
 
-	protected static ItemStack getFuzeFromBlocks(List<StructureBlockInfo> blocks) {
+//	protected static ItemStack getFuzeFromBlocks(List<StructureBlockInfo> blocks) {
+//		if (blocks.isEmpty()) return ItemStack.EMPTY;
+//		StructureBlockInfo info = blocks.get(0);
+//		if (info.nbt() == null) return ItemStack.EMPTY;
+//		BlockEntity load = BlockEntity.loadStatic(info.pos(), info.state(), info.nbt());
+//		return load instanceof FuzedBlockEntity fuzed ? fuzed.getItem(1) : ItemStack.EMPTY;
+//	}
+
+	protected static ItemStack getFuzeFromBlocks(List<StructureBlockInfo> blocks, HolderLookup.Provider registries) {
 		if (blocks.isEmpty()) return ItemStack.EMPTY;
 		StructureBlockInfo info = blocks.get(0);
 		if (info.nbt() == null) return ItemStack.EMPTY;
-		BlockEntity load = BlockEntity.loadStatic(info.pos(), info.state(), info.nbt());
-		return load instanceof FuzedBlockEntity fuzed ? fuzed.getItem(1) : ItemStack.EMPTY;
+		Tag tag = info.nbt().getCompound("components").get("createbigcannons:fuze");
+		ItemContainerContents contents = ItemContainerContents.CODEC
+				.parse(registries.createSerializationContext(NbtOps.INSTANCE), tag)
+				.resultOrPartial()
+				.orElse(ItemContainerContents.EMPTY);
+		return contents.getSlots() > 0 ? contents.getStackInSlot(0) : ItemStack.EMPTY;
 	}
 
 	public ItemStack getFuzeFromBlock(Level level, BlockPos pos) {
@@ -67,59 +86,126 @@ public abstract class FuzedRackedProjectileBlock<BLOCK_ENTITY extends FuzedBlock
 		return ItemStack.EMPTY;
 	}
 
+//	@Override
+//	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+//		if (hand == InteractionHand.OFF_HAND)
+//			return InteractionResult.PASS;
+//		FuzedBlockEntity fuzedBlock = this.getBlockEntity(level, pos);
+//		if (fuzedBlock == null)
+//			return InteractionResult.PASS;
+//		ItemStack stack = player.getItemInHand(hand);
+//		Direction fuzeFace = state.getValue(FACING);
+//		if (this.isBaseFuze())
+//			fuzeFace = fuzeFace.getOpposite();
+//		if (stack.isEmpty()) {
+//			int slot;
+//			if (!fuzedBlock.getItem(0).isEmpty()) {
+//				slot = 0;
+//			} else if (result.getDirection() == fuzeFace && !fuzedBlock.getItem(1).isEmpty()) {
+//				slot = 1;
+//			} else {
+//				return InteractionResult.PASS;
+//			}
+//			if (!level.isClientSide) {
+//				ItemStack resultStack = fuzedBlock.removeItem(slot, 1);
+//				if (!player.addItem(resultStack) && !player.isCreative()) {
+//					ItemEntity item = player.drop(resultStack, false);
+//					if (item != null) {
+//						item.setNoPickUpDelay();
+//						item.setTarget(player.getUUID());
+//					}
+//				}
+//				fuzedBlock.notifyUpdate();
+//			}
+//			level.playSound(player, pos, SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.NEUTRAL, 1.0f, 1.0f);
+//			return InteractionResult.sidedSuccess(level.isClientSide);
+//		} else {
+//			int slot;
+//			if (CBCItems.TRACER_TIP.isIn(stack)) {
+//				slot = 0;
+//			} else if (stack.getItem() instanceof FuzeItem && result.getDirection() == fuzeFace) {
+//				slot = 1;
+//			} else {
+//				return InteractionResult.PASS;
+//			}
+//			if (!fuzedBlock.getItem(slot).isEmpty())
+//				return InteractionResult.PASS;
+//			if (!level.isClientSide) {
+//				ItemStack copy = player.getAbilities().instabuild ? stack.copy() : stack.split(1);
+//				copy.setCount(1);
+//				fuzedBlock.setItem(slot, copy);
+//				fuzedBlock.notifyUpdate();
+//			}
+//			level.playSound(null, pos, SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.NEUTRAL, 1.0f, 1.0f);
+//			return InteractionResult.sidedSuccess(level.isClientSide);
+//		}
+//	}
+
 	@Override
-	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
+	public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
 		if (hand == InteractionHand.OFF_HAND)
-			return InteractionResult.PASS;
+			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 		FuzedBlockEntity fuzedBlock = this.getBlockEntity(level, pos);
 		if (fuzedBlock == null)
-			return InteractionResult.PASS;
-		ItemStack stack = player.getItemInHand(hand);
+			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
 		Direction fuzeFace = state.getValue(FACING);
 		if (this.isBaseFuze())
 			fuzeFace = fuzeFace.getOpposite();
-		if (stack.isEmpty()) {
-			int slot;
-			if (!fuzedBlock.getItem(0).isEmpty()) {
-				slot = 0;
-			} else if (result.getDirection() == fuzeFace && !fuzedBlock.getItem(1).isEmpty()) {
-				slot = 1;
-			} else {
-				return InteractionResult.PASS;
-			}
-			if (!level.isClientSide) {
-				ItemStack resultStack = fuzedBlock.removeItem(slot, 1);
-				if (!player.addItem(resultStack) && !player.isCreative()) {
-					ItemEntity item = player.drop(resultStack, false);
-					if (item != null) {
-						item.setNoPickUpDelay();
-						item.setTarget(player.getUUID());
-					}
-				}
-				fuzedBlock.notifyUpdate();
-			}
-			level.playSound(player, pos, SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.NEUTRAL, 1.0f, 1.0f);
-			return InteractionResult.sidedSuccess(level.isClientSide);
+		int slot;
+		if (CBCItems.TRACER_TIP.isIn(stack)) {
+			slot = 0;
+		} else if (stack.getItem() instanceof FuzeItem && hitResult.getDirection() == fuzeFace) {
+			slot = 1;
 		} else {
-			int slot;
-			if (CBCItems.TRACER_TIP.isIn(stack)) {
-				slot = 0;
-			} else if (stack.getItem() instanceof FuzeItem && result.getDirection() == fuzeFace) {
-				slot = 1;
-			} else {
-				return InteractionResult.PASS;
-			}
-			if (!fuzedBlock.getItem(slot).isEmpty())
-				return InteractionResult.PASS;
-			if (!level.isClientSide) {
-				ItemStack copy = player.getAbilities().instabuild ? stack.copy() : stack.split(1);
-				copy.setCount(1);
-				fuzedBlock.setItem(slot, copy);
-				fuzedBlock.notifyUpdate();
-			}
-			level.playSound(null, pos, SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.NEUTRAL, 1.0f, 1.0f);
-			return InteractionResult.sidedSuccess(level.isClientSide);
+			return stack.isEmpty() ? ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION : ItemInteractionResult.FAIL;
 		}
+		if (!fuzedBlock.getItem(slot).isEmpty())
+			return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+		if (!level.isClientSide) {
+			ItemStack copy = player.getAbilities().instabuild ? stack.copy() : stack.split(1);
+			copy.setCount(1);
+			fuzedBlock.setItem(slot, copy);
+			fuzedBlock.notifyUpdate();
+			if (!level.getBlockTicks().willTickThisTick(pos, this)) {
+				level.scheduleTick(pos, this, 0);
+			}
+		}
+		level.playSound(null, pos, SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.NEUTRAL, 1.0f, 1.0f);
+		return ItemInteractionResult.sidedSuccess(level.isClientSide);
+	}
+
+	@Override
+	public InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos, Player player, BlockHitResult hitResult) {
+		FuzedBlockEntity fuzedBlock = this.getBlockEntity(level, pos);
+		if (fuzedBlock == null)
+			return InteractionResult.PASS;
+		Direction fuzeFace = state.getValue(FACING);
+		if (this.isBaseFuze())
+			fuzeFace = fuzeFace.getOpposite();
+		int slot;
+		if (!fuzedBlock.getItem(0).isEmpty()) {
+			slot = 0;
+		} else if (hitResult.getDirection() == fuzeFace && !fuzedBlock.getItem(1).isEmpty()) {
+			slot = 1;
+		} else {
+			return InteractionResult.PASS;
+		}
+		if (!level.isClientSide) {
+			ItemStack resultStack = fuzedBlock.removeItem(slot, 1);
+			if (!player.addItem(resultStack) && !player.isCreative()) {
+				ItemEntity item = player.drop(resultStack, false);
+				if (item != null) {
+					item.setNoPickUpDelay();
+					item.setTarget(player.getUUID());
+				}
+			}
+			fuzedBlock.notifyUpdate();
+			if (!level.getBlockTicks().willTickThisTick(pos, this)) {
+				level.scheduleTick(pos, this, 0);
+			}
+		}
+		level.playSound(player, pos, SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.NEUTRAL, 1.0f, 1.0f);
+		return InteractionResult.sidedSuccess(level.isClientSide);
 	}
 
 	@Override

@@ -16,11 +16,12 @@ import com.cainiao1053.cbcmoreshells.index.CBCMSSoundEvents;
 import com.cainiao1053.cbcmoreshells.index.CBCMSTags;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.*;
 import com.google.common.collect.ImmutableList;
+import com.simibubi.create.api.contraption.ContraptionType;
 import com.simibubi.create.content.contraptions.AssemblyException;
-import com.simibubi.create.content.contraptions.ContraptionType;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
@@ -187,6 +188,7 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 		this.anchor = pos;
 
 		this.startPos = this.startPos.subtract(pos);
+		HolderLookup.Provider registries = level.registryAccess();
 
 		for (StructureBlockInfo blockInfo : cannonBlocks){
 
@@ -209,7 +211,7 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 			this.getBlocks().put(localPos, localBlockInfo);
 
 			if (blockInfo.nbt() == null) continue;
-			BlockEntity be = BlockEntity.loadStatic(localPos, alignedState, blockInfo.nbt());
+			BlockEntity be = BlockEntity.loadStatic(localPos, alignedState, blockInfo.nbt(), registries);
 			this.presentBlockEntities.put(localPos, be);
 			if (be instanceof IProjectileRackBlockEntity cbe && cbe.cannonBehavior().isWelded()) this.hasWeldedPenalty = true;
 
@@ -298,7 +300,7 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 		BlockPos currentPos = this.startPos.immutable();
 		int count = 0;
 		//int maxSafeCharges = this.getMaxSafeCharges();
-		boolean canFail = !CBCConfigs.SERVER.failure.disableAllFailure.get();
+		boolean canFail = !CBCConfigs.server().failure.disableAllFailure.get();
 		float spreadSub = this.cannonMaterial.properties().spreadReductionPerBarrel();
 		boolean airGapPresent = false;
 
@@ -312,6 +314,8 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 		BlockPos assemblyPos = null;
 
 		float minimumSpread = this.cannonMaterial.properties().minimumSpread();
+
+		HolderLookup.Provider registries = level.registryAccess();
 
 		while (this.presentBlockEntities.get(currentPos) instanceof IProjectileRackBlockEntity cbe) {
 			BigCannonBehavior behavior = cbe.cannonBehavior();
@@ -347,7 +351,7 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 					this.fail(currentPos, level, entity, behavior.blockEntity, (int) propelCtx.chargesUsed);
 					return;
 				}
-				this.consumeBlock(behavior, currentPos, cpropel::consumePropellant);
+				this.consumeBlock(behavior, currentPos, cpropel::consumePropellant, registries);
 				airGapPresent = false;
 			} else if (block instanceof RackedProjectileBlock<?> projBlock && projectile == null) {
 				if (canFail && airGapPresent && rollFailToIgnite(rand)) {
@@ -366,7 +370,7 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 					if (canFail) this.fail(currentPos, level, entity, behavior.blockEntity, (int) propelCtx.chargesUsed);
 					return;
 				}
-				this.consumeBlock(behavior, currentPos);
+				this.consumeBlock(behavior, currentPos, registries);
 
 				rackToClear.add(currentPos);
 
@@ -386,14 +390,14 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 					this.fail(currentPos, level, entity, behavior.blockEntity, (int) propelCtx.chargesUsed);
 					return;
 				} else {
-					this.consumeBlock(behavior, currentPos);
+					this.consumeBlock(behavior, currentPos, registries);
 				}
 			} else {
 				if (canFail) {
 					this.fail(currentPos, level, entity, behavior.blockEntity, (int) propelCtx.chargesUsed);
 					return;
 				} else {
-					this.consumeBlock(behavior, currentPos);
+					this.consumeBlock(behavior, currentPos, registries);
 				}
 			}
 			currentPos = currentPos.relative(this.initialOrientation);
@@ -519,7 +523,7 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 		}
 
 		recoilMagnitude += propelCtx.recoil;
-		recoilMagnitude *= CBCConfigs.SERVER.cannons.bigCannonRecoilScale.getF();
+		recoilMagnitude *= CBCConfigs.server().cannons.bigCannonRecoilScale.getF();
 		if (controller != null) controller.onRecoil(vec.scale(-recoilMagnitude), entity);
 
 		this.hasFired = true;
@@ -527,7 +531,7 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 		float soundPower = Mth.clamp(1 / 16f, 0, 1);
 		float tone = 2 + soundPower * -8 + level.random.nextFloat() * 4f - 2f;
 		float pitch = 1.2f;
-		double shakeDistance = propelCtx.chargesUsed * CBCConfigs.SERVER.cannons.bigCannonBlastDistanceMultiplier.getF();
+		double shakeDistance = propelCtx.chargesUsed * CBCConfigs.server().cannons.bigCannonBlastDistanceMultiplier.getF();
 		float volume = 6;
 		float distMul = 1;
 		Vec3 plumePos = spawnPos.subtract(vec);
@@ -558,7 +562,7 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 				player.connection.send(blastWavePacket);
 		}
 
-		if (projectile != null && CBCConfigs.SERVER.munitions.projectilesCanChunkload.get()) {
+		if (projectile != null && CBCConfigs.server().munitions.projectilesCanChunkload.get()) {
 			ChunkPos cpos1 = new ChunkPos(BlockPos.containing(projectile.position()));
 			RitchiesProjectileLib.queueForceLoad(level, cpos1.x, cpos1.z);
 		}
@@ -589,13 +593,13 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 		level.addFreshEntity(p);
 	}
 
-	private void consumeBlock(BigCannonBehavior behavior, BlockPos pos) {
-		this.consumeBlock(behavior, pos, BigCannonBehavior::removeBlock);
+	private void consumeBlock(BigCannonBehavior behavior, BlockPos pos, HolderLookup.Provider registries) {
+		this.consumeBlock(behavior, pos, BigCannonBehavior::removeBlock, registries);
 	}
 
-	private void consumeBlock(BigCannonBehavior behavior, BlockPos pos, Consumer<BigCannonBehavior> action) {
+	private void consumeBlock(BigCannonBehavior behavior, BlockPos pos, Consumer<BigCannonBehavior> action, HolderLookup.Provider registries) {
 		action.accept(behavior);
-		CompoundTag tag = behavior.blockEntity.saveWithFullMetadata();
+		CompoundTag tag = behavior.blockEntity.saveWithFullMetadata(registries);
 		tag.remove("x");
 		tag.remove("y");
 		tag.remove("z");
@@ -606,57 +610,14 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 		this.blocks.put(oldInfo.pos(), consumedInfo);
 	}
 
-//	private static boolean rollSquib(RandomSource random) {
-//		float f = CBCConfigs.SERVER.failure.squibChance.getF();
-//		return f != 0 && random.nextFloat() <= f;
-//	}
-//
-//	private void squibBlocks(BlockPos currentPos, List<StructureBlockInfo> projectileBlocks) {
-//		for (int i = 0; i < projectileBlocks.size(); ++i) {
-//			BlockPos pos = currentPos.relative(this.initialOrientation, i);
-//			StructureBlockInfo cannonInfo1 = this.blocks.get(pos);
-//			BlockEntity be1 = this.presentBlockEntities.get(pos);
-//			StructureBlockInfo projBlock = projectileBlocks.get(i);
-//
-//			if (cannonInfo1 != null && be1 instanceof IProjectileRackBlockEntity cbe1) {
-//				BigCannonBehavior behavior1 = cbe1.cannonBehavior();
-//				behavior1.loadBlock(projBlock);
-//				CompoundTag tag = behavior1.blockEntity.saveWithFullMetadata();
-//				tag.remove("x");
-//				tag.remove("y");
-//				tag.remove("z");
-//				StructureBlockInfo squibInfo = new StructureBlockInfo(cannonInfo1.pos(), cannonInfo1.state(), tag);
-//				this.blocks.put(cannonInfo1.pos(), squibInfo);
-//			} else {
-//				CompoundTag tag = projBlock.nbt();
-//				if (tag != null) {
-//					tag.remove("x");
-//					tag.remove("y");
-//					tag.remove("z");
-//				}
-//				this.blocks.put(pos, new StructureBlockInfo(pos, projBlock.state(), tag));
-//			}
-//		}
-//	}
-//
-//	private static boolean rollBarrelBurst(RandomSource random) {
-//		float f = CBCConfigs.SERVER.failure.barrelChargeBurstChance.getF();
-//		return f != 0 && random.nextFloat() <= f;
-//	}
-//
-//	private static boolean rollOverloadBurst(RandomSource random) {
-//		float f = CBCConfigs.SERVER.failure.overloadBurstChance.getF();
-//		return f != 0 && random.nextFloat() <= f;
-//	}
-
 	private static boolean rollFailToIgnite(RandomSource random) {
-		float f = CBCConfigs.SERVER.failure.interruptedIgnitionChance.getF();
+		float f = CBCConfigs.server().failure.interruptedIgnitionChance.getF();
 		return f != 0 && random.nextFloat() <= f;
 	}
 
 	public void fail(BlockPos localPos, Level level, PitchOrientedContraptionEntity entity, @Nullable BlockEntity failed, int charges) {
 		Vec3 failurePoint = entity.toGlobalVector(Vec3.atCenterOf(localPos), 1.0f);
-		float failScale = CBCConfigs.SERVER.failure.failureExplosionPower.getF();
+		float failScale = CBCConfigs.server().failure.failureExplosionPower.getF();
 		if (this.cannonMaterial.properties().failureMode() == ProjectileRackMaterialProperties.FailureMode.RUPTURE) {
 			int failInt = Mth.ceil(failScale);
 			BlockPos startPos = localPos.relative(this.initialOrientation.getOpposite(), failInt);
@@ -702,8 +663,8 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 	}
 
 	@Override
-	public CompoundTag writeNBT(boolean clientData) {
-		CompoundTag tag = super.writeNBT(clientData);
+	public CompoundTag writeNBT(HolderLookup.Provider registries, boolean spawnPacket) {
+		CompoundTag tag = super.writeNBT(registries, spawnPacket);
 		tag.putString("CannonMaterial", this.cannonMaterial == null ? CBCMSProjectileRackMaterials.CAST_IRON.name().toString() : this.cannonMaterial.name().toString());
 		if (this.hasWeldedPenalty) tag.putBoolean("WeldedCannon", true);
 		//if (this.mortarDelay > 0) tag.putInt("MortarDelay", this.mortarDelay);
@@ -727,7 +688,7 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 
 	@Override
 	public ContraptionType getType() {
-		return CBCMSContraptionTypes.PROJECTILE_RACK;
+		return CBCMSContraptionTypes.PROJECTILE_RACK.value();
 	}
 
 	public boolean isDropMortar() {
