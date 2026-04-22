@@ -11,12 +11,15 @@ import com.google.gson.JsonElement;
 import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.PacketListener;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
+import net.minecraft.world.entity.player.Player;
 import rbasamoyai.createbigcannons.multiloader.NetworkPlatform;
 import rbasamoyai.createbigcannons.network.RootPacket;
 
@@ -49,43 +52,72 @@ public class DualCannonMaterialPropertiesHandler {
 
 	public static DualCannonMaterialProperties getMaterial(DualCannonMaterial material) { return PROPERTIES.get(material); }
 
-	public static void writeBuf(FriendlyByteBuf buf) {
-		buf.writeVarInt(PROPERTIES.size());
-		for (Map.Entry<DualCannonMaterial, DualCannonMaterialProperties> entry : PROPERTIES.entrySet()) {
+//	public static void writeBuf(FriendlyByteBuf buf) {
+//		buf.writeVarInt(PROPERTIES.size());
+//		for (Map.Entry<DualCannonMaterial, DualCannonMaterialProperties> entry : PROPERTIES.entrySet()) {
+//			buf.writeResourceLocation(entry.getKey().name());
+//			entry.getValue().writeBuf(buf);
+//		}
+//	}
+//
+//	public static void readBuf(FriendlyByteBuf buf) {
+//		PROPERTIES.clear();
+//		int sz = buf.readVarInt();
+//
+//		for (int i = 0; i < sz; ++i) {
+//			PROPERTIES.put(DualCannonMaterial.fromName(buf.readResourceLocation()), DualCannonMaterialProperties.fromBuf(buf));
+//		}
+//	}
+
+	public static void writeBuf(RegistryFriendlyByteBuf buf, ClientboundDualCannonMaterialPropertiesPacket pkt) {
+		buf.writeVarInt(pkt.properties.size());
+		for (Map.Entry<DualCannonMaterial, DualCannonMaterialProperties> entry : pkt.properties.entrySet()) {
 			buf.writeResourceLocation(entry.getKey().name());
 			entry.getValue().writeBuf(buf);
 		}
 	}
 
-	public static void readBuf(FriendlyByteBuf buf) {
-		PROPERTIES.clear();
+	public static ClientboundDualCannonMaterialPropertiesPacket readBuf(RegistryFriendlyByteBuf buf) {
 		int sz = buf.readVarInt();
-
-		for (int i = 0; i < sz; ++i) {
-			PROPERTIES.put(DualCannonMaterial.fromName(buf.readResourceLocation()), DualCannonMaterialProperties.fromBuf(buf));
-		}
+		Map<DualCannonMaterial, DualCannonMaterialProperties> properties = new Reference2ObjectOpenHashMap<>();
+		for (int i = 0; i < sz; ++i)
+			properties.put(DualCannonMaterial.fromName(buf.readResourceLocation()), DualCannonMaterialProperties.fromBuf(buf));
+		return new ClientboundDualCannonMaterialPropertiesPacket(properties);
 	}
 
 	public static void syncTo(ServerPlayer player) {
-		NetworkPlatform.sendToClientPlayer(new ClientboundBigCannonMaterialPropertiesPacket(), player);
+		NetworkPlatform.sendToClientPlayer(new ClientboundDualCannonMaterialPropertiesPacket(), player);
 	}
 
 	public static void syncToAll(MinecraftServer server) {
-		NetworkPlatform.sendToClientAll(new ClientboundBigCannonMaterialPropertiesPacket(), server);
+		NetworkPlatform.sendToClientAll(new ClientboundDualCannonMaterialPropertiesPacket(), server);
 	}
 
-	public record ClientboundBigCannonMaterialPropertiesPacket(@Nullable FriendlyByteBuf buf) implements RootPacket {
-		public ClientboundBigCannonMaterialPropertiesPacket() { this(null); }
+//	public record ClientboundBigCannonMaterialPropertiesPacket(@Nullable FriendlyByteBuf buf) implements RootPacket {
+//		public ClientboundBigCannonMaterialPropertiesPacket() { this(null); }
+//
+//		public static ClientboundBigCannonMaterialPropertiesPacket copyOf(FriendlyByteBuf buf) {
+//			return new ClientboundBigCannonMaterialPropertiesPacket(new FriendlyByteBuf(buf.copy()));
+//		}
+//
+//		@Override public void rootEncode(FriendlyByteBuf buf) { writeBuf(buf); }
+//
+//		@Override
+//		public void handle(Executor exec, PacketListener listener, @Nullable ServerPlayer sender) {
+//			if (this.buf != null) readBuf(this.buf);
+//		}
+//	}
 
-		public static ClientboundBigCannonMaterialPropertiesPacket copyOf(FriendlyByteBuf buf) {
-			return new ClientboundBigCannonMaterialPropertiesPacket(new FriendlyByteBuf(buf.copy()));
-		}
+	public record ClientboundDualCannonMaterialPropertiesPacket(Map<DualCannonMaterial, DualCannonMaterialProperties> properties) implements RootPacket {
+		public static final StreamCodec<RegistryFriendlyByteBuf, ClientboundDualCannonMaterialPropertiesPacket> STREAM_CODEC =
+				StreamCodec.of(DualCannonMaterialPropertiesHandler::writeBuf, DualCannonMaterialPropertiesHandler::readBuf);
 
-		@Override public void rootEncode(FriendlyByteBuf buf) { writeBuf(buf); }
+		public ClientboundDualCannonMaterialPropertiesPacket() { this(new Reference2ObjectOpenHashMap<>(PROPERTIES)); }
 
 		@Override
-		public void handle(Executor exec, PacketListener listener, @Nullable ServerPlayer sender) {
-			if (this.buf != null) readBuf(this.buf);
+		public void handle(Executor exec, PacketListener listener, Player player) {
+			PROPERTIES.clear();
+			PROPERTIES.putAll(this.properties);
 		}
 	}
 

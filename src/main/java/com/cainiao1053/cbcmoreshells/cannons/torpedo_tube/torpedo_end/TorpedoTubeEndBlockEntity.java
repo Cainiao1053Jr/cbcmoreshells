@@ -5,7 +5,7 @@ import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.TorpedoTubeBlock;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.material.TorpedoTubeMaterial;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.Iterate;
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -57,13 +57,13 @@ public class TorpedoTubeEndBlockEntity extends SmartBlockEntity implements ITorp
 		DrillBoringBlockRecipe recipe = AbstractCannonDrillBlockEntity.getBlockRecipe(state, dir);
 		if (recipe == null) return InteractionResult.PASS;
 		if (!this.getLevel().isClientSide) {
-			CompoundTag loadTag = this.saveWithFullMetadata();
+			CompoundTag loadTag = this.saveWithFullMetadata(this.getLevel().registryAccess());
 			BlockState boredState = recipe.getResultState(state);
 			TorpedoTubeMaterial material = ((TorpedoTubeBlock) state.getBlock()).getCannonMaterialInLevel(this.level, state, this.worldPosition);
 			this.setRemoved();
 			this.getLevel().setBlock(this.worldPosition, boredState, 11);
 			BlockEntity newBE = this.getLevel().getBlockEntity(this.worldPosition);
-			if (newBE != null) newBE.load(loadTag);
+			if (newBE != null) newBE.loadWithComponents(loadTag,this.getLevel().registryAccess());
 
 			for (Direction dir1 : Iterate.directions) {
 				if (!this.cannonBehavior.isConnectedTo(dir1)) continue;

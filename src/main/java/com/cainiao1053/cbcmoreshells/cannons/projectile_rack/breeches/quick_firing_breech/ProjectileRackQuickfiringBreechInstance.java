@@ -1,35 +1,28 @@
 package com.cainiao1053.cbcmoreshells.cannons.projectile_rack.breeches.quick_firing_breech;
 
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.ProjectileRackBlock;
-//import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.TorpedoTubeBlock;
 import com.cainiao1053.cbcmoreshells.index.CBCMSBlockPartials;
-import com.jozufozu.flywheel.api.MaterialManager;
-import com.jozufozu.flywheel.api.instance.DynamicInstance;
-import com.jozufozu.flywheel.backend.instancing.blockentity.BlockEntityInstance;
-import com.jozufozu.flywheel.core.Materials;
-import com.jozufozu.flywheel.core.PartialModel;
-import com.jozufozu.flywheel.core.materials.oriented.OrientedData;
 import com.mojang.math.Axis;
-
-import net.minecraft.world.phys.Vec3;
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
-import com.simibubi.create.AllBlocks;
-import com.simibubi.create.foundation.utility.AnimationTickHolder;
-
+import dev.engine_room.flywheel.api.visual.DynamicVisual;
+import dev.engine_room.flywheel.api.visualization.VisualizationContext;
+import dev.engine_room.flywheel.lib.instance.OrientedInstance;
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
+import dev.engine_room.flywheel.lib.visual.AbstractBlockEntityVisual;
+import dev.engine_room.flywheel.lib.visual.SimpleDynamicVisual;
+import net.createmod.catnip.animation.AnimationTickHolder;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import org.joml.Vector3f;
+import rbasamoyai.createbigcannons.cannons.big_cannons.breeches.quickfiring_breech.QuickfiringBreechBlockEntity;
 
 import static com.cainiao1053.cbcmoreshells.cannons.projectile_rack.ProjectileRackBaseBlock.CEILING;
 
-//import rbasamoyai.createbigcannons.cannons.big_cannons.BigCannonBlock;
-//import rbasamoyai.createbigcannons.index.CBCBlockPartials;
 
-public class ProjectileRackQuickfiringBreechInstance extends BlockEntityInstance<ProjectileRackQuickfiringBreechBlockEntity> implements DynamicInstance {
+public class ProjectileRackQuickfiringBreechVisual extends AbstractBlockEntityVisual<ProjectileRackQuickfiringBreechBlockEntity> implements SimpleDynamicVisual {
 
-	private OrientedData breechblock;
+	private OrientedInstance breechblock;
 	//private OrientedData shaft;
 	//private OrientedData lever;
 	private Direction direction;
@@ -38,8 +31,8 @@ public class ProjectileRackQuickfiringBreechInstance extends BlockEntityInstance
 	private Vector3f positionI;
 	private Vector3f offsetI = new Vector3f(0, 0, 0);
 
-	public ProjectileRackQuickfiringBreechInstance(MaterialManager materialManager, ProjectileRackQuickfiringBreechBlockEntity blockEntity) {
-		super(materialManager, blockEntity);
+	public ProjectileRackQuickfiringBreechVisual(VisualizationContext ctx, ProjectileRackQuickfiringBreechBlockEntity blockEntity, float partialTick) {
+		super(ctx, blockEntity, partialTick);
 	}
 
 	@Override
@@ -57,27 +50,8 @@ public class ProjectileRackQuickfiringBreechInstance extends BlockEntityInstance
 			.getModel(getPartialModelForState(this.blockState), this.blockState, this.blockRotation)
 			.createInstance();
 
-//		this.shaft = this.materialManager.defaultSolid()
-//			.material(Materials.ORIENTED)
-//			.getModel(AllBlocks.SHAFT.getDefaultState().setValue(BlockStateProperties.AXIS, axis))
-//			.createInstance();
 
 		this.direction = facing.getCounterClockWise(this.blockRotation.getAxis());
-
-//		this.lever = this.materialManager.defaultSolid()
-//			.material(Materials.ORIENTED)
-//			.getModel(CBCMSBlockPartials.QUICKFIRING_BREECH_LEVER, this.blockState, this.direction)
-//			.createInstance();
-
-//		boolean alongFirst = this.blockState.getValue(ProjectileRackQuickfiringBreechBlock.AXIS);
-//		if (facing.getAxis().isHorizontal() && !alongFirst) {
-//			Direction rotDir = facing.getAxis() == Direction.Axis.X ? Direction.UP : Direction.EAST;
-//			Quaternionf q = Axis.of(rotDir.step()).rotationDegrees(90f);
-//			this.breechblock.setRotation(q);
-//		}
-//		if (facing.getAxis() == Direction.Axis.X && alongFirst) {
-//			this.breechblock.setRotation(Axis.of(this.blockRotation.step()).rotationDegrees(90f));
-//		}
 
 		if(facing == Direction.UP) {
 			this.breechblock.setRotation(Axis.YN.rotationDegrees(90f));
@@ -100,13 +74,13 @@ public class ProjectileRackQuickfiringBreechInstance extends BlockEntityInstance
 	}
 
 	@Override
-	public void beginFrame() {
-		this.transformModels();
+	public void beginFrame(DynamicVisual.Context ctx) {
+		this.transformModels(ctx);
 	}
 
-	private void transformModels() {
+	private void transformModels(DynamicVisual.Context ctx) {
 		float progress = this.blockEntity.getOpenProgress(AnimationTickHolder.getPartialTicks());
-		BlockPos instancePos = this.getInstancePosition();
+		BlockPos instancePos = this.getVisualPosition();
 		positionI = new Vector3f(instancePos.getX(), instancePos.getY(), instancePos.getZ());
 //		Vector3f offsetI = installLock(this.blockState);
 //		positionI = positionI.add(offsetI);

@@ -5,10 +5,12 @@ import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.material.Projectile
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.SolidTorpedoTubeBlock;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.material.TorpedoTubeMaterial;
 import com.cainiao1053.cbcmoreshells.index.CBCMSBlockEntities;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -20,6 +22,8 @@ import rbasamoyai.createbigcannons.index.CBCBlockEntities;
 import rbasamoyai.createbigcannons.index.CBCShapes;
 
 public class ProjectileRackEndBlock extends SolidProjectileRackBlock<ProjectileRackEndBlockEntity> {
+
+	private final MapCodec<? extends DirectionalBlock> codec;
 
 	public ProjectileRackEndBlock(Properties properties, ProjectileRackMaterial cannonMaterial) {
 		super(properties, cannonMaterial);

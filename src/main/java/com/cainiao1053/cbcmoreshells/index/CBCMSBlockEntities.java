@@ -13,6 +13,7 @@ import com.cainiao1053.cbcmoreshells.blocks.torpedo_detection_device.TorpedoDete
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.DualCannonBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.breeches.quick_firing_breech.DualCannonQuickfiringBreechBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.breeches.quick_firing_breech.DualCannonQuickfiringBreechBlockEntityRenderer;
+import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.breeches.quick_firing_breech.DualCannonQuickfiringBreechVisual;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.breeches.sliding_breech.DualCannonSlidingBreechBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.breeches.sliding_breech.DualCannonSlidingBreechBlockEntityRenderer;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.dual_cannon_end.DualCannonEndBlockEntity;
@@ -118,7 +119,7 @@ public class CBCMSBlockEntities {
 
 	public static final BlockEntityEntry<DualCannonQuickfiringBreechBlockEntity> DUAL_CANNON_QUICKFIRING_BREECH = REGISTRATE
 			.blockEntity("dual_cannon_quickfiring_breech", DualCannonQuickfiringBreechBlockEntity::new)
-			//.instance(() -> DualCannonQuickfiringBreechInstance::new)
+			.visual(() -> DualCannonQuickfiringBreechVisual::new)
 			.renderer(() -> DualCannonQuickfiringBreechBlockEntityRenderer::new)
 			.validBlocks(
 					CBCMSBlocks.STEEL_DUAL_CANNON_QUICKFIRING_BREECH,
