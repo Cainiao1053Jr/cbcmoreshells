@@ -1,12 +1,4 @@
 plugins {
-//    id 'eclipse'
-//    id 'idea'
-//    id 'maven-publish'
-//    id 'net.minecraftforge.gradle' version '[6.0,6.2)'
-//
-//    id "com.github.johnrengelman.shadow" version "8.1.1"
-//    id 'org.spongepowered.mixin' version '0.7.+'
-
     id 'java-library'
     id 'maven-publish'
     id 'net.neoforged.moddev' version '2.0.139'
@@ -14,114 +6,39 @@ plugins {
 }
 
 version = mod_version
-group = 'com.cainiao1053.cbcmoreshells' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+group = 'com.cainiao1053.cbcmoreshells'
 archivesBaseName = 'cbcmoreshells'
 
-// Mojang ships Java 17 to end users in 1.18+, so your mod should target Java 17.
-java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+// Minecraft 1.21.1 requires Java 21
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 println "Java: ${System.getProperty 'java.version'}, JVM: ${System.getProperty 'java.vm.version'} (${System.getProperty 'java.vendor'}), Arch: ${System.getProperty 'os.arch'}"
-minecraft {
-    // The mappings can be changed at any time and must be in the following format.
-    // Channel:   Version:
-    // official   MCVersion             Official field/method names from Mojang mapping files
-    // parchment  YYYY.MM.DD-MCVersion  Open community-sourced parameter names and javadocs layered on top of official
-    //
-    // You must be aware of the Mojang license when using the 'official' or 'parchment' mappings.
-    // See more information here: https://github.com/MinecraftForge/MCPConfig/blob/master/Mojang.md
-    //
-    // Parchment is an unofficial project maintained by ParchmentMC, separate from MinecraftForge
-    // Additional setup is needed to use their mappings: https://github.com/ParchmentMC/Parchment/wiki/Getting-Started
-    //
-    // Use non-default mappings at your own risk. They may not always work.
-    // Simply re-run your setup task after changing the mappings to update your workspace.
-    mappings channel: 'official', version: '1.20.1'
 
-    // accessTransformer = file('src/main/resources/META-INF/accesstransformer.cfg') // Currently, this location cannot be changed from the default.
+neoForge {
+    version = project.neoforge_version
 
-    // Default run configurations.
-    // These can be tweaked, removed, or duplicated as needed.
     runs {
         client {
-            workingDirectory project.file('run')
-
-            // Recommended logging data for a userdev environment
-            // The markers can be added/remove as needed separated by commas.
-            // "SCAN": For mods scan.
-            // "REGISTRIES": For firing of registry events.
-            // "REGISTRYDUMP": For getting the contents of all registries.
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            // Recommended logging level for the console
-            // You can set various levels here.
-            // Please read: https://stackoverflow.com/questions/2031163/when-to-use-the-different-log-levels
-            property 'forge.logging.console.level', 'debug'
-
-            property 'mixin.env.remapRefMap', 'true'
-            property 'mixin.env.refMapRemappingFile', "${projectDir}/build/createSrgToMcp/output.srg"
-            args '-mixin.config=cbcmoreshells.mixins.json'
-
-
-            // Comma-separated list of namespaces to load gametests from. Empty = all namespaces.
-            property 'forge.enabledGameTestNamespaces', 'cbcmoreshells'
-
-            mods {
-                cbcmoreshells {
-                    source sourceSets.main
-                }
-            }
+            client()
+            logLevel = org.slf4j.event.Level.DEBUG
         }
 
         server {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            property 'forge.logging.console.level', 'debug'
-
-            property 'forge.enabledGameTestNamespaces', 'cbcmoreshells'
-
-            mods {
-                cbcmoreshells {
-                    source sourceSets.main
-                }
-            }
-        }
-
-        // This run config launches GameTestServer and runs all registered gametests, then exits.
-        // By default, the server will crash when no gametests are provided.
-        // The gametest system is also enabled by default for other run configs under the /test command.
-        gameTestServer {
-            workingDirectory project.file('run')
-
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            property 'forge.logging.console.level', 'debug'
-
-            property 'forge.enabledGameTestNamespaces', 'cbcmoreshells'
-
-            mods {
-                cbcmoreshells {
-                    source sourceSets.main
-                }
-            }
+            server()
+            logLevel = org.slf4j.event.Level.DEBUG
         }
 
         data {
-            workingDirectory project.file('run')
+            data()
+            programArguments.addAll '--mod', mod_id, '--all',
+                    '--output', file('src/generated/resources/').getAbsolutePath(),
+                    '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+    }
 
-            property 'forge.logging.markers', 'REGISTRIES'
-
-            property 'forge.logging.console.level', 'debug'
-
-            // Specify the modid for data generation, where to output the resulting resource, and where to look for existing resources.
-            args '--mod', 'cbcmoreshells', '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-
-            mods {
-                cbcmoreshells {
-                    source sourceSets.main
-                }
-            }
+    mods {
+        cbcmoreshells {
+            sourceSet(sourceSets.main)
         }
     }
 }
@@ -130,137 +47,97 @@ minecraft {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
-    // Put repositories for dependencies here
-    // ForgeGradle automatically adds the Forge maven and Maven Central for you
-
-    // If you have mod jar dependencies in ./libs, you can declare them as a repository like so:
-    // flatDir {
-    //     dir 'libs'
-    // }
     flatDir {
         dirs 'libs'
     }
-    maven { url = 'https://maven.minecraftforge.net' }
+    maven {
+        name = 'NeoForge'
+        url = 'https://maven.neoforged.net/releases'
+    }
     maven {
         name = 'tterrag maven'
         url = 'https://maven.tterrag.com/'
     }
-
-    maven {
-        name = 'Kotlin for Forge'
-        url = 'https://thedarkcolour.github.io/KotlinForForge/'
-    }
-
-
-
-    maven { url 'https://maven.valkyrienskies.org/' }
-
+//    maven {
+//        name = 'Kotlin for Forge'
+//        url = 'https://thedarkcolour.github.io/KotlinForForge/'
+//    }
+    //maven { url 'https://maven.valkyrienskies.org/' }
     maven { url 'https://maven.fabricmc.net/' }
-
     maven {
         url = "https://api.modrinth.com/maven"
         content {
             includeGroup("maven.modrinth")
         }
     }
-    // Add KFF Maven repository
     maven {
         url "https://cursemaven.com"
         content {
             includeGroup "curse.maven"
         }
     }
-
+    maven { url = "https://maven.createmod.net" } // Create, Flywheel, Ponder
+    maven { url = "https://maven.ithundxr.dev/snapshots" } // Registrate
     maven { // Ritchie's Projectile Library
         url = "https://maven.realrobotix.me/master/"
         content {
             includeGroup("com.rbasamoyai")
         }
     }
-
-    maven{
+    maven {
         url = "https://repo.essential.gg/repository/maven-public"
     }
-
     maven {
         name = "CottonMC"
         url = "https://server.bbkr.space/artifactory/libs-release"
     }
-
     maven { url = "https://maven.bawnorton.com/releases" }
     gradlePluginPortal()
     mavenCentral()
 }
 
-mixin {
-    add sourceSets.main, "cbcmoreshells.refmap.json"
-    config 'cbcmoreshells.mixins.json'
-}
-
 dependencies {
-    // Specify the version of Minecraft to use. If this is any group other than 'net.minecraft', it is assumed
-    // that the dep is a ForgeGradle 'patcher' dependency, and its patches will be applied.
-    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
-    minecraft 'net.minecraftforge:forge:1.20.1-47.2.32'
+    // Create (NeoForge 1.21.1)
+    implementation "com.simibubi.create:create-${minecraft_version}:${create_version}"
+    //implementation "dev.engine_room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}"
+    implementation "com.tterrag.registrate:Registrate:${registrate_version}"
+    implementation("net.createmod.ponder:ponder-neoforge:${ponder_neoforge_version}+mc${minecraft_version}")
+    compileOnly("dev.engine-room.flywheel:flywheel-neoforge-api-${minecraft_version}:${flywheel_version}")
+    runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
 
-    implementation fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
-    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
-    implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
+    // Create Big Cannons (NeoForge 1.21.1) — update cbc_file_id in gradle.properties
+    implementation "curse.maven:createbigcannons-646668:${cbc_file_id}"
 
-    implementation fg.deobf("curse.maven:createbigcannons-646668:6064368")
+    // Valkyrien Skies (version intentionally not updated)
+//    implementation("org.valkyrienskies:valkyrienskies-121-neoforge:${vs2_version}") { transitive = false }
+//    compileOnly "org.valkyrienskies.core:api:${vs_core_version}"
+//    compileOnly "org.valkyrienskies.core:api-game:${vs_core_version}"
+//    compileOnly "org.valkyrienskies.core:util:${vs_core_version}"
+//    compileOnly "org.valkyrienskies.core:impl:${vs_core_version}"
 
-    implementation fg.deobf("org.valkyrienskies:valkyrienskies-120-forge:${vs2_version}") { transitive = false }
+    implementation "com.fasterxml.jackson.core:jackson-annotations:2.15.2"
 
-    compileOnly ("org.valkyrienskies.core:api:${vs_core_version}")
-    compileOnly ("org.valkyrienskies.core:api-game:${vs_core_version}")
-    compileOnly ("org.valkyrienskies.core:util:${vs_core_version}")
-    compileOnly ("org.valkyrienskies.core:impl:${vs_core_version}")
-
-    implementation "com.fasterxml.jackson.core:jackson-annotations:2.13.3"
-    implementation "thedarkcolour:kotlinforforge:$forge_kotlin_version"
-
-    //implementation files('libs/createbigcannons-5.8.3-dev+mc.1.20.1-forge.jar')
+    // Kotlin for NeoForge
+    //implementation "thedarkcolour:kotlinforforge-neoforge:${forge_kotlin_version}"
 
     // Ritchie's Projectile Library
-    //String rplSuffix = !Boolean.valueOf(use_local_rpl_build) ? "-build.${rpl_build}" : ""
-    implementation fg.deobf("com.rbasamoyai:ritchiesprojectilelib:${rpl_version}+mc.${minecraft_version}-forge-build." + 182) { transitive = false }
-
-    // Real mod deobf dependency examples - these get remapped to your current mappings
-    // compileOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}:api") // Adds JEI API as a compile dependency
-    // runtimeOnly fg.deobf("mezz.jei:jei-${mc_version}:${jei_version}") // Adds the full JEI mod as a runtime dependency
-    // implementation fg.deobf("com.tterrag.registrate:Registrate:MC${mc_version}-${registrate_version}") // Adds registrate as a dependency
-
-    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    // Examples using mod jars from ./libs
-    // implementation fg.deobf("blank:coolmod-${mc_version}:${coolmod_version}")
-
-    // For more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
+    implementation("com.rbasamoyai:ritchiesprojectilelib:${rpl_version}+mc.${minecraft_version}-neoforge-build.${rpl_build}") { transitive = false }
 }
 
-// Example for how to get properties into the manifest for reading at runtime.
 jar {
     manifest {
         attributes([
                 "Specification-Title"     : "cbcmoreshells",
                 "Specification-Vendor"    : "cainiao1053",
-                "Specification-Version"   : "1", // We are version 1 of ourselves
+                "Specification-Version"   : "1",
                 "Implementation-Title"    : project.name,
                 "Implementation-Version"  : project.jar.archiveVersion,
                 "Implementation-Vendor"   : "cainiao1053",
                 "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
-                "MixinConfigs": "cbcmoreshells.mixins.json"
+                "MixinConfigs"            : "cbcmoreshells.mixins.json"
         ])
     }
 }
-
-// Example configuration to allow publishing using the maven-publish plugin
-// This is the preferred method to reobfuscate your jar file
-jar.finalizedBy('reobfJar')
-// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
-// publish.dependsOn('reobfJar')
-
 
 publishing {
     publications {
@@ -276,5 +153,5 @@ publishing {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
+    options.encoding = 'UTF-8'
 }

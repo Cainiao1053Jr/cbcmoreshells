@@ -46,18 +46,18 @@ public class SensitiveImpactFuzeItem extends FuzeItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, Level level, List<Component> tooltip, TooltipFlag flag) {
-		super.appendHoverText(stack, level, tooltip, flag);
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+		super.appendHoverText(stack, context, tooltip, flag);
 		//CBCTooltip.appendImpactFuzeText(stack, level, tooltip, flag, this.getDetonateChance(), this.getFuzeDurability());
-		CBCMSTooltip.appendSensitiveFuzeInfo(stack,level,tooltip,flag);
+		CBCMSTooltip.appendSensitiveFuzeInfo(stack,context.level(),tooltip,flag);
 	}
 
 	protected float getDetonateChance() {
-		return CBCConfigs.SERVER.munitions.impactFuzeDetonationChance.getF();
+		return CBCConfigs.server().munitions.impactFuzeDetonationChance.getF();
 	}
 
 	protected int getFuzeDurability() {
-		return CBCConfigs.SERVER.munitions.impactFuzeDurability.get();
+		return CBCConfigs.server().munitions.impactFuzeDurability.get();
 	}
 
 	@Override

@@ -2,10 +2,14 @@ package com.cainiao1053.cbcmoreshells.munitions.racked_projectile;
 
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
-import com.simibubi.create.foundation.utility.VoxelShaper;
+import net.createmod.catnip.math.VoxelShaper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -29,6 +33,7 @@ import rbasamoyai.createbigcannons.cannons.big_cannons.BigCannonBlock;
 import rbasamoyai.createbigcannons.config.CBCConfigs;
 import rbasamoyai.createbigcannons.munitions.big_cannon.BigCannonMunitionBlock;
 import rbasamoyai.createbigcannons.munitions.big_cannon.BigCannonProjectileBlockEntity;
+import rbasamoyai.createbigcannons.utils.CBCUtils;
 
 import java.util.List;
 
@@ -43,8 +48,12 @@ public abstract class RackedProjectileBlock<ENTITY extends AbstractRackedProject
 		this.shapes = this.makeShapes();
 	}
 
-	public static ItemStack getTracerFromItemStack(ItemStack stack) {
-		return ItemStack.of(stack.getOrCreateTag().getCompound("BlockEntityTag").getCompound("Tracer"));
+	public static ItemStack getTracerFromItemStack(ItemStack stack, HolderLookup.Provider registries) {
+		CustomData blockEntityData = stack.get(DataComponents.BLOCK_ENTITY_DATA);
+		if (blockEntityData == null) return ItemStack.EMPTY;
+		CompoundTag tag = blockEntityData.copyTag();
+		if (!tag.contains("Tracer")) return ItemStack.EMPTY;
+		return ItemStack.parseOptional(registries, tag.getCompound("Tracer"));
 	}
 
 	@Override
@@ -52,6 +61,24 @@ public abstract class RackedProjectileBlock<ENTITY extends AbstractRackedProject
 		super.createBlockStateDefinition(builder);
 		builder.add(FACING);
 		builder.add(WATERLOGGED);
+	}
+
+	@Override
+	public ItemStack getExtractedItem(StructureBlockInfo info, HolderLookup.Provider registries) {
+		ItemStack stack = new ItemStack(this);
+		if (info.nbt() != null) {
+			DataComponentMap components = CBCUtils.readComponentsFromStructureTag(info.nbt(), registries);
+			stack.applyComponents(components);
+		}
+		return stack;
+	}
+
+	@Override
+	public StructureBlockInfo getHandloadingInfo(ItemStack stack, BlockPos localPos, Direction cannonOrientation, HolderLookup.Provider registries) {
+		BlockState state = this.defaultBlockState().setValue(FACING, cannonOrientation);
+		CompoundTag tag = new CompoundTag();
+		CBCUtils.saveComponentsToStructureTag(tag, stack.getComponents(), registries);
+		return new StructureBlockInfo(localPos, state, tag);
 	}
 
 	public VoxelShaper makeShapes() {
@@ -126,29 +153,6 @@ public abstract class RackedProjectileBlock<ENTITY extends AbstractRackedProject
 		return oldState.setValue(BlockStateProperties.FACING, facing);
 	}
 
-	@Override
-	public StructureBlockInfo getHandloadingInfo(ItemStack stack, BlockPos localPos, Direction cannonOrientation) {
-		BlockState state = this.defaultBlockState().setValue(FACING, cannonOrientation);
-		CompoundTag baseTag = stack.getOrCreateTag();
-		if (baseTag.contains("BlockEntityTag")) {
-			CompoundTag tag = baseTag.getCompound("BlockEntityTag").copy();
-			tag.remove("x");
-			tag.remove("y");
-			tag.remove("z");
-			return new StructureBlockInfo(localPos, state, tag);
-		}
-		return new StructureBlockInfo(localPos, state, null);
-	}
-
-	@Override
-	public ItemStack getExtractedItem(StructureBlockInfo info) {
-		ItemStack stack = new ItemStack(this);
-		if (info.nbt() != null) {
-			stack.getOrCreateTag().put("BlockEntityTag", info.nbt());
-		}
-		return stack;
-	}
-
 	public abstract EntityType<? extends ENTITY> getAssociatedEntityType();
 
 	public boolean isValidAddition(List<StructureBlockInfo> total, StructureBlockInfo data, int index, Direction dir) {
@@ -163,13 +167,13 @@ public abstract class RackedProjectileBlock<ENTITY extends AbstractRackedProject
 
 	@Override public Direction.Axis getAxis(BlockState state) { return state.getValue(FACING).getAxis(); }
 
-	public static ItemStack getTracerFromBlocks(List<StructureBlockInfo> blocks) {
+	public static ItemStack getTracerFromBlocks(List<StructureBlockInfo> blocks, HolderLookup.Provider registries) {
 		if (blocks.isEmpty())
 			return ItemStack.EMPTY;
 		StructureBlockInfo info = blocks.get(0);
 		if (info.nbt() == null)
 			return ItemStack.EMPTY;
-		BlockEntity load = BlockEntity.loadStatic(info.pos(), info.state(), info.nbt());
+		BlockEntity load = BlockEntity.loadStatic(info.pos(), info.state(), info.nbt(), registries);
 		return load instanceof BigCannonProjectileBlockEntity projectile ? projectile.getItem(0) : ItemStack.EMPTY;
 	}
 
@@ -179,7 +183,7 @@ public abstract class RackedProjectileBlock<ENTITY extends AbstractRackedProject
 
 	@Override
 	public void createbigcannons$onBlockExplode(Level level, BlockPos pos, BlockState state, Explosion explosion) {
-		if (level.isClientSide || !CBCConfigs.SERVER.munitions.munitionBlocksCanExplode.get())
+		if (level.isClientSide || !CBCConfigs.server().munitions.munitionBlocksCanExplode.get())
 			return;
 		Vec3 entityPos = Vec3.atCenterOf(pos);
 		AbstractRackedProjectile projectile = this.spawnFromExplosion(level, pos, state, explosion);

@@ -10,6 +10,7 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.item.SmartInventory;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.NbtUtils;
@@ -206,9 +207,9 @@ public class CommandDeployerBlockEntity extends SmartBlockEntity {
     }
 
     @Override
-    public void write(CompoundTag compound, boolean clientPacket) {
-        super.write(compound, clientPacket);
-        compound.put("Inventory", inventory.serializeNBT());
+    public void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
+        super.write(compound,registries, clientPacket);
+        compound.put("Inventory", inventory.serializeNBT(registries));
         ListTag posList = new ListTag();
         for (BlockPos pos : cachedPositions) {
             posList.add(NbtUtils.writeBlockPos(pos));
@@ -217,9 +218,9 @@ public class CommandDeployerBlockEntity extends SmartBlockEntity {
     }
 
     @Override
-    protected void read(CompoundTag compound, boolean clientPacket) {
-        super.read(compound, clientPacket);
-        inventory.deserializeNBT(compound.getCompound("Inventory"));
+    protected void read(CompoundTag compound,HolderLookup.Provider registries, boolean clientPacket) {
+        super.read(compound, registries, clientPacket);
+        inventory.deserializeNBT(registries, compound.getCompound("Inventory"));
         cachedPositions = new ArrayList<>();
         if (compound.contains("CachedPositions", Tag.TAG_LIST)) {
             ListTag posList = compound.getList("CachedPositions", Tag.TAG_COMPOUND);

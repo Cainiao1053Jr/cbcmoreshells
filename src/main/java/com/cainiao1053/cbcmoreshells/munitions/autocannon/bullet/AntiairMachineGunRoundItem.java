@@ -5,9 +5,11 @@ import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.Item.TooltipContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import rbasamoyai.createbigcannons.index.CBCDataComponents;
 import rbasamoyai.createbigcannons.index.CBCItems;
 import rbasamoyai.createbigcannons.munitions.autocannon.AbstractAutocannonProjectile;
 import rbasamoyai.createbigcannons.munitions.autocannon.AutocannonAmmoItem;
@@ -36,11 +38,11 @@ public class AntiairMachineGunRoundItem extends Item implements AutocannonAmmoIt
 		return CBCMSEntityTypes.ANTIAIR_MACHINE_GUN_BULLET.get();
 	}
 
-	@Override public boolean isTracer(ItemStack stack) { return stack.getOrCreateTag().getBoolean("Tracer"); }
+	@Override public boolean isTracer(ItemStack stack) { return stack.getComponents().getOrDefault(CBCDataComponents.AUTOCANNON_TRACER, false); }
 
 	@Override
 	public void setTracer(ItemStack stack, boolean value) {
-		if (!stack.isEmpty()) stack.getOrCreateTag().putBoolean("Tracer", value);
+		if (!stack.isEmpty()) stack.set(CBCDataComponents.AUTOCANNON_TRACER, value);
 	}
 
 	@Override public ItemStack getSpentItem(ItemStack stack) { return CBCItems.EMPTY_MACHINE_GUN_ROUND.asStack(); }
@@ -48,8 +50,8 @@ public class AntiairMachineGunRoundItem extends Item implements AutocannonAmmoIt
 	@Override public AutocannonAmmoType getType() { return AutocannonAmmoType.MACHINE_GUN; }
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
-		super.appendHoverText(stack, level, tooltipComponents, isAdvanced);
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltipComponents, TooltipFlag isAdvanced) {
+		super.appendHoverText(stack, context, tooltipComponents, isAdvanced);
 //		if (stack.getOrCreateTag().getBoolean("Tracer")) {
 //			Lang.builder("tooltip").translate(CreateBigCannons.MOD_ID + ".tracer").addTo(tooltipComponents);
 //		}

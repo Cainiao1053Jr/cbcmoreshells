@@ -1,7 +1,6 @@
 package com.cainiao1053.cbcmoreshells.munitions.autocannon.bullet;
 
 import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
-//import com.cainiao1053.cbcmoreshells.api.vs.ValkyrienSkies;
 import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
 import com.cainiao1053.cbcmoreshells.munitions.autocannon.config.AntiairAutocannonProjectileProperties;
 import net.minecraft.core.BlockPos;
@@ -18,7 +17,6 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
 import org.slf4j.Logger;
-import org.valkyrienskies.core.api.ships.Ship;
 import rbasamoyai.createbigcannons.block_armor_properties.BlockArmorPropertiesHandler;
 import rbasamoyai.createbigcannons.block_armor_properties.BlockArmorPropertiesProvider;
 import rbasamoyai.createbigcannons.config.CBCCfgMunitions;
@@ -35,7 +33,6 @@ import rbasamoyai.createbigcannons.network.ClientboundPlayBlockHitEffectPacket;
 import rbasamoyai.createbigcannons.utils.CBCUtils;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class AntiairMachineGunProjectile extends AbstractAutocannonProjectile {
 
@@ -102,11 +99,11 @@ public class AntiairMachineGunProjectile extends AbstractAutocannonProjectile {
 		double hardnessPenalty = Math.max(blockArmor.hardness(this.level(), state, pos, true) - ballistics.penetration(), 0);
 
 		double projectileDeflection = ballistics.deflection();
-		double baseChance = CBCConfigs.SERVER.munitions.baseProjectileBounceChance.getF();
+		double baseChance = CBCConfigs.server().munitions.baseProjectileBounceChance.getF();
 		double bounceChance = projectileDeflection < 1e-2d || incidence > projectileDeflection ? 0 : Math.max(baseChance, 1 - incidence / projectileDeflection);
 
 		boolean surfaceImpact = this.lastPenetratedBlock.isAir();
-		boolean canBounce = CBCConfigs.SERVER.munitions.projectilesCanBounce.get();
+		boolean canBounce = CBCConfigs.server().munitions.projectilesCanBounce.get();
 		ImpactResult.KinematicOutcome outcome;
 		if (surfaceImpact && canBounce && this.level().getRandom().nextDouble() < bounceChance) {
 			outcome = ImpactResult.KinematicOutcome.BOUNCE;
