@@ -4,8 +4,8 @@ import java.util.List;
 
 import com.cainiao1053.cbcmoreshells.base.CBCMSTooltip;
 import com.simibubi.create.foundation.item.TooltipHelper;
-import com.simibubi.create.foundation.utility.Lang;
 
+import net.createmod.catnip.lang.Lang;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;

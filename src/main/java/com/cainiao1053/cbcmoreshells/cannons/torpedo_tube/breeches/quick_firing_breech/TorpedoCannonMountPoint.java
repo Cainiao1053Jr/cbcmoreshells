@@ -84,18 +84,18 @@ public class TorpedoCannonMountPoint extends AllArmInteractionPointTypes.Deposit
 
 		if (munition instanceof TorpedoProjectileBlock) {
 			if (barrelLength == 0) return stack;
-			if (firstInfo.state().getBlock() instanceof BigCartridgeBlock cartridge) {
-				if (!simulate) {
-					loadProjectile(stack, munition, poce, bigCannon);
-					breech.setLoadingCooldown(getLoadingCooldown());
-				}
-				if (BigCartridgeBlock.getPowerFromData(firstInfo) == 0) {
-					if (simulate) stack.setCount(1);
-					return cartridge.getExtractedItem(firstInfo);
-				} else {
-					return stack;
-				}
-			}
+//			if (firstInfo.state().getBlock() instanceof BigCartridgeBlock cartridge) {
+//				if (!simulate) {
+//					loadProjectile(stack, munition, poce, bigCannon);
+//					breech.setLoadingCooldown(getLoadingCooldown());
+//				}
+//				if (BigCartridgeBlock.getPowerFromData(firstInfo) == 0) {
+//					if (simulate) stack.setCount(1);
+//					return cartridge.getExtractedItem(firstInfo);
+//				} else {
+//					return stack;
+//				}
+//			}
 			if (!firstInfo.state().isAir()) return stack;
 			if (!simulate) {
 				loadProjectile(stack, munition, poce, bigCannon);
@@ -106,17 +106,17 @@ public class TorpedoCannonMountPoint extends AllArmInteractionPointTypes.Deposit
 			copy.shrink(1);
 			return copy;
 		}
-		if (munition instanceof BigCartridgeBlock) {
-			if (BigCartridgeBlockItem.getPower(stack) == 0 || !(firstInfo.state().getBlock() instanceof TorpedoProjectileBlock))
-				return stack;
-			if (!simulate) {
-				loadCartridge(stack, munition, poce, bigCannon);
-				breech.setLoadingCooldown(getLoadingCooldown());
-			}
-			ItemStack copy = stack.copy();
-			copy.shrink(1);
-			return copy;
-		}
+//		if (munition instanceof BigCartridgeBlock) {
+//			if (BigCartridgeBlockItem.getPower(stack) == 0 || !(firstInfo.state().getBlock() instanceof TorpedoProjectileBlock))
+//				return stack;
+//			if (!simulate) {
+//				loadCartridge(stack, munition, poce, bigCannon);
+//				breech.setLoadingCooldown(getLoadingCooldown());
+//			}
+//			ItemStack copy = stack.copy();
+//			copy.shrink(1);
+//			return copy;
+//		}
 		return stack;
 	}
 
@@ -147,18 +147,18 @@ public class TorpedoCannonMountPoint extends AllArmInteractionPointTypes.Deposit
 
 		if (munition instanceof TorpedoProjectileBlock) {
 			if (barrelLength == 0) return stack;
-			if (firstInfo.state().getBlock() instanceof BigCartridgeBlock cartridge) {
-				if (!simulate) {
-					loadProjectile(stack, munition, poce, bigCannon);
-					breech.setLoadingCooldown(getLoadingCooldown());
-				}
-				if (BigCartridgeBlock.getPowerFromData(firstInfo) == 0) {
-					if (simulate) stack.setCount(1);
-					return cartridge.getExtractedItem(firstInfo);
-				} else {
-					return stack;
-				}
-			}
+//			if (firstInfo.state().getBlock() instanceof BigCartridgeBlock cartridge) {
+//				if (!simulate) {
+//					loadProjectile(stack, munition, poce, bigCannon);
+//					breech.setLoadingCooldown(getLoadingCooldown());
+//				}
+//				if (BigCartridgeBlock.getPowerFromData(firstInfo) == 0) {
+//					if (simulate) stack.setCount(1);
+//					return cartridge.getExtractedItem(firstInfo);
+//				} else {
+//					return stack;
+//				}
+//			}
 			if (!firstInfo.state().isAir()) return stack;
 			if (!simulate) {
 				loadProjectile(stack, munition, poce, bigCannon);
@@ -169,17 +169,17 @@ public class TorpedoCannonMountPoint extends AllArmInteractionPointTypes.Deposit
 			copy.shrink(1);
 			return copy;
 		}
-		if (munition instanceof BigCartridgeBlock) {
-			if (BigCartridgeBlockItem.getPower(stack) == 0 || !(firstInfo.state().getBlock() instanceof TorpedoProjectileBlock))
-				return stack;
-			if (!simulate) {
-				loadCartridge(stack, munition, poce, bigCannon);
-				breech.setLoadingCooldown(getLoadingCooldown());
-			}
-			ItemStack copy = stack.copy();
-			copy.shrink(1);
-			return copy;
-		}
+//		if (munition instanceof BigCartridgeBlock) {
+//			if (BigCartridgeBlockItem.getPower(stack) == 0 || !(firstInfo.state().getBlock() instanceof TorpedoProjectileBlock))
+//				return stack;
+//			if (!simulate) {
+//				loadCartridge(stack, munition, poce, bigCannon);
+//				breech.setLoadingCooldown(getLoadingCooldown());
+//			}
+//			ItemStack copy = stack.copy();
+//			copy.shrink(1);
+//			return copy;
+//		}
 		return stack;
 	}
 
@@ -190,7 +190,7 @@ public class TorpedoCannonMountPoint extends AllArmInteractionPointTypes.Deposit
 		BlockEntity be = bigCannon.presentBlockEntities.get(startPos);
 		ITorpedoTubeBlockEntity cbe = (ITorpedoTubeBlockEntity) be;
 		cbe.cannonBehavior().removeBlock();
-		cbe.cannonBehavior().tryLoadingBlock(munition.getHandloadingInfo(stack, startPos, dir));
+		cbe.cannonBehavior().tryLoadingBlock(munition.getHandloadingInfo(stack, startPos, dir, entity.level().registryAccess()));
 		TorpedoTubeBlock.writeAndSyncSingleBlockData(be, bigCannon.getBlocks().get(startPos), entity, bigCannon);
 	}
 
@@ -214,7 +214,7 @@ public class TorpedoCannonMountPoint extends AllArmInteractionPointTypes.Deposit
 			cbe.cannonBehavior().removeBlock();
 			changes.add(nextPos);
 		}
-		cbe.cannonBehavior().tryLoadingBlock(munition.getHandloadingInfo(stack, startPos, dir));
+		cbe.cannonBehavior().tryLoadingBlock(munition.getHandloadingInfo(stack, startPos, dir, entity.level().registryAccess()));
 
 		TorpedoTubeBlock.writeAndSyncMultipleBlockData(changes, entity, cannon);
 	}
@@ -222,7 +222,7 @@ public class TorpedoCannonMountPoint extends AllArmInteractionPointTypes.Deposit
 
 
 	private static int getLoadingCooldown() {
-		return CBCConfigs.SERVER.cannons.quickfiringBreechLoadingCooldown.get()*5+20;
+		return CBCConfigs.server().cannons.quickfiringBreechLoadingCooldown.get()*5+20;
 	}
 
 }

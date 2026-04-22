@@ -2,14 +2,16 @@ package com.cainiao1053.cbcmoreshells.cannons.projectile_rack.breeches.sliding_b
 
 //import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.breeches.quick_firing_breech.TorpQuickfiringBreechBlock;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.breeches.quick_firing_breech.ProjectileRackQuickfiringBreechBlock;
-import com.jozufozu.flywheel.backend.Backend;
+
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 
+import dev.engine_room.flywheel.api.visualization.VisualizationManager;
+import net.createmod.catnip.render.CachedBuffers;
 import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntityRenderer;
-import com.simibubi.create.foundation.render.CachedBufferer;
+
 
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -32,7 +34,7 @@ public class ProjectileRackSlidingBreechBlockEntityRenderer extends KineticBlock
 
 		BlockState blockState = te.getBlockState();
 
-		if (Backend.canUseInstancing(te.getLevel())) return;
+		if (VisualizationManager.supportsVisualization(te.getLevel())) return;
 
 		Direction facing = blockState.getValue(BlockStateProperties.FACING);
 		Direction.Axis axis = CBCClientCommon.getRotationAxis(blockState);
@@ -58,7 +60,7 @@ public class ProjectileRackSlidingBreechBlockEntityRenderer extends KineticBlock
 
 		ms.pushPose();
 
-		CachedBufferer.partialFacing(CBCClientCommon.getBreechblockForState(blockState), blockState, blockRotation)
+		CachedBuffers.partialFacing(CBCClientCommon.getBreechblockForState(blockState), blockState, blockRotation)
 			.translate(normal.x(), normal.y(), normal.z())
 			.rotateCentered(qrot)
 			.light(light)

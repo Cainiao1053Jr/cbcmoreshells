@@ -95,18 +95,18 @@ public class ProjectileRackCannonMountPoint extends AllArmInteractionPointTypes.
 
 		if (munition instanceof RackedProjectileBlock<?> rpb) {
 			if (barrelLength == 0) return stack;
-			if (firstInfo.state().getBlock() instanceof BigCartridgeBlock cartridge) {
-				if (!simulate) {
-					loadProjectile(stack, munition, poce, bigCannon);
-					breech.setLoadingCooldown(rpb.getProjectile(poce.level(), stack).getReloadTime()); //getLoadingCooldown()
-				}
-				if (BigCartridgeBlock.getPowerFromData(firstInfo) == 0) {
-					if (simulate) stack.setCount(1);
-					return cartridge.getExtractedItem(firstInfo);
-				} else {
-					return stack;
-				}
-			}
+//			if (firstInfo.state().getBlock() instanceof BigCartridgeBlock cartridge) {
+//				if (!simulate) {
+//					loadProjectile(stack, munition, poce, bigCannon);
+//					breech.setLoadingCooldown(rpb.getProjectile(poce.level(), stack).getReloadTime()); //getLoadingCooldown()
+//				}
+//				if (BigCartridgeBlock.getPowerFromData(firstInfo) == 0) {
+//					if (simulate) stack.setCount(1);
+//					return cartridge.getExtractedItem(firstInfo);
+//				} else {
+//					return stack;
+//				}
+//			}
 			if (!firstInfo.state().isAir()) return stack;
 			if (!simulate) {
 				loadProjectile(stack, munition, poce, bigCannon);
@@ -137,7 +137,7 @@ public class ProjectileRackCannonMountPoint extends AllArmInteractionPointTypes.
 		BlockEntity be = bigCannon.presentBlockEntities.get(startPos);
 		IProjectileRackBlockEntity cbe = (IProjectileRackBlockEntity) be;
 		cbe.cannonBehavior().removeBlock();
-		cbe.cannonBehavior().tryLoadingBlock(munition.getHandloadingInfo(stack, startPos, dir));
+		cbe.cannonBehavior().tryLoadingBlock(munition.getHandloadingInfo(stack, startPos, dir, entity.level().registryAccess()));
 		ProjectileRackBlock.writeAndSyncSingleBlockData(be, bigCannon.getBlocks().get(startPos), entity, bigCannon);
 	}
 
@@ -161,7 +161,7 @@ public class ProjectileRackCannonMountPoint extends AllArmInteractionPointTypes.
 			cbe.cannonBehavior().removeBlock();
 			changes.add(nextPos);
 		}
-		cbe.cannonBehavior().tryLoadingBlock(munition.getHandloadingInfo(stack, startPos, dir));
+		cbe.cannonBehavior().tryLoadingBlock(munition.getHandloadingInfo(stack, startPos, dir, entity.level().registryAccess()));
 
 		ProjectileRackBlock.writeAndSyncMultipleBlockData(changes, entity, cannon);
 	}
@@ -169,7 +169,7 @@ public class ProjectileRackCannonMountPoint extends AllArmInteractionPointTypes.
 
 
 	private static int getLoadingCooldown() {
-		return CBCConfigs.SERVER.cannons.quickfiringBreechLoadingCooldown.get()*2+100;
+		return CBCConfigs.server().cannons.quickfiringBreechLoadingCooldown.get()*2+100;
 	}
 
 }

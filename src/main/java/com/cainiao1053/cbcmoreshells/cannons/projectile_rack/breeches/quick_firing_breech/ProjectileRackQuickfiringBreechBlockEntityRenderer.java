@@ -1,24 +1,18 @@
 package com.cainiao1053.cbcmoreshells.cannons.projectile_rack.breeches.quick_firing_breech;
 
-import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
-import com.jozufozu.flywheel.backend.Backend;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-
-import org.joml.Quaternionf;
-import org.joml.Vector3f;
-import com.simibubi.create.AllBlocks;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
-import com.simibubi.create.foundation.render.CachedBufferer;
-
+import dev.engine_room.flywheel.api.visualization.VisualizationManager;
+import net.createmod.catnip.render.CachedBuffers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import org.slf4j.Logger;
+import org.joml.Vector3f;
 import rbasamoyai.createbigcannons.CBCClientCommon;
 import rbasamoyai.createbigcannons.index.CBCBlockPartials;
 
@@ -35,7 +29,7 @@ public class ProjectileRackQuickfiringBreechBlockEntityRenderer extends SafeBloc
 	protected void renderSafe(ProjectileRackQuickfiringBreechBlockEntity te, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
 		BlockState blockState = te.getBlockState();
 
-		if (Backend.canUseInstancing(te.getLevel())) return;
+		if (VisualizationManager.supportsVisualization(te.getLevel())) return;
 
 		Direction facing = blockState.getValue(BlockStateProperties.FACING);
 		Direction.Axis axis = CBCClientCommon.getRotationAxis(blockState);
@@ -85,7 +79,7 @@ public class ProjectileRackQuickfiringBreechBlockEntityRenderer extends SafeBloc
 //		ms.popPose();
 		ms.pushPose();
 
-		CachedBufferer.partialFacing(CBCBlockPartials.QUICKFIRING_BREECH_LEVER, blockState, dir)
+		CachedBuffers.partialFacing(CBCBlockPartials.QUICKFIRING_BREECH_LEVER, blockState, dir)
 			.rotateCentered(axis1.rotationDegrees(angle))
 			//.translate(normal1)
 			.light(light)

@@ -1,12 +1,12 @@
 package com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.breeches.quick_firing_breech;
 
-import com.jozufozu.flywheel.backend.Backend;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import com.simibubi.create.AllBlocks;
 import com.simibubi.create.foundation.blockEntity.renderer.SafeBlockEntityRenderer;
-import com.simibubi.create.foundation.render.CachedBufferer;
+import dev.engine_room.flywheel.api.visualization.VisualizationManager;
+import net.createmod.catnip.render.CachedBuffers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
@@ -32,7 +32,7 @@ public class TorpQuickfiringBreechBlockEntityRenderer extends SafeBlockEntityRen
 	protected void renderSafe(TorpQuickfiringBreechBlockEntity te, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
 		BlockState blockState = te.getBlockState();
 
-		if (Backend.canUseInstancing(te.getLevel())) return;
+		if (VisualizationManager.supportsVisualization(te.getLevel())) return;
 
 		Direction facing = blockState.getValue(BlockStateProperties.FACING);
 		Direction.Axis axis = CBCClientCommon.getRotationAxis(blockState);
@@ -60,7 +60,7 @@ public class TorpQuickfiringBreechBlockEntityRenderer extends SafeBlockEntityRen
 		Vector3f normal = blockRotation.step();
 		normal.mul(renderedBreechblockOffset);
 
-		CachedBufferer.partialFacing(CBCClientCommon.getBreechblockForState(blockState), blockState, blockRotation)
+		CachedBuffers.partialFacing(CBCClientCommon.getBreechblockForState(blockState), blockState, blockRotation)
 			.translate(normal.x(), normal.y(), normal.z())
 			.rotateCentered(qrot)
 			.light(light)
@@ -74,7 +74,7 @@ public class TorpQuickfiringBreechBlockEntityRenderer extends SafeBlockEntityRen
 		Vector3f normal1 = dir.step();
 		Axis axis1 = Axis.of(normal1);
 
-		CachedBufferer.block(AllBlocks.SHAFT.getDefaultState().setValue(BlockStateProperties.AXIS, axis))
+		CachedBuffers.block(AllBlocks.SHAFT.getDefaultState().setValue(BlockStateProperties.AXIS, axis))
 			.rotateCentered(axis1.rotationDegrees(angle))
 			.light(light)
 			.renderInto(ms, vcons);
@@ -82,7 +82,7 @@ public class TorpQuickfiringBreechBlockEntityRenderer extends SafeBlockEntityRen
 		ms.popPose();
 		ms.pushPose();
 
-		CachedBufferer.partialFacing(CBCBlockPartials.QUICKFIRING_BREECH_LEVER, blockState, dir)
+		CachedBuffers.partialFacing(CBCBlockPartials.QUICKFIRING_BREECH_LEVER, blockState, dir)
 			.rotateCentered(axis1.rotationDegrees(angle))
 			.translate(normal1)
 			.light(light)
