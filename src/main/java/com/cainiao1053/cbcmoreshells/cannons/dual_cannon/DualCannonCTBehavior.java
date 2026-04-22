@@ -1,12 +1,7 @@
 package com.cainiao1053.cbcmoreshells.cannons.dual_cannon;
 
-import static net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING;
-
-import javax.annotation.Nullable;
-
 import com.simibubi.create.foundation.block.connected.CTSpriteShiftEntry;
 import com.simibubi.create.foundation.block.connected.ConnectedTextureBehaviour;
-
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -14,6 +9,10 @@ import net.minecraft.world.level.BlockAndTintGetter;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import rbasamoyai.createbigcannons.crafting.casting.CannonCastShape;
+
+import javax.annotation.Nullable;
+
+import static net.minecraft.world.level.block.state.properties.BlockStateProperties.FACING;
 
 public class DualCannonCTBehavior extends ConnectedTextureBehaviour.Base {
 

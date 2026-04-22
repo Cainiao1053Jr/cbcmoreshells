@@ -4,8 +4,8 @@ import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import com.simibubi.create.foundation.render.CachedBufferer;
-import com.simibubi.create.foundation.render.SuperByteBuffer;
+import net.createmod.catnip.render.SuperByteBuffer;
+import net.createmod.catnip.render.CachedBuffers;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
@@ -21,8 +21,6 @@ public class ProjectileRackBlockRenderer implements BlockEntityRenderer<Projecti
     public ProjectileRackBlockRenderer(BlockEntityRendererProvider.Context context) {
     }
 
-    Logger LOGGER = Cbcmoreshells.LOGGER;
-
     public void render(ProjectileRackBlockEntity blockEntity, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         Block loadedBlock = blockEntity.getBlockState().getBlock();
 
@@ -31,7 +29,7 @@ public class ProjectileRackBlockRenderer implements BlockEntityRenderer<Projecti
             BlockState blockState = blockEntity.getBlockState();
             Direction facing = (Direction) blockState.getValue(BlockStateProperties.FACING);
             VertexConsumer vcons = buffer.getBuffer(RenderType.solid());
-            SuperByteBuffer c = CachedBufferer.block(loadedBlockState);
+            SuperByteBuffer c = CachedBuffers.block(loadedBlockState);
             //float rotationAngle = facing.getAxisDirection().getStep() == 1 ? 0.0F : 180.0F;
             c.rotateCentered(Axis.YN.rotationDegrees(0))
                     .translate(facing.step().mul(0.6f))

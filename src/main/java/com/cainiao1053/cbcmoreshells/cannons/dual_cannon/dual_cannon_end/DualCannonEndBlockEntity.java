@@ -8,8 +8,8 @@ import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.material.DualCannonMate
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
-import com.simibubi.create.foundation.utility.Iterate;
 
+import net.createmod.catnip.data.Iterate;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -59,7 +59,7 @@ public class DualCannonEndBlockEntity extends SmartBlockEntity implements IDualC
 		DrillBoringBlockRecipe recipe = AbstractCannonDrillBlockEntity.getBlockRecipe(state, dir);
 		if (recipe == null) return InteractionResult.PASS;
 		if (!this.getLevel().isClientSide) {
-			CompoundTag loadTag = this.saveWithFullMetadata();
+			CompoundTag loadTag = this.saveWithFullMetadata(context.getLevel().registryAccess());
 			BlockState boredState = recipe.getResultState(state);
 			DualCannonMaterial material = ((DualCannonBlock) state.getBlock()).getCannonMaterialInLevel(this.level, state, this.worldPosition);
 			this.setRemoved();

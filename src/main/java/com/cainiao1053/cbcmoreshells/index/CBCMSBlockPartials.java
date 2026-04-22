@@ -1,22 +1,16 @@
 package com.cainiao1053.cbcmoreshells.index;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Supplier;
-
 import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.material.DualCannonMaterial;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.material.ProjectileRackMaterial;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.material.TorpedoTubeMaterial;
-import com.jozufozu.flywheel.core.PartialModel;
-
+import dev.engine_room.flywheel.lib.model.baked.PartialModel;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.item.DyeColor;
-//import rbasamoyai.createbigcannons.cannons.autocannon.material.AutocannonMaterial;
-import rbasamoyai.createbigcannons.crafting.casting.CannonCastShape;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 public class CBCMSBlockPartials {
 
@@ -66,16 +60,16 @@ public class CBCMSBlockPartials {
 
 
 	private static PartialModel block(String path) {
-		return new PartialModel(Cbcmoreshells.resource("block/" + path));
+		return PartialModel.of(Cbcmoreshells.resource("block/" + path));
 	}
-	private static PartialModel entity(String path) { return new PartialModel(Cbcmoreshells.resource("entity/" + path)); }
+	private static PartialModel entity(String path) { return PartialModel.of(Cbcmoreshells.resource("entity/" + path)); }
 
 	private static PartialModel breechblockPartial(TorpedoTubeMaterial material, String path) {
 		return breechblockPartial(material, Cbcmoreshells.resource("item/" + path));
 	}
 
 	public static PartialModel breechblockPartial(TorpedoTubeMaterial material, ResourceLocation loc) {
-		PartialModel model = new PartialModel(loc);
+		PartialModel model = PartialModel.of(loc);
 		BREECHBLOCK_BY_MATERIAL.put(material, model);
 		return model;
 	}
@@ -89,7 +83,7 @@ public class CBCMSBlockPartials {
 	}
 
 	public static PartialModel projectileLockBlockPartial(ProjectileRackMaterial material, ResourceLocation loc) {
-		PartialModel model = new PartialModel(loc);
+		PartialModel model = PartialModel.of(loc);
 		PROJECTILE_LOCK_BY_MATERIAL.put(material, model);
 		return model;
 	}
@@ -103,7 +97,7 @@ public class CBCMSBlockPartials {
 	}
 
 	public static PartialModel dualCannonBreechblockPartial(DualCannonMaterial material, ResourceLocation loc) {
-		PartialModel model = new PartialModel(loc);
+		PartialModel model = PartialModel.of(loc);
 		DUAL_CANNON_BREECHBLOCK_BY_MATERIAL.put(material, model);
 		return model;
 	}

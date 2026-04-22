@@ -1,6 +1,5 @@
 package com.cainiao1053.cbcmoreshells.cannons.projectile_rack;
 
-//import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.material.TorpedoTubeMaterial;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.material.ProjectileRackMaterial;
 import com.google.common.collect.ImmutableMap;
 import com.ibm.icu.impl.duration.impl.DataRecord;
@@ -57,9 +56,10 @@ public abstract class ProjectileRackBaseBlock extends DirectionalBlock implement
 //	}
 
 	@Override
-	public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+	public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
 		if (!level.isClientSide) this.playerWillDestroyBigCannon(level, pos, state, player);
 		super.playerWillDestroy(level, pos, state, player);
+		return state;
 	}
 
 	@Override

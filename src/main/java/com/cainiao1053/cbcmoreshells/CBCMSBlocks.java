@@ -165,7 +165,6 @@ import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.ultraspeed_torpedo.U
 import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.ultraspeed_torpedo.UltraspeedTorpedoBlockItem;
 import com.simibubi.create.content.decoration.copycat.CopycatPanelBlock;
 import com.simibubi.create.content.decoration.copycat.CopycatPanelModel;
-import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.foundation.data.BuilderTransformers;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.simibubi.create.foundation.data.SharedProperties;

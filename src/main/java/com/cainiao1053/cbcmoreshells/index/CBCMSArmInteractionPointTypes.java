@@ -35,7 +35,7 @@ public class CBCMSArmInteractionPointTypes {
 
 	public static class CannonMountType extends ArmInteractionPointType {
 		public CannonMountType(ResourceLocation id) {
-			super(id);
+			super();
 		}
 
 		@Override

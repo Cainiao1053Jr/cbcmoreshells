@@ -96,7 +96,7 @@ public class TorpedoDetectionDeviceBlock extends DirectionalAxisKineticBlock imp
                         shipPos.x(),
                         shipPos.y(),
                         shipPos.z(),
-                        SoundEvents.NOTE_BLOCK_BIT.get(),
+                        SoundEvents.NOTE_BLOCK_BIT.value(),
                         SoundSource.BLOCKS,
                         3.5f,
                         1.4f

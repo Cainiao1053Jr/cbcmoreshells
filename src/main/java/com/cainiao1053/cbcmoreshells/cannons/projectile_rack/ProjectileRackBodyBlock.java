@@ -1,28 +1,25 @@
 package com.cainiao1053.cbcmoreshells.cannons.projectile_rack;
 
-import java.util.function.Supplier;
-
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.material.ProjectileRackMaterial;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.projectile_rack_end.ProjectileRackEnd;
-import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.material.TorpedoTubeMaterial;
-import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.torpedo_end.TorpedoTubeEnd;
 import com.cainiao1053.cbcmoreshells.index.CBCMSBlockEntities;
+import com.mojang.serialization.MapCodec;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.utility.VoxelShaper;
-
+import net.createmod.catnip.math.VoxelShaper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-//import rbasamoyai.createbigcannons.cannons.big_cannons.cannon_end.BigCannonEnd;
-import rbasamoyai.createbigcannons.cannons.big_cannons.material.BigCannonMaterial;
 import rbasamoyai.createbigcannons.crafting.casting.CannonCastShape;
-import rbasamoyai.createbigcannons.index.CBCBlockEntities;
+
+import java.util.function.Supplier;
 
 public class ProjectileRackBodyBlock extends ProjectileRackBaseBlock implements IBE<ProjectileRackBlockEntity> {
 
@@ -31,6 +28,7 @@ public class ProjectileRackBodyBlock extends ProjectileRackBaseBlock implements 
 	private final VoxelShaper collisionShapeCeiling;
 	private final VoxelShaper visualShapeCeiling;
 	private final Supplier<CannonCastShape> cannonShape;
+	private final MapCodec<? extends DirectionalBlock> codec;
 
 	public ProjectileRackBodyBlock(Properties properties, ProjectileRackMaterial material, Supplier<CannonCastShape> cannonShape, VoxelShape base) {
 		this(properties, material, cannonShape, base, base);
@@ -43,6 +41,7 @@ public class ProjectileRackBodyBlock extends ProjectileRackBaseBlock implements 
 		this.collisionShapeCeiling = new AllShapes.Builder(Block.box(3, 0, 0, 13, 16, 4)).forDirectional();
 		this.visualShapeCeiling = new AllShapes.Builder(Block.box(3, 0, 0, 13, 16, 4)).forDirectional();
 		this.cannonShape = cannonShape;
+		this.codec = simpleCodec(this::fromSelf);
 	}
 
 	public static ProjectileRackBodyBlock verySmall(Properties properties, ProjectileRackMaterial material) {
@@ -68,6 +67,12 @@ public class ProjectileRackBodyBlock extends ProjectileRackBaseBlock implements 
 	public static ProjectileRackBodyBlock normalRack(Properties properties, ProjectileRackMaterial material) {
 		return new ProjectileRackBodyBlock(properties, material, () -> CannonCastShape.SMALL, Block.box(3, 0, 12, 13, 16, 16));
 	}
+
+	private ProjectileRackBodyBlock fromSelf(Properties properties) {
+		return new ProjectileRackBodyBlock(properties, this.getCannonMaterial(), this.cannonShape, this.visualShapes.get(Direction.UP), this.collisionShapes.get(Direction.UP));
+	}
+
+	@Override protected MapCodec<? extends DirectionalBlock> codec() { return this.codec; }
 
 	@Override
 	public CannonCastShape getCannonShape() {

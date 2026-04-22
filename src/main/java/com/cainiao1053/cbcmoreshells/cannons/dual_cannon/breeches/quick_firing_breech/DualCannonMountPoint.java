@@ -20,7 +20,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.items.ItemStackHandler;
+import net.neoforged.neoforge.items.ItemStackHandler;
 import rbasamoyai.createbigcannons.cannon_control.cannon_mount.CannonMountBlockEntity;
 import rbasamoyai.createbigcannons.cannon_control.cannon_mount.ExtendsCannonMount;
 import rbasamoyai.createbigcannons.cannon_control.contraption.AbstractMountedCannonContraption;
@@ -243,7 +243,7 @@ public class DualCannonMountPoint extends AllArmInteractionPointTypes.DepositOnl
 		BlockEntity be = bigCannon.presentBlockEntities.get(startPos);
 		IDualCannonBlockEntity cbe = (IDualCannonBlockEntity) be;
 		cbe.cannonBehavior().removeBlock();
-		cbe.cannonBehavior().tryLoadingBlock(munition.getHandloadingInfo(stack, startPos, dir));
+		cbe.cannonBehavior().tryLoadingBlock(munition.getHandloadingInfo(stack, startPos, dir, entity.level().registryAccess()));
 		DualCannonBlock.writeAndSyncSingleBlockData(be, bigCannon.getBlocks().get(startPos), entity, bigCannon);
 	}
 
@@ -266,7 +266,7 @@ public class DualCannonMountPoint extends AllArmInteractionPointTypes.DepositOnl
 			cbe.cannonBehavior().removeBlock();
 			changes.add(nextPos);
 		}
-		cbe.cannonBehavior().tryLoadingBlock(munition.getHandloadingInfo(stack, startPos, dir));
+		cbe.cannonBehavior().tryLoadingBlock(munition.getHandloadingInfo(stack, startPos, dir, entity.level().registryAccess()));
 
 		DualCannonBlock.writeAndSyncMultipleBlockData(changes, entity, cannon);
 	}

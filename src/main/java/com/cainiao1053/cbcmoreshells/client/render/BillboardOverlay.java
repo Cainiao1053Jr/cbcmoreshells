@@ -81,12 +81,12 @@ public void render(PoseStack poseStack, MultiBufferSource buffer, Entity entity,
 }
 
 	private static void vertex(VertexConsumer builder, Matrix4f pose, Matrix3f normal, int packedLight, float x, float y, int u, int v) {
-		builder.vertex(pose, x, y, 0.0f)
-				.color(255, 255, 255, 255)
-				.uv((float) u, (float) v)
-				.overlayCoords(OverlayTexture.NO_OVERLAY)
-				.uv2(packedLight)
-				.normal(normal, 0.0f, 1.0f, 0.0f)
-				.endVertex();
+		builder.addVertex(pose, x, y, 0.0f)
+				.setColor(255, 255, 255, 255)
+				.setUv((float) u, (float) v)
+				.setOverlay(OverlayTexture.NO_OVERLAY)
+				.setUv2(packedLight, 1)
+				.setNormal(0.0f, 1.0f, 0.0f);
+				//.endVertex();
 	}
 }

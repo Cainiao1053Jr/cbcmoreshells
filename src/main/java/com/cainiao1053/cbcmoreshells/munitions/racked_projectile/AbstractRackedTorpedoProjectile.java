@@ -53,7 +53,7 @@ public abstract class AbstractRackedTorpedoProjectile extends FuzedRackedProject
 	}
 
 	@Override
-	protected double getGravity() {
+	protected double getDefaultGravity() {
 		double vel = this.getDeltaMovement().y;
 		double damp = getAllProperties().waterDamp();
 		double waterDamp = 0;

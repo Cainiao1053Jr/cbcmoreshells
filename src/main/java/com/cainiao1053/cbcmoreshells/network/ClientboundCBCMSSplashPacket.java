@@ -3,6 +3,7 @@ package com.cainiao1053.cbcmoreshells.network;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.PacketListener;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.player.Player;
 import rbasamoyai.createbigcannons.multiloader.EnvExecute;
 import rbasamoyai.createbigcannons.network.RootPacket;
 
@@ -37,6 +38,5 @@ public record ClientboundCBCMSSplashPacket(double x, double y, double z, double 
 	public void handle(Executor exec, PacketListener listener, @Nullable ServerPlayer sender) {
 		EnvExecute.executeOnClient(() -> () -> CBCMSClientHandlers.addSplashFromServer(this));
 	}
-
 
 }

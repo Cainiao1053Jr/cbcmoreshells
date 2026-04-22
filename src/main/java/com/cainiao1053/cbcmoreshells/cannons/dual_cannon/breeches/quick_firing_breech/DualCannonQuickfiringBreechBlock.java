@@ -11,17 +11,17 @@ import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.IDualCannonBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.dual_cannon_end.DualCannonEnd;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.material.DualCannonMaterial;
 import com.cainiao1053.cbcmoreshells.index.CBCMSBlockEntities;
+import com.mojang.serialization.MapCodec;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.contraptions.Contraption;
-import com.simibubi.create.content.contraptions.ITransformableBlock;
 import com.simibubi.create.content.contraptions.StructureTransform;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.kinetics.base.DirectionalAxisKineticBlock;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.utility.Iterate;
-import com.simibubi.create.foundation.utility.VoxelShaper;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
+import com.simibubi.create.api.contraption.transformable.TransformableBlock;
 
+import net.createmod.catnip.math.VoxelShaper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -38,6 +38,7 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -47,26 +48,17 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.phys.Vec3;
-//import rbasamoyai.createbigcannons.cannon_control.contraption.MountedBigCannonContraption;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import rbasamoyai.createbigcannons.cannon_control.contraption.PitchOrientedContraptionEntity;
-//import rbasamoyai.createbigcannons.cannons.big_cannons.BigCannonBaseBlock;
-//import rbasamoyai.createbigcannons.cannons.big_cannons.BigCannonBlock;
-//import rbasamoyai.createbigcannons.cannons.big_cannons.IBigCannonBlockEntity;
-//import rbasamoyai.createbigcannons.cannons.big_cannons.cannon_end.BigCannonEnd;
-//import rbasamoyai.createbigcannons.cannons.big_cannons.material.BigCannonMaterial;
 import rbasamoyai.createbigcannons.config.CBCConfigs;
 import rbasamoyai.createbigcannons.crafting.casting.CannonCastShape;
-//import rbasamoyai.createbigcannons.effects.particles.smoke.QuickfiringBreechSmokeParticleData;
-import rbasamoyai.createbigcannons.equipment.manual_loading.HandloadingTool;
-import rbasamoyai.createbigcannons.index.CBCBlockEntities;
-import rbasamoyai.createbigcannons.index.CBCItems;
 import rbasamoyai.createbigcannons.munitions.big_cannon.BigCannonMunitionBlock;
 
-public class DualCannonQuickfiringBreechBlock extends DualCannonBaseBlock implements IBE<DualCannonQuickfiringBreechBlockEntity>, ITransformableBlock, IWrenchable {
+public class DualCannonQuickfiringBreechBlock extends DualCannonBaseBlock implements IBE<DualCannonQuickfiringBreechBlockEntity>, TransformableBlock, IWrenchable {
 
 	public static final BooleanProperty AXIS = DirectionalAxisKineticBlock.AXIS_ALONG_FIRST_COORDINATE;
+	private final MapCodec<? extends DirectionalBlock> codec;
 
 	private final NonNullSupplier<? extends Block> slidingConversion;
 	private final VoxelShaper visualShapes;
@@ -82,7 +74,14 @@ public class DualCannonQuickfiringBreechBlock extends DualCannonBaseBlock implem
 		this.slidingConversion = slidingConversion;
 		this.visualShapes = new AllShapes.Builder(visualShape).forDirectional();
 		this.collisionShapes = new AllShapes.Builder(collisionShape).forDirectional();
+		this.codec = simpleCodec(this::fromSelf);
 	}
+
+	private DualCannonQuickfiringBreechBlock fromSelf(Properties properties) {
+		return new DualCannonQuickfiringBreechBlock(properties, this.getCannonMaterial(), this.slidingConversion, this.visualShapes.get(Direction.UP));
+	}
+
+	@Override protected MapCodec<? extends DirectionalBlock> codec() { return this.codec; }
 
 	public static DualCannonQuickfiringBreechBlock medium(Properties properties, DualCannonMaterial material, NonNullSupplier<? extends Block> slidingConversion) {
 		return new DualCannonQuickfiringBreechBlock(properties, material, slidingConversion, Block.box(0, 0, 4, 16, 16, 12));
@@ -165,16 +164,16 @@ public class DualCannonQuickfiringBreechBlock extends DualCannonBaseBlock implem
 				changed.add(localPos);
 
 				if (breech.getOpenDirection() > 0) {
-					BlockEntity be1 = contraption.presentBlockEntities.get(nextPos);
+					BlockEntity be1 = cannon.presentBlockEntities.get(nextPos);
 					if (be1 instanceof IDualCannonBlockEntity cbe1) {
 						StructureBlockInfo info1 = cbe1.cannonBehavior().block();
-						ItemStack extract = info1.state().getBlock() instanceof BigCannonMunitionBlock munition ? munition.getExtractedItem(info1) : ItemStack.EMPTY;
+						ItemStack extract = info1.state().getBlock() instanceof BigCannonMunitionBlock munition ? munition.getExtractedItem(info1, level.registryAccess()) : ItemStack.EMPTY;
 						Vec3 normal = new Vec3(side.step());
 						Vec3 dir = contraption.entity.applyRotation(normal, 0);
 						if (!extract.isEmpty()) {
 							Vec3 ejectPos = Vec3.atCenterOf(localPos).add(normal.scale(1.1));
 							Vec3 globalPos = entity.toGlobalVector(ejectPos, 0);
-							if (CBCConfigs.SERVER.munitions.quickFiringBreechItemGoesToInventory.get()) {
+							if (CBCConfigs.server().munitions.quickFiringBreechItemGoesToInventory.get()) {
 								if (!player.addItem(extract) && !player.isCreative()) {
 									ItemEntity item = player.drop(extract, false);
 									if (item != null) {
@@ -185,7 +184,7 @@ public class DualCannonQuickfiringBreechBlock extends DualCannonBaseBlock implem
 							} else {
 								Vec3 vel = dir.scale(0.075);
 								ItemEntity item = new ItemEntity(level, globalPos.x, globalPos.y, globalPos.z, extract, vel.x, vel.y, vel.z);
-								item.setPickUpDelay(CBCConfigs.SERVER.munitions.quickFiringBreechItemPickupDelay.get());
+								item.setPickUpDelay(CBCConfigs.server().munitions.quickFiringBreechItemPickupDelay.get());
 								level.addFreshEntity(item);
 							}
 						}
@@ -194,17 +193,17 @@ public class DualCannonQuickfiringBreechBlock extends DualCannonBaseBlock implem
 
 					}
 				}
-				DualCannonBlock.writeAndSyncMultipleBlockData(changed, entity, contraption);
+				DualCannonBlock.writeAndSyncMultipleBlockData(changed, entity, cannon);
 			}
 			return true;
 		}
 		if (!breech.isOpen() || breech.onInteractionCooldown()) return false;
 
 		if (Block.byItem(stack.getItem()) instanceof BigCannonMunitionBlock munition) {
-			BlockEntity be1 = contraption.presentBlockEntities.get(nextPos);
+			BlockEntity be1 = cannon.presentBlockEntities.get(nextPos);
 			if (!(be1 instanceof IDualCannonBlockEntity cbe1)) return false;
 
-			StructureBlockInfo loadInfo = munition.getHandloadingInfo(stack, nextPos, pushDirection);
+			StructureBlockInfo loadInfo = munition.getHandloadingInfo(stack, nextPos, pushDirection, level.registryAccess());
 			StructureBlockInfo info1 = cbe1.cannonBehavior().block();
 
 			if (!level.isClientSide) {
@@ -212,7 +211,7 @@ public class DualCannonQuickfiringBreechBlock extends DualCannonBaseBlock implem
 
 				if (!info1.state().isAir()) {
 					BlockPos posAfter = nextPos.relative(pushDirection);
-					BlockEntity be2 = contraption.presentBlockEntities.get(posAfter);
+					BlockEntity be2 = cannon.presentBlockEntities.get(posAfter);
 					if (!(be2 instanceof IDualCannonBlockEntity cbe2) || !cbe2.cannonBehavior().canLoadBlock(info1))
 						return false;
 					cbe2.cannonBehavior().loadBlock(info1);
@@ -222,7 +221,7 @@ public class DualCannonQuickfiringBreechBlock extends DualCannonBaseBlock implem
 				cbe1.cannonBehavior().tryLoadingBlock(loadInfo);
 				changes.add(nextPos);
 
-				DualCannonBlock.writeAndSyncMultipleBlockData(changes, entity, contraption);
+				DualCannonBlock.writeAndSyncMultipleBlockData(changes, entity, cannon);
 
 				SoundType sound = loadInfo.state().getSoundType();
 				level.playSound(null, player.blockPosition(), sound.getPlaceSound(), SoundSource.BLOCKS, sound.getVolume(), sound.getPitch());

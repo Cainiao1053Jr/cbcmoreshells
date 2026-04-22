@@ -32,17 +32,11 @@ public abstract class TorpedoTubeBaseBlock extends DirectionalBlock implements T
 	@Override public TorpedoTubeMaterial getCannonMaterial() { return this.material; }
 	@Override public Direction getFacing(BlockState state) { return state.getValue(FACING); }
 
-	@SuppressWarnings("deprecation")
-//	@Override
-//	public void onRemove(BlockState state, Level level, BlockPos pos, BlockState newState, boolean isMoving) {
-//		if (!level.isClientSide) this.onRemoveCannon(state, level, pos, newState, isMoving);
-//		super.onRemove(state, level, pos, newState, isMoving);
-//	}
-
 	@Override
-	public void playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
+	public BlockState playerWillDestroy(Level level, BlockPos pos, BlockState state, Player player) {
 		if (!level.isClientSide) this.playerWillDestroyBigCannon(level, pos, state, player);
 		super.playerWillDestroy(level, pos, state, player);
+		return state;
 	}
 
 	@Override

@@ -1,14 +1,18 @@
 package com.cainiao1053.cbcmoreshells.cannons.torpedo_tube;
 
+import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.DualCannonBodyBlock;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.material.TorpedoTubeMaterial;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.torpedo_end.TorpedoTubeEnd;
 import com.cainiao1053.cbcmoreshells.index.CBCMSBlockEntities;
+import com.mojang.serialization.MapCodec;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.foundation.block.IBE;
-import com.simibubi.create.foundation.utility.VoxelShaper;
+import net.createmod.catnip.math.VoxelShaper;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -23,6 +27,7 @@ public class TorpedoTubeBodyBlock extends TorpedoTubeBaseBlock implements IBE<To
 	private final VoxelShaper visualShapes;
 	private final VoxelShaper collisionShapes;
 	private final Supplier<CannonCastShape> cannonShape;
+	private final MapCodec<? extends DirectionalBlock> codec;
 
 	public TorpedoTubeBodyBlock(Properties properties, TorpedoTubeMaterial material, Supplier<CannonCastShape> cannonShape, VoxelShape base) {
 		this(properties, material, cannonShape, base, base);
@@ -33,6 +38,7 @@ public class TorpedoTubeBodyBlock extends TorpedoTubeBaseBlock implements IBE<To
 		this.visualShapes = new AllShapes.Builder(visualShape).forDirectional();
 		this.collisionShapes = new AllShapes.Builder(collisionShape).forDirectional();
 		this.cannonShape = cannonShape;
+		this.codec = simpleCodec(this::fromSelf);
 	}
 
 	public static TorpedoTubeBodyBlock verySmall(Properties properties, TorpedoTubeMaterial material) {
@@ -54,6 +60,12 @@ public class TorpedoTubeBodyBlock extends TorpedoTubeBaseBlock implements IBE<To
 	public static TorpedoTubeBodyBlock veryLarge(Properties properties, TorpedoTubeMaterial material) {
 		return new TorpedoTubeBodyBlock(properties, material, () -> CannonCastShape.VERY_LARGE, Block.box(-2, 0, -2, 18, 16, 18), Shapes.block());
 	}
+
+	private TorpedoTubeBodyBlock fromSelf(Properties properties) {
+		return new TorpedoTubeBodyBlock(properties, this.getCannonMaterial(), this.cannonShape, this.visualShapes.get(Direction.UP), this.collisionShapes.get(Direction.UP));
+	}
+
+	@Override protected MapCodec<? extends DirectionalBlock> codec() { return this.codec; }
 
 	@Override
 	public CannonCastShape getCannonShape() {

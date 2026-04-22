@@ -10,9 +10,7 @@ import com.cainiao1053.cbcmoreshells.recipes.ShellFuzingDeployerRecipe;
 import com.cainiao1053.cbcmoreshells.recipes.ShellFuzingRecipe;
 import com.google.gson.JsonObject;
 import com.simibubi.create.content.processing.recipe.ProcessingRecipeBuilder;
-import com.simibubi.create.content.processing.recipe.ProcessingRecipeSerializer;
 import com.simibubi.create.foundation.recipe.IRecipeTypeInfo;
-import com.simibubi.create.foundation.utility.Lang;
 import com.tterrag.registrate.util.nullness.NonNullSupplier;
 
 import net.minecraft.network.FriendlyByteBuf;
@@ -21,9 +19,6 @@ import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 import rbasamoyai.createbigcannons.multiloader.IndexPlatform;
 
 public enum CBCMSRecipeTypes implements IRecipeTypeInfo {

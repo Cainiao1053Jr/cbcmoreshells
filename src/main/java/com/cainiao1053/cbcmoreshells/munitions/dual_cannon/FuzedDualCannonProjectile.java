@@ -97,8 +97,8 @@ public abstract class FuzedDualCannonProjectile extends AbstractDualCannonProjec
 	}
 
 	@Override
-	protected double getGravity() {
-		return super.getGravity();
+	protected double getDefaultGravity() {
+		return super.getDefaultGravity();
 	}
 
 	@Override

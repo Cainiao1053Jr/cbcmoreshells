@@ -8,6 +8,7 @@ import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -45,8 +46,8 @@ public class DualCannonQuickfiringBreechBlockEntity extends SmartBlockEntity imp
 	}
 
 	@Override
-	protected void write(CompoundTag tag, boolean clientPacket) {
-		super.write(tag, clientPacket);
+	protected void write(CompoundTag tag, HolderLookup.Provider registry, boolean clientPacket) {
+		super.write(tag, registry, clientPacket);
 		tag.putBoolean("InPonder", this.inPonder);
 		tag.putInt("OpenProgress", this.openProgress);
 		tag.putInt("OpenDirection", this.openDirection);
@@ -54,8 +55,8 @@ public class DualCannonQuickfiringBreechBlockEntity extends SmartBlockEntity imp
 	}
 
 	@Override
-	protected void read(CompoundTag tag, boolean clientPacket) {
-		super.read(tag, clientPacket);
+	protected void read(CompoundTag tag, HolderLookup.Provider registry, boolean clientPacket) {
+		super.read(tag, registry, clientPacket);
 		this.inPonder = tag.getBoolean("InPonder");
 		this.openProgress = tag.getInt("OpenProgress");
 		this.openDirection = Mth.clamp(tag.getInt("OpenDirection"), -1, 1);

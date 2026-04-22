@@ -24,6 +24,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -364,7 +365,7 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 	}
 
 	@Override
-	protected double getGravity() {
+	protected double getDefaultGravity() {
 		return super.getGravity();
 	}
 
@@ -373,8 +374,13 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 		return super.getDragForce();
 	}
 
+//	@Override
+//	public boolean ignoreExplosion() {
+//		return true;
+//	}
+
 	@Override
-	public boolean ignoreExplosion() {
+	public boolean ignoreExplosion(Explosion explosion) {
 		return true;
 	}
 

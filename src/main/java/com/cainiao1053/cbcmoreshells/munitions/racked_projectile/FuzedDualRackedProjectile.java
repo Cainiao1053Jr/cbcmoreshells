@@ -92,8 +92,8 @@ public abstract class FuzedDualRackedProjectile extends AbstractRackedProjectile
 	}
 
 	@Override
-	protected double getGravity() {
-		return super.getGravity();
+	protected double getDefaultGravity() {
+		return super.getDefaultGravity();
 	}
 
 	@Override

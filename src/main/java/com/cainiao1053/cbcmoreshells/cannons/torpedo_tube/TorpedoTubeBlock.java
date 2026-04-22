@@ -105,7 +105,7 @@ public interface TorpedoTubeBlock extends WeldableBlock, CannonContraptionProvid
 		if (be instanceof ITorpedoTubeBlockEntity cbe) {
 			StructureBlockInfo info = cbe.cannonBehavior().block();
 			BlockState innerState = info.state();
-			ItemStack stack = innerState.getBlock() instanceof BigCannonMunitionBlock munition ? munition.getExtractedItem(info) : ItemStack.EMPTY;
+			ItemStack stack = innerState.getBlock() instanceof BigCannonMunitionBlock munition ? munition.getExtractedItem(info, level.registryAccess()) : ItemStack.EMPTY;
 			if (!stack.isEmpty()) {
 				Containers.dropItemStack(level, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, stack);
 			}
@@ -187,7 +187,7 @@ public interface TorpedoTubeBlock extends WeldableBlock, CannonContraptionProvid
 		ItemStack stack = player.getItemInHand(interactionHand);
 		if (Block.byItem(stack.getItem()) instanceof BigCannonMunitionBlock munition) {
 			if (!level.isClientSide) {
-				StructureBlockInfo loadInfo = munition.getHandloadingInfo(stack, localPos, side);
+				StructureBlockInfo loadInfo = munition.getHandloadingInfo(stack, localPos, side, level.registryAccess());
 				boolean flag = false;
 				 	if (cbe.cannonBehavior().tryLoadingBlock(loadInfo)) {
 						writeAndSyncSingleBlockData(be, info, entity, contraption);
@@ -210,16 +210,16 @@ public interface TorpedoTubeBlock extends WeldableBlock, CannonContraptionProvid
 	}
 
 	static void writeAndSyncSingleBlockData(BlockEntity be, StructureBlockInfo oldInfo, AbstractContraptionEntity entity, Contraption contraption) {
-		CompoundTag tag = be.saveWithFullMetadata();
+		CompoundTag tag = be.saveWithFullMetadata(entity.level().registryAccess());
 		tag.remove("x");
 		tag.remove("y");
 		tag.remove("z");
 		StructureBlockInfo newInfo = new StructureBlockInfo(oldInfo.pos(), oldInfo.state(), tag);
 		contraption.getBlocks().put(oldInfo.pos(), newInfo);
-		NetworkPlatform.sendToClientTracking(new ClientboundUpdateContraptionPacket(entity, oldInfo.pos(), newInfo), entity);
+		NetworkPlatform.sendToClientTracking(ClientboundUpdateContraptionPacket.entity(entity, oldInfo.pos(), newInfo), entity);
 	}
 
-	static void writeAndSyncMultipleBlockData(Set<BlockPos> changed, AbstractContraptionEntity entity, Contraption contraption) {
+	static void writeAndSyncMultipleBlockData(Set<BlockPos> changed, AbstractContraptionEntity entity, AbstractMountedCannonContraption contraption) {
 		Map<BlockPos, StructureBlockInfo> changes = new HashMap<>(changed.size());
 		Map<BlockPos, StructureBlockInfo> blocks = contraption.getBlocks();
 		for (BlockPos pos : changed) {
@@ -227,7 +227,7 @@ public interface TorpedoTubeBlock extends WeldableBlock, CannonContraptionProvid
 			CompoundTag tag = null;
 			BlockEntity be = contraption.presentBlockEntities.get(pos);
 			if (be != null) {
-				tag = be.saveWithFullMetadata();
+				tag = be.saveWithFullMetadata(entity.level().registryAccess());
 				tag.remove("x");
 				tag.remove("y");
 				tag.remove("z");
@@ -236,7 +236,7 @@ public interface TorpedoTubeBlock extends WeldableBlock, CannonContraptionProvid
 			changes.put(pos, newInfo);
 		}
 		blocks.putAll(changes);
-		NetworkPlatform.sendToClientTracking(new ClientboundUpdateContraptionPacket(entity, changes), entity);
+		NetworkPlatform.sendToClientTracking(ClientboundUpdateContraptionPacket.entity(entity, changes), entity);
 	}
 
 	@Override default boolean isWeldable(BlockState state) { return this.getCannonMaterial().properties().isWeldable(); }

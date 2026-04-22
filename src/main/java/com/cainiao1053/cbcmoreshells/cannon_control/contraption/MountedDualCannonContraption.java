@@ -895,7 +895,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
         this.reduceCooldownOnHit = tag.getBoolean("reduceCooldownOnHit");
         this.hasMagazine = tag.getBoolean("hasMagazine");
         if(this.hasMagazine){
-            this.cachedMunition.deserializeNBT(tag.getCompound("magazine"));
+            this.cachedMunition.deserializeNBT(level.registryAccess(), tag.getCompound("magazine"));
         }
     }
 

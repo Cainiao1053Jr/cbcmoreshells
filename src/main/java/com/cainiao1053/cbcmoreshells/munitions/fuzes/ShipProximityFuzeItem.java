@@ -3,7 +3,6 @@ package com.cainiao1053.cbcmoreshells.munitions.fuzes;
 import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
 import com.cainiao1053.cbcmoreshells.base.CBCMSTooltip;
 import com.simibubi.create.foundation.item.TooltipHelper;
-import com.simibubi.create.foundation.utility.Lang;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -22,9 +21,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import org.joml.primitives.AABBdc;
 import org.slf4j.Logger;
-import org.valkyrienskies.mod.common.VSGameUtilsKt;
 import rbasamoyai.createbigcannons.CreateBigCannons;
 import rbasamoyai.createbigcannons.config.CBCConfigs;
 import rbasamoyai.createbigcannons.index.CBCItems;
@@ -116,24 +113,6 @@ public class ShipProximityFuzeItem extends FuzeItem implements MenuProvider {
 				return true;
 			}
 		}
-//		int radius = CBCConfigs.SERVER.munitions.proximityFuzeScale.get();
-//		double scale = CBCConfigs.SERVER.munitions.proximityFuzeSpacing.get();
-//		for (int i = -radius; i <= radius; ++i) {
-//			for (int j = -radius; j <= radius; ++j) {
-//				Vec3 ray = dir.add(right.scale(i * scale)).add(up.scale(j * scale));
-//				Vec3 rayEnd = start.add(ray);
-//
-//				if (projectile.level().clip(new ClipContext(start, rayEnd, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, projectile)).getType() != HitResult.Type.MISS) {
-//					return true;
-//				}
-//
-//				for (Entity target : entities) {
-//					AABB targetBox = target.getBoundingBox().inflate(reach);
-//					if (targetBox.clip(start, rayEnd).isPresent())
-//						return true;
-//				}
-//			}
-//		}
 
 		return super.onProjectileClip(stack, projectile, start, end, ctx, false);
 	}

@@ -6,17 +6,15 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.border.WorldBorder;
-import net.minecraft.world.phys.AABB;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.RenderLevelStageEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
 import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.client.event.RenderLevelStageEvent;
 
 import java.util.*;
 
-@Mod.EventBusSubscriber(modid = Cbcmoreshells.MODID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = Cbcmoreshells.MODID, value = Dist.CLIENT)
 public class RenderHandler {
 
 	private static final Map<EntityType<?>, List<ExtraEntityLayer>> extraLayers = new HashMap<>();
@@ -51,7 +49,7 @@ public class RenderHandler {
 			poseStack.translate(dx, dy, dz);
 
 			for (ExtraEntityLayer layer : layers) {
-				layer.render(poseStack, buffer, entity, event.getPartialTick());
+				layer.render(poseStack, buffer, entity, event.getPartialTick().getGameTimeDeltaTicks());
 			}
 
 			poseStack.popPose();

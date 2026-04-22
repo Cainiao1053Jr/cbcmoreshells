@@ -23,25 +23,5 @@ public abstract class TorpedoCannonMountPointMixin extends ArmInteractionPoint {
 		super(type, level, pos, state);
 	}
 
-	@Override
-	public ItemStack insert(ItemStack stack, boolean simulate) {
-		System.out.println("1145141919810");
-		TorpedoCannonMountPoint self = (TorpedoCannonMountPoint) (Object) this;
-		BlockEntity be = this.getLevel().getBlockEntity(this.pos);
-		PitchOrientedContraptionEntity poce;
-		if (be instanceof ExtendsCannonMount extendsMount) {
-			CannonMountBlockEntity mount = extendsMount.getCannonMount();
-			if (mount == null)
-				return stack;
-			poce = mount.getContraption();
-		} else if (be instanceof FixedCannonMountBlockEntity mount) {
-			poce = mount.getContraption();
-		} else {
-			return stack;
-		}
-		if (poce == null || !(poce.getContraption() instanceof AbstractMountedCannonContraption cannon))
-			return stack;
-		return self.getInsertedResultAndDoSomething(stack, simulate, cannon, poce);
-	}
 
 }

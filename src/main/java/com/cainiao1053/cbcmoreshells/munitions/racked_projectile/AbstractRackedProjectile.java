@@ -257,8 +257,8 @@ public abstract class AbstractRackedProjectile extends AbstractCannonProjectile 
 	}
 
 	@Override
-	protected double getGravity() {
-		return super.getGravity();
+	protected double getDefaultGravity() {
+		return super.getDefaultGravity();
 	}
 
 	public void waterProof(){}

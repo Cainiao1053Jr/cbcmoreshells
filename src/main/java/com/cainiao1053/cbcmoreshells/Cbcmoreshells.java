@@ -7,15 +7,10 @@ import com.cainiao1053.cbcmoreshells.network.CBCMSRootNetwork;
 import com.mojang.logging.LogUtils;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.fml.DistExecutor;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
-import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.fml.common.Mod;
+import net.neoforged.neoforge.common.NeoForge;
 import org.slf4j.Logger;
 import rbasamoyai.createbigcannons.utils.CBCUtils;
 
@@ -29,17 +24,34 @@ public class Cbcmoreshells {
 
     public Cbcmoreshells() {
 
-        IEventBus forgeEventBus = MinecraftForge.EVENT_BUS;
-        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
-        REGISTRATE.registerEventListeners(modEventBus);
+//        IEventBus forgeEventBus = NeoForge.EVENT_BUS;
+//        IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+//        REGISTRATE.registerEventListeners(modEventBus);
+//
+//        modEventBus.addListener(this::addCreative);
+//        // Register the commonSetup method for modloading
+//        modEventBus.addListener(this::commonSetup);
+//        modEventBus.addListener(Cbcmoreshells::init);
+//
+//        ModGroup.register(modEventBus);
+//
+//        CBCMSBlocks.register();
+//        CBCMSEntityTypes.register();
+//        CBCMSBlockEntities.register();
+//        CBCMSBlockPartials.init();
+//        CBCMSItems.register();
+//        CBCMSCannonContraptionTypes.register();
+//        CBCMSContraptionTypes.prepare();
+//        CBCMSSoundEvents.prepare();
+//        CBCMSRootNetwork.init();
+//        CBCMSArmInteractionPointTypes.register();
+//
+//        MinecraftForge.EVENT_BUS.register(this);
 
-        modEventBus.addListener(this::addCreative);
-        // Register the commonSetup method for modloading
-        modEventBus.addListener(this::commonSetup);
-        modEventBus.addListener(Cbcmoreshells::init);
 
-        ModGroup.register(modEventBus);
+    }
 
+    public static void init() {
         CBCMSBlocks.register();
         CBCMSEntityTypes.register();
         CBCMSBlockEntities.register();
@@ -55,40 +67,7 @@ public class Cbcmoreshells {
         CBCMSSoundEvents.prepare();
         CBCMSRootNetwork.init();
         CBCMSArmInteractionPointTypes.register();
-
-        DistExecutor.unsafeRunWhenOn(Dist.CLIENT, () -> CbcmoreshellsClient::clientInit);
-
-        MinecraftForge.EVENT_BUS.register(this);
-
-
-    }
-
-    public static void init(final FMLCommonSetupEvent event) {
-
-        event.enqueueWork(() -> {
-            // TODO: custom registration should all happen in one place
-            // Most registration happens in the constructor.
-            // These registrations use Create's registered objects directly so they must run after registration has finished.
-            // --
-
-
-        });
-    }
-
-    private void commonSetup(final FMLCommonSetupEvent event)
-    {
-        // Some common setup code
-        CBCMSNetwork.init();
-
-    }
-
-    private void clientSetup(FMLClientSetupEvent event)
-    {
-
-    }
-
-    private void addCreative(BuildCreativeModeTabContentsEvent event)
-    {
+        ModGroup.register();
 
     }
 

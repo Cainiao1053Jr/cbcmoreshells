@@ -14,16 +14,16 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.CreativeModeTab;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredHolder;
+import net.neoforged.neoforge.registries.DeferredRegister;
 
 public class ModGroup {
 
 	public static final ResourceKey<CreativeModeTab> MAIN_TAB_KEY = makeKey("shells");
 
 	private static final DeferredRegister<CreativeModeTab> TAB_REGISTER = DeferredRegister.create(Registries.CREATIVE_MODE_TAB, Cbcmoreshells.MODID);
-	private static Map<ResourceKey<CreativeModeTab>, RegistryObject<CreativeModeTab>> TABS = new HashMap<>();
+	private static Map<ResourceKey<CreativeModeTab>, DeferredHolder<CreativeModeTab, CreativeModeTab>> TABS = new HashMap<>();
 
 	public static final Supplier<CreativeModeTab> GROUP = wrapGroup("shells", () -> createBuilder()
 		.title(Component.translatable("itemGroup." + Cbcmoreshells.MODID))
@@ -251,10 +251,15 @@ public class ModGroup {
 		})
 		.build());
 
+//	public static Supplier<CreativeModeTab> wrapGroup(String id, Supplier<CreativeModeTab> sup) {
+//		RegistryObject<CreativeModeTab> obj = TAB_REGISTER.register(id, sup);
+//		TABS.put(ModGroup.makeKey(id), obj);
+//		return obj;
+//	}
 	public static Supplier<CreativeModeTab> wrapGroup(String id, Supplier<CreativeModeTab> sup) {
-		RegistryObject<CreativeModeTab> obj = TAB_REGISTER.register(id, sup);
-		TABS.put(ModGroup.makeKey(id), obj);
-		return obj;
+	DeferredHolder<CreativeModeTab, CreativeModeTab> obj = TAB_REGISTER.register(id, sup);
+	TABS.put(ModGroup.makeKey(id), obj);
+	return obj;
 	}
 	public static CreativeModeTab.Builder createBuilder() {
 		return CreativeModeTab.builder().withTabsBefore(Create.asResource("palettes"));
@@ -268,9 +273,13 @@ public class ModGroup {
 		return ResourceKey.create(Registries.CREATIVE_MODE_TAB, Cbcmoreshells.resource(id));
 	}
 
-	public static void register(IEventBus modBus) {
-		Cbcmoreshells.REGISTRATE.addRawLang("itemGroup." + Cbcmoreshells.MODID, "CBC More Shells");
-		TAB_REGISTER.register(modBus);
+//	public static void register(IEventBus modBus) {
+//		Cbcmoreshells.REGISTRATE.addRawLang("itemGroup." + Cbcmoreshells.MODID, "CBC More Shells");
+//		TAB_REGISTER.register(modBus);
+//	}
+
+	public static void register() {
+		Cbcmoreshells.REGISTRATE.addRawLang("itemGroup." + Cbcmoreshells.MODID, "CBCMS");
 	}
 
 }
