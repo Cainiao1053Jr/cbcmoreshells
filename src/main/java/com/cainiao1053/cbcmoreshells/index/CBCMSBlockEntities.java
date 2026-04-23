@@ -21,12 +21,14 @@ import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.ProjectileRackBlock
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.ProjectileRackBlockRenderer;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.breeches.quick_firing_breech.ProjectileRackQuickfiringBreechBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.breeches.quick_firing_breech.ProjectileRackQuickfiringBreechBlockEntityRenderer;
+import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.breeches.quick_firing_breech.ProjectileRackQuickfiringBreechVisual;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.breeches.sliding_breech.ProjectileRackSlidingBreechBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.breeches.sliding_breech.ProjectileRackSlidingBreechBlockEntityRenderer;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.projectile_rack_end.ProjectileRackEndBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.TorpedoTubeBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.breeches.quick_firing_breech.TorpQuickfiringBreechBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.breeches.quick_firing_breech.TorpQuickfiringBreechBlockEntityRenderer;
+import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.breeches.quick_firing_breech.TorpQuickfiringBreechVisual;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.breeches.sliding_breech.TorpedoSlidingBreechBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.breeches.sliding_breech.TorpedoSlidingBreechBlockEntityRenderer;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.torpedo_end.TorpedoTubeEndBlockEntity;
@@ -61,6 +63,7 @@ public class CBCMSBlockEntities {
 	public static final BlockEntityEntry<TorpQuickfiringBreechBlockEntity> TORPEDO_QUICKFIRING_BREECH = REGISTRATE
 			.blockEntity("torpedo_quickfiring_breech", TorpQuickfiringBreechBlockEntity::new)
 			//.instance(() -> TorpQuickfiringBreechInstance::new)
+			.visual(() -> TorpQuickfiringBreechVisual::new)
 			.renderer(() -> TorpQuickfiringBreechBlockEntityRenderer::new)
 			.validBlocks(CBCMSBlocks.STEEL_TORPEDO_QUICKFIRING_BREECH)
 			.register();
@@ -241,6 +244,7 @@ public class CBCMSBlockEntities {
 	public static final BlockEntityEntry<ProjectileRackQuickfiringBreechBlockEntity> PROJECTILE_RACK_QUICKFIRING_BREECH = REGISTRATE
 			.blockEntity("projectile_rack_quickfiring_breech", ProjectileRackQuickfiringBreechBlockEntity::new)
 			//.instance(() -> ProjectileRackQuickfiringBreechInstance::new)
+			.visual(() -> ProjectileRackQuickfiringBreechVisual::new)
 			.renderer(() -> ProjectileRackQuickfiringBreechBlockEntityRenderer::new)
 			.validBlocks(CBCMSBlocks.STEEL_PROJECTILE_RACK_QUICKFIRING_BREECH)
 			.register();

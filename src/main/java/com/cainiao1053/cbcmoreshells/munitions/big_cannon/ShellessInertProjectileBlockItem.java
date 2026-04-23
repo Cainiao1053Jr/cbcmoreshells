@@ -26,15 +26,15 @@ public class ShellessInertProjectileBlockItem extends ProjectileBlockItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-		super.appendHoverText(stack, level, tooltip, flag);
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+		super.appendHoverText(stack, context, tooltip, flag);
 		boolean desc = Screen.hasShiftDown();
 		if (!desc) {
 			addHoldShift(desc, tooltip);
 			return;
 		}
 		String key1 = "block."+Cbcmoreshells.MODID+".shellessgeneral.tooltip.title";
-		FontHelper.Palette palette = getPalette(level, stack);
+		FontHelper.Palette palette = getPalette();
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		String key2 = "block."+Cbcmoreshells.MODID+".shellessgeneral.tooltip.desc";
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key2), palette.primary(), palette.highlight(), 1));

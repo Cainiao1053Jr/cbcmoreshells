@@ -108,7 +108,8 @@ public abstract class FuzedRackedProjectile extends AbstractRackedProjectile {
 	@Override
 	public void addAdditionalSaveData(CompoundTag tag) {
 		super.addAdditionalSaveData(tag);
-		tag.put("Fuze", this.fuze.save(new CompoundTag()));
+		//tag.put("Fuze", this.fuze.save(new CompoundTag()));
+		tag.put("Fuze", this.fuze.saveOptional(this.level().registryAccess()));
 		//tag.putBoolean("TooManyCharges", this.tooManyCharges);
 		//tag.putInt("Age", this.ageRemaining);
 	}
@@ -116,9 +117,10 @@ public abstract class FuzedRackedProjectile extends AbstractRackedProjectile {
 	@Override
 	public void readAdditionalSaveData(CompoundTag tag) {
 		super.readAdditionalSaveData(tag);
-		this.fuze = tag.contains("Fuze", Tag.TAG_COMPOUND)
-			? ItemStack.parseOptional(this.level().registryAccess(), tag.getCompound("Fuze"))
-			: ItemStack.EMPTY;
+//		this.fuze = tag.contains("Fuze", Tag.TAG_COMPOUND)
+//			? ItemStack.parseOptional(this.level().registryAccess(), tag.getCompound("Fuze"))
+//			: ItemStack.EMPTY;
+		this.fuze = ItemStack.parseOptional(this.level().registryAccess(), tag.getCompound("Fuze"));
 		//this.tooManyCharges = tag.getBoolean("TooManyCharges");
 		//this.ageRemaining = tag.getInt("Age");
 	}

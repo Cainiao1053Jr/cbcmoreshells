@@ -3,7 +3,6 @@ package com.cainiao1053.cbcmoreshells.munitions.big_cannon;
 import com.cainiao1053.cbcmoreshells.cannon_control.contraption.MountedTorpedoTubeContraption;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.breeches.quick_firing_breech.TorpQuickfiringBreechBlockEntity;
 import com.cainiao1053.cbcmoreshells.index.CBCMSSoundEvents;
-import com.cainiao1053.cbcmoreshells.utils.VSShipUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
@@ -43,7 +42,8 @@ public abstract class AbstractReductiveTorpedoProjectile extends FuzedCannonTorp
 	public boolean explodeOnShip(Vec3 pos, Level level) {
 		if (!(level instanceof ServerLevel serverLevel)) return false;
 		AABB box = AABB.ofSize(pos, 4, 4, 4);
-		return VSShipUtils.hasShipInAABB(serverLevel, box);
+		//return VSShipUtils.hasShipInAABB(serverLevel, box);
+		return false;
 	}
 
 	public void playSoundOnHit(Level level) {

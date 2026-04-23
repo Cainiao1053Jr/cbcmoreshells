@@ -92,7 +92,8 @@ public abstract class ShellessFuzedBigCannonProjectile extends AbstractBigCannon
 	@Override
 	public void addAdditionalSaveData(CompoundTag tag) {
 		super.addAdditionalSaveData(tag);
-		tag.put("Fuze", this.fuze.save(new CompoundTag()));
+		//tag.put("Fuze", this.fuze.save(new CompoundTag()));
+		tag.put("Fuze", this.fuze.saveOptional(this.level().registryAccess()));
 		tag.putBoolean("TooManyCharges", this.tooManyCharges);
 		tag.putInt("Age", this.ageRemaining);
 	}
@@ -100,7 +101,8 @@ public abstract class ShellessFuzedBigCannonProjectile extends AbstractBigCannon
 	@Override
 	public void readAdditionalSaveData(CompoundTag tag) {
 		super.readAdditionalSaveData(tag);
-		this.fuze = ItemStack.of(tag.getCompound("Fuze"));
+		//this.fuze = ItemStack.of(tag.getCompound("Fuze"));
+		this.fuze = ItemStack.parseOptional(this.level().registryAccess(), tag.getCompound("Fuze"));
 		this.tooManyCharges = tag.getBoolean("TooManyCharges");
 		this.ageRemaining = tag.getInt("Age");
 	}

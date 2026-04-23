@@ -8,6 +8,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.FluidState;
@@ -98,7 +99,8 @@ public abstract class FuzedCannonTorpedoProjectile extends AbstractCannonTorpedo
 	@Override
 	public void addAdditionalSaveData(CompoundTag tag) {
 		super.addAdditionalSaveData(tag);
-		tag.put("Fuze", this.fuze.save(new CompoundTag()));
+		//tag.put("Fuze", this.fuze.save(new CompoundTag()));
+		tag.put("Fuze", this.fuze.saveOptional(this.level().registryAccess()));
 		tag.putBoolean("TooManyCharges", this.tooManyCharges);
 		tag.putInt("Age", this.ageRemaining);
 	}
@@ -106,7 +108,8 @@ public abstract class FuzedCannonTorpedoProjectile extends AbstractCannonTorpedo
 	@Override
 	public void readAdditionalSaveData(CompoundTag tag) {
 		super.readAdditionalSaveData(tag);
-		this.fuze = ItemStack.of(tag.getCompound("Fuze"));
+		//this.fuze = ItemStack.of(tag.getCompound("Fuze"));
+		this.fuze = ItemStack.parseOptional(this.level().registryAccess(), tag.getCompound("Fuze"));
 		this.tooManyCharges = tag.getBoolean("TooManyCharges");
 		this.ageRemaining = tag.getInt("Age");
 	}
@@ -117,8 +120,9 @@ public abstract class FuzedCannonTorpedoProjectile extends AbstractCannonTorpedo
 			&& this.fuze.getItem() instanceof FuzeItem FuzeItem && cons.test(FuzeItem);
 	}
 
+
 	@Override
-	public boolean ignoreExplosion() {
+	public boolean ignoreExplosion(Explosion explosion) {
 		return true;
 	}
 

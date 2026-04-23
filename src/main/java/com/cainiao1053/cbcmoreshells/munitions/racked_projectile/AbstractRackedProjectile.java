@@ -55,11 +55,11 @@ public abstract class AbstractRackedProjectile extends AbstractCannonProjectile 
 		super(type, level);
 	}
 
-//	@Override
-//	protected void defineSynchedData() {
-//		super.defineSynchedData();
-//		this.entityData.define(TRACER, ItemStack.EMPTY);
-//	}
+	@Override
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(TRACER, ItemStack.EMPTY);
+	}
 
 	@Override
 	public void tick() {
@@ -123,14 +123,18 @@ public abstract class AbstractRackedProjectile extends AbstractCannonProjectile 
 	public void addAdditionalSaveData(CompoundTag tag) {
 		super.addAdditionalSaveData(tag);
 		if (!this.getTracer().isEmpty())
-			tag.put("Tracer", this.getTracer().save(new CompoundTag()));
+			tag.put("Tracer", this.getTracer().save(this.level().registryAccess()));
 		tag.putInt("Age", this.age);
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag tag) {
+//		super.readAdditionalSaveData(tag);
+//		this.setTracer(tag.contains("Tracer", Tag.TAG_COMPOUND) ? ItemStack.of(tag.getCompound("Tracer")) : ItemStack.EMPTY);
 		super.readAdditionalSaveData(tag);
-		this.setTracer(tag.contains("Tracer", Tag.TAG_COMPOUND) ? ItemStack.of(tag.getCompound("Tracer")) : ItemStack.EMPTY);
+		this.setTracer(tag.contains("Tracer", Tag.TAG_COMPOUND)
+				? ItemStack.parseOptional(this.level().registryAccess(), tag.getCompound("Tracer"))
+				: ItemStack.EMPTY);
 		this.age = tag.getInt("Age");
 	}
 
@@ -229,7 +233,7 @@ public abstract class AbstractRackedProjectile extends AbstractCannonProjectile 
 			}
 			Vec3 spallLoc = hitLoc.add(curVel.normalize().scale(2));
 			if (!this.level().isClientSide) {
-				ImpactExplosion explosion = new ImpactExplosion(this.level(), this, this.indirectArtilleryFire(false), spallLoc.x, spallLoc.y, spallLoc.z, 2, Level.ExplosionInteraction.NONE);
+				ImpactExplosion explosion = new ImpactExplosion(this.level(), this, this.indirectArtilleryFire(false), spallLoc.x, spallLoc.y, spallLoc.z, 2, Explosion.BlockInteraction.KEEP);
 				CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 			}
 			SoundType sound = state.getSoundType();

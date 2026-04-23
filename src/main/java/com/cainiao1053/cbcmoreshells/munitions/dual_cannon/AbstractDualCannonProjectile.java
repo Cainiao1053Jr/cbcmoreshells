@@ -78,9 +78,9 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 	private boolean hitTarget = false;
 
 	@Override
-	protected void defineSynchedData() {
-		super.defineSynchedData();
-		this.entityData.define(TRACER, ItemStack.EMPTY);
+	protected void defineSynchedData(SynchedEntityData.Builder builder) {
+		super.defineSynchedData(builder);
+		builder.define(TRACER, ItemStack.EMPTY);
 	}
 
 	@Override
@@ -113,7 +113,7 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 					double radius = Math.min(200, dispLen * 30);
 					EnvExecute.executeOnClient(() -> () -> CBCClientCommon.playShellFlyingSoundOnClient(this,
 						CBCSoundEvents.SHELL_FLYING.getMainEvent(), player -> {
-							if (!CBCConfigs.CLIENT.enableBigCannonFlybySounds.get())
+							if (!CBCConfigs.client().enableBigCannonFlybySounds.get())
 								return false;
 							if (player.distanceToSqr(originPos) > radius * radius)
 								return false;
@@ -170,7 +170,7 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 
 
 	public boolean hasTracer() {
-		return (!this.getTracer().isEmpty() || CBCConfigs.SERVER.munitions.allBigCannonProjectilesAreTracers.get()) && !this.isInGround();
+		return (!this.getTracer().isEmpty() || CBCConfigs.server().munitions.allBigCannonProjectilesAreTracers.get()) && !this.isInGround();
 	}
 
 	public void setTracer(ItemStack stack) {
@@ -183,13 +183,19 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 	public void addAdditionalSaveData(CompoundTag tag) {
 		super.addAdditionalSaveData(tag);
 		if (!this.getTracer().isEmpty())
-			tag.put("Tracer", this.getTracer().save(new CompoundTag()));
+			tag.put("Tracer", this.getTracer().save(this.level().registryAccess()));
+		tag.putInt("Age", this.age);
 	}
 
 	@Override
 	public void readAdditionalSaveData(CompoundTag tag) {
+//		super.readAdditionalSaveData(tag);
+//		this.setTracer(tag.contains("Tracer", Tag.TAG_COMPOUND) ? ItemStack.of(tag.getCompound("Tracer")) : ItemStack.EMPTY);
 		super.readAdditionalSaveData(tag);
-		this.setTracer(tag.contains("Tracer", Tag.TAG_COMPOUND) ? ItemStack.of(tag.getCompound("Tracer")) : ItemStack.EMPTY);
+		this.setTracer(tag.contains("Tracer", Tag.TAG_COMPOUND)
+				? ItemStack.parseOptional(this.level().registryAccess(), tag.getCompound("Tracer"))
+				: ItemStack.EMPTY);
+		this.age = tag.getInt("Age");
 	}
 
 	@Override
@@ -253,7 +259,7 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 		double toughness = blockArmor.toughness(this.level(), state, pos, true);
 
 		double projectileDeflection = ballistics.deflection();
-		double baseChance = CBCConfigs.SERVER.munitions.baseProjectileBounceChance.getF();
+		double baseChance = CBCConfigs.server().munitions.baseProjectileBounceChance.getF();
 		double bounceChance = projectileDeflection < 1e-2d || incidence > projectileDeflection ? 0 : Math.max(0, 1 - incidence / projectileDeflection + baseChance);
 
 		boolean penetrate = false;
@@ -309,7 +315,7 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 			}
 			Vec3 spallLoc = hitLoc.add(curVel.normalize().scale(2));
 			if (!this.level().isClientSide) {
-				ImpactExplosion explosion = new ImpactExplosion(this.level(), this, this.indirectArtilleryFire(false), spallLoc.x, spallLoc.y, spallLoc.z, 1, Level.ExplosionInteraction.NONE);
+				ImpactExplosion explosion = new ImpactExplosion(this.level(), this, this.indirectArtilleryFire(false), spallLoc.x, spallLoc.y, spallLoc.z, 1, Explosion.BlockInteraction.KEEP);
 				CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 			}
 			SoundType sound = state.getSoundType();

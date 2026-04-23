@@ -128,7 +128,7 @@ public class TorpQuickfiringBreechBlock extends TorpedoTubeBaseBlock implements 
 					BlockEntity be1 = cannon.presentBlockEntities.get(nextPos);
 					if (be1 instanceof ITorpedoTubeBlockEntity cbe1) {
 						StructureBlockInfo info1 = cbe1.cannonBehavior().block();
-						ItemStack extract = info1.state().getBlock() instanceof BigCannonMunitionBlock munition ? munition.getExtractedItem(info1) : ItemStack.EMPTY;
+						ItemStack extract = info1.state().getBlock() instanceof BigCannonMunitionBlock munition ? munition.getExtractedItem(info1, level.registryAccess()) : ItemStack.EMPTY;
 						Vec3 normal = new Vec3(side.step());
 						Vec3 dir = contraption.entity.applyRotation(normal, 0);
 						if (!extract.isEmpty()) {
@@ -154,7 +154,7 @@ public class TorpQuickfiringBreechBlock extends TorpedoTubeBaseBlock implements 
 
 					}
 				}
-				TorpedoTubeBlock.writeAndSyncMultipleBlockData(changed, entity, contraption);
+				TorpedoTubeBlock.writeAndSyncMultipleBlockData(changed, entity, cannon);
 			}
 			return true;
 		}
@@ -164,7 +164,7 @@ public class TorpQuickfiringBreechBlock extends TorpedoTubeBaseBlock implements 
 			BlockEntity be1 = cannon.presentBlockEntities.get(nextPos);
 			if (!(be1 instanceof ITorpedoTubeBlockEntity cbe1)) return false;
 
-			StructureBlockInfo loadInfo = munition.getHandloadingInfo(stack, nextPos, pushDirection);
+			StructureBlockInfo loadInfo = munition.getHandloadingInfo(stack, nextPos, pushDirection, level.registryAccess());
 			StructureBlockInfo info1 = cbe1.cannonBehavior().block();
 
 			if (!level.isClientSide) {
@@ -182,7 +182,7 @@ public class TorpQuickfiringBreechBlock extends TorpedoTubeBaseBlock implements 
 				cbe1.cannonBehavior().tryLoadingBlock(loadInfo);
 				changes.add(nextPos);
 
-				TorpedoTubeBlock.writeAndSyncMultipleBlockData(changes, entity, contraption);
+				TorpedoTubeBlock.writeAndSyncMultipleBlockData(changes, entity, cannon);
 
 				SoundType sound = loadInfo.state().getSoundType();
 				level.playSound(null, player.blockPosition(), sound.getPlaceSound(), SoundSource.BLOCKS, sound.getVolume(), sound.getPitch());

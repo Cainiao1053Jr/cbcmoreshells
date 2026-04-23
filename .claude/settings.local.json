@@ -3,7 +3,15 @@
     "allow": [
       "Bash(javap -classpath \"C:\\\\Users\\\\59512\\\\.gradle/caches/forge_gradle/deobf_dependencies/com/rbasamoyai/createbigcannons/5.8.2-dev+mc.1.20.1-forge-build.150_mapped_official_1.20.1/createbigcannons-5.8.2-dev+mc.1.20.1-forge-build.150_mapped_official_1.20.1.jar\" -c rbasamoyai.createbigcannons.munitions.fuzes.TimedFuzeItem)",
       "Bash(find /c/Minecraft/MODS/cbcmoreshells/src -type f -name CBCMSBlocks.java -o -name CBCMSItems.java -o -name *Registry*)",
-      "Bash(grep -r \"mold\\\\|template\\\\|模具\" /c/Minecraft/MODS/cbcmoreshells/src/main/java --include=*.java -l)"
+      "Bash(grep -r \"mold\\\\|template\\\\|模具\" /c/Minecraft/MODS/cbcmoreshells/src/main/java --include=*.java -l)",
+      "Bash(find C:/Users/59512/.gradle/caches -path */flywheel* -name OrientedInstance.java -type f)",
+      "Bash(find C:/Users/59512/.gradle/caches -name *.jar -path *flywheel*)",
+      "Bash(find C:/Users/59512/.gradle/caches -path *engine_room*flywheel* -name *.jar -type f)",
+      "Bash(find C:/Minecraft/MODS/cbcms-v6/src -name *Instance.java -o -name *Visual.java)",
+      "Bash(find C:/Users/59512/.gradle/caches -path *engine_room* -name *.jar -type f)",
+      "Bash(cd /tmp)",
+      "Bash(jar xf:*)",
+      "Bash(jar tf:*)"
     ]
   }
 }

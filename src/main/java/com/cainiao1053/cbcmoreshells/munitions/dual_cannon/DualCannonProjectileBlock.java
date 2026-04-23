@@ -8,10 +8,15 @@ import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import net.createmod.catnip.math.VoxelShaper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtOps;
+import net.minecraft.nbt.Tag;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
@@ -28,8 +33,10 @@ import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import rbasamoyai.createbigcannons.cannons.big_cannons.BigCannonBlock;
+import rbasamoyai.createbigcannons.index.CBCDataComponents;
 import rbasamoyai.createbigcannons.munitions.big_cannon.BigCannonMunitionBlock;
 import rbasamoyai.createbigcannons.munitions.big_cannon.BigCannonProjectileBlockEntity;
+import rbasamoyai.createbigcannons.utils.CBCUtils;
 
 public abstract class DualCannonProjectileBlock<ENTITY extends AbstractDualCannonProjectile> extends DirectionalBlock implements IWrenchable, BigCannonMunitionBlock {
 
@@ -41,8 +48,13 @@ public abstract class DualCannonProjectileBlock<ENTITY extends AbstractDualCanno
 		this.shapes = this.makeShapes();
 	}
 
+//	public static ItemStack getTracerFromItemStack(ItemStack stack) {
+//		return ItemStack.of(stack.getOrCreateTag().getCompound("BlockEntityTag").getCompound("Tracer"));
+//	}
+
 	public static ItemStack getTracerFromItemStack(ItemStack stack) {
-		return ItemStack.of(stack.getOrCreateTag().getCompound("BlockEntityTag").getCompound("Tracer"));
+		ItemContainerContents items = stack.getOrDefault(CBCDataComponents.TRACER, ItemContainerContents.EMPTY);
+		return items.copyOne();
 	}
 
 	@Override
@@ -107,25 +119,43 @@ public abstract class DualCannonProjectileBlock<ENTITY extends AbstractDualCanno
 		return oldState.setValue(BlockStateProperties.FACING, facing);
 	}
 
+//	@Override
+//	public StructureBlockInfo getHandloadingInfo(ItemStack stack, BlockPos localPos, Direction cannonOrientation) {
+//		BlockState state = this.defaultBlockState().setValue(FACING, cannonOrientation);
+//		CompoundTag baseTag = stack.getOrCreateTag();
+//		if (baseTag.contains("BlockEntityTag")) {
+//			CompoundTag tag = baseTag.getCompound("BlockEntityTag").copy();
+//			tag.remove("x");
+//			tag.remove("y");
+//			tag.remove("z");
+//			return new StructureBlockInfo(localPos, state, tag);
+//		}
+//		return new StructureBlockInfo(localPos, state, null);
+//	}
+//
+//	@Override
+//	public ItemStack getExtractedItem(StructureBlockInfo info) {
+//		ItemStack stack = new ItemStack(this);
+//		if (info.nbt() != null) {
+//			stack.getOrCreateTag().put("BlockEntityTag", info.nbt());
+//		}
+//		return stack;
+//	}
+
 	@Override
-	public StructureBlockInfo getHandloadingInfo(ItemStack stack, BlockPos localPos, Direction cannonOrientation) {
+	public StructureBlockInfo getHandloadingInfo(ItemStack stack, BlockPos localPos, Direction cannonOrientation, HolderLookup.Provider registries) {
 		BlockState state = this.defaultBlockState().setValue(FACING, cannonOrientation);
-		CompoundTag baseTag = stack.getOrCreateTag();
-		if (baseTag.contains("BlockEntityTag")) {
-			CompoundTag tag = baseTag.getCompound("BlockEntityTag").copy();
-			tag.remove("x");
-			tag.remove("y");
-			tag.remove("z");
-			return new StructureBlockInfo(localPos, state, tag);
-		}
-		return new StructureBlockInfo(localPos, state, null);
+		CompoundTag tag = new CompoundTag();
+		CBCUtils.saveComponentsToStructureTag(tag, stack.getComponents(), registries); // TODO not efficient but works
+		return new StructureBlockInfo(localPos, state, tag);
 	}
 
 	@Override
-	public ItemStack getExtractedItem(StructureBlockInfo info) {
+	public ItemStack getExtractedItem(StructureBlockInfo info, HolderLookup.Provider registries) {
 		ItemStack stack = new ItemStack(this);
 		if (info.nbt() != null) {
-			stack.getOrCreateTag().put("BlockEntityTag", info.nbt());
+			DataComponentMap components = CBCUtils.readComponentsFromStructureTag(info.nbt(), registries);
+			stack.applyComponents(components);
 		}
 		return stack;
 	}
@@ -144,14 +174,32 @@ public abstract class DualCannonProjectileBlock<ENTITY extends AbstractDualCanno
 
 	@Override public Direction.Axis getAxis(BlockState state) { return state.getValue(FACING).getAxis(); }
 
-	public static ItemStack getTracerFromBlocks(List<StructureBlockInfo> blocks) {
+//	public static ItemStack getTracerFromBlocks(List<StructureBlockInfo> blocks) {
+//		if (blocks.isEmpty())
+//			return ItemStack.EMPTY;
+//		StructureBlockInfo info = blocks.get(0);
+//		if (info.nbt() == null)
+//			return ItemStack.EMPTY;
+//		BlockEntity load = BlockEntity.loadStatic(info.pos(), info.state(), info.nbt());
+//		return load instanceof BigCannonProjectileBlockEntity projectile ? projectile.getItem(0) : ItemStack.EMPTY;
+//	}
+//
+//	public static ItemStack getTracerFromBlock(Level level, BlockPos pos, BlockState state) {
+//		return level.getBlockEntity(pos) instanceof BigCannonProjectileBlockEntity projectile ? projectile.getTracer() : ItemStack.EMPTY;
+//	}
+
+	public static ItemStack getTracerFromBlocks(List<StructureBlockInfo> blocks, HolderLookup.Provider registries) {
 		if (blocks.isEmpty())
 			return ItemStack.EMPTY;
 		StructureBlockInfo info = blocks.get(0);
 		if (info.nbt() == null)
 			return ItemStack.EMPTY;
-		BlockEntity load = BlockEntity.loadStatic(info.pos(), info.state(), info.nbt());
-		return load instanceof BigCannonProjectileBlockEntity projectile ? projectile.getItem(0) : ItemStack.EMPTY;
+		Tag tag = info.nbt().getCompound("components").get("createbigcannons:tracer");
+		ItemContainerContents contents = ItemContainerContents.CODEC
+				.parse(registries.createSerializationContext(NbtOps.INSTANCE), tag)
+				.resultOrPartial()
+				.orElse(ItemContainerContents.EMPTY);
+		return contents.getSlots() > 0 ? contents.getStackInSlot(0) : ItemStack.EMPTY;
 	}
 
 	public static ItemStack getTracerFromBlock(Level level, BlockPos pos, BlockState state) {

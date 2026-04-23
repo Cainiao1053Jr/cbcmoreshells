@@ -528,7 +528,7 @@ public class CBCMSTooltip {
 		return Component.literal(" " + TooltipHelper.makeProgressBar(5, outOfFive)).withStyle(color);
 	}
 
-	public static FontHelper.Palette getPalette(Level level, ItemStack stack) {
+	public static FontHelper.Palette getPalette(TooltipContext context, ItemStack stack) {
 		return FontHelper.Palette.STANDARD_CREATE;
 	}
 

@@ -3,6 +3,7 @@ package com.cainiao1053.cbcmoreshells.munitions.big_cannon;
 import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.utility.Components;
+import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
@@ -34,8 +35,8 @@ public class CannonRocketProjectileBlockItem extends FuzedProjectileBlockItem {
 			return;
 		}
 		String key1 = "block."+Cbcmoreshells.MODID+".crgeneral.tooltip.title";
-		TooltipHelper.Palette palette = getPalette(level, stack);
-		tooltip.add(Components.translatable(key1).withStyle(ChatFormatting.GRAY));
+		FontHelper.Palette palette = getPalette(level, stack);
+		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		String key2 = "block."+Cbcmoreshells.MODID+".crgeneral.tooltip.desc";
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key2), palette.primary(), palette.highlight(), 1));
 

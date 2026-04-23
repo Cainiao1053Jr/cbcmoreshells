@@ -2,7 +2,8 @@ package com.cainiao1053.cbcmoreshells.munitions.big_cannon;
 
 import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
 import com.simibubi.create.foundation.item.TooltipHelper;
-import com.simibubi.create.foundation.utility.Components;
+
+import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
@@ -26,16 +27,16 @@ public class FuzedTorpedoProjectileBlockItem extends FuzedProjectileBlockItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-		super.appendHoverText(stack, level, tooltip, flag);
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+		super.appendHoverText(stack, context, tooltip, flag);
 		boolean desc = Screen.hasShiftDown();
 		if (!desc) {
 			addHoldShift(desc, tooltip);
 			return;
 		}
 		String key1 = "block."+Cbcmoreshells.MODID+".fuzedtorpedo.tooltip.title";
-		TooltipHelper.Palette palette = getPalette(level, stack);
-		tooltip.add(Components.translatable(key1).withStyle(ChatFormatting.GRAY));
+		FontHelper.Palette palette = getPalette();
+		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		String key2 = "block."+Cbcmoreshells.MODID+".fuzedtorpedo.tooltip.desc";
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key2), palette.primary(), palette.highlight(), 1));
 
