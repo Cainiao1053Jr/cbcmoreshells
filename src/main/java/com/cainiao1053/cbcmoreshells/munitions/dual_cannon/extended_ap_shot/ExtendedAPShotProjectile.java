@@ -22,8 +22,6 @@ public class ExtendedAPShotProjectile extends AbstractDualCannonProjectile {
 	}
 
 
-
-
 	@Override
 	public BlockState getRenderedBlockState() {
 		return CBCMSBlocks.NORMAL_AP_SHOT_BLOCK.getDefaultState();

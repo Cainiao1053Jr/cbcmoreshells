@@ -173,7 +173,7 @@ public class NormalSAPShellProjectile extends FuzedDualCannonProjectile {
 						hitLoc.x, hitLoc.y, hitLoc.z, (float) effectNormal.x, (float) effectNormal.y, (float) effectNormal.z));
 			}
 		}
-		boolean shatter = true;
+		boolean shatter = false;
 		if (outcome == ImpactResult.KinematicOutcome.PENETRATE) {
 			this.setProjectileMass(0);
 			this.level().setBlock(pos, Blocks.AIR.defaultBlockState(), DualCannonProjectileBlock.UPDATE_ALL_IMMEDIATE);

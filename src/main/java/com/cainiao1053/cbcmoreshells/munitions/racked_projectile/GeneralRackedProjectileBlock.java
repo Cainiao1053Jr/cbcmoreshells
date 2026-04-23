@@ -1,5 +1,6 @@
 package com.cainiao1053.cbcmoreshells.munitions.racked_projectile;
 
+import com.cainiao1053.cbcmoreshells.index.CBCMSBlockEntities;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import rbasamoyai.createbigcannons.index.CBCBlockEntities;
 import rbasamoyai.createbigcannons.munitions.big_cannon.FuzedBlockEntity;
@@ -18,7 +19,7 @@ public abstract class GeneralRackedProjectileBlock<ENTITY_TYPE extends FuzedRack
 
 	@Override
 	public BlockEntityType<? extends FuzedBlockEntity> getBlockEntityType() {
-		return CBCBlockEntities.FUZED_BLOCK.get();
+		return CBCMSBlockEntities.FUZED_BLOCK.get();
 	}
 
 }

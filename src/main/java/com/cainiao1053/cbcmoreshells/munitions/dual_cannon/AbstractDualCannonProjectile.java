@@ -372,7 +372,7 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 
 	@Override
 	protected double getDefaultGravity() {
-		return super.getGravity();
+		return super.getDefaultGravity();
 	}
 
 	@Override

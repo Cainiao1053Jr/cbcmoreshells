@@ -1,6 +1,7 @@
 package com.cainiao1053.cbcmoreshells.munitions.big_cannon.inferior_he_shell;
 
 import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
+import com.cainiao1053.cbcmoreshells.munitions.big_cannon.ShellessShellBlock;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.block.DirectionalBlock;
@@ -8,7 +9,7 @@ import rbasamoyai.createbigcannons.index.CBCMunitionPropertiesHandlers;
 import rbasamoyai.createbigcannons.munitions.big_cannon.SimpleShellBlock;
 
 
-public class InferiorHEShellBlock extends SimpleShellBlock<InferiorHEShellProjectile> {
+public class InferiorHEShellBlock extends ShellessShellBlock<InferiorHEShellProjectile> {
 
 	private static final MapCodec<InferiorHEShellBlock> CODEC = simpleCodec(InferiorHEShellBlock::new);
 

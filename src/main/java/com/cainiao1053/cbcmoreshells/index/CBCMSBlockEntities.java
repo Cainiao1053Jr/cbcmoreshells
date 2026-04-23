@@ -36,6 +36,10 @@ import rbasamoyai.createbigcannons.cannons.big_cannons.breeches.quickfiring_bree
 import rbasamoyai.createbigcannons.cannons.big_cannons.breeches.sliding_breech.SlidingBreechBlockEntity;
 import rbasamoyai.createbigcannons.cannons.big_cannons.breeches.sliding_breech.SlidingBreechBlockEntityRenderer;
 import rbasamoyai.createbigcannons.cannons.big_cannons.breeches.sliding_breech.SlidingBreechVisual;
+import rbasamoyai.createbigcannons.munitions.big_cannon.BigCannonProjectileBlockEntity;
+import rbasamoyai.createbigcannons.munitions.big_cannon.FuzedBlockEntity;
+import rbasamoyai.createbigcannons.munitions.big_cannon.FuzedBlockEntityRenderer;
+import rbasamoyai.createbigcannons.munitions.big_cannon.FuzedBlockVisual;
 
 import static rbasamoyai.createbigcannons.CreateBigCannons.REGISTRATE;
 
@@ -202,6 +206,75 @@ public class CBCMSBlockEntities {
 					CBCMSBlocks.LARGE_STEEL_SINGLE_CANNON_SLIDING_BREECH,
 					CBCMSBlocks.LARGE_SLATE_ALLOY_SINGLE_CANNON_SLIDING_BREECH,
 					CBCMSBlocks.LARGE_STEEL_DUAL_CANNON_SLIDING_BREECH
+			)
+			.register();
+
+	public static final BlockEntityEntry<FuzedBlockEntity> FUZED_BLOCK = REGISTRATE
+			.blockEntity("fuzed_block", FuzedBlockEntity::new)
+			.visual(() -> FuzedBlockVisual::new)
+			.renderer(() -> FuzedBlockEntityRenderer::new)
+			.validBlocks(
+					CBCMSBlocks.NORMAL_AP_SHELL,
+					CBCMSBlocks.NORMAL_HE_SHELL,
+					CBCMSBlocks.NORMAL_SAP_SHELL,
+					CBCMSBlocks.NORMAL_AP_SHELL,
+					CBCMSBlocks.NORMAL_ANTIAIR_HE_SHELL,
+					CBCMSBlocks.NORMAL_APBC_SHELL,
+					CBCMSBlocks.NORMAL_INCENDIARY_HE_SHELL,
+					CBCMSBlocks.EXTENDED_AP_SHOT,
+					CBCMSBlocks.EXTENDED_ANTIAIR_HE_SHELL,
+					CBCMSBlocks.SAP_SHELL,
+					CBCMSBlocks.ANTIAIR_HE_SHELL,
+					CBCMSBlocks.ANTIAIR_SHRAPNEL_SHELL,
+					CBCMSBlocks.APBC_SHELL,
+					CBCMSBlocks.INCENDIARY_HE_SHELL,
+					CBCMSBlocks.Inferior_HE_SHELL,
+					CBCMSBlocks.HESH_SHELL,
+					CBCMSBlocks.MEDIUM_RANGE_TORPEDO_TYPEB,
+					CBCMSBlocks.MEDIUM_RANGE_DEEPWATER_TORPEDO_TYPEB,
+
+					CBCMSBlocks.MEDIUM_RANGE_TORPEDO,
+					CBCMSBlocks.MEDIUM_RANGE_DEEPWATER_TORPEDO,
+					CBCMSBlocks.HIGHSPEED_TORPEDO,
+					CBCMSBlocks.LONG_RANGE_TORPEDO,
+					CBCMSBlocks.REDUCTIVE_MEDIUM_RANGE_TORPEDO,
+					CBCMSBlocks.LIGHT_HIGH_SPEED_TORPEDO,
+					CBCMSBlocks.REINFORCED_SHORT_RANGE_TORPEDO,
+					CBCMSBlocks.SHORT_RANGE_TORPEDO,
+					CBCMSBlocks.REINFORCED_REDUCTIVE_SHORT_RANGE_TORPEDO,
+					CBCMSBlocks.REINFORCED_MEDIUM_RANGE_TORPEDO,
+					CBCMSBlocks.EARLY_TORPEDO,
+					CBCMSBlocks.PRIMARY_TORPEDO,
+					CBCMSBlocks.REINFORCED_REDUCTIVE_MEDIUM_RANGE_TORPEDO,
+					CBCMSBlocks.REDUCTIVE_LONG_RANGE_TORPEDO,
+					CBCMSBlocks.REINFORCED_LONG_RANGE_TORPEDO,
+					CBCMSBlocks.GAMBLER_MEDIUM_RANGE_TORPEDO,
+					CBCMSBlocks.ULTRASPEED_TORPEDO,
+					CBCMSBlocks.REDUCTIVE_HIGHSPEED_TORPEDO,
+					CBCMSBlocks.SLOW_LONG_RANGE_TORPEDO,
+					CBCMSBlocks.HIGHSPEED_LONG_RANGE_TORPEDO,
+
+					CBCMSBlocks.HE_BOMB,
+					CBCMSBlocks.APHE_BOMB,
+					CBCMSBlocks.HE_BOUNCING_BOMB,
+					CBCMSBlocks.APHE_BOUNCING_BOMB,
+					CBCMSBlocks.RACKED_TORPEDO,
+					CBCMSBlocks.HE_ROCKET,
+					CBCMSBlocks.APHE_ROCKET,
+					CBCMSBlocks.DUAL_HE_ROCKET,
+					CBCMSBlocks.DUAL_APHE_ROCKET,
+					CBCMSBlocks.DEPTH_CHARGE
+			)
+			.register();
+
+	public static final BlockEntityEntry<BigCannonProjectileBlockEntity> PROJECTILE_BLOCK = REGISTRATE
+			.blockEntity("projectile_block", BigCannonProjectileBlockEntity::new)
+			.validBlocks(
+					CBCMSBlocks.APFSDS_SHOT,
+					CBCMSBlocks.APBC_SHOT,
+					CBCMSBlocks.AP_SUPER_HEAVY_SHOT,
+					CBCMSBlocks.BAKED_APFSDS_SHOT,
+					CBCMSBlocks.BAGUETTE_SHOT
 			)
 			.register();
 

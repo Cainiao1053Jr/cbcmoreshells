@@ -1,6 +1,9 @@
 package com.cainiao1053.cbcmoreshells.munitions.big_cannon.hesh_shell;
 
 import com.cainiao1053.cbcmoreshells.CBCMSBlocks;
+import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
+import com.cainiao1053.cbcmoreshells.munitions.big_cannon.ShellessFuzedBigCannonProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.BigCannonShellessShellProperties;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.world.entity.EntityType;
@@ -20,11 +23,13 @@ import rbasamoyai.createbigcannons.munitions.config.components.EntityDamagePrope
 
 import javax.annotation.Nonnull;
 
-public class HESHShellProjectile extends FuzedBigCannonProjectile {
+public class HESHShellProjectile extends ShellessFuzedBigCannonProjectile {
 
 	public HESHShellProjectile(EntityType<? extends HESHShellProjectile> type, Level level) {
 		super(type, level);
 	}
+
+	protected int lifetime = this.getAllProperties().lifetime();
 
 	@Override
 	protected void detonate(Position position) {
@@ -37,6 +42,13 @@ public class HESHShellProjectile extends FuzedBigCannonProjectile {
 	@Override
 	public BlockState getRenderedBlockState() {
 		return CBCMSBlocks.HESH_SHELL.getDefaultState().setValue(BlockStateProperties.FACING, Direction.NORTH);
+	}
+
+	@Override
+	public void setChargePower(float power) {
+		float maxCharges = this.getAllProperties().maxCharges();
+		this.tooManyCharges = maxCharges >= 0 && power > maxCharges;
+		setLifetime(lifetime);
 	}
 
 	@Nonnull
@@ -63,8 +75,8 @@ public class HESHShellProjectile extends FuzedBigCannonProjectile {
 		return this.getAllProperties().ballistics();
 	}
 
-	protected BigCannonCommonShellProperties getAllProperties() {
-		return CBCMunitionPropertiesHandlers.COMMON_SHELL_BIG_CANNON_PROJECTILE.getPropertiesOf(this);
+	protected BigCannonShellessShellProperties getAllProperties() {
+		return CBCMSMunitionPropertiesHandlers.SHELLESS_SHELL_BIG_CANNON_PROJECTILE.getPropertiesOf(this);
 	}
 
 

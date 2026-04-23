@@ -109,9 +109,9 @@ public class CBCMSEntityTypes {
 
 
 
-	public static final EntityEntry<InferiorHEShellProjectile> Inferior_HE_SHELL = cannonProjectile("inferior_he_shell", InferiorHEShellProjectile::new, "Inferior High Explosive Shell", CBCMunitionPropertiesHandlers.COMMON_SHELL_BIG_CANNON_PROJECTILE);
+	public static final EntityEntry<InferiorHEShellProjectile> Inferior_HE_SHELL = cannonProjectile("inferior_he_shell", InferiorHEShellProjectile::new, "Inferior High Explosive Shell", CBCMSMunitionPropertiesHandlers.SHELLESS_SHELL_BIG_CANNON_PROJECTILE);
 	public static final EntityEntry<SAPShellProjectile> SAP_SHELL = cannonProjectile("sap_shell", SAPShellProjectile::new, "SAP Shell", CBCMSMunitionPropertiesHandlers.SHELLESS_SHELL_BIG_CANNON_PROJECTILE);
-	public static final EntityEntry<HESHShellProjectile> HESH_SHELL = cannonProjectile("hesh_shell", HESHShellProjectile::new, "HESH Shell", CBCMunitionPropertiesHandlers.COMMON_SHELL_BIG_CANNON_PROJECTILE);
+	public static final EntityEntry<HESHShellProjectile> HESH_SHELL = cannonProjectile("hesh_shell", HESHShellProjectile::new, "HESH Shell", CBCMSMunitionPropertiesHandlers.SHELLESS_SHELL_BIG_CANNON_PROJECTILE);
 	public static final EntityEntry<ShellessHEShellProjectile> SHELLESS_HE_SHELL = cannonProjectile("shelless_he_shell", ShellessHEShellProjectile::new, "Shelless HE Shell", CBCMSMunitionPropertiesHandlers.SHELLESS_SHELL_BIG_CANNON_PROJECTILE);
 	public static final EntityEntry<APHECannonRocketProjectile> APHE_CANNON_ROCKET = cannonProjectile("aphe_cannon_rocket", APHECannonRocketProjectile::new, "APHE Cannon Rocket", CBCMSMunitionPropertiesHandlers.SHELLESS_SHELL_BIG_CANNON_PROJECTILE);
 	public static final EntityEntry<ShellessAPShotProjectile> SHELLESS_AP_SHOT = cannonProjectile("shelless_ap_shot", ShellessAPShotProjectile::new, "Shelless AP Shot", CBCMSMunitionPropertiesHandlers.SHELLESS_INERT_BIG_CANNON_PROJECTILE);

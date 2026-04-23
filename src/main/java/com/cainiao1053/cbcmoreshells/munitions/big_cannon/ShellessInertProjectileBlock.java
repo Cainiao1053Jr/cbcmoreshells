@@ -1,5 +1,6 @@
 package com.cainiao1053.cbcmoreshells.munitions.big_cannon;
 
+import com.cainiao1053.cbcmoreshells.index.CBCMSBlockEntities;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -138,6 +139,6 @@ public abstract class ShellessInertProjectileBlock<S extends ShellessInertBigCan
 	}
 
 	@Override public Class<BigCannonProjectileBlockEntity> getBlockEntityClass() { return BigCannonProjectileBlockEntity.class; }
-	@Override public BlockEntityType<? extends BigCannonProjectileBlockEntity> getBlockEntityType() { return CBCBlockEntities.PROJECTILE_BLOCK.get(); }
+	@Override public BlockEntityType<? extends BigCannonProjectileBlockEntity> getBlockEntityType() { return CBCMSBlockEntities.PROJECTILE_BLOCK.get(); }
 
 }
