@@ -13,8 +13,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DirectionalBlock;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
-import org.valkyrienskies.core.api.ships.ServerShip;
-import org.valkyrienskies.mod.common.VSGameUtilsKt;
+//import org.valkyrienskies.core.api.ships.ServerShip;
+//import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
 
 public class APHERocketBlock extends GeneralRackedProjectileBlock<APHERocketProjectile> {
@@ -53,11 +53,11 @@ public class APHERocketBlock extends GeneralRackedProjectileBlock<APHERocketProj
 	@Override
 	public void playSoundForLaunching(Level level, BlockPos pos) {
 		if(level.isClientSide()){return;}
-		ServerShip ship = VSGameUtilsKt.getShipManagingPos((ServerLevel) level, pos);
+//		ServerShip ship = VSGameUtilsKt.getShipManagingPos((ServerLevel) level, pos);
 		Vector3dc actualPos = new Vector3d(pos.getX(), pos.getY(), pos.getZ());
-		if(ship != null){
-			actualPos = ship.getTransform().getPositionInWorld();
-		}
+//		if(ship != null){
+//			actualPos = ship.getTransform().getPositionInWorld();
+//		}
 		level.playSound(
 				null,
 				actualPos.x(),

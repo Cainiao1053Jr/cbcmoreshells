@@ -1,26 +1,25 @@
 package com.cainiao1053.cbcmoreshells.blocks.command_deployer;
 
-
-//import com.cainiao1053.cbcmoreshells.api.vs.ValkyrienSkies;
 import com.cainiao1053.cbcmoreshells.cannon_control.contraption.MountedDualCannonContraption;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.combat_command.CombatCommandBaseItem;
-import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.OrientedContraptionEntity;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
 import com.simibubi.create.foundation.item.SmartInventory;
+import it.unimi.dsi.fastutil.ints.IntList;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
-import net.minecraft.nbt.NbtUtils;
-import net.minecraft.nbt.Tag;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.*;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.FireworkRocketEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.FireworkExplosion;
+import net.minecraft.world.item.component.Fireworks;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -28,19 +27,14 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3d;
-import org.joml.primitives.AABBdc;
-import org.valkyrienskies.core.api.ships.Ship;
 import rbasamoyai.createbigcannons.cannon_control.cannon_mount.CannonMountBlockEntity;
 import rbasamoyai.createbigcannons.cannon_control.contraption.PitchOrientedContraptionEntity;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Predicate;
 
 
 public class CommandDeployerBlockEntity extends SmartBlockEntity {
-
 
     public CommandDeployerBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
@@ -58,24 +52,30 @@ public class CommandDeployerBlockEntity extends SmartBlockEntity {
         super.tick();
     }
 
+    public void activateCannons() {
+        if (level.isClientSide()) return;
 
-    public void activateCannons(){
-        if(level.isClientSide()) {
-            return;
-        }
-        ItemStack stack = inventory.getItem(0);
-        if(stack.isEmpty() || !(stack.getItem() instanceof CombatCommandBaseItem ccb)) {
-            return;
-        }
-        CompoundTag tag = stack.getOrCreateTag();
-        if (tag.contains("Positions", Tag.TAG_LIST)) {
-            ListTag positionsTag = tag.getList("Positions", Tag.TAG_COMPOUND);
-            if (!positionsTag.isEmpty()) {
-                cachedPositions = new ArrayList<>();
-                for (int i = 0; i < positionsTag.size(); i++) {
-                    cachedPositions.add(NbtUtils.readBlockPos(positionsTag.getCompound(i)));
+        ItemStack stack = inventory.getStackInSlot(0);
+        if (stack.isEmpty() || !(stack.getItem() instanceof CombatCommandBaseItem ccb)) return;
+
+        // Read cached positions from item's custom data
+        CustomData cd = stack.get(DataComponents.CUSTOM_DATA);
+        if (cd != null) {
+            CompoundTag tag = cd.copyTag();
+            if (tag.contains("Positions", Tag.TAG_LIST)) {
+                ListTag positionsTag = tag.getList("Positions", Tag.TAG_INT_ARRAY);
+                if (!positionsTag.isEmpty()) {
+                    cachedPositions = new ArrayList<>();
+//                    for (int i = 0; i < positionsTag.size(); i++) {
+//                        cachedPositions.add(NbtUtils.readBlockPos(positionsTag.get(i)));
+//                    }
+                    for (int i = 0; i < positionsTag.size(); i++) {
+                        BlockPos.CODEC.parse(NbtOps.INSTANCE, positionsTag.get(i))
+                                .result()
+                                .ifPresent(cachedPositions::add);
+                    }
+                    setChanged();
                 }
-                setChanged();
             }
         }
         if (cachedPositions.isEmpty()) return;
@@ -96,9 +96,7 @@ public class CommandDeployerBlockEntity extends SmartBlockEntity {
                 activatedCannonCount++;
                 continue;
             }
-            if(dualCannon.getCommandCooldown() > 0){
-                continue;
-            }
+            if (dualCannon.getCommandCooldown() > 0) continue;
             availableDualCannon.add(dualCannon);
         }
 
@@ -111,36 +109,37 @@ public class CommandDeployerBlockEntity extends SmartBlockEntity {
                 break;
             }
             dualCannon.activateCombatCommand();
-            dualCannon.setCommandModifiers(ccb.getCommandDurabilityModifier(), ccb.getCommandReloadTimeModifier(), ccb.getCommandLifetimeModifier(), ccb.getCommandSpreadModifier());
-            boolean broke = stack.hurt(1, ((ServerLevel) level).random, null);
-            if (broke) {
-                stack.shrink(1);
-                break;
-            }
+            dualCannon.setCommandModifiers(ccb.getCommandDurabilityModifier(), ccb.getCommandReloadTimeModifier(),
+                    ccb.getCommandLifetimeModifier(), ccb.getCommandSpreadModifier());
+            //boolean broke = stack.hurt(1, ((ServerLevel) level).random, null);
+            stack.hurtAndBreak(1, (ServerLevel) level, null, brokenItem -> {});
+//            if (broke) {
+//                stack.shrink(1);
+//                break;
+//            }
         }
 
         if (activateCannon > 0) {
             setChanged();
             ItemStack rocketStack = new ItemStack(Items.FIREWORK_ROCKET);
-            CompoundTag fireworks = new CompoundTag();
-            fireworks.putByte("Flight", (byte) 1);
-            ListTag explosions = new ListTag();
-            CompoundTag boom = new CompoundTag();
-            boom.putByte("Type", (byte) 1);
-            boom.putIntArray("Colors", new int[]{0xFBBA1E});
-            boom.putIntArray("FadeColors", new int[]{0xEC8E0D});
-            boom.putBoolean("Trail", true);
-            boom.putBoolean("Flicker", true);
-            explosions.add(boom);
-            fireworks.put("Explosions", explosions);
-            rocketStack.getOrCreateTag().put("Fireworks", fireworks);
+            FireworkExplosion boom = new FireworkExplosion(
+                    FireworkExplosion.Shape.LARGE_BALL,
+                    IntList.of(0xFBBA1E),
+                    IntList.of(0xEC8E0D),
+                    true,
+                    true
+            );
+            rocketStack.set(DataComponents.FIREWORKS, new Fireworks(1, List.of(boom)));
+
             FireworkRocketEntity fw = new FireworkRocketEntity(level, selfPos.x, selfPos.y + 1, selfPos.z, rocketStack);
             fw.setDeltaMovement(0, 0.55, 0);
             level.addFreshEntity(fw);
+
             int finalActivateCannon = activateCannon;
             for (Player player : level.players()) {
                 if (player.distanceToSqr(selfPos) < 32.0 * 32.0) {
-                    player.sendSystemMessage(Component.translatable("item.cbcmoreshells.combat_command_base.on_effect", finalActivateCannon));
+                    player.sendSystemMessage(Component.translatable(
+                            "item.cbcmoreshells.combat_command_base.on_effect", finalActivateCannon));
                 }
             }
         }
@@ -160,24 +159,13 @@ public class CommandDeployerBlockEntity extends SmartBlockEntity {
     }
 
     public ItemStack extractStack(int slot) {
-        ItemStack stack = ItemStack.EMPTY;
-        stack = inventory.extractItem(slot, 1, false);
-        return stack;
+        return inventory.extractItem(slot, 1, false);
     }
 
     public static List<MountedDualCannonContraption> findCannons(Level level, AABB box) {
-        //AABB box = AABB.ofSize(center, 2 * radius, 2 * radius, 2 * radius);
-        //if (level.isClientSide()) return List.of();
-
-        Predicate<OrientedContraptionEntity> isMountedCannon = e -> {
-            Contraption c = e.getContraption();
-            return c instanceof MountedDualCannonContraption;
-        };
-
-        List<OrientedContraptionEntity> carriers =
-                level.getEntitiesOfClass(OrientedContraptionEntity.class, box, isMountedCannon);
-
-        return carriers.stream()
+        return level.getEntitiesOfClass(OrientedContraptionEntity.class, box,
+                        e -> e.getContraption() instanceof MountedDualCannonContraption)
+                .stream()
                 .map(OrientedContraptionEntity::getContraption)
                 .filter(c -> c instanceof MountedDualCannonContraption)
                 .map(c -> (MountedDualCannonContraption) c)
@@ -186,8 +174,6 @@ public class CommandDeployerBlockEntity extends SmartBlockEntity {
     }
 
     public static List<PitchOrientedContraptionEntity> findPitchOrientedEntities(Level level, AABB box) {
-        //if (level.isClientSide()) return List.of();
-
         return level.getEntitiesOfClass(
                 PitchOrientedContraptionEntity.class,
                 box,
@@ -195,12 +181,9 @@ public class CommandDeployerBlockEntity extends SmartBlockEntity {
         );
     }
 
-    public static AABB toAABB(AABBdc i) {
-        return new AABB(
-                i.minX(), i.minY(), i.minZ(),
-                i.maxX(), i.maxY(), i.maxZ()
-        );
-    }
+//    public static AABB toAABB(AABBdc i) {
+//        return new AABB(i.minX(), i.minY(), i.minZ(), i.maxX(), i.maxY(), i.maxZ());
+//    }
 
     public SmartInventory getInventory() {
         return inventory;
@@ -208,7 +191,7 @@ public class CommandDeployerBlockEntity extends SmartBlockEntity {
 
     @Override
     public void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
-        super.write(compound,registries, clientPacket);
+        super.write(compound, registries, clientPacket);
         compound.put("Inventory", inventory.serializeNBT(registries));
         ListTag posList = new ListTag();
         for (BlockPos pos : cachedPositions) {
@@ -218,14 +201,19 @@ public class CommandDeployerBlockEntity extends SmartBlockEntity {
     }
 
     @Override
-    protected void read(CompoundTag compound,HolderLookup.Provider registries, boolean clientPacket) {
+    protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
         super.read(compound, registries, clientPacket);
         inventory.deserializeNBT(registries, compound.getCompound("Inventory"));
         cachedPositions = new ArrayList<>();
         if (compound.contains("CachedPositions", Tag.TAG_LIST)) {
-            ListTag posList = compound.getList("CachedPositions", Tag.TAG_COMPOUND);
+            ListTag posList = compound.getList("CachedPositions", Tag.TAG_INT_ARRAY);
+//            for (int i = 0; i < posList.size(); i++) {
+//                cachedPositions.add(NbtUtils.readBlockPos(posList.get(i)));
+//            }
             for (int i = 0; i < posList.size(); i++) {
-                cachedPositions.add(NbtUtils.readBlockPos(posList.getCompound(i)));
+                BlockPos.CODEC.parse(NbtOps.INSTANCE, posList.get(i))
+                        .result()
+                        .ifPresent(cachedPositions::add);
             }
         }
     }
@@ -234,9 +222,5 @@ public class CommandDeployerBlockEntity extends SmartBlockEntity {
         Vec3 front = getBlockPos().getCenter();
         return new Vector3d(front.x, front.y, front.z);
     }
-
-//    public @Nullable Ship getShipOn() {
-//        return ValkyrienSkies.getShipManagingBlock(level, getBlockPos());
-//    }
 
 }

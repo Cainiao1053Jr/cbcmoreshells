@@ -2,25 +2,16 @@ package com.cainiao1053.cbcmoreshells.blocks.torpedo_detection_device;
 
 
 import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
-import com.cainiao1053.cbcmoreshells.index.CBCMSSoundEvents;
-import com.cainiao1053.cbcmoreshells.munitions.big_cannon.AbstractCannonTorpedoProjectile;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Vector3dc;
 import org.slf4j.Logger;
-import org.valkyrienskies.core.api.ships.ServerShip;
-import org.valkyrienskies.mod.common.VSGameUtilsKt;
-
-import java.util.List;
 
 
 public class TorpedoDetectionDeviceBlockEntity extends KineticBlockEntity {
@@ -49,8 +40,8 @@ public class TorpedoDetectionDeviceBlockEntity extends KineticBlockEntity {
             return;
         }
 
-        ServerShip ship = VSGameUtilsKt.getShipManagingPos((ServerLevel) getLevel(), this.getBlockPos());
-        if(ship == null){return;}
+//        ServerShip ship = VSGameUtilsKt.getShipManagingPos((ServerLevel) getLevel(), this.getBlockPos());
+//        if(ship == null){return;}
 
         if(restartCooldown>0){
             restartCooldown--;
@@ -59,17 +50,17 @@ public class TorpedoDetectionDeviceBlockEntity extends KineticBlockEntity {
             restartCooldown--;
             //ServerShip ship = VSGameUtilsKt.getShipManagingPos((ServerLevel) getLevel(), this.getBlockPos());
             //if(ship != null){
-                Vector3dc shipPos = ship.getTransform().getPositionInWorld();
-                level.playSound(
-                        null,
-                        shipPos.x(),
-                        shipPos.y(),
-                        shipPos.z(),
-                        SoundEvents.NOTE_BLOCK_BELL.get(),
-                        SoundSource.BLOCKS,
-                        3.5f,
-                        1.2f
-                );
+//                Vector3dc shipPos = ship.getTransform().getPositionInWorld();
+//                level.playSound(
+//                        null,
+//                        shipPos.x(),
+//                        shipPos.y(),
+//                        shipPos.z(),
+//                        SoundEvents.NOTE_BLOCK_BELL.get(),
+//                        SoundSource.BLOCKS,
+//                        3.5f,
+//                        1.2f
+//                );
             //}
             return;
         }else if(activationLeft>0){
@@ -82,17 +73,17 @@ public class TorpedoDetectionDeviceBlockEntity extends KineticBlockEntity {
             level.setBlock(getBlockPos(), getBlockState().setValue(BlockStateProperties.POWERED, false), 3);
             //ServerShip ship = VSGameUtilsKt.getShipManagingPos((ServerLevel) getLevel(), this.getBlockPos());
             //if(ship !=null){
-                Vector3dc shipPos = ship.getTransform().getPositionInWorld();
-                level.playSound(
-                        null,
-                        shipPos.x(),
-                        shipPos.y(),
-                        shipPos.z(),
-                        SoundEvents.NOTE_BLOCK_BIT.get(),
-                        SoundSource.BLOCKS,
-                        3.5f,
-                        0.9f
-                );
+//                Vector3dc shipPos = ship.getTransform().getPositionInWorld();
+//                level.playSound(
+//                        null,
+//                        shipPos.x(),
+//                        shipPos.y(),
+//                        shipPos.z(),
+//                        SoundEvents.NOTE_BLOCK_BIT.get(),
+//                        SoundSource.BLOCKS,
+//                        3.5f,
+//                        0.9f
+//                );
             //}
             return;
         }
@@ -103,70 +94,65 @@ public class TorpedoDetectionDeviceBlockEntity extends KineticBlockEntity {
         }else {
             cooldown=30;
         }
-        //if (level.isClientSide){return;}
-        //if (speedAbs >= 96) {
-            //LOGGER.info("Speed: " + getSpeed());
-            //ServerShip ship = VSGameUtilsKt.getShipManagingPos((ServerLevel) getLevel(), this.getBlockPos());
-            //if (ship != null) {
-                Vector3dc shipPos = ship.getTransform().getPositionInWorld();
+
+//                Vector3dc shipPos = ship.getTransform().getPositionInWorld();
                 ServerLevel serverLevel = (ServerLevel) level;
                 double searchRange = speedAbs*1.5;
                 minDist = searchRange;
-                AABB box = new AABB(shipPos.x() - searchRange, shipPos.y() - searchRange, shipPos.z() - searchRange,
-                        shipPos.x() + searchRange, shipPos.y() + searchRange, shipPos.z() + searchRange);
+//                AABB box = new AABB(shipPos.x() - searchRange, shipPos.y() - searchRange, shipPos.z() - searchRange,
+//                        shipPos.x() + searchRange, shipPos.y() + searchRange, shipPos.z() + searchRange);
 
-                List<AbstractCannonTorpedoProjectile> torpedoes =
-                        serverLevel.getEntitiesOfClass(
-                                AbstractCannonTorpedoProjectile.class,
-                                box,
-                                torp -> {
-                                    Vec3 torpVel = torp.getDeltaMovement();
-                                    Vec3 torpDistVec = new Vec3(torp.getX() - shipPos.x(), torp.getY() - shipPos.y(), torp.getZ()-shipPos.z());
-                                    boolean torpInAlerting = vecDot(torpVel,torpDistVec)<0;
-                                    double manhattan =
-                                            Math.abs(torpDistVec.x)
-                                                    + Math.abs(torpDistVec.y)
-                                                    + Math.abs(torpDistVec.z);
-                                    if(torpInAlerting){
-                                        if(manhattan < minDist){
-                                            minDist = manhattan;
-                                        }
-                                    }
-                                    return manhattan <= searchRange && torpInAlerting;
-                                });
+//                List<AbstractCannonTorpedoProjectile> torpedoes =
+//                        serverLevel.getEntitiesOfClass(
+//                                AbstractCannonTorpedoProjectile.class,
+//                                box,
+//                                torp -> {
+//                                    Vec3 torpVel = torp.getDeltaMovement();
+//                                    Vec3 torpDistVec = new Vec3(torp.getX() - shipPos.x(), torp.getY() - shipPos.y(), torp.getZ()-shipPos.z());
+//                                    boolean torpInAlerting = vecDot(torpVel,torpDistVec)<0;
+//                                    double manhattan =
+//                                            Math.abs(torpDistVec.x)
+//                                                    + Math.abs(torpDistVec.y)
+//                                                    + Math.abs(torpDistVec.z);
+//                                    if(torpInAlerting){
+//                                        if(manhattan < minDist){
+//                                            minDist = manhattan;
+//                                        }
+//                                    }
+//                                    return manhattan <= searchRange && torpInAlerting;
+//                                });
 
-                if(!torpedoes.isEmpty()){
-                    float pitch = torpPitchLerp(minDist,searchRange);
-                    level.playSound(
-                            null,
-                            shipPos.x(),
-                            shipPos.y(),
-                            shipPos.z(),
-                            CBCMSSoundEvents.SONAR_PULSE.getMainEvent(),
-                            SoundSource.BLOCKS,
-                            5F*pitch,
-                            pitch
-                    );
-                    for (AbstractCannonTorpedoProjectile torp : torpedoes) {
-                        torp.setGlowingTag(true);
-                    }
-                }
-            //}
-        //
+//                if(!torpedoes.isEmpty()){
+//                    float pitch = torpPitchLerp(minDist,searchRange);
+//                    level.playSound(
+//                            null,
+//                            shipPos.x(),
+//                            shipPos.y(),
+//                            shipPos.z(),
+//                            CBCMSSoundEvents.SONAR_PULSE.getMainEvent(),
+//                            SoundSource.BLOCKS,
+//                            5F*pitch,
+//                            pitch
+//                    );
+//                    for (AbstractCannonTorpedoProjectile torp : torpedoes) {
+//                        torp.setGlowingTag(true);
+//                    }
+//                }
+
     }
 
     @Override
-    public void write(CompoundTag compound, boolean clientPacket) {
+    public void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
         compound.putInt("RestartCooldown", restartCooldown);
         compound.putInt("ActivationLeft", activationLeft);
-        super.write(compound, clientPacket);
+        super.write(compound, registries, clientPacket);
     }
 
     @Override
-    protected void read(CompoundTag compound, boolean clientPacket) {
+    protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
         restartCooldown = compound.getInt("RestartCooldown");
         activationLeft = compound.getInt("ActivationLeft");
-        super.read(compound, clientPacket);
+        super.read(compound, registries, clientPacket);
     }
 
     public int getMaxRestartCooldown() {

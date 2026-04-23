@@ -11,7 +11,15 @@
       "Bash(find C:/Users/59512/.gradle/caches -path *engine_room* -name *.jar -type f)",
       "Bash(cd /tmp)",
       "Bash(jar xf:*)",
-      "Bash(jar tf:*)"
+      "Bash(jar tf:*)",
+      "Read(//tmp/**)",
+      "Bash(javap -p net/createmod/catnip/render/PonderRenderTypes.class)",
+      "Bash(javap -p net/createmod/ponder/enums/PonderSpecialTextures.class)",
+      "Bash(mkdir -p /tmp/create_inspect2)",
+      "Bash(javap -p com/simibubi/create/foundation/item/TooltipHelper.class)",
+      "Bash(find C:/Users/59512/.gradle/caches -name createbigcannons*.jar)",
+      "Bash(mkdir -p /tmp/cbc_inspect)",
+      "Bash(javap -p rbasamoyai/createbigcannons/config/CBCConfigs.class)"
     ]
   }
 }

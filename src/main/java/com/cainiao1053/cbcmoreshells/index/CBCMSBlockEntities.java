@@ -6,9 +6,6 @@ import com.cainiao1053.cbcmoreshells.blocks.ammo_rack.AmmoRackRenderer;
 import com.cainiao1053.cbcmoreshells.blocks.command_deployer.CommandDeployerBlockEntity;
 import com.cainiao1053.cbcmoreshells.blocks.command_deployer.CommandDeployerRenderer;
 import com.cainiao1053.cbcmoreshells.blocks.command_displayer.CommandDisplayerBlockEntity;
-import com.cainiao1053.cbcmoreshells.blocks.dish_plate.DishPlateBlockEntity;
-import com.cainiao1053.cbcmoreshells.blocks.dish_plate.DishPlateRenderer;
-import com.cainiao1053.cbcmoreshells.blocks.landing_indicator.LandingIndicatorBlockEntity;
 import com.cainiao1053.cbcmoreshells.blocks.torpedo_detection_device.TorpedoDetectionDeviceBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.DualCannonBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.breeches.quick_firing_breech.DualCannonQuickfiringBreechBlockEntity;
@@ -267,18 +264,18 @@ public class CBCMSBlockEntities {
 			.renderer(()-> AmmoRackRenderer::new)
 			.register();
 
-	public static final BlockEntityEntry<DishPlateBlockEntity> DISH_PLATE = REGISTRATE
-			.blockEntity("dish_plate", DishPlateBlockEntity::new)
-			.validBlocks(CBCMSBlocks.DISH_PLATE, CBCMSBlocks.ROUND_DISH_PLATE)
-			.renderer(()-> DishPlateRenderer::new)
-			.register();
-
-	public static final BlockEntityEntry<LandingIndicatorBlockEntity> LANDING_INDICATOR = REGISTRATE
-			.blockEntity("landing_indicator", LandingIndicatorBlockEntity::new)
-			//.instance(() -> TorpedoDetectionDeviceInstance::new, false)
-			.validBlocks(CBCMSBlocks.LANDING_INDICATOR)
-			//.renderer(() -> ShaftRenderer::new)
-			.register();
+//	public static final BlockEntityEntry<DishPlateBlockEntity> DISH_PLATE = REGISTRATE
+//			.blockEntity("dish_plate", DishPlateBlockEntity::new)
+//			.validBlocks(CBCMSBlocks.DISH_PLATE, CBCMSBlocks.ROUND_DISH_PLATE)
+//			.renderer(()-> DishPlateRenderer::new)
+//			.register();
+//
+//	public static final BlockEntityEntry<LandingIndicatorBlockEntity> LANDING_INDICATOR = REGISTRATE
+//			.blockEntity("landing_indicator", LandingIndicatorBlockEntity::new)
+//			//.instance(() -> TorpedoDetectionDeviceInstance::new, false)
+//			.validBlocks(CBCMSBlocks.LANDING_INDICATOR)
+//			//.renderer(() -> ShaftRenderer::new)
+//			.register();
 
 	public static final BlockEntityEntry<CommandDisplayerBlockEntity> COMMAND_DISPLAYER = REGISTRATE
 			.blockEntity("command_displayer", CommandDisplayerBlockEntity::new)

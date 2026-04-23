@@ -3,6 +3,8 @@ package com.cainiao1053.cbcmoreshells.munitions.fuzes;
 import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
 import com.cainiao1053.cbcmoreshells.base.CBCMSTooltip;
 import com.simibubi.create.foundation.item.TooltipHelper;
+import net.createmod.catnip.lang.Lang;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
@@ -15,8 +17,10 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.item.Item.TooltipContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.HitResult;
@@ -24,6 +28,7 @@ import net.minecraft.world.phys.Vec3;
 import org.slf4j.Logger;
 import rbasamoyai.createbigcannons.CreateBigCannons;
 import rbasamoyai.createbigcannons.config.CBCConfigs;
+import rbasamoyai.createbigcannons.index.CBCDataComponents;
 import rbasamoyai.createbigcannons.index.CBCItems;
 import rbasamoyai.createbigcannons.index.CBCMenuTypes;
 import rbasamoyai.createbigcannons.munitions.AbstractCannonProjectile;
@@ -31,7 +36,6 @@ import rbasamoyai.createbigcannons.munitions.ProjectileContext;
 import rbasamoyai.createbigcannons.munitions.fuzes.FuzeItem;
 import rbasamoyai.createbigcannons.munitions.fuzes.ProximityFuzeContainer;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 public class ShipProximityFuzeItem extends FuzeItem implements MenuProvider {
@@ -54,31 +58,40 @@ public class ShipProximityFuzeItem extends FuzeItem implements MenuProvider {
 
 	@Override
 	public boolean onProjectileTick(ItemStack stack, AbstractCannonProjectile projectile) {
-		CompoundTag tag = stack.getOrCreateTag();
+		CustomData cd = stack.get(DataComponents.CUSTOM_DATA);
+		CompoundTag tag = cd != null ? cd.copyTag() : new CompoundTag();
 
 		// Countdown after proximity activation.
 		if (tag.getBoolean("Activated")) {
 			int timer = tag.getInt("FuzeTimer");
 			if (timer <= 0) return true;
 			tag.putInt("FuzeTimer", timer - 1);
+			stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
 			return false;
 		}
 
-		int airTime = tag.getInt("AirTime");
-		if (airTime > CBCConfigs.SERVER.munitions.proximityFuzeArmingTime.get()) tag.putBoolean("Armed", true);
-		tag.putInt("AirTime", ++airTime);
+//		int airTime = tag.getInt("AirTime");
+//		if (airTime > CBCConfigs.server().munitions.proximityFuzeArmingTime.get()) tag.putBoolean("Armed", true);
+//		tag.putInt("AirTime", ++airTime);
+//		stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+//		return false;
+		int airTime = stack.getOrDefault(CBCDataComponents.AIR_TIME, 0);
+		if (airTime > CBCConfigs.server().munitions.proximityFuzeArmingTime.get()) stack.set(CBCDataComponents.ARMED, true);
+		stack.set(CBCDataComponents.AIR_TIME, ++airTime);
 		return false;
 	}
 
 	@Override
 	public boolean canLingerInGround(ItemStack stack, AbstractCannonProjectile projectile) {
-		return stack.getOrCreateTag().getBoolean("Activated");
+		CustomData cd = stack.get(DataComponents.CUSTOM_DATA);
+		return cd != null && cd.copyTag().getBoolean("Activated");
 	}
 
 	@Override
 	public boolean onProjectileClip(ItemStack stack, AbstractCannonProjectile projectile, Vec3 start, Vec3 end, ProjectileContext ctx, boolean baseFuze) {
 		if (baseFuze) return false;
-		CompoundTag tag = stack.getOrCreateTag();
+		CustomData cd = stack.get(DataComponents.CUSTOM_DATA);
+		CompoundTag tag = cd != null ? cd.copyTag() : new CompoundTag();
 		if (!tag.contains("Armed")) return false;
 
 		int time = Math.max(tag.getInt("DetonationDistance"), 1);
@@ -98,44 +111,62 @@ public class ShipProximityFuzeItem extends FuzeItem implements MenuProvider {
 			.expandTowards(tickDisplacement);
 
 		//List<Entity> entities = projectile.level().getEntities(projectile, currentMovementRegion, projectile::canHitEntity);
-		var shipWorldCore = VSGameUtilsKt.getShipObjectWorld((ServerLevel) projectile.level());
+//		var shipWorldCore = VSGameUtilsKt.getShipObjectWorld((ServerLevel) projectile.level());
 
-		for (var ship : shipWorldCore.getLoadedShips()) {
-			AABBdc shipABdc = ship.getWorldAABB();
-			AABB shipAABB = toAABB(shipABdc);
-			if (currentMovementRegion.intersects(shipAABB)) {
-				// Don't detonate immediately; start the fixed-tick countdown instead.
-				if(time > 1){
-					tag.putBoolean("Activated", true);
-					tag.putInt("FuzeTimer", Math.max(time - 2, 0));
-					return false;
-				}
-				return true;
-			}
-		}
+//		for (var ship : shipWorldCore.getLoadedShips()) {
+//			AABBdc shipABdc = ship.getWorldAABB();
+//			AABB shipAABB = toAABB(shipABdc);
+//			if (currentMovementRegion.intersects(shipAABB)) {
+//				// Don't detonate immediately; start the fixed-tick countdown instead.
+//				if(time > 1){
+//					tag.putBoolean("Activated", true);
+//					tag.putInt("FuzeTimer", Math.max(time - 2, 0));
+//					return false;
+//				}
+//				return true;
+//			}
+//		}
 
 		return super.onProjectileClip(stack, projectile, start, end, ctx, false);
 	}
 
-	public static AABB toAABB(AABBdc i) {
-		return new AABB(
-				i.minX(), i.minY(), i.minZ(),
-				i.maxX(), i.maxY(), i.maxZ()
-		);
-	}
+//	public static AABB toAABB(AABBdc i) {
+//		return new AABB(
+//				i.minX(), i.minY(), i.minZ(),
+//				i.maxX(), i.maxY(), i.maxZ()
+//		);
+//	}
+
+//	@Override
+//	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
+//		if (player instanceof ServerPlayer splayer && player.mayBuild()) {
+//			ItemStack stack = player.getItemInHand(hand);
+//			CustomData cd = stack.get(DataComponents.CUSTOM_DATA);
+//			CompoundTag tag = cd != null ? cd.copyTag() : new CompoundTag();
+//			if (!tag.contains("DetonationDistance")) {
+//				tag.putInt("DetonationDistance", 1);
+//				stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+//			}
+//			int dist = tag.getInt("DetonationDistance");
+//			CBCMenuTypes.SET_PROXIMITY_FUZE.open(splayer, this.getDisplayName(), this, buf -> {
+//				buf.writeVarInt(dist);
+//				buf.writeItem(new ItemStack(this));
+//			});
+//		}
+//		return super.use(level, player, hand);
+//	}
 
 	@Override
 	public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
 		if (player instanceof ServerPlayer splayer && player.mayBuild()) {
 			ItemStack stack = player.getItemInHand(hand);
-			CompoundTag tag = stack.getOrCreateTag();
-			if (!tag.contains("DetonationDistance")) {
-				tag.putInt("DetonationDistance", 1);
+			if (!stack.has(CBCDataComponents.DETONATION_DISTANCE)) {
+				stack.set(CBCDataComponents.DETONATION_DISTANCE, 1);
 			}
-			int dist = tag.getInt("DetonationDistance");
+			int dist = stack.getOrDefault(CBCDataComponents.DETONATION_DISTANCE, 1);
 			CBCMenuTypes.SET_PROXIMITY_FUZE.open(splayer, this.getDisplayName(), this, buf -> {
 				buf.writeVarInt(dist);
-				buf.writeItem(new ItemStack(this));
+				ItemStack.STREAM_CODEC.encode(buf, new ItemStack(this));
 			});
 		}
 		return super.use(level, player, hand);
@@ -153,25 +184,33 @@ public class ShipProximityFuzeItem extends FuzeItem implements MenuProvider {
 
 	public static ItemStack getCreativeTabItem(int defaultFuze) {
 		ItemStack stack = CBCItems.PROXIMITY_FUZE.asStack();
-		stack.getOrCreateTag().putInt("DetonationDistance", 1);
+		stack.update(DataComponents.CUSTOM_DATA, CustomData.EMPTY, data -> {
+			CompoundTag t = data.copyTag();
+			t.putInt("DetonationDistance", 1);
+			return CustomData.of(t);
+		});
 		return stack;
 	}
 
 	@Override
 	public void addExtraInfo(List<Component> tooltip, boolean isSneaking, ItemStack stack) {
 		super.addExtraInfo(tooltip, isSneaking, stack);
+		CustomData addExtraCd = stack.get(DataComponents.CUSTOM_DATA);
+		int detonDist = addExtraCd != null ? addExtraCd.copyTag().getInt("DetonationDistance") : 0;
 		MutableComponent info = Lang.builder("item")
-			.translate(CreateBigCannons.MOD_ID + ".proximity_fuze.tooltip.shell_info", stack.getOrCreateTag().getInt("DetonationDistance"))
+			.translate(CreateBigCannons.MOD_ID + ".proximity_fuze.tooltip.shell_info", detonDist)
 			.component();
 		tooltip.addAll(TooltipHelper.cutTextComponent(info, Style.EMPTY, Style.EMPTY, 6));
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-		super.appendHoverText(stack, level, tooltip, flag);
-		CBCMSTooltip.appendProxyFuzeInfo(stack,level,tooltip,flag);
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+		super.appendHoverText(stack, context, tooltip, flag);
+		CBCMSTooltip.appendProxyFuzeInfo(stack, context, tooltip, flag);
+		CustomData cd = stack.get(DataComponents.CUSTOM_DATA);
+		int detonDist = cd != null ? cd.copyTag().getInt("DetonationDistance") : 0;
 		tooltip.add(Lang.builder("item")
-			.translate(CreateBigCannons.MOD_ID + ".proximity_fuze.tooltip.shell_info.item", stack.getOrCreateTag().getInt("DetonationDistance"))
+			.translate(CreateBigCannons.MOD_ID + ".proximity_fuze.tooltip.shell_info.item", detonDist)
 			.component());
 	}
 

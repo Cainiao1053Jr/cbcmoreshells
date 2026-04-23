@@ -1,14 +1,11 @@
 package com.cainiao1053.cbcmoreshells.blocks.ammo_rack;
 
-import java.util.function.Consumer;
-
 import com.cainiao1053.cbcmoreshells.index.CBCMSBlockEntities;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import com.simibubi.create.content.kinetics.mechanicalArm.ArmItem;
 import com.simibubi.create.foundation.advancement.AdvancementBehaviour;
 import com.simibubi.create.foundation.block.IBE;
 import com.simibubi.create.foundation.block.render.ReducedDestroyEffects;
-
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Vec3i;
@@ -16,6 +13,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
@@ -42,6 +40,8 @@ import rbasamoyai.createbigcannons.CreateBigCannons;
 import rbasamoyai.createbigcannons.config.CBCConfigs;
 import rbasamoyai.createbigcannons.munitions.AbstractCannonProjectile;
 import rbasamoyai.createbigcannons.munitions.ShellExplosion;
+
+import java.util.function.Consumer;
 
 public class AmmoRackBlock extends Block implements IWrenchable, IBE<AmmoRackBlockEntity> {
 
@@ -75,10 +75,7 @@ public class AmmoRackBlock extends Block implements IWrenchable, IBE<AmmoRackBlo
     }
 
     protected void updateDiagonalNeighbour(BlockState state, Level world, BlockPos pos) {
-        //if (!isChute(state))
-        //return;
     }
-
 
     public BlockState getStateForPlacement(BlockPlaceContext p_196258_1_) {
         return super.getStateForPlacement(p_196258_1_).setValue(POWERED, p_196258_1_.getLevel()
@@ -93,12 +90,8 @@ public class AmmoRackBlock extends Block implements IWrenchable, IBE<AmmoRackBlo
     @Override
     public void onProjectileHit(Level level, BlockState p_60454_, BlockHitResult result, Projectile projectile) {
         super.onProjectileHit(level, p_60454_, result, projectile);
-        if (!canExplode()) {
-            return;
-        }
-        if (level.isClientSide()) {
-            return;
-        }
+        if (!canExplode()) return;
+        if (level.isClientSide()) return;
         if (projectile instanceof AbstractCannonProjectile) {
             BlockPos position = result.getBlockPos();
             ShellExplosion explosion = new ShellExplosion(level, null, null, position.getX(),
@@ -111,12 +104,8 @@ public class AmmoRackBlock extends Block implements IWrenchable, IBE<AmmoRackBlo
     @Override
     public void onBlockExploded(BlockState state, Level level, BlockPos pos, Explosion explosion) {
         super.onBlockExploded(state, level, pos, explosion);
-        if (!canExplode()) {
-            return;
-        }
-        if (level.isClientSide()) {
-            return;
-        }
+        if (!canExplode()) return;
+        if (level.isClientSide()) return;
         ShellExplosion rackExplosion = new ShellExplosion(level, null, null, pos.getX(),
                 pos.getY(), pos.getZ(), 5, false,
                 CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
@@ -126,8 +115,7 @@ public class AmmoRackBlock extends Block implements IWrenchable, IBE<AmmoRackBlo
     @Override
     public void onRemove(BlockState state, Level world, BlockPos pos, BlockState newState, boolean isMoving) {
         IBE.onRemove(state, world, pos, newState);
-        if (state.is(newState.getBlock()))
-            return;
+        if (state.is(newState.getBlock())) return;
         updateDiagonalNeighbour(state, world, pos);
     }
 
@@ -138,26 +126,16 @@ public class AmmoRackBlock extends Block implements IWrenchable, IBE<AmmoRackBlo
             level.setBlock(pos, state.cycle(POWERED), 2);
             if (!previouslyPowered) {
                 AmmoRackBlockEntity be = (AmmoRackBlockEntity) level.getBlockEntity(pos);
-                if (be != null) {
-                    be.switchFilter();
-                }
+                if (be != null) be.switchFilter();
             }
         }
-//		if(!previouslyPowered && level.hasNeighborSignal(pos)){
-//			AmmoRackBlockEntity be = (AmmoRackBlockEntity) level.getBlockEntity(pos);
-//			if(be != null){
-//				be.switchFilter();
-//			}
-//		}
     }
 
     @Override
     public void neighborChanged(BlockState p_220069_1_, Level world, BlockPos pos, Block p_220069_4_,
                                 BlockPos neighbourPos, boolean p_220069_6_) {
-        if (world.isClientSide)
-            return;
-        if (!world.getBlockTicks()
-                .willTickThisTick(pos, this))
+        if (world.isClientSide) return;
+        if (!world.getBlockTicks().willTickThisTick(pos, this))
             world.scheduleTick(pos, this, 0);
     }
 
@@ -187,44 +165,61 @@ public class AmmoRackBlock extends Block implements IWrenchable, IBE<AmmoRackBlo
         return false;
     }
 
+    // --- 1.21.1: use() is split into useItemOn() (with item) + useWithoutItem() (empty hand) ---
+
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand,
-                                 BlockHitResult result) {
-        if (level.isClientSide) {
-            return InteractionResult.SUCCESS;
-        }
-//		LOGGER.info("InteractPos"+rotHitVec);
-//		LOGGER.info("HitXIndex: "+ Math.floor((rotHitVec.x)/0.334+1));
-//		LOGGER.info("HitYIndex: "+ Math.floor(Math.max(rotHitVec.y-0.375,0)/0.3125+1));
-//		LOGGER.info("hitSlot "+hitSlot);
-        ItemStack held = player.getItemInHand(hand);
-        if (held.getItem() instanceof ArmItem) {
-            return InteractionResult.PASS;
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+                                              Player player, InteractionHand hand, BlockHitResult result) {
+        // Let the Arm configure this block as an interaction point
+        if (stack.getItem() instanceof ArmItem) {
+            return ItemInteractionResult.SKIP_DEFAULT_BLOCK_INTERACTION;
         }
         if (result.getDirection() != state.getValue(FACING)) {
-            return InteractionResult.PASS;
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
-
+        if (level.isClientSide) {
+            return ItemInteractionResult.SUCCESS;
+        }
         Vec3 hitVec = result.getLocation();
         Vec3 relativeHitVec = new Vec3(hitVec.x - pos.getX(), hitVec.y - pos.getY(), hitVec.z - pos.getZ());
         Vec3 rotHitVec = rotateHitVec(relativeHitVec, state.getValue(FACING));
-        Vec3i slotIndex = new Vec3i((int) Math.floor((rotHitVec.x) / 0.334 + 1), (int) Math.floor(Math.max(rotHitVec.y - 0.375, 0) / 0.3125 + 1), 0);
+        Vec3i slotIndex = new Vec3i(
+                (int) Math.floor((rotHitVec.x) / 0.334 + 1),
+                (int) Math.floor(Math.max(rotHitVec.y - 0.375, 0) / 0.3125 + 1), 0);
         int hitSlot = slotIndex.getX() + 3 * (slotIndex.getY() - 1) - 1;
 
         AmmoRackBlockEntity be = (AmmoRackBlockEntity) level.getBlockEntity(pos);
-        if (held.isEmpty()) {
-            player.setItemInHand(hand, be.extractStack(hitSlot));
-            return InteractionResult.CONSUME;
-        }
-
         if (be != null) {
-            ItemStack remain = be.insertStack(held.copy(), hitSlot);
-            if (remain.getCount() != held.getCount()) {
+            ItemStack remain = be.insertStack(stack.copy(), hitSlot);
+            if (remain.getCount() != stack.getCount()) {
                 player.setItemInHand(hand, remain);
-//					level.playSound(null, pos, SoundEvents.ITEM_PICKUP,
-//							SoundSource.BLOCKS, 0.25f, 1.0f);
-                return InteractionResult.CONSUME;
+                return ItemInteractionResult.SUCCESS;
             }
+        }
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+    }
+
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
+                                               Player player, BlockHitResult result) {
+        if (result.getDirection() != state.getValue(FACING)) {
+            return InteractionResult.PASS;
+        }
+        if (level.isClientSide) {
+            return InteractionResult.SUCCESS;
+        }
+        Vec3 hitVec = result.getLocation();
+        Vec3 relativeHitVec = new Vec3(hitVec.x - pos.getX(), hitVec.y - pos.getY(), hitVec.z - pos.getZ());
+        Vec3 rotHitVec = rotateHitVec(relativeHitVec, state.getValue(FACING));
+        Vec3i slotIndex = new Vec3i(
+                (int) Math.floor((rotHitVec.x) / 0.334 + 1),
+                (int) Math.floor(Math.max(rotHitVec.y - 0.375, 0) / 0.3125 + 1), 0);
+        int hitSlot = slotIndex.getX() + 3 * (slotIndex.getY() - 1) - 1;
+
+        AmmoRackBlockEntity be = (AmmoRackBlockEntity) level.getBlockEntity(pos);
+        if (be != null) {
+            player.setItemInHand(InteractionHand.MAIN_HAND, be.extractStack(hitSlot));
+            return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
     }

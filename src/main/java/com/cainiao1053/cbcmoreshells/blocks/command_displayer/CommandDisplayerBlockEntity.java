@@ -5,12 +5,12 @@ import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
 import com.cainiao1053.cbcmoreshells.CbcmoreshellsClient;
 //import com.cainiao1053.cbcmoreshells.api.vs.ValkyrienSkies;
 import com.cainiao1053.cbcmoreshells.cannon_control.contraption.MountedDualCannonContraption;
-import com.simibubi.create.content.contraptions.Contraption;
 import com.simibubi.create.content.contraptions.OrientedContraptionEntity;
 import com.simibubi.create.foundation.blockEntity.SmartBlockEntity;
 import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.utility.Color;
+import net.createmod.catnip.theme.Color;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -18,19 +18,16 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.api.distmarker.OnlyIn;
 import org.joml.Vector3d;
-import org.joml.primitives.AABBdc;
 import org.slf4j.Logger;
-import org.valkyrienskies.core.api.ships.Ship;
 import rbasamoyai.createbigcannons.cannon_control.contraption.PitchOrientedContraptionEntity;
 
 import static com.cainiao1053.cbcmoreshells.utils.CBCMSBallisticUtils.*;
 
 import javax.annotation.Nullable;
 import java.util.List;
-import java.util.function.Predicate;
 
 
 public class CommandDisplayerBlockEntity extends SmartBlockEntity {
@@ -173,15 +170,9 @@ public class CommandDisplayerBlockEntity extends SmartBlockEntity {
         //AABB box = AABB.ofSize(center, 2 * radius, 2 * radius, 2 * radius);
         if (level.isClientSide()) return List.of();
 
-        Predicate<OrientedContraptionEntity> isMountedCannon = e -> {
-            Contraption c = e.getContraption();
-            return c instanceof MountedDualCannonContraption;
-        };
-
-        List<OrientedContraptionEntity> carriers =
-                level.getEntitiesOfClass(OrientedContraptionEntity.class, box, isMountedCannon);
-
-        return carriers.stream()
+        return level.getEntitiesOfClass(OrientedContraptionEntity.class, box,
+                        e -> e.getContraption() instanceof MountedDualCannonContraption)
+                .stream()
                 .map(OrientedContraptionEntity::getContraption)
                 .filter(c -> c instanceof MountedDualCannonContraption)
                 .map(c -> (MountedDualCannonContraption) c)
@@ -199,21 +190,21 @@ public class CommandDisplayerBlockEntity extends SmartBlockEntity {
         );
     }
 
-    public static AABB toAABB(AABBdc i) {
-        return new AABB(
-                i.minX(), i.minY(), i.minZ(),
-                i.maxX(), i.maxY(), i.maxZ()
-        );
+//    public static AABB toAABB(AABBdc i) {
+//        return new AABB(
+//                i.minX(), i.minY(), i.minZ(),
+//                i.maxX(), i.maxY(), i.maxZ()
+//        );
+//    }
+
+    @Override
+    public void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
+        super.write(compound, registries, clientPacket);
     }
 
     @Override
-    public void write(CompoundTag compound, boolean clientPacket) {
-        super.write(compound, clientPacket);
-    }
-
-    @Override
-    protected void read(CompoundTag compound, boolean clientPacket) {
-        super.read(compound, clientPacket);
+    protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
+        super.read(compound, registries, clientPacket);
     }
 
     public Vector3d getPositionShip() {

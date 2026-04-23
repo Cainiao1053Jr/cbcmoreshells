@@ -7,7 +7,7 @@ import com.simibubi.create.foundation.blockEntity.behaviour.inventory.VersionedI
 import com.simibubi.create.foundation.item.SmartInventory;
 import net.minecraft.MethodsReturnNonnullByDefault;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
+import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.item.ItemStack;
@@ -18,37 +18,32 @@ import net.neoforged.neoforge.items.IItemHandler;
 import rbasamoyai.createbigcannons.munitions.big_cannon.ProjectileBlockItem;
 import rbasamoyai.createbigcannons.munitions.big_cannon.propellant.BigCartridgeBlockItem;
 
-import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.*;
 
 @ParametersAreNonnullByDefault
 @MethodsReturnNonnullByDefault
-/*
-
- */
-public class AmmoRackBlockEntity extends SmartBlockEntity { // , IAirCurrentSource {
+public class AmmoRackBlockEntity extends SmartBlockEntity {
 
 	private FilteringBehaviour filter;
 	private int index = 0;
-	public final SmartInventory inventory = new SmartInventory(getMaxSlots(), this){
+	public final SmartInventory inventory = new SmartInventory(getMaxSlots(), this) {
 		@Override
 		public boolean isItemValid(int slot, ItemStack stack) {
 			return filter == null || filter.test(stack);
 		}
-	}
-	.withMaxStackSize(64);
+	}.withMaxStackSize(64);
 
 	ItemStack item = ItemStack.EMPTY;
-	LazyOptional<IItemHandler> lazyHandler;
+	// Capability is registered via RegisterCapabilitiesEvent — see capability registration in the mod setup
 	AmmoRackItemHandler itemHandler;
 	VersionedInventoryTrackerBehaviour invVersionTracker;
 
 	public AmmoRackBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
 		itemHandler = new AmmoRackItemHandler(this);
-		lazyHandler = LazyOptional.of(() -> inventory);
 	}
+
 	@Override
 	public void addBehaviours(List<BlockEntityBehaviour> behaviours) {
 		behaviours.add(filter =
@@ -68,7 +63,6 @@ public class AmmoRackBlockEntity extends SmartBlockEntity { // , IAirCurrentSour
 		return new AABB(worldPosition).expandTowards(0, -3, 0);
 	}
 
-
 	@Override
 	public void tick() {
 		super.tick();
@@ -87,31 +81,17 @@ public class AmmoRackBlockEntity extends SmartBlockEntity { // , IAirCurrentSour
 	}
 
 	@Override
-	public void invalidateCaps() {
-		super.invalidateCaps();
-		if(lazyHandler != null) {
-			lazyHandler.invalidate();
-		}
-	}
-
-	@Override
-	public void reviveCaps() {
-		super.reviveCaps();
-		lazyHandler = LazyOptional.of(() -> inventory);
-	}
-
-	@Override
-	public void write(CompoundTag compound, boolean clientPacket) {
-		compound.put("Inventory", inventory.serializeNBT());
+	public void write(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
+		compound.put("Inventory", inventory.serializeNBT(registries));
 		compound.putInt("Index", index);
-		super.write(compound, clientPacket);
+		super.write(compound, registries, clientPacket);
 	}
 
 	@Override
-	protected void read(CompoundTag compound, boolean clientPacket) {
-		inventory.deserializeNBT(compound.getCompound("Inventory"));
+	protected void read(CompoundTag compound, HolderLookup.Provider registries, boolean clientPacket) {
+		inventory.deserializeNBT(registries, compound.getCompound("Inventory"));
 		index = compound.getInt("Index");
-		super.read(compound, clientPacket);
+		super.read(compound, registries, clientPacket);
 	}
 
 	@Override
@@ -123,19 +103,11 @@ public class AmmoRackBlockEntity extends SmartBlockEntity { // , IAirCurrentSour
 		refreshBlockState();
 	}
 
-	@Override
-	public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
-		if (cap == ForgeCapabilities.ITEM_HANDLER)
-			return lazyHandler.cast();
-		return super.getCapability(cap, side);
+	public IItemHandler getItemHandler() {
+		return itemHandler;
 	}
 
 	public ItemStack insertStack(ItemStack stack, int slot) {
-//		for (int i = 0; i < inventory.getSlots(); i++) {
-//			stack = inventory.insertItem(i, stack, false);
-//			if (stack.isEmpty())
-//				break;
-//		}
 		stack = inventory.insertItem(slot, stack, false);
 		if (stack.getCount() < stack.getMaxStackSize())
 			setChangedAndSync();
@@ -149,41 +121,24 @@ public class AmmoRackBlockEntity extends SmartBlockEntity { // , IAirCurrentSour
 	}
 
 	public ItemStack extractStack(int slot) {
-		ItemStack stack = ItemStack.EMPTY;
-//		for (int i = inventory.getSlots()-1; i > -1; i--) {
-//			stack = inventory.extractItem(i, 64, false);
-//			if(!stack.isEmpty()){
-//				break;
-//			}
-//		}
-		stack = inventory.extractItem(slot, 64, false);
-		return stack;
+		return inventory.extractItem(slot, 64, false);
 	}
 
 	public void switchFilter() {
 		SmartInventory inv = inventory;
-		if(!inv.isEmpty()){
+		if (!inv.isEmpty()) {
 			Map<ItemStack, Integer> map = mergeStacksIgnoreNBT(this.inventory);
 			int size = map.size();
-			//LOGGER.info("size: " + size);
-			if(size == 0){
-				return;
-			}
-			if(index < size-1){
+			if (size == 0) return;
+			if (index < size - 1) {
 				index++;
-			}else if(index >= size-1){
+			} else {
 				index = 0;
 			}
-			List<Map.Entry<ItemStack,Integer>> list =
-					new ArrayList<>(map.entrySet());
-			Map.Entry<ItemStack,Integer> e = list.get(index);
-			ItemStack stack = e.getKey();
-//			LOGGER.info("map: " + map);
-//			LOGGER.info("list: " + list);
-//			LOGGER.info("stack: " + stack);
-			this.filter.setFilter(stack);
+			List<Map.Entry<ItemStack, Integer>> list = new ArrayList<>(map.entrySet());
+			Map.Entry<ItemStack, Integer> e = list.get(index);
+			this.filter.setFilter(e.getKey());
 		}
-
 	}
 
 	public ItemStack getItem() {
@@ -198,15 +153,15 @@ public class AmmoRackBlockEntity extends SmartBlockEntity { // , IAirCurrentSour
 		return filter;
 	}
 
-	public int getMaxSlots(){
+	public int getMaxSlots() {
 		return 6;
 	}
 
 	protected int getShellCounts() {
 		int count = 0;
-		for(int i = 0; i < inventory.getSlots(); i++) {
+		for (int i = 0; i < inventory.getSlots(); i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
-			if(!stack.isEmpty() &&( (stack.getItem() instanceof ProjectileBlockItem) || (stack.getItem() instanceof BigCartridgeBlockItem) )){
+			if (!stack.isEmpty() && (stack.getItem() instanceof ProjectileBlockItem || stack.getItem() instanceof BigCartridgeBlockItem)) {
 				count += stack.getCount();
 			}
 		}
@@ -215,18 +170,13 @@ public class AmmoRackBlockEntity extends SmartBlockEntity { // , IAirCurrentSour
 
 	public static Map<ItemStack, Integer> mergeStacks(SmartInventory inv) {
 		Map<ItemStack, Integer> merged = new LinkedHashMap<>();
-
 		for (int slot = 0; slot < inv.getSlots(); slot++) {
 			ItemStack stack = inv.getStackInSlot(slot);
-			if (stack.isEmpty())
-				continue;
-
+			if (stack.isEmpty()) continue;
 			Optional<Map.Entry<ItemStack, Integer>> same =
-					merged.entrySet()
-							.stream()
-							.filter(e -> ItemStack.isSameItemSameTags(stack, e.getKey()))
+					merged.entrySet().stream()
+							.filter(e -> ItemStack.isSameItemSameComponents(stack, e.getKey()))
 							.findFirst();
-
 			if (same.isPresent()) {
 				same.get().setValue(same.get().getValue() + stack.getCount());
 			} else {
@@ -240,18 +190,12 @@ public class AmmoRackBlockEntity extends SmartBlockEntity { // , IAirCurrentSour
 		Map<ItemStack, Integer> merged = new LinkedHashMap<>();
 		for (int i = 0; i < inv.getSlots(); i++) {
 			ItemStack s = inv.getStackInSlot(i);
-			if (s.isEmpty())
-				continue;
-			if(!(s.getItem() instanceof ProjectileBlockItem)){
-				continue;
-			}
-
+			if (s.isEmpty()) continue;
+			if (!(s.getItem() instanceof ProjectileBlockItem)) continue;
 			Optional<Map.Entry<ItemStack, Integer>> same =
-					merged.entrySet()
-							.stream()
+					merged.entrySet().stream()
 							.filter(e -> ItemStack.isSameItem(s, e.getKey()))
 							.findFirst();
-
 			if (same.isPresent())
 				same.get().setValue(same.get().getValue() + s.getCount());
 			else

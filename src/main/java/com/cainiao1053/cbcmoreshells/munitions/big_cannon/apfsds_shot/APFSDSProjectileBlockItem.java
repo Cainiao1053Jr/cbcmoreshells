@@ -2,6 +2,7 @@ package com.cainiao1053.cbcmoreshells.munitions.big_cannon.apfsds_shot;
 
 import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
 import com.simibubi.create.foundation.item.TooltipHelper;
+import net.createmod.catnip.lang.FontHelper;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.resources.language.I18n;
@@ -31,7 +32,7 @@ public class APFSDSProjectileBlockItem extends FuzedProjectileBlockItem {
 			return;
 		}
 		String key1 = "block."+Cbcmoreshells.MODID+".apfsds_shot.tooltip.title";
-		TooltipHelper.Palette palette = getPalette(context, stack);
+		FontHelper.Palette palette = getPalette();
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		String key2 = "block."+Cbcmoreshells.MODID+".apfsds_shot.tooltip.desc";
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key2), palette.primary(), palette.highlight(), 1));

@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
 import com.simibubi.create.foundation.item.SmartInventory;
-import com.simibubi.create.foundation.utility.AngleHelper;
+import net.createmod.catnip.math.AngleHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -33,34 +33,20 @@ public class CommandDeployerRenderer extends SmartBlockEntityRenderer<CommandDep
         Direction facing = blockEntity.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
         float yaw = AngleHelper.horizontalAngle(facing);
 
-        //Vec3 position = new Vec3(0.5, 0.0625, 0.35);
         Vec3 position = new Vec3(0, -0.3125, 0.515625);
-        ItemStack stack = inventory.getItem(0);
-        if (stack.isEmpty()) {
-            return;
-        }
+        ItemStack stack = inventory.getStackInSlot(0);
+        if (stack.isEmpty()) return;
 
         ms.pushPose();
         ms.translate(0.5, 0.5, 0.5);
         ms.mulPose(Axis.YP.rotationDegrees(yaw));
-
         ms.translate(position.x, position.y, position.z);
         ms.mulPose(Axis.XP.rotationDegrees(-90));
         ms.mulPose(Axis.YP.rotationDegrees(180));
 
-        //ms.scale(0.5f, 0.5f, 0.5f);
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-        int packedLight = LevelRenderer.getLightColor(blockEntity.getLevel(),
-                blockEntity.getBlockPos());
-
-        itemRenderer.renderStatic(stack,
-                ItemDisplayContext.FIXED,
-                packedLight,
-                overlay,
-                ms,
-                buffer,
-                blockEntity.getLevel(),
-                0);
+        int packedLight = LevelRenderer.getLightColor(blockEntity.getLevel(), blockEntity.getBlockPos());
+        itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, packedLight, overlay, ms, buffer, blockEntity.getLevel(), 0);
 
         ms.popPose();
     }

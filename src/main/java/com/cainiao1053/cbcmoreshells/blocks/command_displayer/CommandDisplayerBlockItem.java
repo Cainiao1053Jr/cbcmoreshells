@@ -20,14 +20,14 @@ public class CommandDisplayerBlockItem<T extends CommandDisplayerBlock> extends 
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-		super.appendHoverText(stack, level, tooltip, flag);
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+		super.appendHoverText(stack, context, tooltip, flag);
 		boolean desc = Screen.hasShiftDown();
 		if (!desc) {
 			addHoldShift(desc, tooltip);
 			return;
 		}
-		CBCMSTooltip.genericItemTooltipInfo(stack,level,tooltip,flag);
+		CBCMSTooltip.genericItemTooltipInfo(stack,context,tooltip,flag);
 	}
 
 

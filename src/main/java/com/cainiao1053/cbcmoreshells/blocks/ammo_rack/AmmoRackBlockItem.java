@@ -6,9 +6,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
-import net.minecraft.world.level.Level;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 import static com.cainiao1053.cbcmoreshells.base.CBCMSTooltip.addHoldShift;
@@ -20,15 +18,14 @@ public class AmmoRackBlockItem<T extends AmmoRackBlock> extends BlockItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-		super.appendHoverText(stack, level, tooltip, flag);
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+		super.appendHoverText(stack, context, tooltip, flag);
 		boolean desc = Screen.hasShiftDown();
 		if (!desc) {
 			addHoldShift(desc, tooltip);
 			return;
 		}
-		CBCMSTooltip.appendAmmoRackInfo(stack,level,tooltip,flag);
+		CBCMSTooltip.appendAmmoRackInfo(stack, context, tooltip, flag);
 	}
-
 
 }

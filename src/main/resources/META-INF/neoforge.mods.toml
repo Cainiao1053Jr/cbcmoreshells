@@ -1,11 +1,11 @@
 modLoader="javafml"
 loaderVersion="[47,)"
-license="GPLv3"
+license="Custom"
 
 [[mods]]
 modId="cbcmoreshells"
-version="0.2.18-1.20.1"
-displayName="Create Big Cannons More Shells"
+version="2.0.0-1.20.1"
+displayName="CBC More Shells"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/"
 logoFile=""
 credits=""
@@ -14,31 +14,34 @@ description='''
 Shells...
 '''
 
+[[mixins]]
+config = "cbcmoreshells.mixins.json"
+
 [[dependencies.cbcmoreshells]] #optional
-modId="forge"
-mandatory=true
-versionRange="[47,)"
+modId = "neoforge"
+type = "required"
+versionRange="21.1.225"
 ordering="AFTER"
 side="SERVER"
 
 [[dependencies.cbcmoreshells]]
 modId="minecraft"
-mandatory=true
-versionRange="[1.20,1.21)"
+type = "required"
+versionRange="[1.21,1.22)"
 ordering="AFTER"
 side="SERVER"
 
 [[dependencies.cbcmoreshells]]
 modId="create"
-mandatory=true
-versionRange="[0.5.1.h,)"
+type = "required"
+versionRange="[6.0.8,)"
 ordering="AFTER"
 side="BOTH"
 
 [[dependencies.cbcmoreshells]]
 modId="createbigcannons"
-mandatory=true
-versionRange="[5.8.0,5.9.0)"
+type = "required"
+versionRange="[5.11.0,)"
 ordering="AFTER"
 side="BOTH"
 

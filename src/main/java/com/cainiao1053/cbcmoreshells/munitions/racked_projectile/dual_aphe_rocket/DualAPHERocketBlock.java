@@ -6,7 +6,7 @@ import com.cainiao1053.cbcmoreshells.index.CBCMSSoundEvents;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.GeneralRackedProjectileBlock;
 import com.mojang.serialization.MapCodec;
 import com.simibubi.create.AllShapes;
-import com.simibubi.create.foundation.utility.VoxelShaper;
+import net.createmod.catnip.math.VoxelShaper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
@@ -20,8 +20,8 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector3d;
 import org.joml.Vector3dc;
-import org.valkyrienskies.core.api.ships.ServerShip;
-import org.valkyrienskies.mod.common.VSGameUtilsKt;
+//import org.valkyrienskies.core.api.ships.ServerShip;
+//import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
 
 public class DualAPHERocketBlock extends GeneralRackedProjectileBlock<DualAPHERocketProjectile> {
@@ -69,11 +69,11 @@ public class DualAPHERocketBlock extends GeneralRackedProjectileBlock<DualAPHERo
 	@Override
 	public void playSoundForLaunching(Level level, BlockPos pos) {
 		if(level.isClientSide()){return;}
-		ServerShip ship = VSGameUtilsKt.getShipManagingPos((ServerLevel) level, pos);
+//		ServerShip ship = VSGameUtilsKt.getShipManagingPos((ServerLevel) level, pos);
 		Vector3dc actualPos = new Vector3d(pos.getX(), pos.getY(), pos.getZ());
-		if(ship != null){
-			actualPos = ship.getTransform().getPositionInWorld();
-		}
+//		if(ship != null){
+//			actualPos = ship.getTransform().getPositionInWorld();
+//		}
 		level.playSound(
 				null,
 				actualPos.x(),

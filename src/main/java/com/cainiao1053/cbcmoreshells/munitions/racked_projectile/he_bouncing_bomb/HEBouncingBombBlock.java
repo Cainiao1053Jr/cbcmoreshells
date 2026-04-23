@@ -4,7 +4,7 @@ import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
 import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.GeneralRackedProjectileBlock;
 import com.mojang.serialization.MapCodec;
-import com.simibubi.create.foundation.utility.VoxelShaper;
+import net.createmod.catnip.math.VoxelShaper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EntityType;

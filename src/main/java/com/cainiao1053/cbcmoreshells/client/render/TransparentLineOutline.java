@@ -2,12 +2,11 @@ package com.cainiao1053.cbcmoreshells.client.render;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import com.simibubi.create.AllSpecialTextures;
-import com.simibubi.create.foundation.render.RenderTypes;
 import net.createmod.catnip.outliner.LineOutline;
+import net.createmod.catnip.render.PonderRenderTypes;
 import net.createmod.catnip.render.SuperRenderTypeBuffer;
+import net.createmod.ponder.enums.PonderSpecialTextures;
 import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector4f;
 
@@ -20,7 +19,7 @@ public class TransparentLineOutline extends LineOutline {
         if (width == 0)
             return;
 
-        VertexConsumer consumer = buffer.getBuffer(RenderTypes.getOutlineTranslucent(AllSpecialTextures.BLANK.getLocation(), true));
+        VertexConsumer consumer = buffer.getBuffer(PonderRenderTypes.outlineTranslucent(PonderSpecialTextures.BLANK.getLocation(), true));
         params.loadColor(colorTemp);
         Vector4f color = colorTemp;
         int lightmap = LightTexture.FULL_BRIGHT;

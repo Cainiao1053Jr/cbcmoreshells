@@ -7,10 +7,6 @@ import com.cainiao1053.cbcmoreshells.blocks.command_deployer.CommandDeployerBloc
 import com.cainiao1053.cbcmoreshells.blocks.command_deployer.CommandDeployerBlockItem;
 import com.cainiao1053.cbcmoreshells.blocks.command_displayer.CommandDisplayerBlock;
 import com.cainiao1053.cbcmoreshells.blocks.command_displayer.CommandDisplayerBlockItem;
-import com.cainiao1053.cbcmoreshells.blocks.dish_plate.DishPlateBlock;
-import com.cainiao1053.cbcmoreshells.blocks.dish_plate.DishPlateBlockItem;
-import com.cainiao1053.cbcmoreshells.blocks.landing_indicator.LandingIndicatorBlock;
-import com.cainiao1053.cbcmoreshells.blocks.landing_indicator.LandingIndicatorBlockItem;
 import com.cainiao1053.cbcmoreshells.blocks.torpedo_detection_device.TorpedoDetectionDeviceBlock;
 import com.cainiao1053.cbcmoreshells.blocks.torpedo_detection_device.TorpedoDetectionDeviceBlockItem;
 import com.cainiao1053.cbcmoreshells.cannons.big_cannon.NethersteelQuickfiringBreechBlock;
@@ -27,7 +23,6 @@ import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.TorpedoTubeBodyBlock;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.breeches.quick_firing_breech.TorpQuickfiringBreechBlock;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.breeches.sliding_breech.TorpedoSlidingBreechBlock;
 import com.cainiao1053.cbcmoreshells.config.CBCMSCfgStress;
-import com.cainiao1053.cbcmoreshells.config.CBCMSConfigs;
 import com.cainiao1053.cbcmoreshells.datagen.assets.CBCMSBuilderTransformers;
 import com.cainiao1053.cbcmoreshells.index.CBCMSDualCannonMaterials;
 import com.cainiao1053.cbcmoreshells.index.CBCMSProjectileRackMaterials;
@@ -2941,33 +2936,33 @@ public class CBCMSBlocks {
 			.transform(customItemModel())
 			.register();
 
-	public static final BlockEntry<DishPlateBlock> DISH_PLATE = REGISTRATE.block("dish_plate", DishPlateBlock::new)
-			.initialProperties(SharedProperties::softMetal)
-			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK).noOcclusion())
-			.item(DishPlateBlockItem::new)
-			.transform(customItemModel())
-			.register();
+//	public static final BlockEntry<DishPlateBlock> DISH_PLATE = REGISTRATE.block("dish_plate", DishPlateBlock::new)
+//			.initialProperties(SharedProperties::softMetal)
+//			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK).noOcclusion())
+//			.item(DishPlateBlockItem::new)
+//			.transform(customItemModel())
+//			.register();
+//
+//	public static final BlockEntry<DishPlateBlock> ROUND_DISH_PLATE = REGISTRATE.block("round_dish_plate", DishPlateBlock::new)
+//			.initialProperties(SharedProperties::softMetal)
+//			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK).noOcclusion())
+//			.item(DishPlateBlockItem::new)
+//			.transform(customItemModel())
+//			.register();
 
-	public static final BlockEntry<DishPlateBlock> ROUND_DISH_PLATE = REGISTRATE.block("round_dish_plate", DishPlateBlock::new)
-			.initialProperties(SharedProperties::softMetal)
-			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK).noOcclusion())
-			.item(DishPlateBlockItem::new)
-			.transform(customItemModel())
-			.register();
-
-	public static final BlockEntry<LandingIndicatorBlock> LANDING_INDICATOR = REGISTRATE
-			.block("landing_indicator", LandingIndicatorBlock::new)
-			.initialProperties(SharedProperties::stone)
-			.properties(p -> p
-					.mapColor(MapColor.DEEPSLATE)
-					.requiresCorrectToolForDrops()
-					.strength(4f,19f)
-					.noOcclusion())
-			//.addLayer(() -> RenderType::cutoutMipped)
-			.transform(axeOrPickaxe())
-			.item(LandingIndicatorBlockItem::new)
-			.transform(customItemModel())
-			.register();
+//	public static final BlockEntry<LandingIndicatorBlock> LANDING_INDICATOR = REGISTRATE
+//			.block("landing_indicator", LandingIndicatorBlock::new)
+//			.initialProperties(SharedProperties::stone)
+//			.properties(p -> p
+//					.mapColor(MapColor.DEEPSLATE)
+//					.requiresCorrectToolForDrops()
+//					.strength(4f,19f)
+//					.noOcclusion())
+//			//.addLayer(() -> RenderType::cutoutMipped)
+//			.transform(axeOrPickaxe())
+//			.item(LandingIndicatorBlockItem::new)
+//			.transform(customItemModel())
+//			.register();
 
 	public static final BlockEntry<CommandDisplayerBlock> COMMAND_DISPLAYER = REGISTRATE
 			.block("command_displayer", CommandDisplayerBlock::new)

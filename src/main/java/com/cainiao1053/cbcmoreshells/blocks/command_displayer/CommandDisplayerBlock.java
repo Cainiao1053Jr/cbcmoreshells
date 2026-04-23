@@ -1,6 +1,7 @@
 package com.cainiao1053.cbcmoreshells.blocks.command_displayer;
 
 import com.cainiao1053.cbcmoreshells.index.CBCMSBlockEntities;
+import com.mojang.serialization.MapCodec;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
@@ -20,10 +21,17 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class CommandDisplayerBlock extends DirectionalBlock implements IBE<CommandDisplayerBlockEntity> {
 
+    private static final MapCodec<CommandDisplayerBlock> CODEC = simpleCodec(CommandDisplayerBlock::new);
+
     public CommandDisplayerBlock(Properties properties) {
         super(properties);
         //registerDefaultState(defaultBlockState());
         registerDefaultState(defaultBlockState().setValue(POWERED, true));
+    }
+
+    @Override
+    protected MapCodec<? extends DirectionalBlock> codec() {
+        return CODEC;
     }
 
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;

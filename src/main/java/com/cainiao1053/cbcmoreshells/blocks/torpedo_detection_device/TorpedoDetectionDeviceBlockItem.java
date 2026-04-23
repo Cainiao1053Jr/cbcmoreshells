@@ -21,14 +21,14 @@ public class TorpedoDetectionDeviceBlockItem<T extends TorpedoDetectionDeviceBlo
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-		super.appendHoverText(stack, level, tooltip, flag);
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+		super.appendHoverText(stack, context, tooltip, flag);
 		boolean desc = Screen.hasShiftDown();
 		if (!desc) {
 			addHoldShift(desc, tooltip);
 			return;
 		}
-		CBCMSTooltip.appendTorpedoDetectorInfo(stack,level,tooltip,flag,3600,1800);
+		CBCMSTooltip.appendTorpedoDetectorInfo(stack,context,tooltip,flag,3600,1800);
 	}
 
 

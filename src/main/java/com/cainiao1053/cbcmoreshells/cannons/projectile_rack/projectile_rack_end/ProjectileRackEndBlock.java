@@ -2,8 +2,6 @@ package com.cainiao1053.cbcmoreshells.cannons.projectile_rack.projectile_rack_en
 
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.SolidProjectileRackBlock;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.material.ProjectileRackMaterial;
-import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.SolidTorpedoTubeBlock;
-import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.material.TorpedoTubeMaterial;
 import com.cainiao1053.cbcmoreshells.index.CBCMSBlockEntities;
 import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
@@ -15,10 +13,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import rbasamoyai.createbigcannons.cannons.big_cannons.material.BigCannonMaterial;
-import rbasamoyai.createbigcannons.cannons.big_cannons.SolidBigCannonBlock;
 import rbasamoyai.createbigcannons.crafting.casting.CannonCastShape;
-import rbasamoyai.createbigcannons.index.CBCBlockEntities;
 import rbasamoyai.createbigcannons.index.CBCShapes;
 
 public class ProjectileRackEndBlock extends SolidProjectileRackBlock<ProjectileRackEndBlockEntity> {
@@ -27,7 +22,14 @@ public class ProjectileRackEndBlock extends SolidProjectileRackBlock<ProjectileR
 
 	public ProjectileRackEndBlock(Properties properties, ProjectileRackMaterial cannonMaterial) {
 		super(properties, cannonMaterial);
+		this.codec = simpleCodec(this::fromSelf);
 	}
+
+	private ProjectileRackEndBlock fromSelf(Properties properties) {
+		return new ProjectileRackEndBlock(properties, this.getCannonMaterial());
+	}
+
+	@Override protected MapCodec<? extends DirectionalBlock> codec() { return this.codec; }
 
 	@Override public boolean canConnectToSide(BlockState state, Direction dir) { return this.getFacing(state) == dir; }
 

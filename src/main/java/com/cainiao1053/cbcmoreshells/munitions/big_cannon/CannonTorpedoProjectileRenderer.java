@@ -14,7 +14,6 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
-import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 import rbasamoyai.createbigcannons.CreateBigCannons;
 import rbasamoyai.createbigcannons.utils.CBCUtils;

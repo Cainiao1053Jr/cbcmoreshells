@@ -1,7 +1,8 @@
 package com.cainiao1053.cbcmoreshells.blocks.ammo_rack;
 
 import com.simibubi.create.foundation.blockEntity.behaviour.ValueBoxTransform;
-import com.simibubi.create.foundation.utility.VecHelper;
+
+import net.createmod.catnip.math.VecHelper;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;

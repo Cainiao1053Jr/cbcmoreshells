@@ -10,6 +10,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
@@ -31,7 +32,6 @@ public class CommandDeployerBlock extends Block implements IBE<CommandDeployerBl
 
     public CommandDeployerBlock(Properties properties) {
         super(properties);
-        //registerDefaultState(defaultBlockState());
         registerDefaultState(defaultBlockState().setValue(POWERED, true));
     }
 
@@ -66,7 +66,7 @@ public class CommandDeployerBlock extends Block implements IBE<CommandDeployerBl
     @Override
     public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource pRandom) {
         boolean previouslyPowered = state.getValue(POWERED);
-        if (previouslyPowered != level.hasNeighborSignal(pos)){
+        if (previouslyPowered != level.hasNeighborSignal(pos)) {
             level.setBlock(pos, state.cycle(POWERED), 2);
         }
     }
@@ -77,47 +77,55 @@ public class CommandDeployerBlock extends Block implements IBE<CommandDeployerBl
         boolean previouslyPowered = state.getValue(POWERED);
         if (previouslyPowered != level.hasNeighborSignal(pos)) {
             level.setBlock(pos, state.cycle(POWERED), 2);
-            if(!previouslyPowered) {
-                CommandDeployerBlockEntity be =(CommandDeployerBlockEntity) level.getBlockEntity(pos);
+            if (!previouslyPowered) {
+                CommandDeployerBlockEntity be = (CommandDeployerBlockEntity) level.getBlockEntity(pos);
+                if (be == null) return;
                 ItemStack stack = be.getInventory().getStackInSlot(0);
-                if(stack.isEmpty() || !(stack.getItem() instanceof CombatCommandBaseItem)){
-                    return;
-                }
+                if (stack.isEmpty() || !(stack.getItem() instanceof CombatCommandBaseItem)) return;
                 be.activateCannons();
             }
         }
     }
 
+    // --- 1.21.1: use() is split into useItemOn() (with item) + useWithoutItem() (empty hand) ---
+
     @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult result) {
-        if(level.isClientSide){
-            return InteractionResult.SUCCESS;
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+                                              Player player, InteractionHand hand, BlockHitResult result) {
+        if (level.isClientSide) return ItemInteractionResult.SUCCESS;
+        if (!(stack.getItem() instanceof CombatCommandBaseItem)) {
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
         }
-        ItemStack stack = player.getItemInHand(hand);
-        CommandDeployerBlockEntity be =(CommandDeployerBlockEntity) level.getBlockEntity(pos);
-        if(stack.isEmpty()){
-            player.setItemInHand(hand, be.extractStack(0));
-            return InteractionResult.CONSUME;
-        }
-        if (be != null && (stack.getItem() instanceof CombatCommandBaseItem)) {
+        CommandDeployerBlockEntity be = (CommandDeployerBlockEntity) level.getBlockEntity(pos);
+        if (be != null) {
             ItemStack remain = be.insertStack(stack.copy(), 0, false);
             if (remain.getCount() != stack.getCount()) {
                 player.setItemInHand(hand, remain);
-//					level.playSound(null, pos, SoundEvents.ITEM_PICKUP,
-//							SoundSource.BLOCKS, 0.25f, 1.0f);
-                return InteractionResult.CONSUME;
+                return ItemInteractionResult.SUCCESS;
             }
         }
-        return super.use(state, level, pos, player, hand, result);
+        return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
     }
 
-    public BlockState getStateForPlacement(BlockPlaceContext p_196258_1_) {
-//        return super.getStateForPlacement(p_196258_1_).setValue(POWERED, p_196258_1_.getLevel()
-//                .hasNeighborSignal(p_196258_1_.getClickedPos())).setValue(FACING, p_196258_1_.getNearestLookingDirection().getOpposite());
-        return super.getStateForPlacement(p_196258_1_).setValue(POWERED, p_196258_1_.getLevel()
-                .hasNeighborSignal(p_196258_1_.getClickedPos())).setValue(FACING, p_196258_1_.getHorizontalDirection().getOpposite());
+    @Override
+    protected InteractionResult useWithoutItem(BlockState state, Level level, BlockPos pos,
+                                               Player player, BlockHitResult result) {
+        if (level.isClientSide) return InteractionResult.SUCCESS;
+        CommandDeployerBlockEntity be = (CommandDeployerBlockEntity) level.getBlockEntity(pos);
+        if (be != null) {
+            player.setItemInHand(InteractionHand.MAIN_HAND, be.extractStack(0));
+            return InteractionResult.CONSUME;
+        }
+        return InteractionResult.PASS;
     }
-    
+
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext p_196258_1_) {
+        return super.getStateForPlacement(p_196258_1_)
+                .setValue(POWERED, p_196258_1_.getLevel().hasNeighborSignal(p_196258_1_.getClickedPos()))
+                .setValue(FACING, p_196258_1_.getHorizontalDirection().getOpposite());
+    }
+
     @Override
     public Class<CommandDeployerBlockEntity> getBlockEntityClass() {
         return CommandDeployerBlockEntity.class;

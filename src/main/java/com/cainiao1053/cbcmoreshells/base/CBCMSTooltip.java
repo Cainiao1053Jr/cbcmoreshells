@@ -56,7 +56,7 @@ public class CBCMSTooltip {
 			return;
 		}
 
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		DualCannonMaterialProperties material = block.getCannonMaterial().properties();
 		String rootKey = "block." + Cbcmoreshells.MODID + ".dual_cannon.tooltip";
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(rootKey + ".info"),
@@ -95,7 +95,7 @@ public class CBCMSTooltip {
 			return;
 		}
 
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		DualCannonMaterialProperties material = block.getCannonMaterial().properties();
 		String rootKey = "block." + Cbcmoreshells.MODID + ".dual_cannon.tooltip";
 		String singleKey = "block." + Cbcmoreshells.MODID + ".single_cannon.tooltip";
@@ -135,7 +135,7 @@ public class CBCMSTooltip {
 			return;
 		}
 
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String rootKey = "block." + Cbcmoreshells.MODID + ".dual_cannon.tooltip.charger";
 		tooltip.add(Component.translatable(rootKey).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(rootKey + ".info"),
@@ -152,7 +152,7 @@ public class CBCMSTooltip {
 		int lifetime = properties.lifetime();
 		int explosiveCooldown = properties.torpedoProperties().explosionCooldown();
 		int reloadTime = properties.torpedoProperties().reloadTime();
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String key1 = "block.cbcmoreshells.torpedo" + ".tooltip.torpInfo";
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main", String.format("%.1f",torpSpeed*38.8),
@@ -172,7 +172,7 @@ public class CBCMSTooltip {
 		int explosiveCooldown = properties.torpedoProperties().explosionCooldown();
 		float reduction = properties.reductiveProjectileProperties().percentReduction();
 		int reloadTime = properties.torpedoProperties().reloadTime();
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String key1 = "block.cbcmoreshells.reductive_torpedo" + ".tooltip.torpInfo";
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main", String.format("%.1f",torpSpeed*38.8),
@@ -187,7 +187,7 @@ public class CBCMSTooltip {
 		if (!Screen.hasShiftDown()) {
 			return;
 		}
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String key1 = stack.getDescriptionId() + ".tooltip.ballisticInfo";
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main", durabilityMass,penetration,String.format("%.0f",Math.acos(deflection)*180/Math.PI)), palette.primary(), palette.highlight(), 1));
@@ -198,7 +198,7 @@ public class CBCMSTooltip {
 		if (!Screen.hasShiftDown()) {
 			return;
 		}
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String key1 = stack.getDescriptionId() + ".tooltip.ballisticInfo";
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main", durabilityMass,penetration,String.format("%.0f",Math.acos(deflection)*180/Math.PI),explosion), palette.primary(), palette.highlight(), 1));
@@ -209,7 +209,7 @@ public class CBCMSTooltip {
 		if (!Screen.hasShiftDown()) {
 			return;
 		}
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String key1 = stack.getDescriptionId() + ".tooltip.ballisticInfo";
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main", durabilityMass,penetration,String.format("%.0f",Math.acos(deflection)*180/Math.PI),explosion,String.format("%.0f",100*fireChance),fireRange), palette.primary(), palette.highlight(), 1));
@@ -220,7 +220,7 @@ public class CBCMSTooltip {
 		if (!Screen.hasShiftDown()) {
 			return;
 		}
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String key1 = stack.getDescriptionId() + ".tooltip.ballisticInfo";
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main", durabilityMass,penetration,String.format("%.0f",Math.acos(deflection)*180/Math.PI),explosion,String.format("%.0f",lifetime/20)), palette.primary(), palette.highlight(), 1));
@@ -231,7 +231,7 @@ public class CBCMSTooltip {
 		if (!Screen.hasShiftDown()) {
 			return;
 		}
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String key1 = stack.getDescriptionId() + ".tooltip.ballisticInfo";
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main",explosion,String.format("%.0f",lifetime/20), buoyancyFactor, String.format("%.1f",ssVel*38.8), waterDamp), palette.primary(), palette.highlight(), 1));
@@ -242,7 +242,7 @@ public class CBCMSTooltip {
 		if (!Screen.hasShiftDown()) {
 			return;
 		}
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String key1 = stack.getDescriptionId() + ".tooltip.ballisticInfo";
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main", durabilityMass,penetration,String.format("%.0f",Math.acos(deflection)*180/Math.PI),explosion,String.format("%.0f",lifetime/20), String.format("%.0f",ssVel*20), String.format("%.0f",thrustTime/20)), palette.primary(), palette.highlight(), 1));
@@ -253,7 +253,7 @@ public class CBCMSTooltip {
 		if (!Screen.hasShiftDown()) {
 			return;
 		}
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String key1 = stack.getDescriptionId() + ".tooltip";
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main", String.format("%.0f",activationTime/20), String.format("%.0f",cooldown/20)), palette.primary(), palette.highlight(), 1));
@@ -264,7 +264,7 @@ public class CBCMSTooltip {
 		if (!Screen.hasShiftDown()) {
 			return;
 		}
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String key1 = "block.cbcmoreshells.ammo_rack.tooltip";
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main"), palette.primary(), palette.highlight(), 1));
@@ -275,7 +275,7 @@ public class CBCMSTooltip {
 		if (!Screen.hasShiftDown()) {
 			return;
 		}
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String key1 = "block.cbcmoreshells.dish_plate.tooltip";
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main"), palette.primary(), palette.highlight(), 1));
@@ -286,7 +286,7 @@ public class CBCMSTooltip {
 		if (!Screen.hasShiftDown()) {
 			return;
 		}
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String key1 = "block.cbcmoreshells.torptube.tooltip";
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main"), palette.primary(), palette.highlight(), 1));
@@ -299,7 +299,7 @@ public class CBCMSTooltip {
 		if (!desc) {
 			return;
 		}
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String key1 = "item.cbcmoreshells.ship_proximity_fuze.tooltip";
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main"), palette.primary(), palette.highlight(), 1));
@@ -312,7 +312,7 @@ public class CBCMSTooltip {
 		if (!desc) {
 			return;
 		}
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String key1 = "item.cbcmoreshells.sensitive_impact_fuze.tooltip";
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main"), palette.primary(), palette.highlight(), 1));
@@ -323,7 +323,7 @@ public class CBCMSTooltip {
 		if (!Screen.hasShiftDown()) {
 			return;
 		}
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String key1 = "block.cbcmoreshells.landing_indicator.tooltip";
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main"), palette.primary(), palette.highlight(), 1));
@@ -334,7 +334,7 @@ public class CBCMSTooltip {
 		if (!Screen.hasShiftDown()) {
 			return;
 		}
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String key1 = "block.cbcmoreshells.projrack.tooltip";
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main"), palette.primary(), palette.highlight(), 1));
@@ -342,7 +342,7 @@ public class CBCMSTooltip {
 
 	public static void appendCombatCommandMaterialInfo(ItemStack stack, TooltipContext ctx, List<Component> tooltip,
 												  TooltipFlag flag) {
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String key1 = "item.cbcmoreshells.combat_command.tooltip.material.main";
 		CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
 
@@ -361,7 +361,7 @@ public class CBCMSTooltip {
 
 	public static void appendCombatCommandMainInfo(ItemStack stack, TooltipContext ctx, List<Component> tooltip,
 													   TooltipFlag flag, int maxCannon) {
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String key1 = "item.cbcmoreshells.combat_command.tooltip.main";
 		String key2 = stack.getDescriptionId();
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
@@ -444,7 +444,7 @@ public class CBCMSTooltip {
 		float smashToughness = properties.dualCannonProperties().smashToughness();
 		float maximumMomentum = properties.dualCannonProperties().maximumMomentum();
 		float reloadTimeCoef = properties.dualCannonProperties().reloadTimeCoef();
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String key1 = stack.getDescriptionId();
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main", durabilityMass, String.format("%.0f",initVel*20), projectileSpread, minimumSpread,
@@ -467,7 +467,7 @@ public class CBCMSTooltip {
 		float smashToughness = properties.dualCannonProperties().smashToughness();
 		float maximumMomentum = properties.dualCannonProperties().maximumMomentum();
 		float reloadTimeCoef = properties.dualCannonProperties().reloadTimeCoef();
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String key1 = stack.getDescriptionId();
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main", durabilityMass, explosion, String.format("%.0f",initVel*20), projectileSpread, minimumSpread,
@@ -492,7 +492,7 @@ public class CBCMSTooltip {
 		float fireChance = properties.incendiary().fireChance();
 		int fireRange = properties.incendiary().fireRange();
 		float reloadTimeCoef = properties.dualCannonProperties().reloadTimeCoef();
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String key1 = stack.getDescriptionId();
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main", durabilityMass, explosion,
@@ -504,7 +504,7 @@ public class CBCMSTooltip {
 
 	public static void genericItemTooltipInfo(ItemStack stack, TooltipContext ctx, List<Component> tooltip,
 												   TooltipFlag flag) {
-		FontHelper.Palette palette = getPalette(ctx.level(), stack);
+		FontHelper.Palette palette = getPalette();
 		String key1 = stack.getDescriptionId() + ".tooltip";
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main"), palette.primary(), palette.highlight(), 1));
@@ -529,6 +529,10 @@ public class CBCMSTooltip {
 	}
 
 	public static FontHelper.Palette getPalette(TooltipContext context, ItemStack stack) {
+		return FontHelper.Palette.STANDARD_CREATE;
+	}
+
+	public static FontHelper.Palette getPalette() {
 		return FontHelper.Palette.STANDARD_CREATE;
 	}
 

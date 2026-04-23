@@ -23,8 +23,6 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import org.joml.Vector3dc;
-import org.valkyrienskies.core.api.ships.ServerShip;
-import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
 public class TorpedoDetectionDeviceBlock extends DirectionalAxisKineticBlock implements IBE<TorpedoDetectionDeviceBlockEntity> {
 
@@ -88,20 +86,20 @@ public class TorpedoDetectionDeviceBlock extends DirectionalAxisKineticBlock imp
             be.setMaxActivation(be.getMaxActivationLeft());
             level.setBlock(pos, state.setValue(POWERED, true), Block.UPDATE_ALL);
 
-            ServerShip ship = VSGameUtilsKt.getShipManagingPos((ServerLevel) level, pos);
-            if(ship != null){
-                Vector3dc shipPos = ship.getTransform().getPositionInWorld();
-                level.playSound(
-                        null,
-                        shipPos.x(),
-                        shipPos.y(),
-                        shipPos.z(),
-                        SoundEvents.NOTE_BLOCK_BIT.value(),
-                        SoundSource.BLOCKS,
-                        3.5f,
-                        1.4f
-                );
-            }
+//            ServerShip ship = VSGameUtilsKt.getShipManagingPos((ServerLevel) level, pos);
+//            if(ship != null){
+//                Vector3dc shipPos = ship.getTransform().getPositionInWorld();
+//                level.playSound(
+//                        null,
+//                        shipPos.x(),
+//                        shipPos.y(),
+//                        shipPos.z(),
+//                        SoundEvents.NOTE_BLOCK_BIT.value(),
+//                        SoundSource.BLOCKS,
+//                        3.5f,
+//                        1.4f
+//                );
+//            }
         }
     }
 

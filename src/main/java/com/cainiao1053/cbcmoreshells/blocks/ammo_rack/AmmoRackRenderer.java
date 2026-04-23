@@ -5,7 +5,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.simibubi.create.foundation.blockEntity.renderer.SmartBlockEntityRenderer;
 import com.simibubi.create.foundation.item.SmartInventory;
-import com.simibubi.create.foundation.utility.AngleHelper;
+import net.createmod.catnip.math.AngleHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.LevelRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -30,60 +30,30 @@ public class AmmoRackRenderer extends SmartBlockEntityRenderer<AmmoRackBlockEnti
     protected void renderSafe(AmmoRackBlockEntity blockEntity, float partialTicks, PoseStack ms, MultiBufferSource buffer, int light, int overlay) {
         super.renderSafe(blockEntity, partialTicks, ms, buffer, light, overlay);
         SmartInventory inventory = blockEntity.getInventory();
-        //ItemStack stack = inventory.getItem(0);
         Direction facing = blockEntity.getBlockState().getValue(BlockStateProperties.HORIZONTAL_FACING);
         float yaw = AngleHelper.horizontalAngle(facing);
 
-        for(int i = 1; i<4; i++){
-            for(int j = 1; j<3; j++){
-                Vec3 position = new Vec3(0.3125f*i-0.625f,0.3125f*j-0.3125f,0.275f);
-                int slot = i+3*(j-1);
-                ItemStack stack = inventory.getItem(slot-1);
-                if(stack.isEmpty()) {
-                    continue;
-                }
+        for (int i = 1; i < 4; i++) {
+            for (int j = 1; j < 3; j++) {
+                Vec3 position = new Vec3(0.3125f * i - 0.625f, 0.3125f * j - 0.3125f, 0.275f);
+                int slot = i + 3 * (j - 1);
+                ItemStack stack = inventory.getStackInSlot(slot - 1);
+                if (stack.isEmpty()) continue;
 
                 ms.pushPose();
                 ms.translate(0.5, 0.5, 0.5);
                 ms.mulPose(Axis.YP.rotationDegrees(yaw));
-
                 ms.translate(position.x, position.y, position.z);
                 ms.mulPose(Axis.XP.rotationDegrees(-90));
-
                 ms.scale(0.8f, 0.8f, 0.8f);
-                ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
-                int packedLight = LevelRenderer.getLightColor(blockEntity.getLevel(),
-                        blockEntity.getBlockPos());
 
-                itemRenderer.renderStatic(stack,
-                        ItemDisplayContext.FIXED,
-                        packedLight,
-                        overlay,
-                        ms,
-                        buffer,
-                        blockEntity.getLevel(),
-                        0);
+                ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+                int packedLight = LevelRenderer.getLightColor(blockEntity.getLevel(), blockEntity.getBlockPos());
+                itemRenderer.renderStatic(stack, ItemDisplayContext.FIXED, packedLight, overlay, ms, buffer, blockEntity.getLevel(), 0);
 
                 ms.popPose();
             }
         }
     }
 
-//    protected float getClockWise(Direction facing) {
-//        if (facing == Direction.SOUTH || facing == Direction.NORTH) {
-//            return 90;
-//        }else{
-//            return -90;
-//        }
-//    }
-
-//    public static Vec3 rotateYaw(Vec3 v, float yawDeg) {
-//        double rad = Math.toRadians(-yawDeg);
-//        double cos = Math.cos(rad);
-//        double sin = Math.sin(rad);
-//
-//        double x = v.x *  cos - v.z * sin;
-//        double z = v.x *  sin + v.z * cos;
-//        return new Vec3(x, v.y, z);
-//    }
 }

@@ -1,6 +1,5 @@
 package com.cainiao1053.cbcmoreshells.cannon_control.contraption;
 
-//import com.cainiao1053.cbcmoreshells.api.vs.ValkyrienSkies;
 import com.cainiao1053.cbcmoreshells.cannon_control.cannon_types.CBCMSCannonContraptionTypes;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.IProjectileRackBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.ProjectileRackBlock;
@@ -288,7 +287,7 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 
 		ControlPitchContraption controller = entity.getController();
 
-		List<BlockPos> rackToClear = new ArrayList();
+		List<BlockPos> rackToClear = new ArrayList<>();
 
 
 //
