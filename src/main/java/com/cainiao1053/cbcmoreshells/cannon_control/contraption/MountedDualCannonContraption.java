@@ -90,7 +90,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
     private float commandDurationModifier = 1;
     private int barrelInverter = 1;
     private float additionalSpreadCoef = 1;
-    private boolean reduceCooldownOnHit = true;
+    private boolean reduceCooldownOnHit = false;
 
     private boolean hasMagazine = false;
     private int magazineReloadDelay = 20;

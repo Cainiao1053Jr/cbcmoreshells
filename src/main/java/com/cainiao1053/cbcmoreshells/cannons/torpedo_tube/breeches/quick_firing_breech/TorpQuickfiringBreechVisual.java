@@ -59,8 +59,36 @@ public class TorpQuickfiringBreechVisual extends AbstractBlockEntityVisual<TorpQ
 		if (facing.getAxis() == Direction.Axis.X && alongFirst) {
 			this.breechblock.rotation(Axis.of(this.blockRotation.step()).rotationDegrees(90f));
 		}
+		rotateBreechblock(breechblock, facing);
 
+//		breechblock.rotateXDegrees(90);
+//		breechblock.rotateYDegrees(180);
+//		breechblock.rotateZDegrees(180);
 		this.transformModels(partialTick);
+	}
+
+	private static void rotateBreechblock(OrientedInstance breechblock, Direction facing) {
+		switch (facing) {
+			case EAST ->{
+				breechblock.rotateXDegrees(90);
+				breechblock.rotateZDegrees(180);
+				breechblock.rotateYDegrees(180);
+			}
+			case WEST ->{
+				breechblock.rotateXDegrees(90);
+				breechblock.rotateYDegrees(180);
+			}
+			case NORTH ->{
+				breechblock.rotateXDegrees(90);
+				breechblock.rotateYDegrees(180);
+			}
+			case SOUTH ->{
+				breechblock.rotateXDegrees(90);
+				breechblock.rotateYDegrees(180);
+				breechblock.rotateZDegrees(180);
+			}
+			default ->{}
+		}
 	}
 
 	@Override
@@ -83,6 +111,25 @@ public class TorpQuickfiringBreechVisual extends AbstractBlockEntityVisual<TorpQ
 		Quaternionf qrot = Axis.of(this.direction.step()).rotationDegrees(angle);
 		this.shaft.position(visualPos).rotation(qrot).setChanged();
 		this.lever.position(visualPos.relative(this.direction)).rotation(qrot).setChanged();
+		rotateLever(this.lever, this.direction);
+	}
+
+	private static void rotateLever(OrientedInstance lever, Direction direction){
+		switch(direction){
+			case NORTH ->{
+				lever.rotateYDegrees(180);
+			}
+			case EAST ->{
+				lever.rotateYDegrees(90);
+			}
+			case WEST -> {
+				lever.rotateYDegrees(-90);
+			}
+			case SOUTH -> {
+				//lever.rotateYDegrees(90);
+			}
+			default -> {}
+		}
 	}
 
 	@Override

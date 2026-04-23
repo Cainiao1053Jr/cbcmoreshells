@@ -214,7 +214,7 @@ public class CBCMSBlockEntities {
 			.visual(() -> FuzedBlockVisual::new)
 			.renderer(() -> FuzedBlockEntityRenderer::new)
 			.validBlocks(
-					CBCMSBlocks.NORMAL_AP_SHELL,
+					CBCMSBlocks.NORMAL_AP_SHOT,
 					CBCMSBlocks.NORMAL_HE_SHELL,
 					CBCMSBlocks.NORMAL_SAP_SHELL,
 					CBCMSBlocks.NORMAL_AP_SHELL,

@@ -2,6 +2,7 @@ package com.cainiao1053.cbcmoreshells.munitions.dual_cannon;
 
 import java.util.List;
 
+import com.cainiao1053.cbcmoreshells.index.CBCMSBlockEntities;
 import com.simibubi.create.foundation.block.IBE;
 
 import net.minecraft.core.BlockPos;
@@ -139,6 +140,6 @@ public abstract class InertDualCannonProjectileBlock<S extends AbstractDualCanno
 	}
 
 	@Override public Class<BigCannonProjectileBlockEntity> getBlockEntityClass() { return BigCannonProjectileBlockEntity.class; }
-	@Override public BlockEntityType<? extends BigCannonProjectileBlockEntity> getBlockEntityType() { return CBCBlockEntities.PROJECTILE_BLOCK.get(); }
+	@Override public BlockEntityType<? extends BigCannonProjectileBlockEntity> getBlockEntityType() { return CBCMSBlockEntities.FUZED_BLOCK.get(); }
 
 }

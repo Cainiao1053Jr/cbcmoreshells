@@ -53,10 +53,15 @@ public class ProjectileRackQuickfiringBreechVisual extends AbstractBlockEntityVi
 			this.breechblock.rotation(Axis.YN.rotationDegrees(-90f));
 		} else if (facing == Direction.NORTH) {
 			this.breechblock.rotation(Axis.of(this.blockRotation.step()).rotationDegrees(180f));
+			this.breechblock.rotateXDegrees(-90);
 		} else if (facing == Direction.WEST) {
 			this.breechblock.rotation(Axis.of(this.blockRotation.step()).rotationDegrees(270f));
+			this.breechblock.rotateXDegrees(-90);
 		} else if (facing == Direction.EAST) {
 			this.breechblock.rotation(Axis.of(this.blockRotation.step()).rotationDegrees(90f));
+			this.breechblock.rotateXDegrees(-90);
+		}else{
+			this.breechblock.rotateXDegrees(-90);
 		}
 
 		this.offsetI = new Vector3f(0, 0, 0);

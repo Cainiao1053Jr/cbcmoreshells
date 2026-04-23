@@ -58,13 +58,33 @@ public class DualCannonQuickfiringBreechVisual extends AbstractBlockEntityVisual
                 this.breechblock.rotateTo(Direction.NORTH, this.blockRotation).rotateDegrees(90f, Direction.NORTH);
             } else {
                 this.breechblock.rotateTo(Direction.NORTH, Direction.UP);
-                if (facing.getAxis() == Direction.Axis.X)
-                    this.breechblock.rotateZDegrees(90f);
+				rotateToVertical(this.breechblock, facing);
+                if (facing.getAxis() == Direction.Axis.X){
+					this.breechblock.rotateZDegrees(90f);
+				}
             }
         } else if (!alongFirst) {
             this.breechblock.rotateYDegrees(90f);
         }
         this.transformModels(partialTick);
+	}
+
+	public static void rotateToVertical(OrientedInstance breechblock, Direction facing){
+		switch (facing) {
+			case EAST ->{
+				breechblock.rotateYDegrees(-90f);
+			}
+			case WEST ->{
+				breechblock.rotateYDegrees(90f);
+			}
+			case NORTH ->{
+				breechblock.rotateXDegrees(-90f);
+			}
+			case SOUTH ->{
+				breechblock.rotateXDegrees(90f);
+			}
+			default ->{}
+		}
 	}
 
 	@Override
@@ -81,8 +101,8 @@ public class DualCannonQuickfiringBreechVisual extends AbstractBlockEntityVisual
 		normal.mul(renderedBreechblockOffset);
 		this.breechblock.position(visualPos).translatePosition(normal.x(), normal.y(), normal.z()).setChanged();
 
-		float angle = progress * 90;
-		Quaternionf qrot = Axis.of(this.direction.step()).rotationDegrees(angle);
+//		float angle = progress * 90;
+//		Quaternionf qrot = Axis.of(this.direction.step()).rotationDegrees(angle);
 //		this.shaft.position(visualPos)
 //            .identityRotation()
 //            .rotate(qrot)
