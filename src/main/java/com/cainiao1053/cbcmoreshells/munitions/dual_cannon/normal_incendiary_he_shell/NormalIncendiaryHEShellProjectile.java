@@ -7,7 +7,6 @@ import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.config.DualCannonInce
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.config.DualCannonPropertiesComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Position;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
@@ -20,9 +19,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
-import org.joml.Vector3d;
-import org.joml.primitives.AABBdc;
-import org.valkyrienskies.mod.common.VSGameUtilsKt;
 import rbasamoyai.createbigcannons.CreateBigCannons;
 import rbasamoyai.createbigcannons.config.CBCConfigs;
 import rbasamoyai.createbigcannons.munitions.ShellExplosion;
@@ -48,7 +44,7 @@ public class NormalIncendiaryHEShellProjectile extends FuzedDualCannonProjectile
 		float explosivePower = this.getAllProperties().explosion().explosivePower()*((this.getDurabilityModifier()-1)/1.2f+1);
 		ShellExplosion explosion = new ShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
 			position.y(), position.z(), explosivePower, false,
-			CBCConfigs.SERVER.munitions.damageRestriction.get().explosiveInteraction());
+			CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
 		CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 		if(Math.random() > fireChance) {
 			return;
@@ -56,17 +52,17 @@ public class NormalIncendiaryHEShellProjectile extends FuzedDualCannonProjectile
 		spawnFire(new BlockPos((int)position.x(), (int)position.y(), (int)position.z()), this.level(), fireRange);
 		AABB currentMovementRegion = this.getBoundingBox()
 				.inflate(3);
-		var shipWorldCore = VSGameUtilsKt.getShipObjectWorld((ServerLevel) this.level());
-		for(var ship :shipWorldCore.getLoadedShips()){
-			AABBdc shipABdc = ship.getWorldAABB();
-			AABB shipAABB = toAABB(shipABdc);
-			if(currentMovementRegion.intersects(shipAABB)){
-				//return true;
-				Vector3d incPos = ship.getWorldToShip().transformPosition(new Vector3d(position.x(), position.y(), position.z()));
-				BlockPos incBp = new BlockPos((int)incPos.x, (int)incPos.y, (int)incPos.z);
-				spawnFire(incBp, this.level(), fireRange);
-			}
-		}
+//		var shipWorldCore = VSGameUtilsKt.getShipObjectWorld((ServerLevel) this.level());
+//		for(var ship :shipWorldCore.getLoadedShips()){
+//			AABBdc shipABdc = ship.getWorldAABB();
+//			AABB shipAABB = toAABB(shipABdc);
+//			if(currentMovementRegion.intersects(shipAABB)){
+//				//return true;
+//				Vector3d incPos = ship.getWorldToShip().transformPosition(new Vector3d(position.x(), position.y(), position.z()));
+//				BlockPos incBp = new BlockPos((int)incPos.x, (int)incPos.y, (int)incPos.z);
+//				spawnFire(incBp, this.level(), fireRange);
+//			}
+//		}
 		//if(hitBlockPos != null) {}
 	}
 
@@ -112,12 +108,12 @@ public class NormalIncendiaryHEShellProjectile extends FuzedDualCannonProjectile
 		}
 	}
 
-	public static AABB toAABB(AABBdc i) {
-		return new AABB(
-				i.minX(), i.minY(), i.minZ(),
-				i.maxX(), i.maxY(), i.maxZ()
-		);
-	}
+//	public static AABB toAABB(AABBdc i) {
+//		return new AABB(
+//				i.minX(), i.minY(), i.minZ(),
+//				i.maxX(), i.maxY(), i.maxZ()
+//		);
+//	}
 
 
 	@Nonnull

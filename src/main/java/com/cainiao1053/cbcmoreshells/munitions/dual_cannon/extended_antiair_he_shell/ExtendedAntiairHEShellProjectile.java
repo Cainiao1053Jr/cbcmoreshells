@@ -32,7 +32,7 @@ public class ExtendedAntiairHEShellProjectile extends FuzedDualCannonProjectile 
 		float explosivePower = this.getAllProperties().explosion().explosivePower()*((this.getDurabilityModifier()-1)/1.5f+1) * explosionMultiplier;
 		ShellExplosion explosion = new ShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
 			position.y(), position.z(), explosivePower, false,
-			CBCConfigs.SERVER.munitions.damageRestriction.get().explosiveInteraction());
+			CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
 		CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 	}
 

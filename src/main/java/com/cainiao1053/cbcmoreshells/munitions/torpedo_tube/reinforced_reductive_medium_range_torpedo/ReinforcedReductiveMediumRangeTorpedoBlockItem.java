@@ -22,10 +22,10 @@ public class ReinforcedReductiveMediumRangeTorpedoBlockItem extends FuzedTorpedo
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-		super.appendHoverText(stack, level, tooltip, flag);
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+		super.appendHoverText(stack, context, tooltip, flag);
 		ReductiveTorpedoProperties properties = CBCMSMunitionPropertiesHandlers.REDUCTIVE_TORPEDO_PROJECTILE.getPropertiesOf(REINFORCED_REDUCTIVE_MEDIUM_RANGE_TORPEDO.get());
-		CBCMSTooltip.appendReductiveTorpedoInfo(stack, level, tooltip, flag, properties);
+		CBCMSTooltip.appendReductiveTorpedoInfo(stack, context, tooltip, flag, properties);
 
 	}
 

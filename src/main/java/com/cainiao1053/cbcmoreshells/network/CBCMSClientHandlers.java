@@ -51,9 +51,6 @@ public class CBCMSClientHandlers {
 		dual.commandEffect   = effect;
 		dual.commandCooldown = cooldown;
 		dual.commandLeft     = left;
-
-		// 若你的渲染/GUI依赖这些值，可在这里触发可视刷新（按你的实现需要决定是否调用）
-		// 例如：poce.setChanged(); 或请求重渲染等
 	}
 
 

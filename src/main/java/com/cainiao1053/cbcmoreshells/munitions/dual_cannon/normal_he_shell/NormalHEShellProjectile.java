@@ -29,7 +29,7 @@ public class NormalHEShellProjectile extends FuzedDualCannonProjectile {
 		float explosivePower = this.getAllProperties().explosion().explosivePower()*((this.getDurabilityModifier()-1)/1.2f+1);
 		ShellExplosion explosion = new ShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
 			position.y(), position.z(), explosivePower, false,
-			CBCConfigs.SERVER.munitions.damageRestriction.get().explosiveInteraction());
+			CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
 		CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 	}
 

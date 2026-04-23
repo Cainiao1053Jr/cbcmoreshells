@@ -11,6 +11,7 @@ import net.minecraft.core.Position;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
@@ -46,7 +47,7 @@ public class NormalAPShellProjectile extends FuzedDualCannonProjectile {
 		//float explosivePower = ((this.getDurabilityModifier()) * 0.5f + 0.4f) * initialPower;
 		ShellExplosion explosion = new ShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
 			position.y(), position.z(), explosivePower, false,
-			CBCConfigs.SERVER.munitions.damageRestriction.get().explosiveInteraction());
+			CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
 		CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 	}
 
@@ -103,7 +104,7 @@ public class NormalAPShellProjectile extends FuzedDualCannonProjectile {
 		double toughness = blockArmor.toughness(this.level(), state, pos, true);
 
 		double projectileDeflection = ballistics.deflection();
-		double baseChance = CBCConfigs.SERVER.munitions.baseProjectileBounceChance.getF();
+		double baseChance = CBCConfigs.server().munitions.baseProjectileBounceChance.getF();
 		double bounceChance = projectileDeflection < 1e-2d || incidence > projectileDeflection ? 0 : Math.max(0, 1 - incidence / projectileDeflection + baseChance);
 
 		boolean penetrate = false;
@@ -161,7 +162,7 @@ public class NormalAPShellProjectile extends FuzedDualCannonProjectile {
 			}
 			Vec3 spallLoc = hitLoc.add(curVel.normalize().scale(2));
 			if (!this.level().isClientSide) {
-				ImpactExplosion explosion = new ImpactExplosion(this.level(), this, this.indirectArtilleryFire(false), spallLoc.x, spallLoc.y, spallLoc.z, 1, Level.ExplosionInteraction.NONE);
+				ImpactExplosion explosion = new ImpactExplosion(this.level(), this, this.indirectArtilleryFire(false), spallLoc.x, spallLoc.y, spallLoc.z, 1, Explosion.BlockInteraction.KEEP);
 				CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 			}
 			SoundType sound = state.getSoundType();

@@ -22,10 +22,10 @@ public class MediumRangeTorpedoTypeBBlockItem extends FuzedTorpedoProjectileBloc
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-		super.appendHoverText(stack, level, tooltip, flag);
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+		super.appendHoverText(stack, context, tooltip, flag);
 		TorpedoProperties properties = CBCMSMunitionPropertiesHandlers.TORPEDO_PROJECTILE.getPropertiesOf(MEDIUM_RANGE_TORPEDO_TYPEB.get());
-		CBCMSTooltip.appendTorpedoInfo(stack, level, tooltip, flag, properties);
+		CBCMSTooltip.appendTorpedoInfo(stack, context, tooltip, flag, properties);
 
 	}
 

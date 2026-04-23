@@ -11,6 +11,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import org.checkerframework.checker.units.qual.C;
 import rbasamoyai.createbigcannons.munitions.FuzedProjectileBlockItem;
 
 import javax.annotation.Nullable;
@@ -26,16 +27,16 @@ public class BakedAPFSDSProjectileBlockItem extends FuzedProjectileBlockItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-		super.appendHoverText(stack, level, tooltip, flag);
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+		super.appendHoverText(stack, context, tooltip, flag);
 		boolean desc = Screen.hasShiftDown();
 		if (!desc) {
 			addHoldShift(desc, tooltip);
 			return;
 		}
 		String key1 = "block."+Cbcmoreshells.MODID+".baked_apfsds_shot.tooltip.title";
-		TooltipHelper.Palette palette = getPalette(level, stack);
-		tooltip.add(Components.translatable(key1).withStyle(ChatFormatting.GRAY));
+		TooltipHelper.Palette palette = getPalette();
+		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		String key2 = "block."+Cbcmoreshells.MODID+".baked_apfsds_shot.tooltip.desc";
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key2), palette.primary(), palette.highlight(), 1));
 

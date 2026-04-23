@@ -26,7 +26,7 @@ public class APHELoiteringRocketBlockItem extends AbstractRackedRocketBlockItem<
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		//super.appendHoverText(stack, level, tooltip, flag);
 		//RackedLoiteringRocketProjectileProperties properties = CBCMSMunitionPropertiesHandlers.LOITERING_ROCKET.getPropertiesOf(HE_LOITERING_ROCKET.get());
 		//CBCMSTooltip.appendRackedRocketInfo(stack, level, tooltip, flag, properties.ballistics().durabilityMass(), properties.ballistics().penetration(), properties.ballistics().deflection(), properties.explosion().explosivePower(),properties.lifetime(), properties.steadyStateVel(), properties.thrustTime());

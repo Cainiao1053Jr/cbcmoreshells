@@ -19,18 +19,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.storage.loot.LootPool;
-import net.minecraft.world.level.storage.loot.LootTable;
-import net.minecraft.world.level.storage.loot.entries.LootItem;
-import net.minecraft.world.level.storage.loot.functions.CopyNbtFunction;
-import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
-import net.minecraft.world.level.storage.loot.providers.nbt.ContextNbtProvider;
-import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
-import net.minecraftforge.client.model.generators.BlockModelBuilder;
 import rbasamoyai.createbigcannons.CBCTags;
-import rbasamoyai.createbigcannons.munitions.big_cannon.propellant.BigCannonPropellantBlock;
-import rbasamoyai.createbigcannons.munitions.big_cannon.propellant.BigCartridgeBlock;
-import rbasamoyai.createbigcannons.munitions.big_cannon.propellant.BigCartridgeBlockItem;
 import rbasamoyai.createbigcannons.utils.CBCUtils;
 
 public class CBCMSBuilderTransformers {
@@ -179,26 +168,26 @@ public class CBCMSBuilderTransformers {
 
 
 
-	public static <T extends Block, P> NonNullUnaryOperator<BlockBuilder<T, P>> unuese_projectile(String pathAndMaterial) {
-		return unused_projectile(pathAndMaterial, false);
-	}
-
-	public static <T extends Block, P> NonNullUnaryOperator<BlockBuilder<T, P>> unused_projectile(String pathAndMaterial, boolean useStandardModel) {
-		ResourceLocation baseLoc = Cbcmoreshells.resource(String.format("block/%sprojectile_block", useStandardModel ? "standard_" : ""));
-		ResourceLocation sideLoc = Cbcmoreshells.resource("block/" + pathAndMaterial);
-		ResourceLocation topLoc = Cbcmoreshells.resource("block/" + pathAndMaterial + "_top");
-		ResourceLocation bottomLoc = Cbcmoreshells.resource("block/" + pathAndMaterial + "_bottom");
-		return b -> b.properties(p -> p.noOcclusion())
-			.addLayer(() -> RenderType::solid)
-			.blockstate((c, p) -> {
-				BlockModelBuilder builder = p.models().withExistingParent(c.getName(), baseLoc)
-					.texture("side", sideLoc)
-					.texture("top", topLoc)
-					.texture("particle", topLoc);
-				if (!useStandardModel) builder.texture("bottom", bottomLoc);
-				p.directionalBlock(c.get(), builder);
-			});
-	}
+//	public static <T extends Block, P> NonNullUnaryOperator<BlockBuilder<T, P>> unuese_projectile(String pathAndMaterial) {
+//		return unused_projectile(pathAndMaterial, false);
+//	}
+//
+//	public static <T extends Block, P> NonNullUnaryOperator<BlockBuilder<T, P>> unused_projectile(String pathAndMaterial, boolean useStandardModel) {
+//		ResourceLocation baseLoc = Cbcmoreshells.resource(String.format("block/%sprojectile_block", useStandardModel ? "standard_" : ""));
+//		ResourceLocation sideLoc = Cbcmoreshells.resource("block/" + pathAndMaterial);
+//		ResourceLocation topLoc = Cbcmoreshells.resource("block/" + pathAndMaterial + "_top");
+//		ResourceLocation bottomLoc = Cbcmoreshells.resource("block/" + pathAndMaterial + "_bottom");
+//		return b -> b.properties(p -> p.noOcclusion())
+//			.addLayer(() -> RenderType::solid)
+//			.blockstate((c, p) -> {
+//				BlockModelBuilder builder = p.models().withExistingParent(c.getName(), baseLoc)
+//					.texture("side", sideLoc)
+//					.texture("top", topLoc)
+//					.texture("particle", topLoc);
+//				if (!useStandardModel) builder.texture("bottom", bottomLoc);
+//				p.directionalBlock(c.get(), builder);
+//			});
+//	}
 
 	public static <T extends Block, P> NonNullUnaryOperator<BlockBuilder<T, P>> powderCharge() {
 		ResourceLocation baseLoc = Cbcmoreshells.resource("block/powder_charge");
@@ -207,30 +196,30 @@ public class CBCMSBuilderTransformers {
 			.blockstate((c, p) -> BlockStateGen.axisBlock(c, p, $ -> p.models().getExistingFile(baseLoc)));
 	}
 
-	public static <T extends BigCartridgeBlock & BigCannonPropellantBlock, P> NonNullUnaryOperator<BlockBuilder<T, P>> bigCartridge() {
-		ResourceLocation filledLoc = Cbcmoreshells.resource("block/big_cartridge_filled");
-		ResourceLocation emptyLoc = Cbcmoreshells.resource("block/big_cartridge_empty");
-		return b -> b.properties(p -> p.noOcclusion())
-			.addLayer(() -> RenderType::solid)
-			.blockstate((c, p) -> BlockStateGen.directionalBlockIgnoresWaterlogged(c, p, s -> {
-				return p.models().getExistingFile(s.getValue(BigCartridgeBlock.FILLED) ? filledLoc : emptyLoc);
-			}))
-			.tag(AllBlockTags.SAFE_NBT.tag)
-			.loot((t, c) -> {
-				t.add(c, LootTable.lootTable()
-					.withPool(t.applyExplosionCondition(c, LootPool.lootPool()
-						.add(LootItem.lootTableItem(c))
-						.apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
-						.apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy("Power", "Power")))));
-			})
-			.item(BigCartridgeBlockItem::new)
-			.tag(CBCTags.CBCItemTags.BIG_CANNON_CARTRIDGES)
-			.model((c, p) -> {
-				p.withExistingParent(c.getName(), emptyLoc)
-					.override().model(p.getExistingFile(filledLoc)).predicate(Cbcmoreshells.resource("big_cartridge_filled"), 1).end();
-			})
-			.build();
-	}
+//	public static <T extends BigCartridgeBlock & BigCannonPropellantBlock, P> NonNullUnaryOperator<BlockBuilder<T, P>> bigCartridge() {
+//		ResourceLocation filledLoc = Cbcmoreshells.resource("block/big_cartridge_filled");
+//		ResourceLocation emptyLoc = Cbcmoreshells.resource("block/big_cartridge_empty");
+//		return b -> b.properties(p -> p.noOcclusion())
+//			.addLayer(() -> RenderType::solid)
+//			.blockstate((c, p) -> BlockStateGen.directionalBlockIgnoresWaterlogged(c, p, s -> {
+//				return p.models().getExistingFile(s.getValue(BigCartridgeBlock.FILLED) ? filledLoc : emptyLoc);
+//			}))
+//			.tag(AllBlockTags.SAFE_NBT.tag)
+//			.loot((t, c) -> {
+//				t.add(c, LootTable.lootTable()
+//					.withPool(t.applyExplosionCondition(c, LootPool.lootPool()
+//						.add(LootItem.lootTableItem(c))
+//						.apply(SetItemCountFunction.setCount(ConstantValue.exactly(1)))
+//						.apply(CopyNbtFunction.copyData(ContextNbtProvider.BLOCK_ENTITY).copy("Power", "Power")))));
+//			})
+//			.item(BigCartridgeBlockItem::new)
+//			.tag(CBCTags.CBCItemTags.BIG_CANNON_CARTRIDGES)
+//			.model((c, p) -> {
+//				p.withExistingParent(c.getName(), emptyLoc)
+//					.override().model(p.getExistingFile(filledLoc)).predicate(Cbcmoreshells.resource("big_cartridge_filled"), 1).end();
+//			})
+//			.build();
+//	}
 
 
 

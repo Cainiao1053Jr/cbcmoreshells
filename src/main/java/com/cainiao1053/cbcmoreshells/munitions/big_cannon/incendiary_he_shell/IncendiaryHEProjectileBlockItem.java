@@ -25,8 +25,8 @@ public class IncendiaryHEProjectileBlockItem extends FuzedProjectileBlockItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-		super.appendHoverText(stack, level, tooltip, flag);
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+		super.appendHoverText(stack, context, tooltip, flag);
 		boolean desc = Screen.hasShiftDown();
 		if (!desc) {
 			addHoldShift(desc, tooltip);
@@ -34,7 +34,7 @@ public class IncendiaryHEProjectileBlockItem extends FuzedProjectileBlockItem {
 		}
 
 		BigCannonIncendiaryShellProperties properties = CBCMSMunitionPropertiesHandlers.INCENDIARY_SHELL_PROJECTILE.getPropertiesOf(INCENDIARY_HE_SHELL.get());
-		CBCMSTooltip.appendIncendiaryInfo(stack, level, tooltip, flag, properties.ballistics().durabilityMass(), properties.ballistics().penetration(), properties.ballistics().deflection(),properties.explosion().explosivePower(), properties.fireChance(), properties.fireRange());
+		CBCMSTooltip.appendIncendiaryInfo(stack, context, tooltip, flag, properties.ballistics().durabilityMass(), properties.ballistics().penetration(), properties.ballistics().deflection(),properties.explosion().explosivePower(), properties.fireChance(), properties.fireRange());
 
 	}
 

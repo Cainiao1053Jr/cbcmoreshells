@@ -44,7 +44,7 @@ public class CannonTorpedoProjectile extends FuzedCannonTorpedoProjectile {
 
 		ShellExplosion explosion = new ShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
 			position.y(), position.z(), explosivePower, false,
-			CBCConfigs.SERVER.munitions.damageRestriction.get().explosiveInteraction());
+			CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
 
 		Cbcmoreshells.LOGGER.info("Explosive power: " + explosivePower);
 

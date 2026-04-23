@@ -1,10 +1,11 @@
 package com.cainiao1053.cbcmoreshells.mixin;
 
-import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.level.Level;
 import org.spongepowered.asm.mixin.Mixin;
@@ -21,15 +22,15 @@ import rbasamoyai.createbigcannons.munitions.fuzes.FuzeItem;
 public abstract class MunitionFuzingRecipeMixin extends CustomRecipe {
 
 	private MunitionFuzingRecipeMixin() {
-		super(null, null);
+		super(null);
 	}
 
 	@Inject(method = "matches", at = @At("HEAD"), cancellable = true, remap = false)
-	private void injectedMatches(CraftingContainer container, Level level, CallbackInfoReturnable<Boolean> cir) {
+	private void injectedMatches(CraftingInput container, Level level, CallbackInfoReturnable<Boolean> cir) {
 		ItemStack round = ItemStack.EMPTY;
 		ItemStack fuze = ItemStack.EMPTY;
 
-		for (int i = 0; i < container.getContainerSize(); ++i) {
+		for (int i = 0; i < container.size(); ++i) {
 			ItemStack stack = container.getItem(i);
 			if (stack.isEmpty()) continue;
 
@@ -42,13 +43,15 @@ public abstract class MunitionFuzingRecipeMixin extends CustomRecipe {
 			}
 
 			if (stack.getItem() instanceof FuzedItemMunition) {
-				if (!round.isEmpty() || stack.getOrCreateTag().contains("Fuze", Tag.TAG_COMPOUND)) {
+				CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
+				if (!round.isEmpty() || (customData != null && customData.copyTag().contains("Fuze"))) {
 					cir.setReturnValue(false);
 					return;
 				}
 				round = stack;
 			} else if (stack.getItem() instanceof FuzedProjectileBlockItem) {
-				if (!round.isEmpty() || stack.getOrCreateTag().getCompound("BlockEntityTag").contains("Fuze", Tag.TAG_COMPOUND)) {
+				CustomData blockData = stack.get(DataComponents.BLOCK_ENTITY_DATA);
+				if (!round.isEmpty() || (blockData != null && blockData.copyTag().contains("Fuze"))) {
 					cir.setReturnValue(false);
 					return;
 				}
@@ -69,11 +72,11 @@ public abstract class MunitionFuzingRecipeMixin extends CustomRecipe {
 	}
 
 	@Inject(method = "assemble", at = @At("HEAD"), cancellable = true, remap = false)
-	private void injectedAssemble(CraftingContainer container, RegistryAccess access, CallbackInfoReturnable<ItemStack> cir) {
+	private void injectedAssemble(CraftingInput container, HolderLookup.Provider registries, CallbackInfoReturnable<ItemStack> cir) {
 		ItemStack round = ItemStack.EMPTY;
 		ItemStack fuze = ItemStack.EMPTY;
 
-		for (int i = 0; i < container.getContainerSize(); ++i) {
+		for (int i = 0; i < container.size(); ++i) {
 			ItemStack stack = container.getItem(i);
 			if (stack.isEmpty()) continue;
 
@@ -104,19 +107,30 @@ public abstract class MunitionFuzingRecipeMixin extends CustomRecipe {
 		result.setCount(1);
 		ItemStack fuzeCopy = fuze.copy();
 		fuzeCopy.setCount(1);
-		CompoundTag tag = result.getOrCreateTag();
 
 		if (result.getItem() instanceof FuzedItemMunition) {
-			tag.put("Fuze", fuzeCopy.save(new CompoundTag()));
+			result.update(DataComponents.CUSTOM_DATA, CustomData.EMPTY, data -> {
+				CompoundTag nbt = data.copyTag();
+				nbt.put("Fuze", fuzeCopy.save(registries));
+				return CustomData.of(nbt);
+			});
 		} else if (result.getItem() instanceof AutocannonCartridgeItem) {
-			CompoundTag projectileTag = tag.getCompound("Projectile").getCompound("tag");
-			projectileTag.put("Fuze", fuzeCopy.save(new CompoundTag()));
-			tag.getCompound("Projectile").put("tag", projectileTag);
+			result.update(DataComponents.CUSTOM_DATA, CustomData.EMPTY, data -> {
+				CompoundTag nbt = data.copyTag();
+				CompoundTag projectile = nbt.getCompound("Projectile");
+				CompoundTag projectileTag = projectile.getCompound("tag");
+				projectileTag.put("Fuze", fuzeCopy.save(registries));
+				projectile.put("tag", projectileTag);
+				nbt.put("Projectile", projectile);
+				return CustomData.of(nbt);
+			});
 		} else if (result.getItem() instanceof FuzedProjectileBlockItem) {
-			CompoundTag blockEntityTag = tag.getCompound("BlockEntityTag");
-			blockEntityTag.put("Fuze", fuzeCopy.save(new CompoundTag()));
-			blockEntityTag.putString("id", "createbigcannons:fuzed_block");
-			tag.put("BlockEntityTag", blockEntityTag);
+			result.update(DataComponents.BLOCK_ENTITY_DATA, CustomData.EMPTY, data -> {
+				CompoundTag nbt = data.copyTag();
+				nbt.put("Fuze", fuzeCopy.save(registries));
+				nbt.putString("id", "createbigcannons:fuzed_block");
+				return CustomData.of(nbt);
+			});
 		}
 
 		cir.setReturnValue(result);

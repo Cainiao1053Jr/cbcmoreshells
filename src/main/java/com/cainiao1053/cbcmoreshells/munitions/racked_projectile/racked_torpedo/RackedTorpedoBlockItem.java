@@ -23,10 +23,10 @@ public class RackedTorpedoBlockItem extends FuzedRackedProjectileBlockItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-		super.appendHoverText(stack, level, tooltip, flag);
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+		super.appendHoverText(stack, context, tooltip, flag);
 		RackedTorpedoProjectileProperties properties = CBCMSMunitionPropertiesHandlers.RACKED_TORPEDO.getPropertiesOf(RACKED_TORPEDO.get());
-		CBCMSTooltip.appendRackedTorpedoInfo(stack, level, tooltip, flag, properties.explosion().explosivePower(),properties.lifetime(), properties.buoyancyFactor(), properties.steadyStateVel(), properties.waterDamp());
+		CBCMSTooltip.appendRackedTorpedoInfo(stack, context, tooltip, flag, properties.explosion().explosivePower(),properties.lifetime(), properties.buoyancyFactor(), properties.steadyStateVel(), properties.waterDamp());
 	}
 
 }

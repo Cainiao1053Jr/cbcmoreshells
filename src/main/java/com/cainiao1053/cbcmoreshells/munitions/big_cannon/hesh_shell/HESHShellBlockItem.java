@@ -25,16 +25,16 @@ public class HESHShellBlockItem extends FuzedProjectileBlockItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-		super.appendHoverText(stack, level, tooltip, flag);
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+		super.appendHoverText(stack, context, tooltip, flag);
 		boolean desc = Screen.hasShiftDown();
 		if (!desc) {
 			addHoldShift(desc, tooltip);
 			return;
 		}
 		String key1 = stack.getDescriptionId()+".tooltip.title";
-		TooltipHelper.Palette palette = getPalette(level, stack);
-		tooltip.add(Components.translatable(key1).withStyle(ChatFormatting.GRAY));
+		TooltipHelper.Palette palette = getPalette();
+		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		String key2 = stack.getDescriptionId()+".tooltip.desc";
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key2), palette.primary(), palette.highlight(), 1));
 

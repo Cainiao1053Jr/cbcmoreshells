@@ -44,7 +44,7 @@ public class ShellessIncendiaryHEShellProjectile extends ShellessFuzedBigCannonP
 		boolean doFire = Math.random() < fireRate;
         ShellExplosion explosion = new ShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
 			position.y(), position.z(), this.getAllProperties().explosion().explosivePower(), false,
-			CBCConfigs.SERVER.munitions.damageRestriction.get().explosiveInteraction());
+			CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
 		CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 		BlockPos pos = BlockPos.containing(position);
 
