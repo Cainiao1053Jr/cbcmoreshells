@@ -26,6 +26,8 @@ import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.TorpedoTubeBlockItem;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.TorpedoTubeBodyBlock;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.breeches.quick_firing_breech.TorpQuickfiringBreechBlock;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.breeches.sliding_breech.TorpedoSlidingBreechBlock;
+import com.cainiao1053.cbcmoreshells.config.CBCMSCfgStress;
+import com.cainiao1053.cbcmoreshells.config.CBCMSConfigs;
 import com.cainiao1053.cbcmoreshells.datagen.assets.CBCMSBuilderTransformers;
 import com.cainiao1053.cbcmoreshells.index.CBCMSDualCannonMaterials;
 import com.cainiao1053.cbcmoreshells.index.CBCMSProjectileRackMaterials;
@@ -2919,7 +2921,7 @@ public class CBCMSBlocks {
 					.strength(4f,16f)
 					.noOcclusion())
 			.addLayer(() -> RenderType::cutoutMipped)
-			.transform(BlockStressDefaults.setImpact(32.0f))
+			.transform(CBCMSCfgStress.setImpact(32))
 			.transform(axeOrPickaxe())
 			.item(TorpedoDetectionDeviceBlockItem::new)
 			.transform(customItemModel())

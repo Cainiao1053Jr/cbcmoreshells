@@ -282,4 +282,12 @@ public class ModGroup {
 		Cbcmoreshells.REGISTRATE.addRawLang("itemGroup." + Cbcmoreshells.MODID, "CBCMS");
 	}
 
+	public static void registerNeoForge(IEventBus modBus) {
+		TAB_REGISTER.register(modBus);
+	}
+
+	public static void setDefaultTabToNull() {
+		Cbcmoreshells.REGISTRATE.defaultCreativeTab((ResourceKey<CreativeModeTab>) null);
+	}
+
 }

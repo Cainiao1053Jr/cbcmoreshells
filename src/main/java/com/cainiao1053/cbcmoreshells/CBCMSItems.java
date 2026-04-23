@@ -122,17 +122,17 @@ public class CBCMSItems {
             .properties(properties -> properties.stacksTo(1))
             .register();
 
-    public static final ItemEntry<DualCannonComboItem> DUAL_CANNON_COMBO = REGISTRATE.item("dual_cannon_combo", DualCannonComboItem::new)
-            .properties(properties -> properties.stacksTo(8))
-            .register();
-
-    public static final ItemEntry<SingleCannonComboItem> SINGLE_CANNON_COMBO = REGISTRATE.item("single_cannon_combo", SingleCannonComboItem::new)
-            .properties(properties -> properties.stacksTo(8))
-            .register();
-
-    public static final ItemEntry<BigCannonComboItem> BIG_CANNON_COMBO = REGISTRATE.item("big_cannon_combo", BigCannonComboItem::new)
-            .properties(properties -> properties.stacksTo(8))
-            .register();
+//    public static final ItemEntry<DualCannonComboItem> DUAL_CANNON_COMBO = REGISTRATE.item("dual_cannon_combo", DualCannonComboItem::new)
+//            .properties(properties -> properties.stacksTo(8))
+//            .register();
+//
+//    public static final ItemEntry<SingleCannonComboItem> SINGLE_CANNON_COMBO = REGISTRATE.item("single_cannon_combo", SingleCannonComboItem::new)
+//            .properties(properties -> properties.stacksTo(8))
+//            .register();
+//
+//    public static final ItemEntry<BigCannonComboItem> BIG_CANNON_COMBO = REGISTRATE.item("big_cannon_combo", BigCannonComboItem::new)
+//            .properties(properties -> properties.stacksTo(8))
+//            .register();
 
     public static final ItemEntry<SequencedAssemblyItem> ASSEMBLED_TORPEDO_HEAD = sequencedIngredient("assembled_torpedo_head");
 

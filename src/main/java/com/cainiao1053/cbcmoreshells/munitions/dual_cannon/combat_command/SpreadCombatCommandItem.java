@@ -22,8 +22,8 @@ public class SpreadCombatCommandItem extends CombatCommandBaseItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-		super.appendHoverText(stack, level, tooltip, flag);
-		CBCMSTooltip.appendCombatCommandSpreadInfo(stack,level,tooltip,flag,getCommandSpreadModifier());
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+		super.appendHoverText(stack, context, tooltip, flag);
+		CBCMSTooltip.appendCombatCommandSpreadInfo(stack,context,tooltip,flag,getCommandSpreadModifier());
 	}
 }

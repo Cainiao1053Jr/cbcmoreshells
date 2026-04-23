@@ -52,6 +52,8 @@ public class Cbcmoreshells {
     }
 
     public static void init() {
+        ModGroup.register();
+        ModGroup.setDefaultTabToNull();
         CBCMSBlocks.register();
         CBCMSEntityTypes.register();
         CBCMSBlockEntities.register();
@@ -60,19 +62,22 @@ public class Cbcmoreshells {
         CBCMSCannonContraptionTypes.register();
         //CBCMSRecipeTypes.register();
 
-        //CBCMSArmInteractionPointTypes.register();
+        CBCMSArmInteractionPointTypes.register();
 
         CBCMSContraptionTypes.prepare();
         //CBCMSLangGen.prepare();
         CBCMSSoundEvents.prepare();
         CBCMSRootNetwork.init();
         CBCMSArmInteractionPointTypes.register();
-        ModGroup.register();
 
     }
 
     public static ResourceLocation resource(String path) {
         return CBCUtils.location(MODID, path);
+    }
+
+    public static void onCommonSetup() {
+
     }
 
 }

@@ -21,8 +21,8 @@ public class ReloadCombatCommandItem extends CombatCommandBaseItem {
 	}
 
 	@Override
-	public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
-		super.appendHoverText(stack, level, tooltip, flag);
-		CBCMSTooltip.appendCombatCommandReloadInfo(stack,level,tooltip,flag,getCommandReloadTimeModifier());
+	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
+		super.appendHoverText(stack, context, tooltip, flag);
+		CBCMSTooltip.appendCombatCommandReloadInfo(stack,context,tooltip,flag,getCommandReloadTimeModifier());
 	}
 }
