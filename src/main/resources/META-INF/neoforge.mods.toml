@@ -1,10 +1,10 @@
 modLoader="javafml"
-loaderVersion="[47,)"
+loaderVersion="[4,)"
 license="Custom"
 
 [[mods]]
 modId="cbcmoreshells"
-version="2.0.0-1.20.1"
+version="2.0.0-1.21.1"
 displayName="CBC More Shells"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/"
 logoFile=""

@@ -1,11 +1,11 @@
 package com.cainiao1053.cbcmoreshells;
 
 import com.cainiao1053.cbcmoreshells.config.CBCMSConfigs;
+import com.cainiao1053.cbcmoreshells.index.CBCMSArmInteractionPointTypes;
 import com.cainiao1053.cbcmoreshells.index.CBCMSContraptionTypes;
+import com.cainiao1053.cbcmoreshells.index.CBCMSDataComponents;
 import com.cainiao1053.cbcmoreshells.index.CBCMSSoundEvents;
-import net.createmod.catnip.platform.CatnipServices;
 import net.minecraft.core.Registry;
-import net.minecraft.core.particles.ParticleType;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -20,9 +20,6 @@ import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
-import net.neoforged.neoforge.registries.RegistryBuilder;
-import rbasamoyai.createbigcannons.index.CBCArmInteractionPointTypes;
-import rbasamoyai.createbigcannons.index.CBCDataComponents;
 
 
 @Mod(Cbcmoreshells.MODID)
@@ -98,8 +95,8 @@ public class CbcmoreshellsNeoForge {
 //			CannonCastShape.register();
 //		}
         CBCMSContraptionTypes.prepare();
-        CBCArmInteractionPointTypes.init();
-        CBCDataComponents.init();
+        CBCMSArmInteractionPointTypes.register();
+        CBCMSDataComponents.init();
 	}
 
     private void onRegisterSounds(RegisterEvent event) {

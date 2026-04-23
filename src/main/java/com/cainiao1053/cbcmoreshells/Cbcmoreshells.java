@@ -62,13 +62,12 @@ public class Cbcmoreshells {
         CBCMSCannonContraptionTypes.register();
         //CBCMSRecipeTypes.register();
 
-        CBCMSArmInteractionPointTypes.register();
-
-        CBCMSContraptionTypes.prepare();
+        //CBCMSContraptionTypes.prepare();
         //CBCMSLangGen.prepare();
         CBCMSSoundEvents.prepare();
         CBCMSRootNetwork.init();
-        CBCMSArmInteractionPointTypes.register();
+        //CBCMSArmInteractionPointTypes.register();
+        //CBCMSDataComponents.init();
 
     }
 
