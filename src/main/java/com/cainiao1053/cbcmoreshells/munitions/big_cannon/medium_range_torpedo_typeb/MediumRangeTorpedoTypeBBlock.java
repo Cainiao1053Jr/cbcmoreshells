@@ -2,16 +2,24 @@ package com.cainiao1053.cbcmoreshells.munitions.big_cannon.medium_range_torpedo_
 
 import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.GeneralCannonTorpedoBlock;
-import com.cainiao1053.cbcmoreshells.munitions.big_cannon.ShellessShellBlock;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.DirectionalBlock;
 import rbasamoyai.createbigcannons.index.CBCMunitionPropertiesHandlers;
 
 
 
 public class MediumRangeTorpedoTypeBBlock extends GeneralCannonTorpedoBlock<MediumRangeTorpedoTypeBProjectile> {
 
+	private static final MapCodec<MediumRangeTorpedoTypeBBlock> CODEC = simpleCodec(MediumRangeTorpedoTypeBBlock::new);
+
 	public MediumRangeTorpedoTypeBBlock(Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends DirectionalBlock> codec() {
+		return CODEC;
 	}
 
 	@Override

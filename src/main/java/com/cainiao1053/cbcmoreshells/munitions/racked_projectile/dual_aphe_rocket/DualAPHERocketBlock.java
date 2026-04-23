@@ -4,6 +4,7 @@ import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
 import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
 import com.cainiao1053.cbcmoreshells.index.CBCMSSoundEvents;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.GeneralRackedProjectileBlock;
+import com.mojang.serialization.MapCodec;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.foundation.utility.VoxelShaper;
 import net.minecraft.core.BlockPos;
@@ -13,6 +14,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -24,12 +26,19 @@ import org.valkyrienskies.mod.common.VSGameUtilsKt;
 
 public class DualAPHERocketBlock extends GeneralRackedProjectileBlock<DualAPHERocketProjectile> {
 
+	private static final MapCodec<DualAPHERocketBlock> CODEC = simpleCodec(DualAPHERocketBlock::new);
+
 	public DualAPHERocketBlock(Properties properties) {
 		super(properties);
 		this.shapes = createShapes();
 	}
 
 	private VoxelShaper shapes;
+
+	@Override
+	protected MapCodec<? extends DirectionalBlock> codec() {
+		return CODEC;
+	}
 
 	@Override
 	public boolean isBaseFuze() {

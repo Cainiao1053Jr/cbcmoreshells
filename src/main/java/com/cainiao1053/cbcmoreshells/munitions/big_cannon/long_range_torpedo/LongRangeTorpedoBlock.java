@@ -2,15 +2,24 @@ package com.cainiao1053.cbcmoreshells.munitions.big_cannon.long_range_torpedo;
 
 import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.GeneralCannonTorpedoBlock;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.DirectionalBlock;
 import rbasamoyai.createbigcannons.index.CBCMunitionPropertiesHandlers;
 
 
 
 public class LongRangeTorpedoBlock extends GeneralCannonTorpedoBlock<LongRangeTorpedoProjectile> {
 
+	private static final MapCodec<LongRangeTorpedoBlock> CODEC = simpleCodec(LongRangeTorpedoBlock::new);
+
 	public LongRangeTorpedoBlock(Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends DirectionalBlock> codec() {
+		return CODEC;
 	}
 
 	@Override

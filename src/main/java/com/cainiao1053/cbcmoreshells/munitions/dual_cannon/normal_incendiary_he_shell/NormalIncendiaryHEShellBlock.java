@@ -3,13 +3,22 @@ package com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_incendiary_he
 import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
 import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.GeneralDualCannonProjectileBlock;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.DirectionalBlock;
 
 
 public class NormalIncendiaryHEShellBlock extends GeneralDualCannonProjectileBlock<NormalIncendiaryHEShellProjectile> {
 
+	private static final MapCodec<NormalIncendiaryHEShellBlock> CODEC = simpleCodec(NormalIncendiaryHEShellBlock::new);
+
 	public NormalIncendiaryHEShellBlock(Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends DirectionalBlock> codec() {
+		return CODEC;
 	}
 
 	@Override

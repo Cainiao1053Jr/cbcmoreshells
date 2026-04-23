@@ -2,15 +2,24 @@ package com.cainiao1053.cbcmoreshells.munitions.big_cannon.deepwater_shrapnel_to
 
 import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.GeneralCannonTorpedoBlock;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.DirectionalBlock;
 import rbasamoyai.createbigcannons.index.CBCMunitionPropertiesHandlers;
 
 
 
 public class DeepwaterShrapnelTorpedoBlock extends GeneralCannonTorpedoBlock<DeepwaterShrapnelTorpedoProjectile> {
 
+	private static final MapCodec<DeepwaterShrapnelTorpedoBlock> CODEC = simpleCodec(DeepwaterShrapnelTorpedoBlock::new);
+
 	public DeepwaterShrapnelTorpedoBlock(Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends DirectionalBlock> codec() {
+		return CODEC;
 	}
 
 	@Override

@@ -1,15 +1,24 @@
 package com.cainiao1053.cbcmoreshells.munitions.big_cannon.hesh_shell;
 
 import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.DirectionalBlock;
 import rbasamoyai.createbigcannons.index.CBCMunitionPropertiesHandlers;
 import rbasamoyai.createbigcannons.munitions.big_cannon.SimpleShellBlock;
 
 
 public class HESHShellBlock extends SimpleShellBlock<HESHShellProjectile> {
 
+	private static final MapCodec<HESHShellBlock> CODEC = simpleCodec(HESHShellBlock::new);
+
 	public HESHShellBlock(Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends DirectionalBlock> codec() {
+		return CODEC;
 	}
 
 	@Override

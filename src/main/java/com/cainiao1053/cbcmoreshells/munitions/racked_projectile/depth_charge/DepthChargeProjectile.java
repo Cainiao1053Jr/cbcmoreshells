@@ -51,7 +51,7 @@ public class DepthChargeProjectile extends AbstractDepthChargeProjectile {
 		Vec3 oldDelta = this.getDeltaMovement().normalize().scale(5);
 		ShellExplosion explosion = new ShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
 			position.y(), position.z(), explosivePower, false,
-			CBCConfigs.SERVER.munitions.damageRestriction.get().explosiveInteraction());
+			CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
 		CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 		CBCProjectileBurst.spawnConeBurst(this.level(), CBCMSEntityTypes.TORPEDO_BURST.get(), new Vec3(position.x(), position.y(), position.z()),
 				oldDelta, burstCount, properties.burst().burstSpread());

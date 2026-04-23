@@ -2,15 +2,24 @@ package com.cainiao1053.cbcmoreshells.munitions.big_cannon.long_range_shrapnel_t
 
 import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.GeneralCannonTorpedoBlock;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.DirectionalBlock;
 import rbasamoyai.createbigcannons.index.CBCMunitionPropertiesHandlers;
 
 
 
 public class LongRangeShrapnelTorpedoBlock extends GeneralCannonTorpedoBlock<LongRangeShrapnelTorpedoProjectile> {
 
+	private static final MapCodec<LongRangeShrapnelTorpedoBlock> CODEC = simpleCodec(LongRangeShrapnelTorpedoBlock::new);
+
 	public LongRangeShrapnelTorpedoBlock(Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends DirectionalBlock> codec() {
+		return CODEC;
 	}
 
 	@Override

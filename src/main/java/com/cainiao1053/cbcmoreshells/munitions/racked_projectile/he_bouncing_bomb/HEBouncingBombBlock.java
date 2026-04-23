@@ -3,11 +3,13 @@ package com.cainiao1053.cbcmoreshells.munitions.racked_projectile.he_bouncing_bo
 import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
 import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.GeneralRackedProjectileBlock;
+import com.mojang.serialization.MapCodec;
 import com.simibubi.create.foundation.utility.VoxelShaper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
@@ -15,11 +17,18 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class HEBouncingBombBlock extends GeneralRackedProjectileBlock<HEBouncingBombProjectile> {
 
+	private static final MapCodec<HEBouncingBombBlock> CODEC = simpleCodec(HEBouncingBombBlock::new);
+
 	public HEBouncingBombBlock(Properties properties) {
 		super(properties);
 	}
 
 	protected VoxelShaper shapes;
+
+	@Override
+	protected MapCodec<? extends DirectionalBlock> codec() {
+		return CODEC;
+	}
 
 	@Override
 	public boolean isBaseFuze() {

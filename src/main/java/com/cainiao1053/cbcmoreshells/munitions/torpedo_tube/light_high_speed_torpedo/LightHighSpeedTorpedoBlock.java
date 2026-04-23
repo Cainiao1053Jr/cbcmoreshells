@@ -2,16 +2,24 @@ package com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.light_high_speed_to
 
 import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.GeneralCannonTorpedoBlock;
-import com.cainiao1053.cbcmoreshells.munitions.big_cannon.ShellessShellBlock;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.DirectionalBlock;
 import rbasamoyai.createbigcannons.index.CBCMunitionPropertiesHandlers;
 
 
 
 public class LightHighSpeedTorpedoBlock extends GeneralCannonTorpedoBlock<LightHighSpeedTorpedoProjectile> {
 
+	private static final MapCodec<LightHighSpeedTorpedoBlock> CODEC = simpleCodec(LightHighSpeedTorpedoBlock::new);
+
 	public LightHighSpeedTorpedoBlock(Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends DirectionalBlock> codec() {
+		return CODEC;
 	}
 
 	@Override

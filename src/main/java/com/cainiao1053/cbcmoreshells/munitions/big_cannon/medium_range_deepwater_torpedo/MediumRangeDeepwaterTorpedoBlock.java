@@ -2,7 +2,9 @@ package com.cainiao1053.cbcmoreshells.munitions.big_cannon.medium_range_deepwate
 
 import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.GeneralCannonTorpedoBlock;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.DirectionalBlock;
 import rbasamoyai.createbigcannons.index.CBCMunitionPropertiesHandlers;
 
 
@@ -10,8 +12,15 @@ import rbasamoyai.createbigcannons.index.CBCMunitionPropertiesHandlers;
 
 public class MediumRangeDeepwaterTorpedoBlock extends GeneralCannonTorpedoBlock<MediumRangeDeepwaterTorpedoProjectile> {
 
+	private static final MapCodec<MediumRangeDeepwaterTorpedoBlock> CODEC = simpleCodec(MediumRangeDeepwaterTorpedoBlock::new);
+
 	public MediumRangeDeepwaterTorpedoBlock(Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends DirectionalBlock> codec() {
+		return CODEC;
 	}
 
 	@Override

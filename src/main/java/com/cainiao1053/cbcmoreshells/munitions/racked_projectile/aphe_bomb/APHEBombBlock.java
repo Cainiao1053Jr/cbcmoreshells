@@ -3,13 +3,22 @@ package com.cainiao1053.cbcmoreshells.munitions.racked_projectile.aphe_bomb;
 import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
 import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.GeneralRackedProjectileBlock;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.level.block.DirectionalBlock;
 
 
 public class APHEBombBlock extends GeneralRackedProjectileBlock<APHEBombProjectile> {
 
+	private static final MapCodec<APHEBombBlock> CODEC = simpleCodec(APHEBombBlock::new);
+
 	public APHEBombBlock(Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends DirectionalBlock> codec() {
+		return CODEC;
 	}
 
 	@Override

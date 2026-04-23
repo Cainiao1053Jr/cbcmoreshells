@@ -3,16 +3,23 @@ package com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.reductive_highspeed
 import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
 import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.GeneralCannonTorpedoBlock;
-import com.cainiao1053.cbcmoreshells.munitions.big_cannon.ShellessShellBlock;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.world.entity.EntityType;
-import rbasamoyai.createbigcannons.index.CBCMunitionPropertiesHandlers;
+import net.minecraft.world.level.block.DirectionalBlock;
 
 
 
 public class ReductiveHighspeedTorpedoBlock extends GeneralCannonTorpedoBlock<ReductiveHighspeedTorpedoProjectile> {
 
+	private static final MapCodec<ReductiveHighspeedTorpedoBlock> CODEC = simpleCodec(ReductiveHighspeedTorpedoBlock::new);
+
 	public ReductiveHighspeedTorpedoBlock(Properties properties) {
 		super(properties);
+	}
+
+	@Override
+	protected MapCodec<? extends DirectionalBlock> codec() {
+		return CODEC;
 	}
 
 	@Override

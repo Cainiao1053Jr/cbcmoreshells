@@ -3,7 +3,6 @@ package com.cainiao1053.cbcmoreshells.munitions.racked_projectile.aphe_bouncing_
 import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
 import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.GeneralRackedProjectileBlock;
-import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.RackedProjectileBlock;
 import com.mojang.serialization.MapCodec;
 import net.createmod.catnip.math.VoxelShaper;
 import net.minecraft.core.BlockPos;
@@ -18,7 +17,7 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class APHEBouncingBombBlock extends GeneralRackedProjectileBlock<APHEBouncingBombProjectile> {
 
-	private static final MapCodec<RackedProjectileBlock> CODEC = simpleCodec(APHEBouncingBombBlock::new);
+	private static final MapCodec<APHEBouncingBombBlock> CODEC = simpleCodec(APHEBouncingBombBlock::new);
 
 	public APHEBouncingBombBlock(Properties properties) {
 		super(properties);
