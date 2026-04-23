@@ -120,13 +120,23 @@ repositories {
     maven { url = "https://raw.githubusercontent.com/Fuzss/modresources/main/maven/" }
     maven { url = 'https://maven.blamejared.com' }
     maven { url = "https://maven.ryanhcode.dev/releases" } // Sable
+    maven { url = "https://maven.ftb.dev/release" } // FTB (ftb-chunks, ftb-teams, ftb-library)
+    maven { url = "https://maven.architectury.dev" } // Architectury
+    maven { url = "https://maven.squiddev.cc" } // CC: Tweaked
     gradlePluginPortal()
     mavenCentral()
 }
 
 dependencies {
     // Create (NeoForge 1.21.1)
-    implementation "com.simibubi.create:create-${minecraft_version}:${create_version}"
+    implementation("com.simibubi.create:create-${minecraft_version}:${create_version}") {
+        exclude group: "xaero.lib"        // no public Maven
+        exclude group: "dev.ftb.mods"     // optional FTB integration, versions not on Maven
+        exclude group: "dev.architectury" // optional, version string malformed (13d.0.8)
+        exclude group: "cc.tweaked"       // optional CC:Tweaked integration
+        exclude group: "info.journeymap"  // old API version shadows JourneyMap's bundled newer API
+        exclude group: "maven.modrinth", module: "journeymap"
+    }
     //implementation "dev.engine_room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}"
     implementation "com.tterrag.registrate:Registrate:${registrate_version}"
     implementation("net.createmod.ponder:ponder-neoforge:${ponder_neoforge_version}+mc${minecraft_version}")
@@ -134,7 +144,10 @@ dependencies {
     runtimeOnly("dev.engine-room.flywheel:flywheel-neoforge-${minecraft_version}:${flywheel_version}")
 
     // Create Big Cannons (NeoForge 1.21.1) — update cbc_file_id in gradle.properties
-    implementation "curse.maven:createbigcannons-646668:${cbc_file_id}"
+    implementation("curse.maven:createbigcannons-646668:${cbc_file_id}") {
+        exclude group: "info.journeymap"       // version conflict: old API shadows JourneyMap's bundled newer API
+        exclude group: "maven.modrinth", module: "journeymap"
+    }
 
     // Valkyrien Skies (version intentionally not updated)
 //    implementation("org.valkyrienskies:valkyrienskies-121-neoforge:${vs2_version}") { transitive = false }
