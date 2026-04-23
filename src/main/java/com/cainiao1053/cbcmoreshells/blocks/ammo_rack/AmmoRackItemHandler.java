@@ -1,6 +1,5 @@
 package com.cainiao1053.cbcmoreshells.blocks.ammo_rack;
 
-import com.simibubi.create.foundation.item.ItemHelper;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.neoforge.items.IItemHandler;
 
@@ -24,18 +23,12 @@ public class AmmoRackItemHandler implements IItemHandler {
 
 	@Override
 	public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-		if (!blockEntity.canAcceptItem(stack))
-			return stack;
-		ItemStack remainder = ItemHelper.limitCountToMaxStackSize(stack, simulate);
-		return remainder;
+		return blockEntity.inventory.insertItem(slot, stack, simulate);
 	}
 
 	@Override
 	public ItemStack extractItem(int slot, int amount, boolean simulate) {
-		ItemStack item = blockEntity.inventory.getStackInSlot(0);
-		if (!simulate)
-			blockEntity.setItem(item, slot);
-		return item;
+		return blockEntity.inventory.extractItem(slot, amount, simulate);
 	}
 
 	@Override

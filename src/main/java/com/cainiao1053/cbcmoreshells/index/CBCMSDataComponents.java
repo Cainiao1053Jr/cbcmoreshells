@@ -11,8 +11,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.codec.ByteBufCodecs;
 
 public class CBCMSDataComponents {
-    public static final DataComponentType<Boolean> AUTOCANNON_TRACER = register(
-        "autocannon_tracer",
+    public static final DataComponentType<Boolean> EXAMPLE = register(
+        "example",
         builder -> builder.persistent(Codec.BOOL).networkSynchronized(ByteBufCodecs.BOOL)
     );
 

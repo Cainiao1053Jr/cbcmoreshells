@@ -1,10 +1,14 @@
 package com.cainiao1053.cbcmoreshells;
 
+import com.cainiao1053.cbcmoreshells.blocks.ammo_rack.AmmoRackBlockEntity;
 import com.cainiao1053.cbcmoreshells.config.CBCMSConfigs;
 import com.cainiao1053.cbcmoreshells.index.CBCMSArmInteractionPointTypes;
+import com.cainiao1053.cbcmoreshells.index.CBCMSBlockEntities;
 import com.cainiao1053.cbcmoreshells.index.CBCMSContraptionTypes;
 import com.cainiao1053.cbcmoreshells.index.CBCMSDataComponents;
 import com.cainiao1053.cbcmoreshells.index.CBCMSSoundEvents;
+import net.neoforged.neoforge.capabilities.Capabilities;
+import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
@@ -49,6 +53,7 @@ public class CbcmoreshellsNeoForge {
         modEventBus.addListener(this::onReloadConfig);
         modEventBus.addListener(this::onRegisterSounds);
 		modEventBus.addListener(this::onRegister);
+        modEventBus.addListener(this::onRegisterCapabilities);
 
         //CBCCommonNeoForgeEvents.register(modEventBus, forgeEventBus);
 
@@ -101,6 +106,14 @@ public class CbcmoreshellsNeoForge {
 
     private void onRegisterSounds(RegisterEvent event) {
         event.register(Registries.SOUND_EVENT, helper -> CBCMSSoundEvents.register(soundEntry -> soundEntry.register(helper)));
+    }
+
+    private void onRegisterCapabilities(RegisterCapabilitiesEvent event) {
+        event.registerBlockEntity(
+            Capabilities.ItemHandler.BLOCK,
+            CBCMSBlockEntities.AMMO_RACK.get(),
+            (be, side) -> be.getItemHandler()
+        );
     }
 
     private void onLoadConfig(ModConfigEvent.Loading evt) {

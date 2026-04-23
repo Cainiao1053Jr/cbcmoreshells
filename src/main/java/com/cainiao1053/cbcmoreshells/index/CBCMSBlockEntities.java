@@ -41,7 +41,7 @@ import rbasamoyai.createbigcannons.munitions.big_cannon.FuzedBlockEntity;
 import rbasamoyai.createbigcannons.munitions.big_cannon.FuzedBlockEntityRenderer;
 import rbasamoyai.createbigcannons.munitions.big_cannon.FuzedBlockVisual;
 
-import static rbasamoyai.createbigcannons.CreateBigCannons.REGISTRATE;
+import static com.cainiao1053.cbcmoreshells.Cbcmoreshells.REGISTRATE;
 
 
 public class CBCMSBlockEntities {
