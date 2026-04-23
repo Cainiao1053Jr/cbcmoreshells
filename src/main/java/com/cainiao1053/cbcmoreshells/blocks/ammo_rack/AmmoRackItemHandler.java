@@ -13,7 +13,7 @@ public class AmmoRackItemHandler implements IItemHandler {
 
 	@Override
 	public int getSlots() {
-		return 1;
+		return 6;
 	}
 
 	@Override
