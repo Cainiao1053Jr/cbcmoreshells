@@ -84,18 +84,18 @@ public class TorpedoCannonMountPoint extends AllArmInteractionPointTypes.Deposit
 
 		if (munition instanceof TorpedoProjectileBlock) {
 			if (barrelLength == 0) return stack;
-//			if (firstInfo.state().getBlock() instanceof BigCartridgeBlock cartridge) {
-//				if (!simulate) {
-//					loadProjectile(stack, munition, poce, bigCannon);
-//					breech.setLoadingCooldown(getLoadingCooldown());
-//				}
-//				if (BigCartridgeBlock.getPowerFromData(firstInfo) == 0) {
-//					if (simulate) stack.setCount(1);
-//					return cartridge.getExtractedItem(firstInfo);
-//				} else {
-//					return stack;
-//				}
-//			}
+			if (firstInfo.state().getBlock() instanceof BigCartridgeBlock cartridge) {
+				if (!simulate) {
+					loadProjectile(stack, munition, poce, bigCannon);
+					breech.setLoadingCooldown(getLoadingCooldown());
+				}
+				if (BigCartridgeBlock.getPowerFromData(firstInfo) == 0) {
+					if (simulate) stack.setCount(1);
+					return cartridge.getExtractedItem(firstInfo, poce.level().registryAccess());
+				} else {
+					return stack;
+				}
+			}
 			if (!firstInfo.state().isAir()) return stack;
 			if (!simulate) {
 				loadProjectile(stack, munition, poce, bigCannon);
