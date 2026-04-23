@@ -42,7 +42,7 @@ public class AirdroppedShrapnelTorpedoProjectile extends FuzedCannonTorpedoProje
 
 		ShrapnelExplosion explosion = new ShrapnelExplosion(this.level(), null, this.indirectArtilleryFire(false), position.x(),
 				position.y(), position.z(), properties.explosion().explosivePower(),
-				CBCConfigs.SERVER.munitions.damageRestriction.get().explosiveInteraction());
+				CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
 
 		CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 		CBCProjectileBurst.spawnConeBurst(this.level(), CBCMSEntityTypes.TORPEDO_BURST.get(), new Vec3(position.x(), position.y(), position.z()),

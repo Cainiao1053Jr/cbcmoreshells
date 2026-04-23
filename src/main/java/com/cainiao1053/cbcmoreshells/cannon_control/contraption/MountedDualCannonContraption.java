@@ -294,16 +294,16 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
                 deactivateCombatCommand();
             }
         }
-        magazineAutoLoad();
+        magazineAutoLoad(level);
     }
 
-    protected void magazineAutoLoad() {
+    protected void magazineAutoLoad(Level level) {
         if (this.hasMagazine) {
             if (this.magazineReloadDelay > 0) {
                 --this.magazineReloadDelay;
             } else {
                 this.magazineReloadDelay = Math.min((int)(this.getCannonMaterial().properties().reloadTimeModifier() * 12.0F), 40);
-                ItemStack loaded = this.getLoadedMunition();
+                ItemStack loaded = this.getLoadedMunition(level);
                 if (loaded != null && loaded.isEmpty()) {
                     int magazineSlots = this.cachedMunition.getSlots();
 
@@ -627,11 +627,11 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
         return this.cachedMunition;
     }
 
-    public ItemStack getLoadedMunition() {
+    public ItemStack getLoadedMunition(Level level) {
         if (!(this.presentBlockEntities.get(this.startPos) instanceof IDualCannonBlockEntity cbe)) return null;
         StructureBlockInfo contained = cbe.cannonBehavior().block();
         if (contained.state().getBlock() instanceof DualCannonProjectileBlock<?> projBlock)
-            return projBlock.getExtractedItem(contained);
+            return projBlock.getExtractedItem(contained, level.registryAccess());
         return ItemStack.EMPTY;
     }
 

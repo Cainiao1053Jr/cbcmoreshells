@@ -3,6 +3,7 @@ package com.cainiao1053.cbcmoreshells.munitions.big_cannon.antiair_shrapnel_shel
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
@@ -35,22 +36,26 @@ public class AntiairShrapnelBurstRenderer<T extends AntiairShrapnelBurst> extend
 		Matrix3f normal = lastPose.normal();
 		VertexConsumer builder = buffers.getBuffer(RENDER_TYPE);
 
-		vertex(builder, pose, normal, packedLight, 0.0f, 0, 0, 1);
-		vertex(builder, pose, normal, packedLight, 1.0f, 0, 1, 1);
-		vertex(builder, pose, normal, packedLight, 1.0f, 1, 1, 0);
-		vertex(builder, pose, normal, packedLight, 0.0f, 1, 0, 0);
+//		vertex(builder, pose, normal, packedLight, 0.0f, 0, 0, 1);
+//		vertex(builder, pose, normal, packedLight, 1.0f, 0, 1, 1);
+//		vertex(builder, pose, normal, packedLight, 1.0f, 1, 1, 0);
+//		vertex(builder, pose, normal, packedLight, 0.0f, 1, 0, 0);
+
+		vertex(builder, pose, LightTexture.FULL_BRIGHT, -0.5f, -0.5f, 0, 1);
+		vertex(builder, pose, LightTexture.FULL_BRIGHT, -0.5f,  0.5f, 0, 0);
+		vertex(builder, pose, LightTexture.FULL_BRIGHT,  0.5f,  0.5f, 1, 0);
+		vertex(builder, pose, LightTexture.FULL_BRIGHT,  0.5f, -0.5f, 1, 1);
 
 		poseStack.popPose();
 	}
 
-	private static void vertex(VertexConsumer builder, Matrix4f pose, Matrix3f normal, int packedLight, float x, int y, int u, int v) {
-		builder.vertex(pose, x - 0.5f, (float) y - 0.25f, 0.0f)
-			.color(255, 255, 255, 255)
-			.uv((float) u, (float) v)
-			.overlayCoords(OverlayTexture.NO_OVERLAY)
-			.uv2(packedLight)
-			.normal(normal, 0.0f, 1.0f, 0.0f)
-			.endVertex();
+	private static void vertex(VertexConsumer builder, Matrix4f pose, int packedLight, float x, float y, int u, int v) {
+		builder.addVertex(pose, x, y, 0.0f)
+				.setColor(255, 255, 255, 255)
+				.setUv((float) u, (float) v)
+				.setOverlay(OverlayTexture.NO_OVERLAY)
+				.setLight(packedLight)
+				.setNormal(0.0f, 1.0f, 0.0f);
 	}
 
 	@Override public ResourceLocation getTextureLocation(AntiairShrapnelBurst entity) { return TEXTURE_LOCATION; }

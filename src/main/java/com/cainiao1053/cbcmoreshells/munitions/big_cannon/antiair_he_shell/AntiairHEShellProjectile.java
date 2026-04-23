@@ -37,7 +37,7 @@ public class AntiairHEShellProjectile extends ShellessFuzedBigCannonProjectile {
 		float explosionPower = this.getAllProperties().explosion().explosivePower() + Math.max(0,Math.min(deltaY/15,2*this.getAllProperties().explosion().explosivePower()));
 		ShellExplosion explosion = new ShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
 			position.y(), position.z(), explosionPower, false,
-			CBCConfigs.SERVER.munitions.damageRestriction.get().explosiveInteraction());
+			CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
 		CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 	}
 
