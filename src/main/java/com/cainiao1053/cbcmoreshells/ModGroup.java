@@ -237,7 +237,7 @@ public class ModGroup {
 //				CBCMSBlocks.DISH_PLATE.asStack(),
 //				CBCMSBlocks.ROUND_DISH_PLATE.asStack(),
 
-				CBCMSBlocks.ANTIBLAST_COPYCAT_PANEL.asStack(),
+//				CBCMSBlocks.ANTIBLAST_COPYCAT_PANEL.asStack(),
 
 					CBCMSItems.TORPEDO_HEAD.asStack(),
 					CBCMSItems.REINFORCED_TORPEDO_HEAD.asStack()
