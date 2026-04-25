@@ -1,6 +1,7 @@
 package com.cainiao1053.cbcmoreshells;
 
 import com.cainiao1053.cbcmoreshells.blocks.ammo_rack.AmmoRackBlockEntity;
+import com.cainiao1053.cbcmoreshells.compat.sable.CBCMSSableCompat;
 import com.cainiao1053.cbcmoreshells.config.CBCMSConfigs;
 import com.cainiao1053.cbcmoreshells.index.CBCMSArmInteractionPointTypes;
 import com.cainiao1053.cbcmoreshells.index.CBCMSBlockEntities;
@@ -43,8 +44,6 @@ public class CbcmoreshellsNeoForge {
 
         Cbcmoreshells.REGISTRATE.registerEventListeners(modEventBus);
         Cbcmoreshells.init();
-        //CBCMSParticleTypes.register();
-        //PARTICLE_REGISTER.register(modEventBus);
         CBCMSConfigs.register(mlContext::registerConfig);
 
         modEventBus.addListener(this::onCommonSetup);
@@ -55,50 +54,19 @@ public class CbcmoreshellsNeoForge {
 		modEventBus.addListener(this::onRegister);
         modEventBus.addListener(this::onRegisterCapabilities);
 
-        //CBCCommonNeoForgeEvents.register(modEventBus, forgeEventBus);
-
-		//CBCModsNeoForge.CURIOS.executeIfInstalled(() -> () -> CBCCuriosIntegration.init(modEventBus, forgeEventBus));
-
-        //CatnipServices.PLATFORM.executeOnClientOnly(() -> () -> CBCClientNeoForge.prepareClient(modEventBus, forgeEventBus));
     }
 
     private void onCommonSetup(FMLCommonSetupEvent event) {
-//		BlockArmorInspectionToolItem.registerDefaultHandlers();
-//		GasMaskItem.registerDefaultHandlers();
-//        DefaultFluidCompat.registerMinecraftBlobEffects();
-//        DefaultFluidCompat.registerCreateBlobEffects();
 
 		Cbcmoreshells.onCommonSetup();
-		//DefaultCreateCompat.init();
-		//DefaultCannonMountPropertiesSerializers.init();
-		//CBCModsNeoForge.COPYCATS.executeIfInstalled(() -> () -> CopycatsCompat.init(CBCModsNeoForge.COPYCATS::getBlock));
-		//CBCModsNeoForge.FRAMEDBLOCKS.executeIfInstalled(() -> () -> FramedBlocksCompat.init());
-        //CBCModsNeoForge.SABLE.executeIfInstalled(() -> () -> SableCompat.init());
+        CBCMSModsNeoForge.SABLE.executeIfInstalled(() -> CBCMSSableCompat::init);
     }
 
     private void onNewRegistry(NewRegistryEvent evt) {
-//        evt.create(new RegistryBuilder<>(CBCRegistries.BLOCK_RECIPE_SERIALIZERS)
-//			.defaultKey(CreateBigCannons.resource("cannon_casting"))
-//            .sync(true));
-//
-//		evt.create(new RegistryBuilder<>(CBCRegistries.BLOCK_RECIPE_TYPES)
-//			.defaultKey(CreateBigCannons.resource("cannon_casting"))
-//            .sync(true));
-//
-//		evt.create(new RegistryBuilder<>(CBCRegistries.CANNON_CAST_SHAPES)
-//            .defaultKey(CreateBigCannons.resource("very_small"))
-//            .sync(true));
     }
 
 	private void onRegister(RegisterEvent evt) {
 		ResourceKey<? extends Registry<?>> key = evt.getRegistryKey();
-//		if (CBCRegistries.BLOCK_RECIPE_SERIALIZERS.equals(key)) {
-//			BlockRecipeSerializer.register();
-//		} else if (CBCRegistries.BLOCK_RECIPE_TYPES.equals(key)) {
-//			BlockRecipeType.register();
-//		} else if (CBCRegistries.CANNON_CAST_SHAPES.equals(key)) {
-//			CannonCastShape.register();
-//		}
         CBCMSContraptionTypes.prepare();
         CBCMSArmInteractionPointTypes.register();
         CBCMSDataComponents.init();

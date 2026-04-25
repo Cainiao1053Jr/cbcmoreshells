@@ -1,5 +1,6 @@
 package com.cainiao1053.cbcmoreshells.munitions.big_cannon;
 
+import com.cainiao1053.cbcmoreshells.CBCMSCompatTransformers;
 import com.cainiao1053.cbcmoreshells.cannon_control.contraption.MountedTorpedoTubeContraption;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.breeches.quick_firing_breech.TorpQuickfiringBreechBlockEntity;
 import com.cainiao1053.cbcmoreshells.index.CBCMSSoundEvents;
@@ -20,7 +21,6 @@ public abstract class AbstractReductiveTorpedoProjectile extends FuzedCannonTorp
 
 	public void reduceReloadTime() {
 		if(this.torpedoTube == null) {
-			//Cbcmoreshells.LOGGER.info("Torpedo tube is null!");
 			return;
 		}
 		BlockPos breechPos = getBreechPos(this.torpedoTube);
@@ -31,19 +31,16 @@ public abstract class AbstractReductiveTorpedoProjectile extends FuzedCannonTorp
 				return;
 			}
 			int newReloadTime = Math.max(currentCooldown - (int)(this.getReloadTime() * getReductionPercentage()), 20);
-			//Cbcmoreshells.LOGGER.info("old Reload time: " + breech.getLoadingCooldown());
-			//Cbcmoreshells.LOGGER.info("new Reload time: " + newReloadTime);
 			breech.setLoadingCooldown(newReloadTime);
-		}else{
-			//Cbcmoreshells.LOGGER.info("No such be!");
 		}
 	}
 
 	public boolean explodeOnShip(Vec3 pos, Level level) {
 		if (!(level instanceof ServerLevel serverLevel)) return false;
-		AABB box = AABB.ofSize(pos, 4, 4, 4);
+		//AABB box = AABB.ofSize(pos, 4, 4, 4);
 		//return VSShipUtils.hasShipInAABB(serverLevel, box);
-		return false;
+		return CBCMSCompatTransformers.shootOnSublevel(level, pos);
+		//return false;
 	}
 
 	public void playSoundOnHit(Level level) {

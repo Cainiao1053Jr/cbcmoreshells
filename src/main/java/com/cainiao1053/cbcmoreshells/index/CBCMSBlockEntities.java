@@ -29,6 +29,7 @@ import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.breeches.quick_firing_
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.breeches.sliding_breech.TorpedoSlidingBreechBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.breeches.sliding_breech.TorpedoSlidingBreechBlockEntityRenderer;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.torpedo_end.TorpedoTubeEndBlockEntity;
+import com.simibubi.create.content.decoration.copycat.CopycatBlockEntity;
 import com.tterrag.registrate.util.entry.BlockEntityEntry;
 import rbasamoyai.createbigcannons.cannons.big_cannons.breeches.quickfiring_breech.QuickfiringBreechBlockEntity;
 import rbasamoyai.createbigcannons.cannons.big_cannons.breeches.quickfiring_breech.QuickfiringBreechBlockEntityRenderer;
@@ -362,6 +363,11 @@ public class CBCMSBlockEntities {
 			.validBlocks(CBCMSBlocks.COMMAND_DEPLOYER)
 			.renderer(() -> CommandDeployerRenderer::new)
 			.register();
+
+	public static final BlockEntityEntry<CopycatBlockEntity> COPYCAT =
+			REGISTRATE.blockEntity("copycat", CopycatBlockEntity::new)
+					.validBlocks(CBCMSBlocks.ANTIBLAST_COPYCAT_PANEL)
+					.register();
 
 
 	public static void register() {

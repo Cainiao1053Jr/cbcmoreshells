@@ -9,6 +9,10 @@ version = mod_version
 group = 'com.cainiao1053.cbcmoreshells'
 archivesBaseName = 'cbcmoreshells'
 
+tasks.named('jar', Jar) {
+    archiveFileName.set("CBC-Military-Supplement-${minecraft_version}-${project.version}.jar")
+}
+
 // Minecraft 1.21.1 requires Java 21
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
@@ -148,6 +152,9 @@ dependencies {
         exclude group: "info.journeymap"       // version conflict: old API shadows JourneyMap's bundled newer API
         exclude group: "maven.modrinth", module: "journeymap"
     }
+
+    //implementation "curse.maven:sable-1312371:${sable_version_cf}"
+    api("dev.ryanhcode.sable:sable-neoforge-${project.minecraft_version}:${project.sable_version}")
 
     // Valkyrien Skies (version intentionally not updated)
 //    implementation("org.valkyrienskies:valkyrienskies-121-neoforge:${vs2_version}") { transitive = false }

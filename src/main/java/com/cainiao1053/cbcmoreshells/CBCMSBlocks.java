@@ -196,7 +196,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_RED))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/inferior_he_shell"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Inferior High Explosive (HE) Shell")
 			.item(InferiorHEShellBlockItem::new)
@@ -209,7 +209,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_RED))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/sap_shell"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("SAP Shell")
 			.item(SAPShellBlockItem::new)
@@ -222,7 +222,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/hesh_shell"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("HESH Shell")
 			.item(HESHShellBlockItem::new)
@@ -235,7 +235,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/shelless_he_shell"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Shelless HE Shell")
 			.item(ShellessHEProjectileBlockItem::new)
@@ -248,7 +248,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/aphe_cannon_rocket"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("APHE Cannon Rocket")
 			.item(CannonRocketProjectileBlockItem::new)
@@ -261,7 +261,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/shelless_ap_shot"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Shelless AP Shot")
 			.item(ShellessAPProjectileBlockItem::new)
@@ -274,7 +274,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/apfsds_shot"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("APFSDS Shot")
 			.item(APFSDSProjectileBlockItem::new)
@@ -287,7 +287,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/baked_apfsds_shot"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Baked APFSDS Shot")
 			.item(BakedAPFSDSProjectileBlockItem::new)
@@ -300,7 +300,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/baguette_shot"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Baguette Shot")
 			.item(BaguetteProjectileBlockItem::new)
@@ -337,7 +337,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/shelless_sap_shell"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Shelless SAP Shell")
 			.item(ShellessSAPProjectileBlockItem::new)
@@ -350,7 +350,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/he_cannon_rocket"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("HE Cannon Rocket")
 			.item(CannonRocketProjectileBlockItem::new)
@@ -363,7 +363,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/antiair_he_shell"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Antiair HE Shell")
 			.item(AntiairHEShellBlockItem::new)
@@ -376,7 +376,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/apbc_shot"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("APBC Shot")
 			.item(APBCBlockItem::new)
@@ -389,7 +389,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_RED))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/apbc_shell"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("SAP Shell")
 			.item(APBCShellBlockItem::new)
@@ -402,7 +402,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/ap_super_heavy_shot"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("AP Super Heavy Shot")
 			.item(APSuperHeavyBlockItem::new)
@@ -415,7 +415,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/incendiary_he_shell"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Incendiary HE Shell")
 			.item(IncendiaryHEProjectileBlockItem::new)
@@ -428,7 +428,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/shelless_incendiary_he_shell"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Shelless Incendiary HE Shell")
 			.item(ShellessIncendiaryHEProjectileBlockItem::new)
@@ -441,7 +441,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/antiair_shrapnel_shell"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Antiair Shrapnel Shell")
 			.item(AntiairShrapnelShellBlockItem::new)
@@ -454,7 +454,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/cannon_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Cannon Torpedo")
 			.item(CannonTorpedoBlockItem::new)
@@ -467,7 +467,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/medium_range_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Medium Range Torpedo")
 			.addLayer(() -> RenderType::translucent)
@@ -481,7 +481,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/medium_range_torpedo_typeb"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Medium Range Torpedo Type B")
 			.item(MediumRangeTorpedoTypeBBlockItem::new)
@@ -495,7 +495,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/long_range_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Long Range Torpedo")
 			.addLayer(() -> RenderType::translucent)
@@ -509,7 +509,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/medium_range_deepwater_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Medium Range Deepwater Torpedo")
 			.addLayer(() -> RenderType::translucent)
@@ -523,7 +523,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/medium_range_deepwater_torpedo_typeb"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Medium Range Deepwater Torpedo")
 			.item(MediumRangeDeepwaterTorpedoTypeBBlockItem::new)
@@ -536,7 +536,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/highspeed_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Highspeed Torpedo")
 			.addLayer(() -> RenderType::translucent)
@@ -550,7 +550,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/airdropped_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Airdropped Torpedo")
 			.item(AirdroppedTorpedoBlockItem::new)
@@ -563,7 +563,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/sharpnel_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Sharpnel Torpedo")
 			.item(SharpnelTorpedoBlockItem::new)
@@ -576,7 +576,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/airdropped_shrapnel_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Airdropped Shrapnel Torpedo")
 			.item(AirdroppedShrapnelTorpedoBlockItem::new)
@@ -589,7 +589,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/deepwater_shrapnel_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Deepwater Shrapnel Torpedo")
 			.item(DeepwaterShrapnelTorpedoBlockItem::new)
@@ -602,7 +602,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/long_range_shrapnel_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Long Range Shrapnel Torpedo")
 			.item(LongRangeShrapnelTorpedoBlockItem::new)
@@ -615,7 +615,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/reductive_medium_range_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Medium Range Torpedo")
 			.addLayer(() -> RenderType::translucent)
@@ -629,7 +629,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/light_high_speed_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.addLayer(() -> RenderType::translucent)
 			.item(LightHighSpeedTorpedoBlockItem::new)
@@ -642,7 +642,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/reinforced_short_range_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.addLayer(() -> RenderType::translucent)
 			.item(ReinforcedShortRangeTorpedoBlockItem::new)
@@ -655,7 +655,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/short_range_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.addLayer(() -> RenderType::translucent)
 			.item(ShortRangeTorpedoBlockItem::new)
@@ -668,7 +668,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/reinforced_reductive_short_range_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.addLayer(() -> RenderType::translucent)
 			.item(ReinforcedReductiveShortRangeTorpedoBlockItem::new)
@@ -681,7 +681,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/early_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.addLayer(() -> RenderType::translucent)
 			.item(EarlyTorpedoBlockItem::new)
@@ -694,7 +694,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/reinforced_medium_range_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.addLayer(() -> RenderType::translucent)
 			.item(ReinforcedMediumRangeTorpedoBlockItem::new)
@@ -707,7 +707,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/primary_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.addLayer(() -> RenderType::translucent)
 			.item(PrimaryTorpedoBlockItem::new)
@@ -720,7 +720,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/reinforced_reductive_medium_range_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.addLayer(() -> RenderType::translucent)
 			.item(ReinforcedReductiveMediumRangeTorpedoBlockItem::new)
@@ -733,7 +733,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/reductive_long_range_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.addLayer(() -> RenderType::translucent)
 			.item(ReductiveLongRangeTorpedoBlockItem::new)
@@ -746,7 +746,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/reinforced_long_range_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.addLayer(() -> RenderType::translucent)
 			.item(ReinforcedLongRangeTorpedoBlockItem::new)
@@ -759,7 +759,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/gambler_medium_range_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.addLayer(() -> RenderType::translucent)
 			.item(GamblerMediumRangeTorpedoBlockItem::new)
@@ -772,7 +772,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/ultraspeed_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.addLayer(() -> RenderType::translucent)
 			.item(UltraspeedTorpedoBlockItem::new)
@@ -785,7 +785,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/reductive_highspeed_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.addLayer(() -> RenderType::translucent)
 			.item(ReductiveHighspeedTorpedoBlockItem::new)
@@ -798,7 +798,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/slow_long_range_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.addLayer(() -> RenderType::translucent)
 			.item(SlowLongRangeTorpedoBlockItem::new)
@@ -811,7 +811,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/highspeed_long_range_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.addLayer(() -> RenderType::translucent)
 			.item(HighspeedLongRangeTorpedoBlockItem::new)
@@ -826,7 +826,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/he_bomb"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("HE Bomb")
 			.item(HEBombBlockItem::new)
@@ -839,7 +839,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/he_bouncing_bomb"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("HE Bouncing Bomb")
 			.item(HEBouncingBombBlockItem::new)
@@ -852,7 +852,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/racked_torpedo"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Racked Torpedo")
 			.item(RackedTorpedoBlockItem::new)
@@ -865,7 +865,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/he_rocket"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("HE Rocket")
 			.item(HERocketBlockItem::new)
@@ -878,7 +878,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/aphe_bomb"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("APHE Bomb")
 			.item(APHEBombBlockItem::new)
@@ -891,7 +891,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/aphe_bouncing_bomb"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("APHE Bouncing Bomb")
 			.item(APHEBouncingBombBlockItem::new)
@@ -904,7 +904,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/aphe_rocket"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("APHE Rocket")
 			.item(APHERocketBlockItem::new)
@@ -917,7 +917,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/dual_he_rocket"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Dual HE Rocket")
 			.item(DualHERocketBlockItem::new)
@@ -930,7 +930,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/dual_aphe_rocket"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Dual APHE Rocket")
 			.item(DualAPHERocketBlockItem::new)
@@ -943,7 +943,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/depth_charge"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Depth Charge")
 			.item(DepthChargeBlockItem::new)
@@ -956,7 +956,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/beef_noodle"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("HE Rocket")
 			.item(HELoiteringRocketBlockItem::new)
@@ -969,7 +969,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/bubble_drink"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("APHE Rocket")
 			.item(APHELoiteringRocketBlockItem::new)
@@ -984,7 +984,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/normal_ap_shot"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Normal AP Shot")
 			.item(NormalAPShotBlockItem::new)
@@ -997,7 +997,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/normal_he_shell"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Normal HE Shell")
 			.item(NormalHEShellBlockItem::new)
@@ -1010,7 +1010,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/normal_sap_shell"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Normal SAP Shell")
 			.item(NormalSAPShellBlockItem::new)
@@ -1023,7 +1023,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/normal_ap_shell"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Normal AP Shell")
 			.item(NormalAPShellBlockItem::new)
@@ -1036,7 +1036,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/normal_apbc_shell"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Normal APBC Shell")
 			.item(NormalAPBCShellBlockItem::new)
@@ -1049,7 +1049,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/extended_ap_shot"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Extended AP Shot")
 			.item(ExtendedAPShotBlockItem::new)
@@ -1062,7 +1062,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/normal_antiair_he_shell"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Normal Antiair HE Shell")
 			.item(NormalAntiairHEShellBlockItem::new)
@@ -1075,7 +1075,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/normal_incendiary_he_shell"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Normal Incendiary HE Shell")
 			.item(NormalIncendiaryHEShellBlockItem::new)
@@ -1088,7 +1088,7 @@ public class CBCMSBlocks {
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/extended_antiair_he_shell"))
-			.transform(CBCBuilderTransformers.safeNbt())
+			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("Extended Antiair HE Shell")
 			.item(NormalAntiairHEShellBlockItem::new)
@@ -1175,7 +1175,7 @@ public class CBCMSBlocks {
 			//.transform(strongCannonBlock(false))
 			.loot(CBCBuilderTransformers.steelScrapLoot(10))
 			//.transform(CBCMSBuilderTransformers.torpedoSlidingBreech("torpedo_sliding_breech/steel"))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.onRegister(CreateRegistrate.connectedTextures(() ->
 					new SlidingBreechCTBehavior(CBCSpriteShifts.STEEL_SLIDING_BREECH_SIDE, CBCSpriteShifts.STEEL_SLIDING_BREECH_SIDE_HOLE)))
 			.register();
@@ -1213,7 +1213,7 @@ public class CBCMSBlocks {
 			.transform(strongCannonBlock(false))
 			.properties(p -> p.strength(4.0f,16f))
 			.transform(CBCBuilderTransformers.slidingBreech("sliding_breech/nethersteel"))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.onRegister(CreateRegistrate.connectedTextures(() ->
 					new SlidingBreechCTBehavior(CBCMSSpriteShifts.NETHERSTEEL_SLIDING_BREECH_SIDE, CBCMSSpriteShifts.NETHERSTEEL_SLIDING_BREECH_SIDE_HOLE)))
 			.register();
@@ -1271,7 +1271,7 @@ public class CBCMSBlocks {
 			//.transform(strongCannonBlock(false))
 			.loot(CBCBuilderTransformers.steelScrapLoot(10))
 			//.transform(CBCMSBuilderTransformers.torpedoSlidingBreech("torpedo_sliding_breech/steel"))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 //			.onRegister(CreateRegistrate.connectedTextures(() ->
 //					new SlidingBreechCTBehavior(CBCSpriteShifts.STEEL_SLIDING_BREECH_SIDE, CBCSpriteShifts.STEEL_SLIDING_BREECH_SIDE_HOLE)))
 			.register();
@@ -1342,7 +1342,7 @@ public class CBCMSBlocks {
 			//.transform(strongCannonBlock(false))
 			.loot(CBCBuilderTransformers.steelScrapLoot(10))
 			//.transform(CBCMSBuilderTransformers.torpedoSlidingBreech("torpedo_sliding_breech/steel"))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 //			.onRegister(CreateRegistrate.connectedTextures(() ->
 //					new SlidingBreechCTBehavior(CBCSpriteShifts.STEEL_SLIDING_BREECH_SIDE, CBCSpriteShifts.STEEL_SLIDING_BREECH_SIDE_HOLE)))
 			.register();
@@ -1397,7 +1397,7 @@ public class CBCMSBlocks {
 	public static final BlockEntry<DualCannonSlidingBreechBlock> STEEL_SINGLE_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("steel_single_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.SINGLE_STEEL, STEEL_SINGLE_CANNON_QUICKFIRING_BREECH))
 			.loot(CBCBuilderTransformers.steelScrapLoot(10))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	public static final BlockEntry<DualCannonBodyBlock> WIDE_STEEL_DUAL_CANNON_BARREL = REGISTRATE
@@ -1454,7 +1454,7 @@ public class CBCMSBlocks {
 	public static final BlockEntry<DualCannonSlidingBreechBlock> WIDE_STEEL_DUAL_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("wide_steel_dual_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.WIDE_STEEL, WIDE_STEEL_DUAL_CANNON_QUICKFIRING_BREECH))
 			.loot(CBCBuilderTransformers.steelScrapLoot(10))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	public static final BlockEntry<DualCannonBodyBlock> LARGE_STEEL_DUAL_CANNON_BARREL = REGISTRATE
@@ -1504,7 +1504,7 @@ public class CBCMSBlocks {
 
 	public static final BlockEntry<DualCannonSlidingBreechBlock> LARGE_STEEL_DUAL_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("large_steel_dual_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.LARGE_STEEL, LARGE_STEEL_DUAL_CANNON_QUICKFIRING_BREECH))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	public static final BlockEntry<DualCannonBodyBlock> WIDE_STEEL_SINGLE_CANNON_BARREL = REGISTRATE
@@ -1570,7 +1570,7 @@ public class CBCMSBlocks {
 	public static final BlockEntry<DualCannonSlidingBreechBlock> WIDE_STEEL_SINGLE_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("wide_steel_single_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.WIDE_SINGLE_STEEL, WIDE_STEEL_SINGLE_CANNON_QUICKFIRING_BREECH))
 			.loot(CBCBuilderTransformers.steelScrapLoot(10))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	public static final BlockEntry<DualCannonBodyBlock> LARGE_STEEL_SINGLE_CANNON_BARREL = REGISTRATE
@@ -1623,7 +1623,7 @@ public class CBCMSBlocks {
 	public static final BlockEntry<DualCannonSlidingBreechBlock> LARGE_STEEL_SINGLE_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("large_steel_single_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.LARGE_SINGLE_STEEL, LARGE_STEEL_SINGLE_CANNON_QUICKFIRING_BREECH))
 			.loot(CBCBuilderTransformers.steelScrapLoot(10))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 
@@ -1662,7 +1662,7 @@ public class CBCMSBlocks {
 
 	public static final BlockEntry<DualCannonSlidingBreechBlock> CAST_IRON_DUAL_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("cast_iron_dual_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.CAST_IRON, CAST_IRON_DUAL_CANNON_QUICKFIRING_BREECH))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	public static final BlockEntry<DualCannonBodyBlock> WIDE_CAST_IRON_SINGLE_CANNON_BARREL = REGISTRATE
@@ -1699,7 +1699,7 @@ public class CBCMSBlocks {
 
 	public static final BlockEntry<DualCannonSlidingBreechBlock> WIDE_CAST_IRON_SINGLE_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("wide_cast_iron_single_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.WIDE_SINGLE_CAST_IRON, WIDE_CAST_IRON_SINGLE_CANNON_QUICKFIRING_BREECH))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	public static final BlockEntry<DualCannonBodyBlock> BRONZE_DUAL_CANNON_BARREL = REGISTRATE
@@ -1737,7 +1737,7 @@ public class CBCMSBlocks {
 	public static final BlockEntry<DualCannonSlidingBreechBlock> BRONZE_DUAL_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("bronze_dual_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.BRONZE, BRONZE_DUAL_CANNON_QUICKFIRING_BREECH))
 			//.loot(CBCBuilderTransformers.steelScrapLoot(10))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	public static final BlockEntry<DualCannonBodyBlock> WIDE_BRONZE_SINGLE_CANNON_BARREL = REGISTRATE
@@ -1775,7 +1775,7 @@ public class CBCMSBlocks {
 	public static final BlockEntry<DualCannonSlidingBreechBlock> WIDE_BRONZE_SINGLE_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("wide_bronze_single_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.WIDE_SINGLE_BRONZE, WIDE_BRONZE_SINGLE_CANNON_QUICKFIRING_BREECH))
 			//.loot(CBCBuilderTransformers.steelScrapLoot(10))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	public static final BlockEntry<DualCannonBodyBlock> BRASS_DUAL_CANNON_BARREL = REGISTRATE
@@ -1825,7 +1825,7 @@ public class CBCMSBlocks {
 
 	public static final BlockEntry<DualCannonSlidingBreechBlock> BRASS_DUAL_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("brass_dual_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.BRASS, BRASS_DUAL_CANNON_QUICKFIRING_BREECH))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	public static final BlockEntry<DualCannonBodyBlock> WIDE_BRASS_DUAL_CANNON_BARREL = REGISTRATE
@@ -1875,7 +1875,7 @@ public class CBCMSBlocks {
 
 	public static final BlockEntry<DualCannonSlidingBreechBlock> WIDE_BRASS_DUAL_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("wide_brass_dual_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.WIDE_BRASS, WIDE_BRASS_DUAL_CANNON_QUICKFIRING_BREECH))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	public static final BlockEntry<DualCannonBodyBlock> LARGE_BRASS_DUAL_CANNON_BARREL = REGISTRATE
@@ -1925,7 +1925,7 @@ public class CBCMSBlocks {
 
 	public static final BlockEntry<DualCannonSlidingBreechBlock> LARGE_BRASS_DUAL_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("large_brass_dual_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.LARGE_BRASS, LARGE_BRASS_DUAL_CANNON_QUICKFIRING_BREECH))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	public static final BlockEntry<DualCannonBodyBlock> BRASS_SINGLE_CANNON_BARREL = REGISTRATE
@@ -1979,7 +1979,7 @@ public class CBCMSBlocks {
 	public static final BlockEntry<DualCannonSlidingBreechBlock> BRASS_SINGLE_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("brass_single_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.SINGLE_BRASS, BRASS_SINGLE_CANNON_QUICKFIRING_BREECH))
 			.loot(CBCBuilderTransformers.steelScrapLoot(10))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	public static final BlockEntry<DualCannonBodyBlock> WIDE_BRASS_SINGLE_CANNON_BARREL = REGISTRATE
@@ -2045,7 +2045,7 @@ public class CBCMSBlocks {
 	public static final BlockEntry<DualCannonSlidingBreechBlock> WIDE_BRASS_SINGLE_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("wide_brass_single_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.WIDE_SINGLE_BRASS, WIDE_BRASS_SINGLE_CANNON_QUICKFIRING_BREECH))
 			.loot(CBCBuilderTransformers.steelScrapLoot(10))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	public static final BlockEntry<DualCannonBodyBlock> LARGE_BRASS_SINGLE_CANNON_BARREL = REGISTRATE
@@ -2109,7 +2109,7 @@ public class CBCMSBlocks {
 	public static final BlockEntry<DualCannonSlidingBreechBlock> LARGE_BRASS_SINGLE_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("large_brass_single_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.LARGE_SINGLE_BRASS, LARGE_BRASS_SINGLE_CANNON_QUICKFIRING_BREECH))
 			.loot(CBCBuilderTransformers.steelScrapLoot(10))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	public static final BlockEntry<DualCannonBodyBlock> ROSEQUARTZ_BRASS_DUAL_CANNON_BARREL = REGISTRATE
@@ -2148,7 +2148,7 @@ public class CBCMSBlocks {
 
 	public static final BlockEntry<DualCannonSlidingBreechBlock> ROSEQUARTZ_BRASS_DUAL_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("rosequartz_brass_dual_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.ROSEQUARTZ_BRASS, ROSEQUARTZ_BRASS_DUAL_CANNON_QUICKFIRING_BREECH))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	public static final BlockEntry<DualCannonBodyBlock> WIDE_ROSEQUARTZ_BRASS_DUAL_CANNON_BARREL = REGISTRATE
@@ -2187,7 +2187,7 @@ public class CBCMSBlocks {
 
 	public static final BlockEntry<DualCannonSlidingBreechBlock> WIDE_ROSEQUARTZ_BRASS_DUAL_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("wide_rosequartz_brass_dual_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.WIDE_ROSEQUARTZ_BRASS, WIDE_ROSEQUARTZ_BRASS_DUAL_CANNON_QUICKFIRING_BREECH))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	public static final BlockEntry<DualCannonBodyBlock> TOUGH_STEEL_DUAL_CANNON_BARREL = REGISTRATE
@@ -2226,7 +2226,7 @@ public class CBCMSBlocks {
 
 	public static final BlockEntry<DualCannonSlidingBreechBlock> TOUGH_STEEL_DUAL_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("tough_steel_dual_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.TOUGH_STEEL, TOUGH_STEEL_DUAL_CANNON_QUICKFIRING_BREECH))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	public static final BlockEntry<DualCannonBodyBlock> WIDE_TOUGH_STEEL_DUAL_CANNON_BARREL = REGISTRATE
@@ -2265,7 +2265,7 @@ public class CBCMSBlocks {
 
 	public static final BlockEntry<DualCannonSlidingBreechBlock> WIDE_TOUGH_STEEL_DUAL_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("wide_tough_steel_dual_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.WIDE_SINGLE_TOUGH_STEEL, WIDE_TOUGH_STEEL_DUAL_CANNON_QUICKFIRING_BREECH))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	//
@@ -2316,7 +2316,7 @@ public class CBCMSBlocks {
 
 	public static final BlockEntry<DualCannonSlidingBreechBlock> WIDE_TOUGH_STEEL_SINGLE_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("wide_tough_steel_single_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.WIDE_SINGLE_TOUGH_STEEL, WIDE_TOUGH_STEEL_SINGLE_CANNON_QUICKFIRING_BREECH))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	//
@@ -2357,7 +2357,7 @@ public class CBCMSBlocks {
 
 	public static final BlockEntry<DualCannonSlidingBreechBlock> NETHER_STEEL_DUAL_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("nether_steel_dual_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.NETHER_STEEL, NETHER_STEEL_DUAL_CANNON_QUICKFIRING_BREECH))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	public static final BlockEntry<DualCannonBodyBlock> WIDE_NETHER_STEEL_DUAL_CANNON_BARREL = REGISTRATE
@@ -2407,7 +2407,7 @@ public class CBCMSBlocks {
 
 	public static final BlockEntry<DualCannonSlidingBreechBlock> WIDE_NETHER_STEEL_DUAL_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("wide_nether_steel_dual_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.WIDE_NETHER_STEEL, WIDE_NETHER_STEEL_DUAL_CANNON_QUICKFIRING_BREECH))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	public static final BlockEntry<DualCannonBodyBlock> MILITARY_SLATE_ALLOY_DUAL_CANNON_BARREL = REGISTRATE
@@ -2446,7 +2446,7 @@ public class CBCMSBlocks {
 
 	public static final BlockEntry<DualCannonSlidingBreechBlock> MILITARY_SLATE_ALLOY_DUAL_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("military_slate_alloy_dual_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.MILITARY_SLATE_ALLOY, MILITARY_SLATE_ALLOY_DUAL_CANNON_QUICKFIRING_BREECH))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	//
@@ -2502,7 +2502,7 @@ public class CBCMSBlocks {
 	public static final BlockEntry<DualCannonSlidingBreechBlock> MILITARY_SLATE_ALLOY_SINGLE_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("military_slate_alloy_single_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.SINGLE_MILITARY_SLATE_ALLOY, MILITARY_SLATE_ALLOY_SINGLE_CANNON_QUICKFIRING_BREECH))
 			.loot(CBCBuilderTransformers.steelScrapLoot(10))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 	//
 
@@ -2563,7 +2563,7 @@ public class CBCMSBlocks {
 
 	public static final BlockEntry<DualCannonSlidingBreechBlock> WIDE_MILITARY_SLATE_ALLOY_DUAL_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("wide_military_slate_alloy_dual_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.WIDE_MILITARY_SLATE_ALLOY, WIDE_MILITARY_SLATE_ALLOY_DUAL_CANNON_QUICKFIRING_BREECH))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	//
@@ -2623,7 +2623,7 @@ public class CBCMSBlocks {
 
 	public static final BlockEntry<DualCannonSlidingBreechBlock> WIDE_MILITARY_SLATE_ALLOY_SINGLE_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("wide_military_slate_alloy_single_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.WIDE_SINGLE_MILITARY_SLATE_ALLOY, WIDE_MILITARY_SLATE_ALLOY_SINGLE_CANNON_QUICKFIRING_BREECH))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 	//
 
@@ -2663,7 +2663,7 @@ public class CBCMSBlocks {
 
 	public static final BlockEntry<DualCannonSlidingBreechBlock> SLATE_ALLOY_DUAL_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("slate_alloy_dual_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.SLATE_ALLOY, SLATE_ALLOY_DUAL_CANNON_QUICKFIRING_BREECH))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	public static final BlockEntry<DualCannonBodyBlock> SLATE_ALLOY_SINGLE_CANNON_BARREL = REGISTRATE
@@ -2728,7 +2728,7 @@ public class CBCMSBlocks {
 	public static final BlockEntry<DualCannonSlidingBreechBlock> SLATE_ALLOY_SINGLE_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("slate_alloy_single_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.SINGLE_SLATE_ALLOY, SLATE_ALLOY_SINGLE_CANNON_QUICKFIRING_BREECH))
 			.loot(CBCBuilderTransformers.steelScrapLoot(10))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	public static final BlockEntry<DualCannonBodyBlock> WIDE_SLATE_ALLOY_DUAL_CANNON_BARREL = REGISTRATE
@@ -2788,7 +2788,7 @@ public class CBCMSBlocks {
 
 	public static final BlockEntry<DualCannonSlidingBreechBlock> WIDE_SLATE_ALLOY_DUAL_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("wide_slate_alloy_dual_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.WIDE_SLATE_ALLOY, WIDE_SLATE_ALLOY_DUAL_CANNON_QUICKFIRING_BREECH))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	//
@@ -2848,7 +2848,7 @@ public class CBCMSBlocks {
 
 	public static final BlockEntry<DualCannonSlidingBreechBlock> WIDE_SLATE_ALLOY_SINGLE_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("wide_slate_alloy_single_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.WIDE_SINGLE_SLATE_ALLOY, WIDE_SLATE_ALLOY_SINGLE_CANNON_QUICKFIRING_BREECH))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 
 	public static final BlockEntry<DualCannonBodyBlock> LARGE_SLATE_ALLOY_SINGLE_CANNON_BARREL = REGISTRATE
@@ -2901,7 +2901,7 @@ public class CBCMSBlocks {
 	public static final BlockEntry<DualCannonSlidingBreechBlock> LARGE_SLATE_ALLOY_SINGLE_CANNON_SLIDING_BREECH = REGISTRATE
 			.block("large_slate_alloy_single_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.LARGE_SINGLE_SLATE_ALLOY, LARGE_SLATE_ALLOY_SINGLE_CANNON_QUICKFIRING_BREECH))
 			.loot(CBCBuilderTransformers.steelScrapLoot(10))
-			.transform(CBCDefaultStress.setImpact(32.0d))
+			//.transform(CBCDefaultStress.setImpact(32.0d))
 			.register();
 	//
 
