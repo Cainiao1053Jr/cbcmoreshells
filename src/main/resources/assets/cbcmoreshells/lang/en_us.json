@@ -466,5 +466,9 @@
 "block.cbcmoreshells.wide_slate_alloy_single_cannon_magazine_breech": "Wide Slate Alloy Single Cannon Magazine Breech",
 "block.cbcmoreshells.slate_alloy_single_cannon_magazine_breech": "Slate Alloy Single Cannon Magazine Breech",
 "block.cbcmoreshells.military_slate_alloy_single_cannon_magazine_breech": "Military Slate Alloy Single Cannon Magazine Breech",
-"block.cbcmoreshells.wide_military_slate_alloy_single_cannon_magazine_breech": "Wide Military Slate Alloy Single Cannon Magazine Breech"
+"block.cbcmoreshells.wide_military_slate_alloy_single_cannon_magazine_breech": "Wide Military Slate Alloy Single Cannon Magazine Breech",
+"block.cbcmoreshells.he_loitering_rocket": "HE Loitering Rocket",
+"block.cbcmoreshells.aphe_loitering_rocket": "APHE Loitering Rocket",
+"block.cbcmoreshells.loitering_rocket.tooltip.tooltip_info": "Loitering Rocket",
+"block.cbcmoreshells.loitering_rocket.tooltip.tooltip_info.main": "The rocket has its own thougts. The guided rocket will automatically search for targets ahead and track them after being launched. This rocket's warhead mass is %s, explosion power is %s, lifetime is _%s_s, steady-state speed is _%s_m/s, thrust duration is _%s_s, and maximum guidance G-force is %s."
 }

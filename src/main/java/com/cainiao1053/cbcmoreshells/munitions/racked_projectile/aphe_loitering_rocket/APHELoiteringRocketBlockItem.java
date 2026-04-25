@@ -16,8 +16,7 @@ import net.minecraft.world.level.block.Block;
 import javax.annotation.Nullable;
 import java.util.List;
 
-import static com.cainiao1053.cbcmoreshells.CBCMSEntityTypes.HE_LOITERING_ROCKET;
-import static com.cainiao1053.cbcmoreshells.CBCMSEntityTypes.HE_ROCKET;
+import static com.cainiao1053.cbcmoreshells.CBCMSEntityTypes.APHE_LOITERING_ROCKET;
 
 public class APHELoiteringRocketBlockItem extends AbstractRackedRocketBlockItem<APHELoiteringRocketProjectile> {
 
@@ -27,9 +26,9 @@ public class APHELoiteringRocketBlockItem extends AbstractRackedRocketBlockItem<
 
 	@Override
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
-		//super.appendHoverText(stack, level, tooltip, flag);
-		//RackedLoiteringRocketProjectileProperties properties = CBCMSMunitionPropertiesHandlers.LOITERING_ROCKET.getPropertiesOf(HE_LOITERING_ROCKET.get());
-		//CBCMSTooltip.appendRackedRocketInfo(stack, level, tooltip, flag, properties.ballistics().durabilityMass(), properties.ballistics().penetration(), properties.ballistics().deflection(), properties.explosion().explosivePower(),properties.lifetime(), properties.steadyStateVel(), properties.thrustTime());
+		super.appendHoverText(stack, context, tooltip, flag);
+		RackedLoiteringRocketProjectileProperties properties = CBCMSMunitionPropertiesHandlers.LOITERING_ROCKET.getPropertiesOf(APHE_LOITERING_ROCKET.get());
+		CBCMSTooltip.appendLoiteringRackedRocketInfo(stack, context, tooltip, flag, properties);
 	}
 
 	@Override

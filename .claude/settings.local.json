@@ -24,7 +24,16 @@
       "Bash(find /c/Users/59512/.gradle -name *.jar -path *create*)",
       "Bash(javap -p -c /c/Users/59512/.gradle/caches/modules-2/files-2.1/com.simibubi.create/create-1.21.1/6.0.9-215/1b3715996fac9e3cda412e64a6002660cf504bc1/create-1.21.1-6.0.9-215.jar!/com/simibubi/create/content/kinetics/mechanicalArm/ArmInteractionPoint.class)",
       "Bash(mkdir -p /tmp/create_classes)",
-      "Bash(javap -p \"com/simibubi/create/content/kinetics/mechanicalArm/ArmInteractionPoint.class\")"
+      "Bash(javap -p \"com/simibubi/create/content/kinetics/mechanicalArm/ArmInteractionPoint.class\")",
+      "Bash(javap -p dev/ryanhcode/sable/sublevel/SubLevel.class)",
+      "Bash(javap -p dev/ryanhcode/sable/api/SubLevelHelper.class)",
+      "Bash(xargs -I{} javap -p {})",
+      "Bash(javap -p dev/ryanhcode/sable/companion/SableCompanion.class)",
+      "Bash(javap -p dev/ryanhcode/sable/companion/SubLevelAccess.class)",
+      "Bash(javap -p dev/ryanhcode/sable/companion/math/Pose3dc.class)",
+      "Bash(javap -p dev/ryanhcode/sable/companion/math/BoundingBox3dc.class)",
+      "Bash(javap -p dev/ryanhcode/sable/companion/math/BoundingBox3d.class)",
+      "Bash(javap -p dev/ryanhcode/sable/ActiveSableCompanion.class)"
     ]
   }
 }

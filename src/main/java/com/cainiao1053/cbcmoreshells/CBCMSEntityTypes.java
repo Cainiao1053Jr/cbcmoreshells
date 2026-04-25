@@ -169,8 +169,8 @@ public class CBCMSEntityTypes {
 	public static final EntityEntry<DualHERocketProjectile> DUAL_HE_ROCKET = rackedProjectile("dual_he_rocket", DualHERocketProjectile::new, "Dual HE Rocket", CBCMSMunitionPropertiesHandlers.RACKED_ROCKET);
 	public static final EntityEntry<DualAPHERocketProjectile> DUAL_APHE_ROCKET = rackedProjectile("dual_aphe_rocket", DualAPHERocketProjectile::new, "Dual APHE Rocket", CBCMSMunitionPropertiesHandlers.RACKED_ROCKET);
 	public static final EntityEntry<DepthChargeProjectile> DEPTH_CHARGE = rackedProjectile("depth_charge", DepthChargeProjectile::new, "Depth Charge", CBCMSMunitionPropertiesHandlers.RACKED_SHRAPNEL_PROJECTILE);
-	public static final EntityEntry<HELoiteringRocketProjectile> HE_LOITERING_ROCKET = rackedProjectile("beef_noodle", HELoiteringRocketProjectile::new, "HE Rocket", CBCMSMunitionPropertiesHandlers.LOITERING_ROCKET);
-	public static final EntityEntry<APHELoiteringRocketProjectile> APHE_LOITERING_ROCKET = rackedProjectile("bubble_drink", APHELoiteringRocketProjectile::new, "APHE Rocket", CBCMSMunitionPropertiesHandlers.LOITERING_ROCKET);
+	public static final EntityEntry<HELoiteringRocketProjectile> HE_LOITERING_ROCKET = rackedProjectile("he_loitering_rocket", HELoiteringRocketProjectile::new, "HE Rocket", CBCMSMunitionPropertiesHandlers.LOITERING_ROCKET);
+	public static final EntityEntry<APHELoiteringRocketProjectile> APHE_LOITERING_ROCKET = rackedProjectile("aphe_loitering_rocket", APHELoiteringRocketProjectile::new, "APHE Rocket", CBCMSMunitionPropertiesHandlers.LOITERING_ROCKET);
 
 	public static final EntityEntry<NormalAPShotProjectile> NORMAL_AP_SHOT = dualCannonProjectile("normal_ap_shot", NormalAPShotProjectile::new, "Normal AP Shot", CBCMSMunitionPropertiesHandlers.DUAL_CANNON_PROPERTIES);
 	public static final EntityEntry<NormalHEShellProjectile> NORMAL_HE_SHELL = dualCannonProjectile("normal_he_shell", NormalHEShellProjectile::new, "Normal HE Shell", CBCMSMunitionPropertiesHandlers.DUAL_CANNON_PROPERTIES);

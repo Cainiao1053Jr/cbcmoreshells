@@ -138,7 +138,7 @@ public class DualCannonMountPoint extends AllArmInteractionPointTypes.DepositOnl
 			return stack;
 
 		//Magazine behavior
-		if (bigCannon.hasMagazine()) {
+		if (bigCannon.hasMagazine() && munition instanceof DualCannonProjectileBlock) {
 			ItemStackHandler magazine = bigCannon.getCachedMunition();
 			int maxSlots = magazine.getSlots();
 

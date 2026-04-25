@@ -8,6 +8,7 @@ import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.ReductiveTorped
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.TorpedoProperties;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.config.DualCannonIncendiaryProperties;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.config.DualCannonProperties;
+import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.config.RackedLoiteringRocketProjectileProperties;
 import com.simibubi.create.foundation.item.TooltipHelper;
 import com.simibubi.create.foundation.utility.CreateLang;
 import net.createmod.catnip.lang.FontHelper;
@@ -246,6 +247,19 @@ public class CBCMSTooltip {
 		String key1 = stack.getDescriptionId() + ".tooltip.ballisticInfo";
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main", durabilityMass,penetration,String.format("%.0f",Math.acos(deflection)*180/Math.PI),explosion,String.format("%.0f",lifetime/20), String.format("%.0f",ssVel*20), String.format("%.0f",thrustTime/20)), palette.primary(), palette.highlight(), 1));
+	}
+
+	public static void appendLoiteringRackedRocketInfo(ItemStack stack, TooltipContext ctx, List<Component> tooltip,
+													   TooltipFlag flag, RackedLoiteringRocketProjectileProperties properties) {
+		if (!Screen.hasShiftDown()) {
+			return;
+		}
+		FontHelper.Palette palette = getPalette();
+		String key1 = "block.cbcmoreshells.loitering_rocket.tooltip.tooltip_info";
+		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main", properties.ballistics().durabilityMass(),properties.explosion().explosivePower(),
+				String.format("%.0f",(float)properties.lifetime()/20), String.format("%.0f",properties.steadyStateVel()*20),
+				String.format("%.0f",(float)properties.thrustTime()/20), String.format("%.2f",properties.control().maxG())), palette.primary(), palette.highlight(), 1));
 	}
 
 	public static void appendTorpedoDetectorInfo(ItemStack stack, TooltipContext ctx, List<Component> tooltip,

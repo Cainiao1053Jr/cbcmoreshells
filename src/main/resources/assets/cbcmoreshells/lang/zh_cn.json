@@ -466,5 +466,9 @@
 "block.cbcmoreshells.wide_slate_alloy_single_cannon_magazine_breech": "宽板岩合金单管弹夹炮闩",
 "block.cbcmoreshells.slate_alloy_single_cannon_magazine_breech": "细板岩合金单管弹夹炮闩",
 "block.cbcmoreshells.military_slate_alloy_single_cannon_magazine_breech": "细军用板岩合金单管弹夹炮闩",
-"block.cbcmoreshells.wide_military_slate_alloy_single_cannon_magazine_breech": "宽军用板岩合金单管弹夹炮闩"
+"block.cbcmoreshells.wide_military_slate_alloy_single_cannon_magazine_breech": "宽军用板岩合金单管弹夹炮闩",
+"block.cbcmoreshells.he_loitering_rocket": "高爆制导火箭",
+"block.cbcmoreshells.aphe_loitering_rocket": "穿甲制导火箭",
+"block.cbcmoreshells.loitering_rocket.tooltip.tooltip_info": "制导火箭",
+"block.cbcmoreshells.loitering_rocket.tooltip.tooltip_info.main": "发射后管不了。制导火箭会在发射后自动搜索前方的目标并追踪。这种火箭弹的弹头质量为_%s_，爆炸威力为_%s_，存续时间为_%s_s，稳态速度为_%s_m/s，推进时间为_%s_s，最大制导G力为_%s_"
 }

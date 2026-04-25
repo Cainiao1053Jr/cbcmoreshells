@@ -264,7 +264,11 @@ public class CBCMSBlockEntities {
 					CBCMSBlocks.APHE_ROCKET,
 					CBCMSBlocks.DUAL_HE_ROCKET,
 					CBCMSBlocks.DUAL_APHE_ROCKET,
-					CBCMSBlocks.DEPTH_CHARGE
+					CBCMSBlocks.DEPTH_CHARGE,
+					CBCMSBlocks.BEEF_NOODLE,
+					CBCMSBlocks.BUBBLE_DRINK,
+					CBCMSBlocks.HE_LOITERING_ROCKET,
+					CBCMSBlocks.APHE_LOITERING_ROCKET
 			)
 			.register();
 

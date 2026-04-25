@@ -951,7 +951,7 @@ public class CBCMSBlocks {
 			.build()
 			.register();
 
-	public static final BlockEntry<HELoiteringRocketBlock> HE_LOITERING_ROCKET = REGISTRATE
+	public static final BlockEntry<HELoiteringRocketBlock> BEEF_NOODLE = REGISTRATE
 			.block("beef_noodle", HELoiteringRocketBlock::new)
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
@@ -964,11 +964,37 @@ public class CBCMSBlocks {
 			.build()
 			.register();
 
-	public static final BlockEntry<APHELoiteringRocketBlock> APHE_LOITERING_ROCKET = REGISTRATE
+	public static final BlockEntry<APHELoiteringRocketBlock> BUBBLE_DRINK = REGISTRATE
 			.block("bubble_drink", APHELoiteringRocketBlock::new)
 			.transform(shell(MapColor.COLOR_YELLOW))
 			.transform(axeOrPickaxe())
 			.transform(CBCBuilderTransformers.projectile("projectile/bubble_drink"))
+			//.transform(CBCBuilderTransformers.safeNbt())
+			.loot(CBCBuilderTransformers.shellLoot())
+			.lang("APHE Rocket")
+			.item(APHELoiteringRocketBlockItem::new)
+			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
+			.build()
+			.register();
+
+	public static final BlockEntry<HELoiteringRocketBlock> HE_LOITERING_ROCKET = REGISTRATE
+			.block("he_loitering_rocket", HELoiteringRocketBlock::new)
+			.transform(shell(MapColor.COLOR_YELLOW))
+			.transform(axeOrPickaxe())
+			.transform(CBCBuilderTransformers.projectile("projectile/he_loitering_rocket"))
+			//.transform(CBCBuilderTransformers.safeNbt())
+			.loot(CBCBuilderTransformers.shellLoot())
+			.lang("HE Rocket")
+			.item(HELoiteringRocketBlockItem::new)
+			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
+			.build()
+			.register();
+
+	public static final BlockEntry<APHELoiteringRocketBlock> APHE_LOITERING_ROCKET = REGISTRATE
+			.block("aphe_loitering_rocket", APHELoiteringRocketBlock::new)
+			.transform(shell(MapColor.COLOR_YELLOW))
+			.transform(axeOrPickaxe())
+			.transform(CBCBuilderTransformers.projectile("projectile/aphe_loitering_rocket"))
 			//.transform(CBCBuilderTransformers.safeNbt())
 			.loot(CBCBuilderTransformers.shellLoot())
 			.lang("APHE Rocket")

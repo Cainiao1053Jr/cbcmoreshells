@@ -1,4 +1,5 @@
 {
+  "replace": false,
   "values": [
     "cbcmoreshells:sap_shell",
     "cbcmoreshells:apbc_shot",

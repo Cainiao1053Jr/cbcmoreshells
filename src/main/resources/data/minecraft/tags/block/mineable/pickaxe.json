@@ -1,4 +1,5 @@
 {
+  "replace": false,
   "values": [
     "cbcmoreshells:antiblast_panel",
     "cbcmoreshells:steel_torpedo_tube_barrel",
@@ -6,12 +7,9 @@
     "cbcmoreshells:steel_torpedo_quickfiring_breech",
     "cbcmoreshells:steel_projectile_rack_chamber",
     "cbcmoreshells:steel_projectile_rack_quickfiring_breech",
-    "cbcmoreshells:landing_indicator",
     "cbcmoreshells:torpedo_detection_device",
     "cbcmoreshells:ammo_rack",
     "cbcmoreshells:steel_ammo_rack",
-    "cbcmoreshells:dish_plate",
-    "cbcmoreshells:round_dish_plate",
     "cbcmoreshells:steel_dual_cannon_barrel",
     "cbcmoreshells:steel_dual_cannon_chamber",
     "cbcmoreshells:steel_dual_cannon_quickfiring_breech",

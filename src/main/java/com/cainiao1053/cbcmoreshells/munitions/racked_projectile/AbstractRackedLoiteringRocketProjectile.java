@@ -1,6 +1,7 @@
 package com.cainiao1053.cbcmoreshells.munitions.racked_projectile;
 
 
+import com.cainiao1053.cbcmoreshells.CBCMSCompatTransformers;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.config.RackedLoiteringRocketProjectileProperties;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.util.Mth;
@@ -26,8 +27,10 @@ public abstract class AbstractRackedLoiteringRocketProjectile extends FuzedRacke
     protected float controlGain = getAllProperties().control().guidanceControl();
     protected float maxG = getAllProperties().control().maxG();
     protected float scanAngle = getAllProperties().control().scanAngle();
-    //protected Ship targetShip;
-    //protected Vec3 control = new Vec3(0.0D, 0.0D, 0.0D);
+    /** Locked sublevel target; stored as Object to avoid a direct Sable dependency here. */
+    protected Object targetSublevel = null;
+    protected Vec3 cachedTargetPos = null;
+    protected Vec3 cachedTargetVel = null;
 
     @Override
     public void tick() {
@@ -46,59 +49,33 @@ public abstract class AbstractRackedLoiteringRocketProjectile extends FuzedRacke
                 this.level().addAlwaysVisibleParticle(options, true, dx, dy, dz, sx, sy, sz);
             }
         }
-//        if(getAge() > guidanceStart && this.targetShip == null) {
-//            //start control
-//            List<Ship> ships = new ArrayList<>();
-//            Vec3 dir = this.getOrientation().normalize();
-//            Vec3 offset = dir.scale(searchWidth);
-//            dir = dir.scale(searchLength);
-//
-//            AABB currentMovementRegion = this.getBoundingBox()
-//                    .inflate(searchWidth)
-//                    .expandTowards(dir)
-//                    .move(offset);
-//            var shipWorldCore = VSGameUtilsKt.getShipObjectWorld((ServerLevel) this.level());
-//
-//            double leastScore = Double.MAX_VALUE;
-//            for(var ship :shipWorldCore.getLoadedShips()){
-//                AABBdc shipABdc = ship.getWorldAABB();
-//                AABB shipAABB = toAABB(shipABdc);
-//                if(currentMovementRegion.intersects(shipAABB)) {
-//                    //set target
-//                    Vector3dc shipPosdc = ship.getTransform().getPositionInWorld();
-//                    Vec3 shipPos = new Vec3(shipPosdc.x(), shipPosdc.y(), shipPosdc.z());
-//                    Vec3 dirToTarget = shipPos.subtract(this.position()).normalize();
-//                    Vec3 heading = this.getDeltaMovement().normalize();
-//                    double dot = dirToTarget.dot(heading);
-//                    if(dot > scanAngle){
-//                        ships.add(ship);
-//                    }
-//                }
-//            }
-//            if(!ships.isEmpty()) {
-//                for(Ship ship : ships) {
-//                    Vector3dc shipPosdc = ship.getTransform().getPositionInWorld();
-//                    Vec3 shipPos = new Vec3(shipPosdc.x(), shipPosdc.y(), shipPosdc.z());
-//                    double distSqr = this.position().distanceTo(shipPos);
-//                    Vec3 dirToTarget = shipPos.subtract(this.position()).normalize();
-//                    Vec3 heading = this.getDeltaMovement().normalize();
-//                    double dot = dirToTarget.dot(heading);
-//                    double score = distSqr*Math.max((1-dot), 0.01);
-//                    if(score < leastScore) {
-//                        leastScore = score;
-//                        this.targetShip = ship;
-//                    }
-//                }
-//            }
-//        }
+        if (!this.level().isClientSide && getAge() > guidanceStart) {
+            if (this.targetSublevel == null) {
+                Vec3 heading = this.getDeltaMovement();
+                if (heading.lengthSqr() > 1e-12) {
+                    CBCMSCompatTransformers.SubLevelTarget found = CBCMSCompatTransformers.findSublevelTarget(
+                            this.level(), this.position(), heading,
+                            searchLength, searchWidth, scanAngle);
+                    if (found != null) {
+                        this.targetSublevel = found.sublevel();
+                        this.cachedTargetPos = found.position();
+                        this.cachedTargetVel = found.velocity();
+                    }
+                }
+            } else {
+                CBCMSCompatTransformers.SubLevelTarget tracked = CBCMSCompatTransformers.trackSublevelTarget(
+                        this.level(), this.targetSublevel);
+                if (tracked != null) {
+                    this.cachedTargetPos = tracked.position();
+                    this.cachedTargetVel = tracked.velocity();
+                } else {
+                    this.targetSublevel = null;
+                    this.cachedTargetPos = null;
+                    this.cachedTargetVel = null;
+                }
+            }
+        }
     }
-
-//    public static AABB toAABB(AABBdc i) {
-//        return new AABB(
-//                i.minX(), i.minY(), i.minZ(),
-//                i.maxX(), i.maxY(), i.maxZ()
-//        );
-//    }
 
     @Override
     protected double getDragForce() {
@@ -120,27 +97,23 @@ public abstract class AbstractRackedLoiteringRocketProjectile extends FuzedRacke
     @Override
     protected Vec3 getForces(Vec3 position, Vec3 velocity) {
         Vec3 naturalForce = velocity.normalize().scale(-this.getDragForce()).add((double) 0.0F, this.getGravity(), (double) 0.0F);
-        //add control
-        Vec3 control = new Vec3(0,0,0);
-//        if(this.targetShip != null) {
-//            //control here
-//            Vector3dc shipVeldc = targetShip.getVelocity();
-//            Vec3 shipVel = new Vec3(shipVeldc.x(), shipVeldc.y(), shipVeldc.z());
-//            Vector3dc shipPosdc = targetShip.getTransform().getPositionInWorld();
-//            Vec3 shipPos = new Vec3(shipPosdc.x(), shipPosdc.y(), shipPosdc.z()).add(shipVel.scale(0.15));
-//            Vec3 dirToTarget = position.subtract(shipPos).normalize();
-//            Vec3 heading = velocity.normalize(); //used to normalize
-//            double dot = dirToTarget.dot(heading);
-//            Vec3 lateral = dirToTarget.subtract(heading.scale(dot));
-//            double lateralLength = lateral.length();
-//            double vel = velocity.length();
-//            double actual_force = lateralLength * vel * controlGain;
-//            if(actual_force > maxG){
-//                control = lateral.normalize().scale(-maxG).subtract(0,this.getGravity(),0);
-//            }else{
-//                control = lateral.scale(-vel*controlGain).subtract(0,this.getGravity(),0);
-//            }
-//        }
+        Vec3 control = new Vec3(0, 0, 0);
+        if (this.targetSublevel != null && this.cachedTargetPos != null) {
+            Vec3 targetVel = this.cachedTargetVel != null ? this.cachedTargetVel : new Vec3(0, 0, 0);
+            Vec3 shipPos = this.cachedTargetPos.add(targetVel.scale(0.15));
+            Vec3 dirToTarget = position.subtract(shipPos).normalize();
+            Vec3 heading = velocity.normalize();
+            double dot = dirToTarget.dot(heading);
+            Vec3 lateral = dirToTarget.subtract(heading.scale(dot));
+            double lateralLength = lateral.length();
+            double vel = velocity.length();
+            double actualForce = lateralLength * vel * controlGain;
+            if (actualForce > maxG) {
+                control = lateral.normalize().scale(-maxG).subtract(0, this.getGravity(), 0);
+            } else {
+                control = lateral.scale(-vel * controlGain).subtract(0, this.getGravity(), 0);
+            }
+        }
         return naturalForce.add(control);
     }
 

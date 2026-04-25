@@ -205,6 +205,8 @@ public class ModGroup {
 				CBCMSItems.SNIPER_COMBAT_COMMAND.asStack(),
 				CBCMSItems.ASSASSIN_COMBAT_COMMAND.asStack(),
 
+				CBCMSBlocks.HE_LOITERING_ROCKET.asStack(),
+				CBCMSBlocks.APHE_LOITERING_ROCKET.asStack(),
 				CBCMSBlocks.HE_BOMB.asStack(),
 				CBCMSBlocks.APHE_BOMB.asStack(),
 				CBCMSBlocks.HE_BOUNCING_BOMB.asStack(),
