@@ -8,7 +8,8 @@
   "mixins": [
     "CannonMountPointMixin",
     "MunitionFuzingRecipeMixin",
-    "AbstractBigCannonProjectileMixin"
+    "AbstractBigCannonProjectileMixin",
+    "CompatMountPointMixin"
   ],
   "injectors": {
     "defaultRequire": 1
