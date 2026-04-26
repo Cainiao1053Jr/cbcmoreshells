@@ -39,7 +39,16 @@
       "Bash(javap -p com/simibubi/create/content/kinetics/mechanicalArm/ArmInteractionPoint.class)",
       "Bash(find ~/.gradle/caches -name create-1.21.1*.jar)",
       "Bash(find C:/Minecraft/MODS/cbcms-v6 -path */createbigcannons/* -name *.java)",
-      "Bash(find C:/Users/59512/.gradle -name createbigcannons*sources*.jar)"
+      "Bash(find C:/Users/59512/.gradle -name createbigcannons*sources*.jar)",
+      "Bash(javap -c -p \"rbasamoyai/createbigcannons/cannons/big_cannons/breeches/quickfiring_breech/CannonMountPoint.class\")",
+      "Bash(javap -p -verbose \"C:\\\\Minecraft\\\\MODS\\\\cbcms-v6\\\\rbasamoyai\\\\createbigcannons\\\\cannons\\\\big_cannons\\\\breeches\\\\quickfiring_breech\\\\CannonMountPoint.class\")",
+      "Bash(javap -c -p \"rbasamoyai/createbigcannons/index/CBCArmInteractionPointTypes$CannonMountType.class\")",
+      "Bash(javap -c -p \"C:\\\\Minecraft\\\\MODS\\\\cbcms-v6\\\\rbasamoyai\\\\createbigcannons\\\\cannons\\\\big_cannons\\\\breeches\\\\quickfiring_breech\\\\CannonMountPoint.class\")",
+      "Bash(javap -p \"rbasamoyai/createbigcannons/cannon_control/fixed_cannon_mount/FixedCannonMountBlockEntity.class\")",
+      "Bash(find C:MinecraftMODScbcms-v6src -name TorpQuickfiringBreech*.java -o -name DualCannonQuickfiringBreech*.java -o -name ProjectileRackQuickfiringBreech*.java)",
+      "Bash(javap -c -p \"C:\\\\Minecraft\\\\MODS\\\\cbcms-v6\\\\rbasamoyai\\\\createbigcannons\\\\cannon_control\\\\contraption\\\\AbstractMountedCannonContraption.class\")",
+      "Bash(javap -c \"C:\\\\Minecraft\\\\MODS\\\\cbcms-v6\\\\rbasamoyai\\\\createbigcannons\\\\cannon_control\\\\contraption\\\\AbstractMountedCannonContraption.class\")",
+      "Bash(javap -c -p \"rbasamoyai/createbigcannons/cannon_control/cannon_mount/CannonMountBlockEntity.class\")"
     ]
   }
 }
