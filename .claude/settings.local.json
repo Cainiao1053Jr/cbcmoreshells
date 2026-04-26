@@ -1,9 +1,0 @@
-{
-  "permissions": {
-    "allow": [
-      "Bash(javap -classpath \"C:\\\\Users\\\\59512\\\\.gradle/caches/forge_gradle/deobf_dependencies/com/rbasamoyai/createbigcannons/5.8.2-dev+mc.1.20.1-forge-build.150_mapped_official_1.20.1/createbigcannons-5.8.2-dev+mc.1.20.1-forge-build.150_mapped_official_1.20.1.jar\" -c rbasamoyai.createbigcannons.munitions.fuzes.TimedFuzeItem)",
-      "Bash(find /c/Minecraft/MODS/cbcmoreshells/src -type f -name CBCMSBlocks.java -o -name CBCMSItems.java -o -name *Registry*)",
-      "Bash(grep -r \"mold\\\\|template\\\\|模具\" /c/Minecraft/MODS/cbcmoreshells/src/main/java --include=*.java -l)"
-    ]
-  }
-}
