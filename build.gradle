@@ -150,10 +150,13 @@ dependencies {
     implementation "maven.modrinth:rjti7mm0:E47zeSfp"
 
     // Create Big Cannons (NeoForge 1.21.1) — update cbc_file_id in gradle.properties
-    implementation("curse.maven:createbigcannons-646668:${cbc_file_id}") {
-        exclude group: "info.journeymap"       // version conflict: old API shadows JourneyMap's bundled newer API
-        exclude group: "maven.modrinth", module: "journeymap"
-    }
+    //implementation("curse.maven:createbigcannons-646668:${cbc_file_id}")
+//            {
+//        exclude group: "info.journeymap"       // version conflict: old API shadows JourneyMap's bundled newer API
+//        exclude group: "maven.modrinth", module: "journeymap"
+//    }
+
+    implementation(files("libs/createbigcannons-5.11.3.jar"))
 
     //implementation "curse.maven:sable-1312371:${sable_version_cf}"
     api("dev.ryanhcode.sable:sable-neoforge-${project.minecraft_version}:${project.sable_version}")

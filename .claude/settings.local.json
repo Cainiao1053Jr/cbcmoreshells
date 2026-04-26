@@ -37,7 +37,9 @@
       "Bash(cp /c/Users/59512/.gradle/caches/modules-2/files-2.1/maven.modrinth/rjti7mm0/E47zeSfp/f7a9aa39957626f64a8763f6e4c91d754e168ba/rjti7mm0-E47zeSfp.jar compact_mount.jar)",
       "Bash(javap -p -c com/cubester/cbc_compact_mount/compat/CMArmInteractionPointTypes$CompactCannonMountPoint.class)",
       "Bash(javap -p com/simibubi/create/content/kinetics/mechanicalArm/ArmInteractionPoint.class)",
-      "Bash(find ~/.gradle/caches -name create-1.21.1*.jar)"
+      "Bash(find ~/.gradle/caches -name create-1.21.1*.jar)",
+      "Bash(find C:/Minecraft/MODS/cbcms-v6 -path */createbigcannons/* -name *.java)",
+      "Bash(find C:/Users/59512/.gradle -name createbigcannons*sources*.jar)"
     ]
   }
 }
