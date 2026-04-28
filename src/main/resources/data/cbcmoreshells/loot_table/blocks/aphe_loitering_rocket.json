@@ -20,11 +20,11 @@
               "source": "block_entity"
             }
           ],
-          "name": "cbcmoreshells:normal_incendiary_he_shell"
+          "name": "cbcmoreshells:aphe_loitering_rocket"
         }
       ],
       "rolls": 1.0
     }
   ],
-  "random_sequence": "cbcmoreshells:blocks/normal_incendiary_he_shell"
+  "random_sequence": "cbcmoreshells:blocks/aphe_loitering_rocket"
 }

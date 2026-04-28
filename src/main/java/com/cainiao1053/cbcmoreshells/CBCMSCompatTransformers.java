@@ -26,6 +26,23 @@ public class CBCMSCompatTransformers {
         boolean shootOnSublevel(Level level, Vec3 pos);
     }
 
+    private static final List<isOnSublevelHandler> IS_ON_SUBLEVEL = new ReferenceArrayList<>();
+
+    public static void addIsOnSublevelHandler(isOnSublevelHandler handler) {
+        IS_ON_SUBLEVEL.add(handler);
+    }
+
+    public static boolean isOnSublevel(Level level, Vec3 pos) {
+        for (isOnSublevelHandler t : IS_ON_SUBLEVEL) {
+            return  t.isOnSublevel(level, pos);
+        }
+        return false;
+    }
+
+    public interface isOnSublevelHandler {
+        boolean isOnSublevel(Level level, Vec3 pos);
+    }
+
     public record SubLevelTarget(Object sublevel, Vec3 position, Vec3 velocity) {}
 
     public interface SubLevelSearchHandler {

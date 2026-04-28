@@ -13,39 +13,6 @@ import javax.annotation.Nullable;
 
 public class CBCMSSableCompat {
 
-//    public static BlockPos transformFromShip(Level level, BlockPos pos, BlockPos root) {
-//        // Adapted from ActiveSableCompanion; this implementation is mainly leveraged for cannon particle handling as
-//        // the cannon particle spawn points can be far away from the cannon mount. --ritchie
-//        SubLevel sublevel = Sable.HELPER.getContaining(level, root);
-//        if (sublevel == null)
-//            return pos;
-//        Pose3dc pose = level instanceof LevelPoseProviderExtension extension ? extension.sable$getPose(sublevel) : sublevel.logicalPose();
-//        return BlockPos.containing(pose.transformPosition(Vec3.atCenterOf(pos)));
-//    }
-//
-//    public static Vec3 transformFromShip(Level level, Vec3 pos, Vec3 root) {
-//        // See the BlockPos version for commentary. --ritchie
-//        SubLevel sublevel = Sable.HELPER.getContaining(level, root);
-//        if (sublevel == null)
-//            return pos;
-//        Pose3dc pose = level instanceof LevelPoseProviderExtension extension ? extension.sable$getPose(sublevel) : sublevel.logicalPose();
-//        return pose.transformPosition(pos);
-//    }
-//
-//    public static boolean groundProjectile(Level level, AbstractCannonProjectile projectile, BlockPos impactPos) {
-//        SubLevel sublevel = Sable.HELPER.getContaining(level, impactPos);
-//        if (sublevel == null)
-//            return false;
-//        Vec3 projPos = projectile.position();
-//        Pose3d pose = sublevel.logicalPose();
-//        Vec3 shipPos = pose.transformPositionInverse(projPos);
-//        Vec3 nudge = Vec3.atCenterOf(impactPos).subtract(shipPos).scale(0.05);
-//        projectile.setPos(shipPos.add(nudge));
-//        Vec3 orientation = projectile.getOrientation();
-//        projectile.setOrientation(pose.transformNormalInverse(pose.transformNormalInverse(orientation)));
-//        return true;
-//    }
-
     public static boolean hitAroundSublevel(Level level, Vec3 pos){
         if(Sable.HELPER.getContaining(level, pos) != null){
             return true;
@@ -53,6 +20,13 @@ public class CBCMSSableCompat {
         AABB box = AABB.ofSize(pos, 4, 4, 4);
         Iterable<SubLevel> sublevels = Sable.HELPER.getAllIntersecting(level, new BoundingBox3d(box));
         for (SubLevel sublevel : sublevels) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isOnSublevel(Level level, Vec3 pos){
+        if(Sable.HELPER.getContaining(level, pos) != null){
             return true;
         }
         return false;
@@ -101,7 +75,7 @@ public class CBCMSSableCompat {
         if (sublevel.isRemoved()) return null;
         Vector3dc posdc = sublevel.logicalPose().position();
         Vec3 pos = new Vec3(posdc.x(), posdc.y(), posdc.z());
-        Vec3 vel = Sable.HELPER.getVelocity(level, sublevel, pos);
+        Vec3 vel = Sable.HELPER.getVelocity(level, sublevel, pos).multiply(0.00001, -0.00001, 0.00001);
         return new CBCMSCompatTransformers.SubLevelTarget(sublevel, pos, vel);
     }
 
@@ -109,6 +83,7 @@ public class CBCMSSableCompat {
         CBCMSCompatTransformers.addShootOnSublevelHandler(CBCMSSableCompat::hitAroundSublevel);
         CBCMSCompatTransformers.setSublevelSearchHandler(CBCMSSableCompat::findTarget);
         CBCMSCompatTransformers.setSublevelTrackHandler(CBCMSSableCompat::trackTarget);
+        CBCMSCompatTransformers.addIsOnSublevelHandler(CBCMSSableCompat::isOnSublevel);
 //        CBCCompatTransformers.addBlockPosTransformer(SableCompat::transformFromShip);
 //        CBCCompatTransformers.addVec3Transformer(SableCompat::transformFromShip);
 //        CBCCompatTransformers.addNormalTransformer(new SableCannonProjectileCompat.NormalTransformer());

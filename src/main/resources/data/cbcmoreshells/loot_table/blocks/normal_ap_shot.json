@@ -12,18 +12,10 @@
               "source": "block_entity"
             },
             {
-              "function": "minecraft:copy_nbt",
-              "ops": [
-                {
-                  "op": "replace",
-                  "source": "Tracer",
-                  "target": "BlockEntityTag.Tracer"
-                },
-                {
-                  "op": "replace",
-                  "source": "id",
-                  "target": "BlockEntityTag.id"
-                }
+              "function": "minecraft:copy_components",
+              "include": [
+                "createbigcannons:tracer",
+                "createbigcannons:fuze"
               ],
               "source": "block_entity"
             }

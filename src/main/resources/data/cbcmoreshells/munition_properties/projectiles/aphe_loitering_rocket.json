@@ -24,7 +24,7 @@
   "steady_state_vel": 5,
   "thrust_time": 110,
   "guidance_start": 30,
-  "maxG": 0.09,
+  "maxG": 0.13,
   "guidance_control": 1,
   "search_length": 160,
   "search_width": 48,
