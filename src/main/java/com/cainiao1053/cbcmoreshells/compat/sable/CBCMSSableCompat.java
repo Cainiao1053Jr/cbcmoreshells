@@ -13,11 +13,11 @@ import javax.annotation.Nullable;
 
 public class CBCMSSableCompat {
 
-    public static boolean hitAroundSublevel(Level level, Vec3 pos){
+    public static boolean hitAroundSublevel(Level level, Vec3 pos, int x, int y, int z) {
         if(Sable.HELPER.getContaining(level, pos) != null){
             return true;
         }
-        AABB box = AABB.ofSize(pos, 4, 4, 4);
+        AABB box = AABB.ofSize(pos, x, y, z);
         Iterable<SubLevel> sublevels = Sable.HELPER.getAllIntersecting(level, new BoundingBox3d(box));
         for (SubLevel sublevel : sublevels) {
             return true;

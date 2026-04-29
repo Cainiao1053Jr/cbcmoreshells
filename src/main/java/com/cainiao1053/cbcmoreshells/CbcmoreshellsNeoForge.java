@@ -8,6 +8,7 @@ import com.cainiao1053.cbcmoreshells.index.CBCMSBlockEntities;
 import com.cainiao1053.cbcmoreshells.index.CBCMSContraptionTypes;
 import com.cainiao1053.cbcmoreshells.index.CBCMSDataComponents;
 import com.cainiao1053.cbcmoreshells.index.CBCMSSoundEvents;
+import net.createmod.catnip.platform.CatnipServices;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.minecraft.core.Registry;
@@ -53,6 +54,8 @@ public class CbcmoreshellsNeoForge {
         modEventBus.addListener(this::onRegisterSounds);
 		modEventBus.addListener(this::onRegister);
         modEventBus.addListener(this::onRegisterCapabilities);
+
+        CatnipServices.PLATFORM.executeOnClientOnly(() -> () -> CBCMSClientNeoForge.prepareClient(modEventBus, forgeEventBus));
 
     }
 

@@ -16,14 +16,22 @@ public class CBCMSCompatTransformers {
     }
 
     public static boolean shootOnSublevel(Level level, Vec3 pos) {
+        return shootOnSublevel(level, pos, 4,4,4);
+//        for (shootOnSublevelHandler t : SHOOT_ON_SUBLEVEL) {
+//            return  t.shootOnSublevel(level, pos, 4, 4, 4);
+//        }
+//        return false;
+    }
+
+    public static boolean shootOnSublevel(Level level, Vec3 pos, int x, int y, int z) {
         for (shootOnSublevelHandler t : SHOOT_ON_SUBLEVEL) {
-            return  t.shootOnSublevel(level, pos);
+            return  t.shootOnSublevel(level, pos, x, y, z);
         }
         return false;
     }
 
     public interface shootOnSublevelHandler {
-        boolean shootOnSublevel(Level level, Vec3 pos);
+        boolean shootOnSublevel(Level level, Vec3 pos, int x, int y, int z);
     }
 
     private static final List<isOnSublevelHandler> IS_ON_SUBLEVEL = new ReferenceArrayList<>();

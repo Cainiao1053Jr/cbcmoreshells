@@ -96,7 +96,7 @@ public class DualCannonQuickfiringBreechVisual extends AbstractBlockEntityVisual
 		float progress = this.blockEntity.getOpenProgress(partialTick);
 		BlockPos visualPos = this.getVisualPosition();
 
-		float renderedBreechblockOffset = progress / 16.0f * 13.0f;
+		float renderedBreechblockOffset = progress / 16.0f * 7.0f;
 		Vector3f normal = this.blockRotation.step();
 		normal.mul(renderedBreechblockOffset);
 		this.breechblock.position(visualPos).translatePosition(normal.x(), normal.y(), normal.z()).setChanged();
