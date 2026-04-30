@@ -1,6 +1,7 @@
 package com.cainiao1053.cbcmoreshells.cannon_control.contraption;
 
 import com.cainiao1053.cbcmoreshells.cannon_control.cannon_types.CBCMSCannonContraptionTypes;
+import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.breeches.quick_firing_breech.DualCannonQuickfiringBreechBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.IProjectileRackBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.ProjectileRackBlock;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.breeches.ProjectileRackBreechStrengthHandler;
@@ -257,6 +258,11 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 		BlockPos endPos = this.startPos.relative(this.initialOrientation.getOpposite());
 		if (this.presentBlockEntities.get(endPos) instanceof ProjectileRackQuickfiringBreechBlockEntity qfbreech)
 			qfbreech.tickAnimation();
+		if (level.isClientSide) {
+			BlockEntity clientBe = this.getBlockEntityClientSide(endPos);
+			if (clientBe instanceof ProjectileRackQuickfiringBreechBlockEntity clientQfBreech)
+				clientQfBreech.tickAnimation();
+		}
 //		if (!level.isClientSide && this.isDropMortar() && this.mortarDelay > 0) {
 //			--this.mortarDelay;
 //			//if (this.mortarDelay == 0) this.actuallyFireDropMortar();

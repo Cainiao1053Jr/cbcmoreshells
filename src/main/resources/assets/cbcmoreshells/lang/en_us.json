@@ -491,5 +491,17 @@
 "cbcmoreshells.ponder.dual_cannon/dual_cannon_magazine.text_1": "Replace the quickfiring breech with a magazine breech and assemble it to turn the cannon into a magazine cannon",
 "cbcmoreshells.ponder.dual_cannon/dual_cannon_magazine.text_2": "A magazine allows the cannon to fire multiple shells in a short time, but increases the total loading time",
 "cbcmoreshells.ponder.dual_cannon/dual_cannon_magazine.text_3": "Each magazine allows the cannon to carry three additional reserve shells",
-"cbcmoreshells.ponder.dual_cannon/dual_cannon_magazine.text_4": "Mechanical arm auto-loading is required to load shells into the magazine"
+"cbcmoreshells.ponder.dual_cannon/dual_cannon_magazine.text_4": "Mechanical arm auto-loading is required to load shells into the magazine",
+"cbcmoreshells.ponder.projectile_rack/projectile_rack_intro.header": "Projectile Rack",
+"cbcmoreshells.ponder.projectile_rack/projectile_rack_intro.text_1": "Projectile racks are used to carry drop-launched munitions. They must be assembled on a cannon mount, and require at least one latch and two body sections",
+"cbcmoreshells.ponder.projectile_rack/projectile_rack_intro.text_2": "After assembly, right-click the latch to open it, then right-click with a bomb in hand to load it",
+"cbcmoreshells.ponder.projectile_rack/projectile_rack_intro.text_3": "Projectile racks can carry and launch bombs, rockets, and other munitions. Different munition types have their own features",
+"cbcmoreshells.ponder.projectile_rack/projectile_rack_intro.text_4": "Note that torpedoes loaded on projectile racks are different from those launched from torpedo tubes",
+"cbcmoreshells.ponder.projectile_rack/projectile_rack_intro.text_5": "Projectile racks can also be loaded automatically using mechanical arms",
+"cbcmoreshells.ponder.ammo_rack/ammo_rack_intro.header": "Ammo Rack",
+"cbcmoreshells.ponder.ammo_rack/ammo_rack_intro.text_1": "Ammo racks are used to store munition and supply loading for cannons",
+"cbcmoreshells.ponder.ammo_rack/ammo_rack_intro.text_2": "Mechanical arms can take munition directly from ammo racks",
+"cbcmoreshells.ponder.ammo_rack/ammo_rack_intro.text_3": "Right-click an ammo rack slot while holding munition to insert it",
+"cbcmoreshells.ponder.ammo_rack/ammo_rack_intro.text_4": "Right-click a slot with an empty hand to take munition out",
+"cbcmoreshells.ponder.ammo_rack/ammo_rack_intro.text_5": "Ammo racks can filter munition. Provide a redstone signal to switch the filtered ammo type"
 }

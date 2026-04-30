@@ -66,7 +66,7 @@ public abstract class ProjectileRackBaseBlock extends DirectionalBlock implement
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		return this.defaultBlockState()
 				.setValue(FACING, context.getHorizontalDirection())
-				.setValue(CEILING, context.getClickedFace() == Direction.DOWN);
+				.setValue(CEILING, context.getPlayer() != null && context.getPlayer().getXRot() < 0);
 	}
 
 

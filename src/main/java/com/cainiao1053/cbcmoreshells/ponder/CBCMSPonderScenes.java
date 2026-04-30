@@ -156,5 +156,15 @@ public class CBCMSPonderScenes {
                 CBCMSItems.SNIPER_COMBAT_COMMAND,
                 CBCMSItems.ASSASSIN_COMBAT_COMMAND
         ).addStoryBoard("dual_cannon/dual_cannon_command", DualCannonScenes::dualCannonCommand);
+
+        HELPER.forComponents(
+                CBCMSBlocks.STEEL_PROJECTILE_RACK_CHAMBER,
+                CBCMSBlocks.STEEL_PROJECTILE_RACK_QUICKFIRING_BREECH
+        ).addStoryBoard("projectile_rack/projectile_rack_intro", ProjectileRackScenes::projectileRackIntro);
+
+        HELPER.forComponents(
+                CBCMSBlocks.AMMO_RACK,
+                CBCMSBlocks.STEEL_AMMO_RACK
+        ).addStoryBoard("ammo_rack/ammo_rack_intro", AmmoRackScenes::ammoRackIntro);
     }
 }

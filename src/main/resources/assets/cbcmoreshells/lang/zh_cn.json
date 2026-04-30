@@ -491,5 +491,17 @@
 "cbcmoreshells.ponder.dual_cannon/dual_cannon_magazine.text_1": "将弹夹炮闩替换普通炮闩并组装，可以把火炮变成弹夹炮",
 "cbcmoreshells.ponder.dual_cannon/dual_cannon_magazine.text_2": "弹夹能让火炮在短时间内打出多发炮弹，但总体装填时间会变长",
 "cbcmoreshells.ponder.dual_cannon/dual_cannon_magazine.text_3": "一个弹夹能够让火炮额外装载三发备弹",
-"cbcmoreshells.ponder.dual_cannon/dual_cannon_magazine.text_4": "需要使用动力臂自动装填来把炮弹装入弹夹"
+"cbcmoreshells.ponder.dual_cannon/dual_cannon_magazine.text_4": "需要使用动力臂自动装填来把炮弹装入弹夹",
+"cbcmoreshells.ponder.projectile_rack/projectile_rack_intro.header": "挂架",
+"cbcmoreshells.ponder.projectile_rack/projectile_rack_intro.text_1": "挂架用于装载投放式弹药，需要在炮座上组装，至少需要一个卡扣和两个主体",
+"cbcmoreshells.ponder.projectile_rack/projectile_rack_intro.text_2": "组装后右键卡扣可以打开，之后手持航弹右键能够进行装弹",
+"cbcmoreshells.ponder.projectile_rack/projectile_rack_intro.text_3": "挂架上能够装载航弹，火箭等挂载并发射，不同的弹种具有各自的特点",
+"cbcmoreshells.ponder.projectile_rack/projectile_rack_intro.text_4": "注意，挂架上装载的鱼雷和鱼雷管中发射的并不相同",
+"cbcmoreshells.ponder.projectile_rack/projectile_rack_intro.text_5": "挂架也可以使用动力臂进行自动装填",
+"cbcmoreshells.ponder.ammo_rack/ammo_rack_intro.header": "弹药架",
+"cbcmoreshells.ponder.ammo_rack/ammo_rack_intro.text_1": "弹药架用于存放弹药并给火炮提供装填",
+"cbcmoreshells.ponder.ammo_rack/ammo_rack_intro.text_2": "动力臂可以直接从弹药架中抓取弹药",
+"cbcmoreshells.ponder.ammo_rack/ammo_rack_intro.text_3": "手持弹药右键弹药架的格子以放入",
+"cbcmoreshells.ponder.ammo_rack/ammo_rack_intro.text_4": "空手右键格子以取出",
+"cbcmoreshells.ponder.ammo_rack/ammo_rack_intro.text_5": "弹药架可以筛选弹药，通入红石信号以切换筛选弹种"
 }

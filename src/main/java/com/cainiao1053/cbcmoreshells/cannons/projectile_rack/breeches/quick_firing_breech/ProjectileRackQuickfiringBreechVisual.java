@@ -26,8 +26,6 @@ import static com.cainiao1053.cbcmoreshells.cannons.projectile_rack.ProjectileRa
 public class ProjectileRackQuickfiringBreechVisual extends AbstractBlockEntityVisual<ProjectileRackQuickfiringBreechBlockEntity> implements SimpleDynamicVisual {
 
 	private final OrientedInstance breechblock;
-	//private final OrientedInstance shaft;
-	//private final OrientedInstance lever;
 	private final Direction direction;
 	private final Direction blockRotation;
 	private final Direction blockTranslation;
@@ -88,31 +86,21 @@ public class ProjectileRackQuickfiringBreechVisual extends AbstractBlockEntityVi
 			.translatePosition(this.offsetI.x + normal.x(), this.offsetI.y + normal.y(), this.offsetI.z + normal.z())
 			.setChanged();
 
-//		float angle = -progress * 90;
-//		Quaternionf qrot = Axis.of(this.direction.step()).rotationDegrees(angle);
-//		this.shaft.position(visualPos).rotation(qrot).setChanged();
-//		this.lever.position(visualPos.relative(this.direction)).rotation(qrot).setChanged();
 	}
 
 	@Override
 	public void updateLight(float partialTick) {
 		this.relight(this.pos, this.breechblock);
-//		this.relight(this.pos, this.shaft);
-//		this.relight(this.pos, this.lever);
 	}
 
 	@Override
 	public void _delete() {
 		this.breechblock.delete();
-//		this.shaft.delete();
-//		this.lever.delete();
 	}
 
 	@Override
 	public void collectCrumblingInstances(Consumer<Instance> consumer) {
 		consumer.accept(this.breechblock);
-//		consumer.accept(this.shaft);
-//		consumer.accept(this.lever);
 	}
 
 	private static PartialModel getPartialModelForState(BlockState state) {

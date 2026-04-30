@@ -2,6 +2,7 @@ package com.cainiao1053.cbcmoreshells.cannon_control.contraption;
 
 //import com.cainiao1053.cbcmoreshells.api.vs.ValkyrienSkies;
 import com.cainiao1053.cbcmoreshells.cannon_control.cannon_types.CBCMSCannonContraptionTypes;
+import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.breeches.quick_firing_breech.DualCannonQuickfiringBreechBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.ITorpedoTubeBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.TorpedoTubeBlock;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.breeches.TorpedoTubeBreechStrengthHandler;
@@ -224,6 +225,11 @@ public class MountedTorpedoTubeContraption extends AbstractMountedCannonContrapt
 		BlockPos endPos = this.startPos.relative(this.initialOrientation.getOpposite());
 		if (this.presentBlockEntities.get(endPos) instanceof TorpQuickfiringBreechBlockEntity qfbreech)
 			qfbreech.tickAnimation();
+		if (level.isClientSide) {
+			BlockEntity clientBe = this.getBlockEntityClientSide(endPos);
+			if (clientBe instanceof TorpQuickfiringBreechBlockEntity clientQfBreech)
+				clientQfBreech.tickAnimation();
+		}
 	}
 
 	@Override

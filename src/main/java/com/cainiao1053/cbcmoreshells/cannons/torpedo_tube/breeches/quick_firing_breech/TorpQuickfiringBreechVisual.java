@@ -26,7 +26,7 @@ import org.joml.Vector3f;
 public class TorpQuickfiringBreechVisual extends AbstractBlockEntityVisual<TorpQuickfiringBreechBlockEntity> implements SimpleDynamicVisual {
 
 	private final OrientedInstance breechblock;
-	private final OrientedInstance shaft;
+	//private final OrientedInstance shaft;
 	private final OrientedInstance lever;
 	private final Direction direction;
 	private final Direction blockRotation;
@@ -44,8 +44,8 @@ public class TorpQuickfiringBreechVisual extends AbstractBlockEntityVisual<TorpQ
 		this.breechblock = instancerProvider().instancer(InstanceTypes.ORIENTED, Models.partial(getPartialModelForState(this.blockState)))
 			.createInstance();
 
-		this.shaft = instancerProvider().instancer(InstanceTypes.ORIENTED, Models.partial(AllPartialModels.SHAFT))
-			.createInstance();
+//		this.shaft = instancerProvider().instancer(InstanceTypes.ORIENTED, Models.partial(AllPartialModels.SHAFT))
+//			.createInstance();
 
 		this.lever = instancerProvider().instancer(InstanceTypes.ORIENTED, Models.partial(CBCMSBlockPartials.QUICKFIRING_BREECH_LEVER))
 			.createInstance();
@@ -109,7 +109,7 @@ public class TorpQuickfiringBreechVisual extends AbstractBlockEntityVisual<TorpQ
 
 		float angle = progress * 90;
 		Quaternionf qrot = Axis.of(this.direction.step()).rotationDegrees(angle);
-		this.shaft.position(visualPos).rotation(qrot).setChanged();
+		//this.shaft.position(visualPos).rotation(qrot).setChanged();
 		this.lever.position(visualPos.relative(this.direction)).rotation(qrot).setChanged();
 		rotateLever(this.lever, this.direction);
 	}
@@ -135,21 +135,21 @@ public class TorpQuickfiringBreechVisual extends AbstractBlockEntityVisual<TorpQ
 	@Override
 	public void updateLight(float partialTick) {
 		this.relight(this.pos, this.breechblock);
-		this.relight(this.pos, this.shaft);
+		//this.relight(this.pos, this.shaft);
 		this.relight(this.pos, this.lever);
 	}
 
 	@Override
 	public void _delete() {
 		this.breechblock.delete();
-		this.shaft.delete();
+		//this.shaft.delete();
 		this.lever.delete();
 	}
 
 	@Override
 	public void collectCrumblingInstances(Consumer<Instance> consumer) {
 		consumer.accept(this.breechblock);
-		consumer.accept(this.shaft);
+		//consumer.accept(this.shaft);
 		consumer.accept(this.lever);
 	}
 

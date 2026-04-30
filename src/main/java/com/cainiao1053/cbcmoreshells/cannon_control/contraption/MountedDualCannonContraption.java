@@ -278,6 +278,11 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
         BlockPos endPos = this.startPos.relative(this.initialOrientation.getOpposite());
         if (this.presentBlockEntities.get(endPos) instanceof DualCannonQuickfiringBreechBlockEntity qfbreech)
             qfbreech.tickAnimation();
+        if (level.isClientSide) {
+            BlockEntity clientBe = this.getBlockEntityClientSide(endPos);
+            if (clientBe instanceof DualCannonQuickfiringBreechBlockEntity clientQfBreech)
+                clientQfBreech.tickAnimation();
+        }
 //		if (!level.isClientSide && this.isDropMortar() && this.mortarDelay > 0) {
 //			--this.mortarDelay;
 //			//if (this.mortarDelay == 0) this.actuallyFireDropMortar();
