@@ -4,6 +4,7 @@ import com.cainiao1053.cbcmoreshells.datagen.assets.CBCMSBuilderTransformers;
 import com.cainiao1053.cbcmoreshells.items.cannon_combo.BigCannonComboItem;
 import com.cainiao1053.cbcmoreshells.items.cannon_combo.DualCannonComboItem;
 import com.cainiao1053.cbcmoreshells.items.cannon_combo.SingleCannonComboItem;
+import com.cainiao1053.cbcmoreshells.items.cannon_combo.TorpedoTubeComboItem;
 import com.cainiao1053.cbcmoreshells.munitions.autocannon.bullet.AntiairMachineGunRoundItem;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.combat_command.*;
 import com.cainiao1053.cbcmoreshells.munitions.fuzes.SensitiveImpactFuzeItem;
@@ -131,6 +132,10 @@ public class CBCMSItems {
             .register();
 
     public static final ItemEntry<BigCannonComboItem> BIG_CANNON_COMBO = REGISTRATE.item("big_cannon_combo", BigCannonComboItem::new)
+            .properties(properties -> properties.stacksTo(8))
+            .register();
+
+    public static final ItemEntry<TorpedoTubeComboItem> TORPEDO_TUBE_COMBO = REGISTRATE.item("torpedo_tube_combo", TorpedoTubeComboItem::new)
             .properties(properties -> properties.stacksTo(8))
             .register();
 
