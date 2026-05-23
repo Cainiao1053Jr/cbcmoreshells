@@ -2,6 +2,7 @@ package com.cainiao1053.cbcmoreshells;
 
 import it.unimi.dsi.fastutil.objects.ReferenceArrayList;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 
 import javax.annotation.Nullable;
@@ -86,6 +87,23 @@ public class CBCMSCompatTransformers {
         return sublevelTrackHandler != null
                 ? sublevelTrackHandler.trackTarget(level, sublevel)
                 : null;
+    }
+
+    private static final List<spawnFireOnSublevelHandler> SPAWNFIRE_ON_SUBLEVEL = new ReferenceArrayList<>();
+
+    public static void addSpawnFireOnSublevelHandler(spawnFireOnSublevelHandler handler) {
+        SPAWNFIRE_ON_SUBLEVEL.add(handler);
+    }
+
+    public static void spawnFireOnSublevel(Level level, AABB box, int radius, Vec3 pos) {
+        for (spawnFireOnSublevelHandler t : SPAWNFIRE_ON_SUBLEVEL) {
+            t.spawnFireOnSublevel(level,box, radius, pos);
+            return;
+        }
+    }
+
+    public interface spawnFireOnSublevelHandler {
+        void spawnFireOnSublevel(Level level, AABB box, int radius, Vec3 pos);
     }
 
 }

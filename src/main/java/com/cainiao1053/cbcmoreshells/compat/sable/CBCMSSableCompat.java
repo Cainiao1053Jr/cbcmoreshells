@@ -4,12 +4,25 @@ import com.cainiao1053.cbcmoreshells.CBCMSCompatTransformers;
 import dev.ryanhcode.sable.Sable;
 import dev.ryanhcode.sable.companion.math.BoundingBox3d;
 import dev.ryanhcode.sable.sublevel.SubLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.BaseFireBlock;
+import net.minecraft.world.level.block.CampfireBlock;
+import net.minecraft.world.level.block.CandleBlock;
+import net.minecraft.world.level.block.CandleCakeBlock;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3dc;
+import rbasamoyai.createbigcannons.munitions.big_cannon.fluid_shell.FluidBlobBurst;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CBCMSSableCompat {
 
@@ -23,6 +36,45 @@ public class CBCMSSableCompat {
             return true;
         }
         return false;
+    }
+
+    public static List<SubLevel> getSublevelAround(Level level, AABB box) {
+        //AABB box = AABB.ofSize(pos, x, y, z);
+        List<SubLevel> all_sublevels = new ArrayList<>();
+        Iterable<SubLevel> sublevels = Sable.HELPER.getAllIntersecting(level, new BoundingBox3d(box));
+        for (SubLevel sublevel : sublevels) {
+            all_sublevels.add(sublevel);
+        }
+        return all_sublevels;
+    }
+
+    public static void spawnFireOnShip(Level level, AABB box, int radius, Vec3 pos) {
+        Iterable<SubLevel> sublevels = Sable.HELPER.getAllIntersecting(level, new BoundingBox3d(box));
+        for (SubLevel sublevel : sublevels) {
+            Vec3 localPos = sublevel.logicalPose().transformPositionInverse(pos);
+            spawnFire(new BlockPos((int) localPos.x(),(int) localPos.y(), (int) localPos.z()), level, radius);
+        }
+    }
+
+    public static void spawnFire(BlockPos root, Level level, int radius) {
+        float chance = FluidBlobBurst.getBlockAffectChance();
+        if (chance == 0)
+            return;
+        AABB bounds = new AABB(root).inflate(radius);
+        BlockPos pos1 = BlockPos.containing(bounds.minX, bounds.minY, bounds.minZ);
+        BlockPos pos2 = BlockPos.containing(bounds.maxX, bounds.maxY, bounds.maxZ);
+        for (BlockPos pos : BlockPos.betweenClosed(pos1, pos2)) {
+            if (level.getRandom().nextFloat() > chance)
+                continue;
+            BlockState state = level.getBlockState(pos);
+            if (level.isEmptyBlock(pos)) {
+                level.setBlockAndUpdate(pos, BaseFireBlock.getState(level, pos));
+            } else if (CandleBlock.canLight(state) || CampfireBlock.canLight(state) || CandleCakeBlock.canLight(state)) {
+                level.playSound(null, pos, SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
+                level.setBlock(pos, state.setValue(BlockStateProperties.LIT, true), 11);
+                level.gameEvent(null, GameEvent.BLOCK_PLACE, pos);
+            }
+        }
     }
 
     public static boolean isOnSublevel(Level level, Vec3 pos){
@@ -84,6 +136,7 @@ public class CBCMSSableCompat {
         CBCMSCompatTransformers.setSublevelSearchHandler(CBCMSSableCompat::findTarget);
         CBCMSCompatTransformers.setSublevelTrackHandler(CBCMSSableCompat::trackTarget);
         CBCMSCompatTransformers.addIsOnSublevelHandler(CBCMSSableCompat::isOnSublevel);
+        CBCMSCompatTransformers.addSpawnFireOnSublevelHandler(CBCMSSableCompat::spawnFireOnShip);
 //        CBCCompatTransformers.addBlockPosTransformer(SableCompat::transformFromShip);
 //        CBCCompatTransformers.addVec3Transformer(SableCompat::transformFromShip);
 //        CBCCompatTransformers.addNormalTransformer(new SableCannonProjectileCompat.NormalTransformer());

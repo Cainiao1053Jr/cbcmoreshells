@@ -22,18 +22,8 @@ public class CBCMSConfigs {
 
 
     private static final Map<ModConfig.Type, ConfigBase> CONFIGS = new EnumMap<>(ModConfig.Type.class);
-
-//    private static CBCCfgClient client;
-//    private static CBCCfgCommon common;
     private static CBCMSCfgServer server;
 
-//    public static CBCCfgClient client() {
-//        return client;
-//    }
-//
-//    public static CBCCfgCommon common() {
-//        return common;
-//    }
 
     public static CBCMSCfgServer server() {
         return server;
@@ -57,8 +47,6 @@ public class CBCMSConfigs {
     }
 
     public static void register(BiConsumer<ModConfig.Type, ModConfigSpec> cons) {
-//        client = register(CBCCfgClient::new, ModConfig.Type.CLIENT);
-//        common = register(CBCCfgCommon::new, ModConfig.Type.COMMON);
         server = register(CBCMSCfgServer::new, ModConfig.Type.SERVER);
 
         for (Entry<ModConfig.Type, ConfigBase> pair : CONFIGS.entrySet())

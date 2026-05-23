@@ -47,6 +47,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.phys.Vec3;
 import net.neoforged.neoforge.items.ItemStackHandler;
+import rbasamoyai.createbigcannons.CBCCompatTransformers;
 import rbasamoyai.createbigcannons.CBCTags;
 import rbasamoyai.createbigcannons.cannon_control.ControlPitchContraption;
 import rbasamoyai.createbigcannons.cannon_control.cannon_types.ICannonContraptionType;
@@ -585,9 +586,12 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
         float tone = 2 + soundPower * -8 + level.random.nextFloat() * 4f - 2f;
         //float pitch = Math.min(1.5f/((this.cannonMaterial.properties().durabilityMassModifier()-1)/1.6f+1),2);
         float pitch = 1;
-        double shakeDistance = propelCtx.chargesUsed * CBCConfigs.server().cannons.bigCannonBlastDistanceMultiplier.getF();
+        //double shakeDistance = propelCtx.chargesUsed * CBCConfigs.server().cannons.bigCannonBlastDistanceMultiplier.getF();
+        double shakeDistance = 0;
         float volume = 14;
-        Vec3 plumePos = spawnPos.subtract(vec);
+        //Vec3 plumePos = spawnPos.subtract(vec);
+        Vec3 plumePos = CBCCompatTransformers.transformVec3(level, spawnPos.subtract(vec), this.entity.position());
+        Vec3 plumeDir = CBCCompatTransformers.transformLocationNormal(level, this.entity.blockPosition(), vec);
         propelCtx.smokeScale = Math.max(1, propelCtx.smokeScale);
 
         BigCannonPlumeParticleData plumeParticle = new BigCannonPlumeParticleData(0.5f, 4, 10);
@@ -599,7 +603,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
         double blastDistSqr = volume * volume * 256 * 1.21;
 
         for (ServerPlayer player : level.players()) {
-            level.sendParticles(player, plumeParticle, true, plumePos.x, plumePos.y, plumePos.z, 0, vec.x, vec.y, vec.z, 1.0f);
+            level.sendParticles(player, plumeParticle, true, plumePos.x, plumePos.y, plumePos.z, 0, plumeDir.x, plumeDir.y, plumeDir.z, 1.0f);
             if (player.distanceToSqr(plumePos.x, plumePos.y, plumePos.z) < blastDistSqr)
                 player.connection.send(blastWavePacket);
         }

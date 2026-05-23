@@ -1,15 +1,13 @@
 package com.cainiao1053.cbcmoreshells;
 
-import java.util.Optional;
-import java.util.function.Supplier;
-
 import com.simibubi.create.foundation.utility.CreateLang;
-
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.neoforged.fml.ModList;
-import rbasamoyai.createbigcannons.utils.CBCUtils;
+
+import java.util.Optional;
+import java.util.function.Supplier;
 
 public enum CBCMSModsNeoForge {
 	SABLE;
@@ -25,7 +23,7 @@ public enum CBCMSModsNeoForge {
 	}
 
 	public ResourceLocation resource(String path) {
-		return CBCUtils.location(id, path);
+		return ResourceLocation.fromNamespaceAndPath(id, path);
 	}
 
 	public Block getBlock(String id) {

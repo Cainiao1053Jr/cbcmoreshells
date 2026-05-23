@@ -1,6 +1,7 @@
 package com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_incendiary_he_shell;
 
 import com.cainiao1053.cbcmoreshells.CBCMSBlocks;
+import com.cainiao1053.cbcmoreshells.CBCMSCompatTransformers;
 import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.FuzedDualCannonProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.config.DualCannonIncendiaryProperties;
@@ -19,6 +20,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
 import rbasamoyai.createbigcannons.CreateBigCannons;
 import rbasamoyai.createbigcannons.config.CBCConfigs;
 import rbasamoyai.createbigcannons.munitions.ShellExplosion;
@@ -52,6 +54,8 @@ public class NormalIncendiaryHEShellProjectile extends FuzedDualCannonProjectile
 		spawnFire(new BlockPos((int)position.x(), (int)position.y(), (int)position.z()), this.level(), fireRange);
 		AABB currentMovementRegion = this.getBoundingBox()
 				.inflate(3);
+		CBCMSCompatTransformers.spawnFireOnSublevel(level(), currentMovementRegion, fireRange, new Vec3(position.x(),
+				position.y(), position.z()));
 //		var shipWorldCore = VSGameUtilsKt.getShipObjectWorld((ServerLevel) this.level());
 //		for(var ship :shipWorldCore.getLoadedShips()){
 //			AABBdc shipABdc = ship.getWorldAABB();
