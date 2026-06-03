@@ -27,7 +27,7 @@ public class ShellessHEProjectileBlockItem extends ShellessFuzedProjectileBlockI
 		super.appendHoverText(stack, context, tooltip, flag);
 
 		BigCannonShellessShellProperties properties = CBCMSMunitionPropertiesHandlers.SHELLESS_SHELL_BIG_CANNON_PROJECTILE.getPropertiesOf(SHELLESS_HE_SHELL.get());
-		CBCMSTooltip.appendExplosiveInfo(stack, context, tooltip, flag, properties.ballistics().durabilityMass(), properties.ballistics().penetration(), properties.ballistics().deflection(),properties.explosion().explosivePower());
+		CBCMSTooltip.appendExplosiveInfo(stack, context, tooltip, flag, properties.ballistics().durabilityMass(), properties.ballistics().penetration(), properties.ballistics().deflection(),properties.explosion().blockDamagePower());
 
 	}
 

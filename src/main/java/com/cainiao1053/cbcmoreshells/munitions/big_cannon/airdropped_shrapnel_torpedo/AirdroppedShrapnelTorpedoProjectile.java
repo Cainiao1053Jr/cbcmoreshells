@@ -41,7 +41,7 @@ public class AirdroppedShrapnelTorpedoProjectile extends FuzedCannonTorpedoProje
 		if (getTickInWater() > 30){burstCount =properties.torpedoBurst().burstProjectileCount();}
 
 		ShrapnelExplosion explosion = new ShrapnelExplosion(this.level(), null, this.indirectArtilleryFire(false), position.x(),
-				position.y(), position.z(), properties.explosion().explosivePower(),
+				position.y(), position.z(), properties.explosion().blockDamagePower(),properties.explosion().blockDamagePower(),
 				CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
 
 		CreateBigCannons.handleCustomExplosion(this.level(), explosion);

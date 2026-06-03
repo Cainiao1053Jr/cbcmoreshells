@@ -43,10 +43,10 @@ public class NormalAPShellProjectile extends FuzedDualCannonProjectile {
 
 	@Override
 	protected void detonate(Position position) {
-		float explosivePower = this.getAllProperties().explosion().explosivePower() * ((this.getDurabilityModifier()) * 0.47f + 0.4f);
+		float explosivePower = this.getAllProperties().explosion().blockDamagePower() * ((this.getDurabilityModifier()) * 0.47f + 0.4f);
 		//float explosivePower = ((this.getDurabilityModifier()) * 0.5f + 0.4f) * initialPower;
 		ShellExplosion explosion = new ShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
-			position.y(), position.z(), explosivePower, false,
+			position.y(), position.z(), explosivePower, explosivePower, false,
 			CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
 		CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 	}
@@ -162,7 +162,7 @@ public class NormalAPShellProjectile extends FuzedDualCannonProjectile {
 			}
 			Vec3 spallLoc = hitLoc.add(curVel.normalize().scale(2));
 			if (!this.level().isClientSide) {
-				ImpactExplosion explosion = new ImpactExplosion(this.level(), this, this.indirectArtilleryFire(false), spallLoc.x, spallLoc.y, spallLoc.z, 1, Explosion.BlockInteraction.KEEP);
+				ImpactExplosion explosion = new ImpactExplosion(this.level(), this, this.indirectArtilleryFire(false), spallLoc.x, spallLoc.y, spallLoc.z, 1, 1,  Explosion.BlockInteraction.KEEP);
 				CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 			}
 			SoundType sound = state.getSoundType();

@@ -27,53 +27,6 @@ public class DualCannonProjectileRenderer<T extends AbstractDualCannonProjectile
 		super(context);
 	}
 
-//	@Override
-//	public void render(T entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffers, int packedLight) {
-//		boolean isTracer = entity.hasTracer();
-//		BlockState blockState = entity.getRenderedBlockState();
-//		if (blockState.getRenderShape() == RenderShape.MODEL) {
-//			Vec3 vel = entity.getOrientation();
-//			if (vel.lengthSqr() < 1e-4d)
-//				vel = new Vec3(0, -1, 0);
-//
-//			poseStack.pushPose();
-//			if (vel.horizontalDistanceSqr() > 1e-4d && Math.abs(vel.y) > 1e-2d) {
-//				Vec3 horizontal = new Vec3(vel.x, 0, vel.z).normalize();
-//				poseStack.mulPoseMatrix(CBCUtils.mat4x4fFacing(vel.normalize().reverse(), horizontal));
-//				poseStack.mulPoseMatrix(CBCUtils.mat4x4fFacing(horizontal));
-//			} else {
-//				poseStack.mulPoseMatrix(CBCUtils.mat4x4fFacing(vel.normalize()));
-//			}
-//			poseStack.translate(-0.5, -0.5, -0.5);
-//
-//			Minecraft.getInstance().getBlockRenderer().renderSingleBlock(blockState, poseStack, buffers,
-//				isTracer ? LightTexture.FULL_BRIGHT : packedLight, OverlayTexture.NO_OVERLAY);
-//
-//			poseStack.popPose();
-//		}
-//		if (isTracer) {
-//			int frame = (int)((entity.getId() + entity.level().getGameTime()) % 4L);
-//			ResourceLocation textureLoc = CreateBigCannons.resource(String.format("textures/entity/tracer_glow%d.png", frame));
-//			RenderType renderType = RenderType.entityCutoutNoCull(textureLoc);
-//
-//			poseStack.pushPose();
-//			poseStack.mulPose(this.entityRenderDispatcher.cameraOrientation());
-//			poseStack.scale(1.5f, 1.5f, 1.5f);
-//
-//			PoseStack.Pose lastPose = poseStack.last();
-//			Matrix4f pose = lastPose.pose();
-//			Matrix3f normal = lastPose.normal();
-//			VertexConsumer builder = buffers.getBuffer(renderType);
-//
-//			vertex(builder, pose, normal, LightTexture.FULL_BRIGHT, -0.5f, -0.5f, 0, 1);
-//			vertex(builder, pose, normal, LightTexture.FULL_BRIGHT, -0.5f,  0.5f, 0, 0);
-//			vertex(builder, pose, normal, LightTexture.FULL_BRIGHT,  0.5f,  0.5f, 1, 0);
-//			vertex(builder, pose, normal, LightTexture.FULL_BRIGHT,  0.5f, -0.5f, 1, 1);
-//
-//			poseStack.popPose();
-//		}
-//		super.render(entity, entityYaw, partialTicks, poseStack, buffers, packedLight);
-//	}
 
 	@Override
 	public void render(T entity, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource buffers, int packedLight) {

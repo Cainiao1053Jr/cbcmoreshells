@@ -43,9 +43,9 @@ public class NormalSAPShellProjectile extends FuzedDualCannonProjectile {
 
 	@Override
 	protected void detonate(Position position) {
-		float explosivePower = this.getAllProperties().explosion().explosivePower()*(this.getDurabilityModifier()*0.82f + 0.18f);
+		float explosivePower = this.getAllProperties().explosion().blockDamagePower()*(this.getDurabilityModifier()*0.82f + 0.18f);
 		ShellExplosion explosion = new ShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
-			position.y(), position.z(), explosivePower, false,
+			position.y(), position.z(), explosivePower, explosivePower, false,
 			CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
 		CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 	}
@@ -74,7 +74,6 @@ public class NormalSAPShellProjectile extends FuzedDualCannonProjectile {
 
 		BallisticPropertiesComponent ballistics = this.getBallisticProperties();
 		BlockArmorPropertiesProvider blockArmor = BlockArmorPropertiesHandler.getProperties(state);
-		//boolean unbreakable = projectileContext.griefState() == CBCCfgMunitions.GriefState.NO_DAMAGE || state.getDestroySpeed(this.level(), pos) == -1;
 		boolean penetrate = false;
 		boolean surfaceImpact = this.canHitSurface();
 
@@ -124,30 +123,6 @@ public class NormalSAPShellProjectile extends FuzedDualCannonProjectile {
 				}
 			}
 		}
-//		double bonusMomentum = 1 + Math.max(0, (velMag - 2f)
-//				* 0.15f);
-//		double incidentVel = velMag * incidence;
-//		double rawMomentum = mass * bonusMomentum * velMag;
-//		double excessMomentum = 0;
-//		double maximumMomentum = getMaximumMomentum();
-//		if(rawMomentum > maximumMomentum) {
-//			rawMomentum = maximumMomentum;
-//			excessMomentum = rawMomentum - maximumMomentum;
-//		}
-//		//double momentum = mass * incidentVel * bonusMomentum;
-//		double momentum = rawMomentum * incidence;
-//		durabilityPenalty = (float) toughness / (float) incidentVel + (float)excessMomentum;
-//
-//
-//
-//		if(momentum>toughness*2){
-//			penetrate = true;
-//		}else if(momentum > toughness*0.5){
-//			double penetrateChance = (momentum/toughness-0.15)/2;
-//			if(this.level().getRandom().nextDouble()<penetrateChance){
-//				penetrate = true;
-//			}
-//		}
 
 		ImpactResult.KinematicOutcome outcome;
 		if (!this.level().isClientSide && (penetrate || this.getSmashToughness()>toughness)) {
@@ -186,7 +161,7 @@ public class NormalSAPShellProjectile extends FuzedDualCannonProjectile {
 			}
 			Vec3 spallLoc = hitLoc.add(curVel.normalize().scale(2));
 			if (!this.level().isClientSide) {
-				ImpactExplosion explosion = new ImpactExplosion(this.level(), this, this.indirectArtilleryFire(false), spallLoc.x, spallLoc.y, spallLoc.z, 1, Explosion.BlockInteraction.KEEP);
+				ImpactExplosion explosion = new ImpactExplosion(this.level(), this, this.indirectArtilleryFire(false), spallLoc.x, spallLoc.y, spallLoc.z, 1, 1, Explosion.BlockInteraction.KEEP);
 				CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 			}
 			SoundType sound = state.getSoundType();
@@ -194,7 +169,6 @@ public class NormalSAPShellProjectile extends FuzedDualCannonProjectile {
 				this.level().playSound(null, spallLoc.x, spallLoc.y, spallLoc.z, sound.getBreakSound(), SoundSource.BLOCKS,
 						sound.getVolume(), sound.getPitch());
 		}
-		//shatter |= this.onImpact(blockHitResult, new ImpactResult(outcome, shatter), projectileContext);
 		return new ImpactResult(outcome, shatter);
 	}
 

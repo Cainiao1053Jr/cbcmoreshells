@@ -95,7 +95,7 @@ public class AmmoRackBlock extends Block implements IWrenchable, IBE<AmmoRackBlo
         if (projectile instanceof AbstractCannonProjectile) {
             BlockPos position = result.getBlockPos();
             ShellExplosion explosion = new ShellExplosion(level, null, null, position.getX(),
-                    position.getY(), position.getZ(), 5, false,
+                    position.getY(), position.getZ(), 5, 5, false,
                     CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
             CreateBigCannons.handleCustomExplosion(level, explosion);
         }
@@ -107,7 +107,7 @@ public class AmmoRackBlock extends Block implements IWrenchable, IBE<AmmoRackBlo
         if (!canExplode()) return;
         if (level.isClientSide()) return;
         ShellExplosion rackExplosion = new ShellExplosion(level, null, null, pos.getX(),
-                pos.getY(), pos.getZ(), 5, false,
+                pos.getY(), pos.getZ(), 5, 5, false,
                 CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
         CreateBigCannons.handleCustomExplosion(level, rackExplosion);
     }

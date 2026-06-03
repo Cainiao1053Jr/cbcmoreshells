@@ -42,7 +42,7 @@ public class DepthChargeProjectile extends AbstractDepthChargeProjectile {
 		RackedShrapnelProjectileProperties properties = this.getAllProperties();
 		FluidState fluidState = this.level().getFluidState(this.blockPosition());
 		if(this.getAge() > explisionCooldown && !fluidState.isEmpty()){
-			this.explosivePower = this.getAllProperties().explosion().explosivePower();
+			this.explosivePower = this.getAllProperties().explosion().blockDamagePower();
 			if(!level().isClientSide()){
 				destroyTorpedo(position, (ServerLevel) level());
 				burstCount =properties.burst().burstProjectileCount();
@@ -50,7 +50,7 @@ public class DepthChargeProjectile extends AbstractDepthChargeProjectile {
 		}
 		Vec3 oldDelta = this.getDeltaMovement().normalize().scale(5);
 		ShellExplosion explosion = new ShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
-			position.y(), position.z(), explosivePower, false,
+			position.y(), position.z(), explosivePower, explosivePower, false,
 			CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
 		CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 		CBCProjectileBurst.spawnConeBurst(this.level(), CBCMSEntityTypes.TORPEDO_BURST.get(), new Vec3(position.x(), position.y(), position.z()),

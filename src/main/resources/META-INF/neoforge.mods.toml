@@ -4,7 +4,7 @@ license="Custom"
 
 [[mods]]
 modId="cbcmoreshells"
-version="2.0.11-1.21.1"
+version="2.1.0-1.21.1"
 displayName="CBC Military Supplement"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/"
 logoFile=""
@@ -34,14 +34,14 @@ side="SERVER"
 [[dependencies.cbcmoreshells]]
 modId="create"
 type = "required"
-versionRange="[6.0.9,)"
+versionRange="[6.0.10,)"
 ordering="AFTER"
 side="BOTH"
 
 [[dependencies.cbcmoreshells]]
 modId="createbigcannons"
 type = "required"
-versionRange="[5.11.2,)"
+versionRange="[5.11.5,)"
 ordering="AFTER"
 side="BOTH"
 

@@ -36,7 +36,7 @@ public class AntiairShrapnelShellProjectile extends ShellessFuzedBigCannonProjec
 		Vec3 oldDelta = this.getDeltaMovement();
 		ShrapnelShellessShellProperties properties = this.getAllProperties();
 		ShrapnelExplosion explosion = new ShrapnelExplosion(this.level(), null, this.indirectArtilleryFire(false), position.x(),
-			position.y(), position.z(), properties.explosion().explosivePower(),
+			position.y(), position.z(), properties.explosion().blockDamagePower(),properties.explosion().blockDamagePower(),
 			CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
 		CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 		CBCProjectileBurst.spawnConeBurst(this.level(), CBCMSEntityTypes.ANTIAIR_SHRAPNEL_BURST.get(), new Vec3(position.x(), position.y(), position.z()),

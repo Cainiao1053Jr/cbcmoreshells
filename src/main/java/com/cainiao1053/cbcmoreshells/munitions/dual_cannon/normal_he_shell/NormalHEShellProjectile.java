@@ -26,9 +26,9 @@ public class NormalHEShellProjectile extends FuzedDualCannonProjectile {
 
 	@Override
 	protected void detonate(Position position) {
-		float explosivePower = this.getAllProperties().explosion().explosivePower()*((this.getDurabilityModifier()-1)/1.2f+1);
+		float explosivePower = this.getAllProperties().explosion().blockDamagePower()*((this.getDurabilityModifier()-1)/1.2f+1);
 		ShellExplosion explosion = new ShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
-			position.y(), position.z(), explosivePower, false,
+			position.y(), position.z(), explosivePower, explosivePower, false,
 			CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
 		CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 	}

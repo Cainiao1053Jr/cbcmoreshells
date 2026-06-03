@@ -451,7 +451,8 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 		}
 
 		Vec3 spawnPos = entity.toGlobalVector(Vec3.atCenterOf(currentPos.relative(this.initialOrientation)), 0);
-		Vec3 vec = spawnPos.subtract(entity.toGlobalVector(Vec3.atCenterOf(BlockPos.ZERO), 0)).normalize();
+		Vec3 centerPos = entity.toGlobalVector(Vec3.atCenterOf(BlockPos.ZERO), 0);
+		Vec3 vec = spawnPos.subtract(centerPos).normalize();
 		spawnPos = spawnPos.subtract(vec.scale(2));
 		//float initVel = projectile.initialVelocity();
 
@@ -462,31 +463,6 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 
 		if (projectile != null) {
 			float initVel = projectile.initialVelocity();
-//			if(ship != null) {
-//				Vector3d vecV3d = new Vector3d(vec.x, vec.y, vec.z);
-//				Vector3d shipVel = new Vector3d(ship.getVelocity().x(), ship.getVelocity().y(), ship.getVelocity().z());
-//
-//				if(this.hasStabilizer){ //some condition, pending in future
-//					Vector3dc shipVelForFix = ship.getVelocity().div(20, new Vector3d());
-//					Vector3dc shipVelInShip = ship.getWorldToShip().transformDirection(shipVelForFix, new Vector3d());
-//					Vec3 shipVelVec3 = new Vec3(shipVelInShip.x(), shipVelInShip.y(), shipVelInShip.z());
-//					double scale = shipVelVec3.dot(vec);
-//					Vec3 proj = new Vec3(vec.x() * scale, vec.y() * scale, vec.z() * scale);
-//					Vec3 rej = shipVelVec3.subtract(proj);
-//					Vec3 vecOut = vec.scale(initVel).subtract(rej); //extract normal
-//					initVel =(float) vecOut.length();
-//					vec = vecOut.normalize();
-//				}
-//
-//				Quaterniondc trf = ship.getTransform().getShipToWorldRotation().conjugate(new Quaterniond());
-//				Vector3d velInShip = trf.transform(shipVel);
-//				double projScale = velInShip.dot(vecV3d)*0.025;
-//				if(projScale<0){
-//					projScale = 0;
-//				}
-//				Vector3d velPrjGunInShip = vecV3d.mul(projScale);
-//				spawnPos = new Vec3(spawnPos.x +velPrjGunInShip.x, spawnPos.y + velPrjGunInShip.y, spawnPos.z + velPrjGunInShip.z);
-//			}
 
 			if (projectile instanceof IntegratedPropellantProjectile integPropel && !projectileBlocks.isEmpty()) {
 				if (!propelCtx.addIntegratedPropellant(integPropel, projectileBlocks.get(0), this.initialOrientation) && canFail) {
@@ -499,13 +475,6 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 				this.fail(currentPos, level, entity, null, (int) propelCtx.chargesUsed);
 				return;
 			}
-
-//			Direction breechDirection = this.breechState.getValue(BlockStateProperties.FACING);
-//			if(breechDirection != Direction.DOWN && breechDirection != Direction.UP){
-//				if(this.breechState.getValue(CEILING)){
-//					spawnPos = spawnPos.subtract(0,0.5*(1-Math.max(vec.y,0)),0);
-//				}else{spawnPos = spawnPos.add(0,0.5*(1-Math.max(vec.y,0)),0);}
-//			}
 
 			if(projectile instanceof AbstractDualRackedRocketProjectile && projectileBlockDuplicate!=null) {
 				Vec3 vecRot = vec.yRot((float)Math.PI/2).scale(0.35);
@@ -529,7 +498,7 @@ public class MountedProjectileRackContraption extends AbstractMountedCannonContr
 
 		recoilMagnitude += propelCtx.recoil;
 		recoilMagnitude *= CBCConfigs.server().cannons.bigCannonRecoilScale.getF();
-		if (controller != null) controller.onRecoil(vec.scale(-recoilMagnitude), entity);
+		//if (controller != null) controller.onRecoil(vec.scale(0), centerPos, entity);
 
 		this.hasFired = true;
 

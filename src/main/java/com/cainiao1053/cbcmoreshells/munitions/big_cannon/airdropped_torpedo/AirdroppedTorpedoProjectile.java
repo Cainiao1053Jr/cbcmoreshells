@@ -33,10 +33,10 @@ public class AirdroppedTorpedoProjectile extends FuzedCannonTorpedoProjectile {
 	@Override
 	protected void detonate(Position position) {
 		float explosivePower = 0f;
-		if (getTickInWater() > 20){explosivePower =this.getAllProperties().explosion().explosivePower()*4;}
+		if (getTickInWater() > 20){explosivePower =this.getAllProperties().explosion().blockDamagePower()*4;}
 
 		ShellExplosion explosion = new ShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
-			position.y(), position.z(), explosivePower, false,
+			position.y(), position.z(), explosivePower, explosivePower, false,
 			CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
 		CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 	}

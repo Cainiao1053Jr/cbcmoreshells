@@ -157,7 +157,7 @@ public class CBCMSTooltip {
 		String key1 = "block.cbcmoreshells.torpedo" + ".tooltip.torpInfo";
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main", String.format("%.1f",torpSpeed*38.8),
-				String.format("%.1f", properties.explosion().explosivePower() * 4),
+				String.format("%.1f", properties.explosion().blockDamagePower() * 4),
 				buoyancyFactor,String.format("%.1f",lifetime*torpSpeed),String.format("%.1f",explosiveCooldown*torpSpeed), String.format("%.1f",((float)reloadTime /20))
 		), palette.primary(), palette.highlight(), 1));
 	}
@@ -177,7 +177,7 @@ public class CBCMSTooltip {
 		String key1 = "block.cbcmoreshells.reductive_torpedo" + ".tooltip.torpInfo";
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main", String.format("%.1f",torpSpeed*38.8),
-				String.format("%.1f", properties.explosion().explosivePower() * 4),
+				String.format("%.1f", properties.explosion().blockDamagePower() * 4),
 				buoyancyFactor,String.format("%.1f",lifetime*torpSpeed),String.format("%.1f",explosiveCooldown*torpSpeed),String.format("%.1f",((float)reloadTime /20)),
 				String.format("%.1f",reduction * 100)
 		), palette.primary(), palette.highlight(), 1));
@@ -257,7 +257,7 @@ public class CBCMSTooltip {
 		FontHelper.Palette palette = getPalette();
 		String key1 = "block.cbcmoreshells.loitering_rocket.tooltip.tooltip_info";
 		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
-		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main", properties.ballistics().durabilityMass(),properties.explosion().explosivePower(),
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main", properties.ballistics().durabilityMass(),properties.explosion().blockDamagePower(),
 				String.format("%.0f",(float)properties.lifetime()/20), String.format("%.0f",properties.steadyStateVel()*20),
 				String.format("%.0f",(float)properties.thrustTime()/20), String.format("%.2f",properties.control().maxG())), palette.primary(), palette.highlight(), 1));
 	}
@@ -472,7 +472,7 @@ public class CBCMSTooltip {
 			return;
 		}
 		float durabilityMass = properties.ballistics().durabilityMass();
-		float explosion = properties.explosion().explosivePower();
+		float explosion = properties.explosion().blockDamagePower();
 		float initVel = properties.dualCannonProperties().initialVel();
 		float projectileSpread = properties.dualCannonProperties().projectileSpread();
 		float minimumSpread = properties.dualCannonProperties().minimumSpread();
@@ -495,7 +495,7 @@ public class CBCMSTooltip {
 			return;
 		}
 		float durabilityMass = properties.ballistics().durabilityMass();
-		float explosion = properties.explosion().explosivePower();
+		float explosion = properties.explosion().blockDamagePower();
 		float initVel = properties.dualCannonProperties().initialVel();
 		float projectileSpread = properties.dualCannonProperties().projectileSpread();
 		float minimumSpread = properties.dualCannonProperties().minimumSpread();

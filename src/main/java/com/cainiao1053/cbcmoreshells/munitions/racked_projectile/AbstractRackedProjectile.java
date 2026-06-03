@@ -68,18 +68,6 @@ public abstract class AbstractRackedProjectile extends AbstractCannonProjectile 
 			Vec3 oldPos = this.position();
 			super.tick();
 			if (!this.isInGround()) {
-//					int lifetime = 20;
-//					ParticleOptions options = new TrailSmokeParticleData(lifetime);
-//					for (int i = 0; i < 10; ++i) {
-//						double partial = i * 0.1f;
-//						double dx = Mth.lerp(partial, this.xOld, this.getX());
-//						double dy = Mth.lerp(partial, this.yOld, this.getY());
-//						double dz = Mth.lerp(partial, this.zOld, this.getZ());
-//						double sx = this.level().random.nextDouble() * 0.004d - 0.002d;
-//						double sy = this.level().random.nextDouble() * 0.004d - 0.002d;
-//						double sz = this.level().random.nextDouble() * 0.004d - 0.002d;
-//						this.level().addAlwaysVisibleParticle(options, true, dx, dy, dz, sx, sy, sz);
-//					}
 
 				Vec3 newPos = this.position();
 				if (this.level().isClientSide && this.localSoundCooldown == 0) {
@@ -87,15 +75,6 @@ public abstract class AbstractRackedProjectile extends AbstractCannonProjectile 
 					double dispLen = displacement.length();
 					Vec3 originPos = newPos.subtract(displacement.scale(0.5));
 					double radius = Math.min(200, dispLen * 30);
-//					EnvExecute.executeOnClient(() -> () -> CBCClientCommon.playShellFlyingSoundOnClient(this,
-//						CBCSoundEvents.SHELL_FLYING.getMainEvent(), player -> {
-//							if (!CBCConfigs.CLIENT.enableBigCannonFlybySounds.get())
-//								return false;
-//							if (player.distanceToSqr(originPos) > radius * radius)
-//								return false;
-//							Vec3 diff = player.position().subtract(originPos);
-//							return displacement.normalize().dot(diff.normalize()) >= 0;
-//						}, radius));
 					playFlybySound(originPos, displacement, radius);
 				}
 			}
@@ -233,7 +212,7 @@ public abstract class AbstractRackedProjectile extends AbstractCannonProjectile 
 			}
 			Vec3 spallLoc = hitLoc.add(curVel.normalize().scale(2));
 			if (!this.level().isClientSide) {
-				ImpactExplosion explosion = new ImpactExplosion(this.level(), this, this.indirectArtilleryFire(false), spallLoc.x, spallLoc.y, spallLoc.z, 2, Explosion.BlockInteraction.KEEP);
+				ImpactExplosion explosion = new ImpactExplosion(this.level(), this, this.indirectArtilleryFire(false), spallLoc.x, spallLoc.y, spallLoc.z, 2, 2, Explosion.BlockInteraction.KEEP);
 				CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 			}
 			SoundType sound = state.getSoundType();

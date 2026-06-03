@@ -498,7 +498,8 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
         }
 
         Vec3 spawnPos = entity.toGlobalVector(Vec3.atCenterOf(currentPos.relative(this.initialOrientation)), 0);
-        Vec3 vec = spawnPos.subtract(entity.toGlobalVector(Vec3.atCenterOf(BlockPos.ZERO), 0)).normalize();
+        Vec3 centerPos = entity.toGlobalVector(Vec3.atCenterOf(BlockPos.ZERO), 0);
+        Vec3 vec = spawnPos.subtract(centerPos).normalize();
         spawnPos = spawnPos.subtract(vec.scale(2));
         float horizontalOffset = this.cannonMaterial.properties().barrelGap() / 2 * this.barrelInverter;
         Vec3 horizontalOffsetVec = vec.yRot((float) Math.PI / 2).scale(horizontalOffset);
@@ -572,12 +573,12 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
             secondary_projectile.addUntouchableEntity(entity, 1);
 
             level.addFreshEntity(secondary_projectile);
-            recoilMagnitude += secondary_projectile.addedRecoil();
+            //recoilMagnitude += secondary_projectile.addedRecoil();
         }
 
-        recoilMagnitude += propelCtx.recoil;
-        recoilMagnitude *= CBCConfigs.server().cannons.bigCannonRecoilScale.getF();
-        if (controller != null) controller.onRecoil(vec.scale(-recoilMagnitude), entity);
+        //recoilMagnitude += propelCtx.recoil;
+        //recoilMagnitude *= CBCConfigs.server().cannons.bigCannonRecoilScale.getF();
+        if (controller != null) controller.onRecoil(vec.scale(-durabilityMassModifier * 2.25), centerPos, entity);
 
         this.hasFired = true;
         this.barrelInverter *= -1;

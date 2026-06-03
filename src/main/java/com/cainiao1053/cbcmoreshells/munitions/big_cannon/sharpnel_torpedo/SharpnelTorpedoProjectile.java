@@ -41,7 +41,7 @@ public class SharpnelTorpedoProjectile extends FuzedCannonTorpedoProjectile {
 		if (normalDetonate()){burstCount =properties.torpedoBurst().burstProjectileCount();}
 
 		ShellExplosion explosion = new ShellExplosion(this.level(), null, this.indirectArtilleryFire(false), position.x(),
-				position.y(), position.z(), properties.explosion().explosivePower(), false,
+				position.y(), position.z(), properties.explosion().blockDamagePower(), this.getAllProperties().explosion().entityDamagePower(), false,
 				CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
 
 

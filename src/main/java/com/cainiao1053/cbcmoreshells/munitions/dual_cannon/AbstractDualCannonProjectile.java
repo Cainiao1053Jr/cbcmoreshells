@@ -1,7 +1,8 @@
 package com.cainiao1053.cbcmoreshells.munitions.dual_cannon;
 
-import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
+import com.cainiao1053.cbcmoreshells.CBCMSCompatTransformers;
 import com.cainiao1053.cbcmoreshells.cannon_control.contraption.MountedDualCannonContraption;
+import com.cainiao1053.cbcmoreshells.config.CBCMSConfigs;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.config.DualCannonPropertiesComponent;
 import com.cainiao1053.cbcmoreshells.network.CBCMSNetworkImpl;
 import com.cainiao1053.cbcmoreshells.network.ClientboundCBCMSSplashPacket;
@@ -17,11 +18,13 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Explosion;
@@ -30,9 +33,9 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.slf4j.Logger;
 import rbasamoyai.createbigcannons.CBCClientCommon;
 import rbasamoyai.createbigcannons.CreateBigCannons;
 import rbasamoyai.createbigcannons.block_armor_properties.BlockArmorPropertiesHandler;
@@ -51,8 +54,6 @@ import rbasamoyai.createbigcannons.network.ClientboundPlayBlockHitEffectPacket;
 import rbasamoyai.createbigcannons.utils.CBCUtils;
 
 import javax.annotation.Nonnull;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public abstract class AbstractDualCannonProjectile extends AbstractCannonProjectile {
 
@@ -315,7 +316,7 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 			}
 			Vec3 spallLoc = hitLoc.add(curVel.normalize().scale(2));
 			if (!this.level().isClientSide) {
-				ImpactExplosion explosion = new ImpactExplosion(this.level(), this, this.indirectArtilleryFire(false), spallLoc.x, spallLoc.y, spallLoc.z, 1, Explosion.BlockInteraction.KEEP);
+				ImpactExplosion explosion = new ImpactExplosion(this.level(), this, this.indirectArtilleryFire(false), spallLoc.x, spallLoc.y, spallLoc.z, 1, 1, Explosion.BlockInteraction.KEEP);
 				CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 			}
 			SoundType sound = state.getSoundType();
@@ -413,6 +414,13 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 		if(this.contraption == null){
 			return;
 		}
+		if(CBCMSConfigs.server().notifyOnHit.get()){
+			BlockPos contraptionPos = contraption.getStartPos();
+			AABB box =  CBCMSCompatTransformers.getShipAABB(level(), new Vec3(contraptionPos.getX(), contraptionPos.getY(), contraptionPos.getZ()));
+			level().getEntitiesOfClass(Player.class, box).forEach(player -> {
+				player.playNotifySound(SoundEvents.ANVIL_LAND, SoundSource.AMBIENT, 1 , 2);
+			});
+		}
 		contraption.reduceCooldown(getCooldownReductionRate());
 		hitTarget = true;
 	}
@@ -445,7 +453,7 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 	public float getDurabilityModifier(){return this.durabilityMassModifier;}
 
 	public boolean hitShip(BlockPos pos){
-		if(Math.abs(pos.getX()) > 10000000 || Math.abs(pos.getZ()) > 10000000){//guess what, I save 100000 iterations
+		if(Math.abs(pos.getX()) > 10000000 || Math.abs(pos.getZ()) > 10000000){//guess what, I saved 100000 iterations
 			return true;
 		}
 		return false;

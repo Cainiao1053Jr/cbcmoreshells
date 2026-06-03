@@ -41,7 +41,7 @@ public class InferiorHEShellProjectile extends ShellessFuzedBigCannonProjectile 
 	@Override
 	protected void detonate(Position position) {
 		ShellExplosion explosion = new ShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
-			position.y(), position.z(), this.getAllProperties().explosion().explosivePower(), false,
+			position.y(), position.z(), this.getAllProperties().explosion().blockDamagePower(), this.getAllProperties().explosion().entityDamagePower(), false,
 			CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
 		CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 	}

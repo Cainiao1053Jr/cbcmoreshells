@@ -235,7 +235,7 @@ public abstract class AbstractCannonTorpedoProjectile extends AbstractCannonProj
 			}
 			Vec3 spallLoc = hitLoc.add(curVel.normalize().scale(2));
 			if (!this.level().isClientSide) {
-				ImpactExplosion explosion = new ImpactExplosion(this.level(), this, this.indirectArtilleryFire(false), spallLoc.x, spallLoc.y, spallLoc.z, 2, Explosion.BlockInteraction.KEEP);
+				ImpactExplosion explosion = new ImpactExplosion(this.level(), this, this.indirectArtilleryFire(false), spallLoc.x, spallLoc.y, spallLoc.z, 2, 1, Explosion.BlockInteraction.KEEP);
 				CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 			}
 			SoundType sound = state.getSoundType();

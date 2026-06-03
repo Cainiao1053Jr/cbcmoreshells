@@ -34,7 +34,7 @@ public class IncendiaryHEProjectileBlockItem extends FuzedProjectileBlockItem {
 		}
 
 		BigCannonIncendiaryShellProperties properties = CBCMSMunitionPropertiesHandlers.INCENDIARY_SHELL_PROJECTILE.getPropertiesOf(INCENDIARY_HE_SHELL.get());
-		CBCMSTooltip.appendIncendiaryInfo(stack, context, tooltip, flag, properties.ballistics().durabilityMass(), properties.ballistics().penetration(), properties.ballistics().deflection(),properties.explosion().explosivePower(), properties.fireChance(), properties.fireRange());
+		CBCMSTooltip.appendIncendiaryInfo(stack, context, tooltip, flag, properties.ballistics().durabilityMass(), properties.ballistics().penetration(), properties.ballistics().deflection(),properties.explosion().blockDamagePower(), properties.fireChance(), properties.fireRange());
 
 	}
 

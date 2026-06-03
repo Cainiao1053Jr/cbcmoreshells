@@ -25,7 +25,7 @@ public class DualHERocketBlockItem extends FuzedRackedProjectileBlockItem {
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		super.appendHoverText(stack, context, tooltip, flag);
 		RackedRocketProjectileProperties properties = CBCMSMunitionPropertiesHandlers.RACKED_ROCKET.getPropertiesOf(DUAL_HE_ROCKET.get());
-		CBCMSTooltip.appendRackedRocketInfo(stack, context, tooltip, flag, properties.ballistics().durabilityMass(), properties.ballistics().penetration(), properties.ballistics().deflection(), properties.explosion().explosivePower(),properties.lifetime(), properties.steadyStateVel(), properties.thrustTime());
+		CBCMSTooltip.appendRackedRocketInfo(stack, context, tooltip, flag, properties.ballistics().durabilityMass(), properties.ballistics().penetration(), properties.ballistics().deflection(), properties.explosion().blockDamagePower(),properties.lifetime(), properties.steadyStateVel(), properties.thrustTime());
 
 	}
 

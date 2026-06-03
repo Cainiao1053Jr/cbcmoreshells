@@ -8,10 +8,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseFireBlock;
-import net.minecraft.world.level.block.CampfireBlock;
-import net.minecraft.world.level.block.CandleBlock;
-import net.minecraft.world.level.block.CandleCakeBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
@@ -48,12 +45,27 @@ public class CBCMSSableCompat {
         return all_sublevels;
     }
 
+    public static AABB getShipAABB(Level level, Vec3 pos) {
+        AABB searchBox = AABB.ofSize(pos, 1, 1, 1);
+        List<SubLevel> sublevels = getSublevelAround(level, searchBox);
+        if(!sublevels.isEmpty()){
+            SubLevel sublevel = sublevels.get(0);
+            return sublevel.boundingBox().toMojang();
+        }
+        return searchBox;
+    }
+
+    public static boolean hasShipsAround(Level level, AABB box) {
+        return !getSublevelAround(level, box).isEmpty();
+    }
+
     public static void spawnFireOnShip(Level level, AABB box, int radius, Vec3 pos) {
         Iterable<SubLevel> sublevels = Sable.HELPER.getAllIntersecting(level, new BoundingBox3d(box));
         for (SubLevel sublevel : sublevels) {
             Vec3 localPos = sublevel.logicalPose().transformPositionInverse(pos);
             spawnFire(new BlockPos((int) localPos.x(),(int) localPos.y(), (int) localPos.z()), level, radius);
         }
+        spawnFire(new BlockPos((int) pos.x(),(int) pos.y(),(int) pos.z()), level, radius);
     }
 
     public static void spawnFire(BlockPos root, Level level, int radius) {
@@ -74,6 +86,38 @@ public class CBCMSSableCompat {
                 level.setBlock(pos, state.setValue(BlockStateProperties.LIT, true), 11);
                 level.gameEvent(null, GameEvent.BLOCK_PLACE, pos);
             }
+        }
+    }
+
+    public static void extinguishFireOnShip(Level level, AABB box, int radius, Vec3 pos) {
+        Iterable<SubLevel> sublevels = Sable.HELPER.getAllIntersecting(level, new BoundingBox3d(box));
+        for (SubLevel sublevel : sublevels) {
+            Vec3 localPos = sublevel.logicalPose().transformPositionInverse(pos);
+            extinguishFire(new BlockPos((int) localPos.x(),(int) localPos.y(), (int) localPos.z()), level, radius);
+        }
+        extinguishFire(new BlockPos((int) pos.x(),(int) pos.y(),(int) pos.z()), level, radius);
+    }
+
+    public static void extinguishFire(BlockPos root, Level level, int radius) {
+        AABB bounds = new AABB(root).inflate(radius);
+        BlockPos pos1 = BlockPos.containing(bounds.minX, bounds.minY, bounds.minZ);
+        BlockPos pos2 = BlockPos.containing(bounds.maxX, bounds.maxY, bounds.maxZ);
+        for (BlockPos pos : BlockPos.betweenClosed(pos1, pos2)) {
+            BlockState state = level.getBlockState(pos);
+            if(state.getBlock() instanceof BaseFireBlock){
+                level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+            }else if(CandleBlock.canLight(state) || CampfireBlock.canLight(state) || CandleCakeBlock.canLight(state)){
+                level.setBlock(pos, state.setValue(BlockStateProperties.LIT, false), 11);
+                level.gameEvent(null, GameEvent.BLOCK_PLACE, pos);
+            }
+            //level.playSound(null, pos, SoundEvents., SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
+//            if (level.isEmptyBlock(pos)) {
+//                level.setBlockAndUpdate(pos, BaseFireBlock.getState(level, pos));
+//            } else if (CandleBlock.canLight(state) || CampfireBlock.canLight(state) || CandleCakeBlock.canLight(state)) {
+//                level.playSound(null, pos, SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
+//                level.setBlock(pos, state.setValue(BlockStateProperties.LIT, true), 11);
+//                level.gameEvent(null, GameEvent.BLOCK_PLACE, pos);
+//            }
         }
     }
 
@@ -137,6 +181,9 @@ public class CBCMSSableCompat {
         CBCMSCompatTransformers.setSublevelTrackHandler(CBCMSSableCompat::trackTarget);
         CBCMSCompatTransformers.addIsOnSublevelHandler(CBCMSSableCompat::isOnSublevel);
         CBCMSCompatTransformers.addSpawnFireOnSublevelHandler(CBCMSSableCompat::spawnFireOnShip);
+        CBCMSCompatTransformers.addhasShipsAroundHandler(CBCMSSableCompat::hasShipsAround);
+        CBCMSCompatTransformers.addExtinguishFireOnSublevelHandler(CBCMSSableCompat::extinguishFireOnShip);
+        CBCMSCompatTransformers.addGetShipAABBHandler(CBCMSSableCompat::getShipAABB);
 //        CBCCompatTransformers.addBlockPosTransformer(SableCompat::transformFromShip);
 //        CBCCompatTransformers.addVec3Transformer(SableCompat::transformFromShip);
 //        CBCCompatTransformers.addNormalTransformer(new SableCannonProjectileCompat.NormalTransformer());

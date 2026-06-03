@@ -34,10 +34,10 @@ public class HEBouncingBombProjectile extends AbstractBouncingProjectile {
 	@Override
 	protected void detonate(Position position) {
 		if(this.getAge() > explisionCooldown){
-			this.explosivePower = this.getAllProperties().explosion().explosivePower();
+			this.explosivePower = this.getAllProperties().explosion().blockDamagePower();
 		}
 		ShellExplosion explosion = new ShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
-			position.y(), position.z(), explosivePower, false,
+			position.y(), position.z(), explosivePower, explosivePower, false,
 			CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
 		CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 	}

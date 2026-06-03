@@ -43,9 +43,9 @@ public class NormalIncendiaryHEShellProjectile extends FuzedDualCannonProjectile
 	protected void detonate(Position position) {
 		float fireChance = getAllProperties().incendiary().fireChance() * ((this.getDurabilityModifier()-1)/0.9f+1);
 		int fireRange =(int) (getAllProperties().incendiary().fireRange() * ((this.getDurabilityModifier()-1)/1.3f+1));
-		float explosivePower = this.getAllProperties().explosion().explosivePower()*((this.getDurabilityModifier()-1)/1.2f+1);
+		float explosivePower = this.getAllProperties().explosion().blockDamagePower()*((this.getDurabilityModifier()-1)/1.2f+1);
 		ShellExplosion explosion = new ShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
-			position.y(), position.z(), explosivePower, false,
+			position.y(), position.z(), explosivePower, explosivePower, false,
 			CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
 		CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 		if(Math.random() > fireChance) {

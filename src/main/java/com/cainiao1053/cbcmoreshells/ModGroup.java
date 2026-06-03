@@ -235,6 +235,7 @@ public class ModGroup {
 				CBCMSBlocks.TORPEDO_DETECTION_DEVICE.asStack(),
 				CBCMSBlocks.AMMO_RACK.asStack(),
 				CBCMSBlocks.STEEL_AMMO_RACK.asStack(),
+				CBCMSItems.FIRE_EXTINGUISHER.asStack(),
 //				CBCMSBlocks.LANDING_INDICATOR.asStack(),
 //				CBCMSBlocks.DISH_PLATE.asStack(),
 //				CBCMSBlocks.ROUND_DISH_PLATE.asStack(),

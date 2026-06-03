@@ -26,7 +26,7 @@ public class APHEBouncingBombBlockItem extends FuzedRackedProjectileBlockItem {
 	public void appendHoverText(ItemStack stack, TooltipContext context, List<Component> tooltip, TooltipFlag flag) {
 		super.appendHoverText(stack, context, tooltip, flag);
 		RackedProjectileProperties properties = CBCMSMunitionPropertiesHandlers.RACKED_PROJECTILE.getPropertiesOf(APHE_BOUNCING_BOMB.get());
-		CBCMSTooltip.appendBombInfo(stack, context, tooltip, flag, properties.ballistics().durabilityMass(), properties.ballistics().penetration(), properties.ballistics().deflection(), properties.explosion().explosivePower(),properties.lifetime());
+		CBCMSTooltip.appendBombInfo(stack, context, tooltip, flag, properties.ballistics().durabilityMass(), properties.ballistics().penetration(), properties.ballistics().deflection(), properties.explosion().blockDamagePower(),properties.lifetime());
 	}
 
 }

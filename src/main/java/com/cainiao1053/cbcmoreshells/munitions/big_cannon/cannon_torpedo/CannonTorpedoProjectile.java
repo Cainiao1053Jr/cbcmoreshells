@@ -39,11 +39,11 @@ public class CannonTorpedoProjectile extends FuzedCannonTorpedoProjectile {
 
 	@Override
 	protected void detonate(Position position) {
-		float explosivePower = this.getAllProperties().explosion().explosivePower();
+		float explosivePower = this.getAllProperties().explosion().blockDamagePower();
 		if (getTickInWater() > 20){explosivePower *=4;}
 
 		ShellExplosion explosion = new ShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
-			position.y(), position.z(), explosivePower, false,
+			position.y(), position.z(), explosivePower, explosivePower, false,
 			CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
 
 		Cbcmoreshells.LOGGER.info("Explosive power: " + explosivePower);

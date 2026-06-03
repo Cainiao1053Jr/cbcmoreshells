@@ -32,11 +32,11 @@ public class LightHighSpeedTorpedoProjectile extends FuzedCannonTorpedoProjectil
 
 	@Override
 	protected void detonate(Position position) {
-		float explosivePower = this.getAllProperties().explosion().explosivePower();
+		float explosivePower = this.getAllProperties().explosion().blockDamagePower();
 		if (normalDetonate()){explosivePower *=4;}
 
 		ShellExplosion explosion = new ShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
-			position.y(), position.z(), explosivePower, false,
+			position.y(), position.z(), explosivePower, explosivePower, false,
 			CBCConfigs.server().munitions.damageRestriction.get().explosiveInteraction());
 		CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 	}

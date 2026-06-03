@@ -503,5 +503,6 @@
 "cbcmoreshells.ponder.ammo_rack/ammo_rack_intro.text_2": "动力臂可以直接从弹药架中抓取弹药",
 "cbcmoreshells.ponder.ammo_rack/ammo_rack_intro.text_3": "手持弹药右键弹药架的格子以放入",
 "cbcmoreshells.ponder.ammo_rack/ammo_rack_intro.text_4": "空手右键格子以取出",
-"cbcmoreshells.ponder.ammo_rack/ammo_rack_intro.text_5": "弹药架可以筛选弹药，通入红石信号以切换筛选弹种"
+"cbcmoreshells.ponder.ammo_rack/ammo_rack_intro.text_5": "弹药架可以筛选弹药，通入红石信号以切换筛选弹种",
+"item.cbcmoreshells.fire_extinguisher": "灭火器"
 }

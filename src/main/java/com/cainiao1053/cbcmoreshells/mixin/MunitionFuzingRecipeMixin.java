@@ -1,10 +1,8 @@
 package com.cainiao1053.cbcmoreshells.mixin;
 
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.component.DataComponents;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.component.CustomData;
+import net.minecraft.world.item.component.ItemContainerContents;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CustomRecipe;
 import net.minecraft.world.level.Level;
@@ -13,10 +11,13 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import rbasamoyai.createbigcannons.crafting.munition_assembly.MunitionFuzingRecipe;
+import rbasamoyai.createbigcannons.index.CBCDataComponents;
 import rbasamoyai.createbigcannons.munitions.FuzedItemMunition;
 import rbasamoyai.createbigcannons.munitions.FuzedProjectileBlockItem;
 import rbasamoyai.createbigcannons.munitions.autocannon.AutocannonCartridgeItem;
 import rbasamoyai.createbigcannons.munitions.fuzes.FuzeItem;
+
+import java.util.List;
 
 @Mixin(MunitionFuzingRecipe.class)
 public abstract class MunitionFuzingRecipeMixin extends CustomRecipe {
@@ -43,15 +44,13 @@ public abstract class MunitionFuzingRecipeMixin extends CustomRecipe {
 			}
 
 			if (stack.getItem() instanceof FuzedItemMunition) {
-				CustomData customData = stack.get(DataComponents.CUSTOM_DATA);
-				if (!round.isEmpty() || (customData != null && customData.copyTag().contains("Fuze"))) {
+				if (!round.isEmpty() || stack.has(CBCDataComponents.FUZE)) {
 					cir.setReturnValue(false);
 					return;
 				}
 				round = stack;
 			} else if (stack.getItem() instanceof FuzedProjectileBlockItem) {
-				CustomData blockData = stack.get(DataComponents.BLOCK_ENTITY_DATA);
-				if (!round.isEmpty() || (blockData != null && blockData.copyTag().contains("Fuze"))) {
+				if (!round.isEmpty() || stack.has(CBCDataComponents.FUZE)) {
 					cir.setReturnValue(false);
 					return;
 				}
@@ -108,29 +107,18 @@ public abstract class MunitionFuzingRecipeMixin extends CustomRecipe {
 		ItemStack fuzeCopy = fuze.copy();
 		fuzeCopy.setCount(1);
 
+		ItemContainerContents fuzeContents = ItemContainerContents.fromItems(List.of(fuzeCopy));
+
 		if (result.getItem() instanceof FuzedItemMunition) {
-			result.update(DataComponents.CUSTOM_DATA, CustomData.EMPTY, data -> {
-				CompoundTag nbt = data.copyTag();
-				nbt.put("Fuze", fuzeCopy.save(registries));
-				return CustomData.of(nbt);
-			});
+			result.set(CBCDataComponents.FUZE, fuzeContents);
 		} else if (result.getItem() instanceof AutocannonCartridgeItem) {
-			result.update(DataComponents.CUSTOM_DATA, CustomData.EMPTY, data -> {
-				CompoundTag nbt = data.copyTag();
-				CompoundTag projectile = nbt.getCompound("Projectile");
-				CompoundTag projectileTag = projectile.getCompound("tag");
-				projectileTag.put("Fuze", fuzeCopy.save(registries));
-				projectile.put("tag", projectileTag);
-				nbt.put("Projectile", projectile);
-				return CustomData.of(nbt);
-			});
+			ItemStack projectile = AutocannonCartridgeItem.getProjectileStack(result);
+			if (!projectile.isEmpty() && projectile.getItem() instanceof FuzedItemMunition) {
+				projectile.set(CBCDataComponents.FUZE, fuzeContents);
+				AutocannonCartridgeItem.writeProjectile(projectile, result);
+			}
 		} else if (result.getItem() instanceof FuzedProjectileBlockItem) {
-			result.update(DataComponents.BLOCK_ENTITY_DATA, CustomData.EMPTY, data -> {
-				CompoundTag nbt = data.copyTag();
-				nbt.put("Fuze", fuzeCopy.save(registries));
-				nbt.putString("id", "createbigcannons:fuzed_block");
-				return CustomData.of(nbt);
-			});
+			result.set(CBCDataComponents.FUZE, fuzeContents);
 		}
 
 		cir.setReturnValue(result);
