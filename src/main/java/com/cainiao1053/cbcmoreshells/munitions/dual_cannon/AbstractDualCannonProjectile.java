@@ -415,11 +415,13 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 			return;
 		}
 		if(CBCMSConfigs.server().notifyOnHit.get()){
-			BlockPos contraptionPos = contraption.getStartPos();
-			AABB box =  CBCMSCompatTransformers.getShipAABB(level(), new Vec3(contraptionPos.getX(), contraptionPos.getY(), contraptionPos.getZ()));
-			level().getEntitiesOfClass(Player.class, box).forEach(player -> {
-				player.playNotifySound(SoundEvents.ANVIL_LAND, SoundSource.AMBIENT, 1 , 2);
-			});
+			Vec3 contraptionWorldPos = contraption.getContraptionWorldPos();
+			if(contraptionWorldPos != null){
+				AABB box = CBCMSCompatTransformers.getShipAABB(level(), contraptionWorldPos);
+				level().getEntitiesOfClass(Player.class, box).forEach(player -> {
+					player.playNotifySound(SoundEvents.ANVIL_LAND, SoundSource.AMBIENT, 1 , 2);
+				});
+			}
 		}
 		contraption.reduceCooldown(getCooldownReductionRate());
 		hitTarget = true;

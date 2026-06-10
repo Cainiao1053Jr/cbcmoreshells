@@ -12,6 +12,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3dc;
@@ -46,13 +47,19 @@ public class CBCMSSableCompat {
     }
 
     public static AABB getShipAABB(Level level, Vec3 pos) {
-        AABB searchBox = AABB.ofSize(pos, 1, 1, 1);
-        List<SubLevel> sublevels = getSublevelAround(level, searchBox);
-        if(!sublevels.isEmpty()){
-            SubLevel sublevel = sublevels.get(0);
+        //AABB searchBox = AABB.ofSize(pos, 1, 1, 1);
+        //List<SubLevel> sublevels = getSublevelAround(level, searchBox);
+        SubLevel sublevel = Sable.HELPER.getContaining(level, pos);
+//        if(!sublevels.isEmpty()){
+//            SubLevel sublevel = sublevels.get(0);
+//            //BoundingBox3d box = sublevel.boundingBox().transform(sublevel.logicalPose(), new BoundingBox3d());
+//            //return box.toMojang();
+//            return sublevel.boundingBox().toMojang();
+//        }
+        if(sublevel != null){
             return sublevel.boundingBox().toMojang();
         }
-        return searchBox;
+        return AABB.ofSize(pos, 1, 1, 1);
     }
 
     public static boolean hasShipsAround(Level level, AABB box) {

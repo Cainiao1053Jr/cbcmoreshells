@@ -854,6 +854,10 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
         return poce.toGlobalVector(Vec3.atCenterOf(this.startPos.relative(this.initialOrientation.getOpposite())), 1);
     }
 
+    public Vec3 getContraptionWorldPos() {
+        return this.entity != null ? this.entity.position() : new Vec3(0,0,0);
+    }
+
     @Override
     public ICannonContraptionType getCannonType() {
         return CBCMSCannonContraptionTypes.DUAL_CANNON;
