@@ -18,6 +18,7 @@ import com.cainiao1053.cbcmoreshells.munitions.big_cannon.apbc_shell.APBCShellPr
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.apbc_shot.APBCShotProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.apfsds_shot.APFSDSShotProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.aphe_cannon_rocket.APHECannonRocketProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.big_cannon.aphe_super_heavy.APHESuperHeavyShellProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.baked_apfsds_shot.BakedAPFSDSShotProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.cannon_torpedo.CannonTorpedoProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.deepwater_shrapnel_torpedo.DeepwaterShrapnelTorpedoProjectile;
@@ -125,6 +126,7 @@ public class CBCMSEntityTypes {
 	public static final EntityEntry<ShellessIncendiaryHEShellProjectile> SHELLESS_INCENDIARY_HE_SHELL = cannonProjectile("shelless_incendiary_he_shell", ShellessIncendiaryHEShellProjectile::new, "Shelless Incendiary HE Shell", CBCMSMunitionPropertiesHandlers.INCENDIARY_SHELL_PROJECTILE);
 	public static final EntityEntry<AntiairShrapnelShellProjectile> ANTIAIR_SHRAPNEL_SHELL = cannonProjectile("antiair_shrapnel_shell", AntiairShrapnelShellProjectile::new, "Antiair Shrapnel Shell", CBCMSMunitionPropertiesHandlers.SHRAPNEL_SHELLESS_BIG_CANNON_PROJECTILE);
 	public static final EntityEntry<APBCShellProjectile> APBC_SHELL = cannonProjectile("apbc_shell", APBCShellProjectile::new, "APBC Shell", CBCMSMunitionPropertiesHandlers.SHELLESS_SHELL_BIG_CANNON_PROJECTILE);
+	public static final EntityEntry<APHESuperHeavyShellProjectile> APHE_SUPER_HEAVY_SHELL = cannonProjectile("aphe_super_heavy_shell", APHESuperHeavyShellProjectile::new, "APHE Super Heavy Shell", CBCMSMunitionPropertiesHandlers.SHELLESS_SHELL_BIG_CANNON_PROJECTILE);
 
 
 	public static final EntityEntry<CannonTorpedoProjectile> CANNON_TORPEDO = torpedoProjectile("cannon_torpedo", CannonTorpedoProjectile::new, "Cannon Torpedo", CBCMSMunitionPropertiesHandlers.TORPEDO_PROJECTILE);

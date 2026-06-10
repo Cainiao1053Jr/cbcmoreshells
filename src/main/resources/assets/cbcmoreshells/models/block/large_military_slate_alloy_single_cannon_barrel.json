@@ -1,0 +1,7 @@
+{
+  "parent": "cbcmoreshells:block/large_single_cannon_barrel",
+  "textures": {
+		"side": "cbcmoreshells:block/dual_cannon/military_slate_alloy_dual_cannon_barrel_side",
+		"front": "cbcmoreshells:block/dual_cannon/military_slate_alloy_dual_cannon_front"
+  }
+}

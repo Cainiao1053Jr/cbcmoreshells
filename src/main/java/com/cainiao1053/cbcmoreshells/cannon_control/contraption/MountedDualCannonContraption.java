@@ -95,7 +95,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
     private float commandDurationModifier = 1;
     private int barrelInverter = 1;
     private float additionalSpreadCoef = 1;
-    private boolean reduceCooldownOnHit = true;
+    private boolean reduceCooldownOnHit = false;
 
     private boolean hasMagazine = false;
     private int magazineReloadDelay = 20;
@@ -236,17 +236,19 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
     }
 
     public void addCommandEquipmentModification() {
-        this.equipmentLifetimeModifier += -0.07F;
-        this.equipmentReloadModifier += 0.1F;
-        this.equipmentSpreadModifier += 0.1F;
-        this.equipmentDurabilityModifier += -0.08F;
-        this.commandCooldownModifier = 2.0F;
-        this.commandDurationModifier = 3.0F;
+        this.equipmentLifetimeModifier += -0.05F;
+        this.equipmentReloadModifier += 0.07F;
+        this.equipmentSpreadModifier += 0.05F;
+        this.commandCooldownModifier = 1.5F;
+        this.commandDurationModifier = 2.5F;
+        this.reduceCooldownOnHit = true;
     }
 
     public void installMagazine() {
         this.hasMagazine = true;
-        this.equipmentReloadModifier += 0.18F;
+        this.equipmentReloadModifier += 0.12F;
+        this.equipmentDurabilityModifier += -0.07F;
+        this.equipmentSpreadModifier += 0.1F;
     }
 
     private boolean isValidCannonBlock(LevelAccessor level, BlockState state, BlockPos pos) {

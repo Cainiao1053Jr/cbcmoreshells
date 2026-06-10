@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "cbcmoreshells:block/large_nether_steel_single_cannon_chamber",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "cbcmoreshells:block/large_nether_steel_single_cannon_chamber",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "cbcmoreshells:block/large_nether_steel_single_cannon_chamber"
+    },
+    "facing=south": {
+      "model": "cbcmoreshells:block/large_nether_steel_single_cannon_chamber",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "cbcmoreshells:block/large_nether_steel_single_cannon_chamber",
+      "x": 90
+    },
+    "facing=west": {
+      "model": "cbcmoreshells:block/large_nether_steel_single_cannon_chamber",
+      "y": 270
+    }
+  }
+}

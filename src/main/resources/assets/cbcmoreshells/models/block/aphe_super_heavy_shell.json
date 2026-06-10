@@ -1,0 +1,9 @@
+{
+  "parent": "createbigcannons:block/projectile_block",
+  "textures": {
+    "bottom": "cbcmoreshells:block/projectile/ap_super_heavy_shot_bottom",
+    "particle": "cbcmoreshells:block/projectile/ap_super_heavy_shot_top",
+    "side": "cbcmoreshells:block/projectile/ap_super_heavy_shot",
+    "top": "cbcmoreshells:block/projectile/ap_super_heavy_shot_top"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "parent": "taov_core:item/stock_item",
+  "textures": {
+		"stock": "taov_core:item/cannon_combo",
+		"chest": "taov_core:item/stock_item/military_case"
+  }
+}

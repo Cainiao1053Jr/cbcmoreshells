@@ -9,14 +9,13 @@ import java.util.function.Supplier;
 
 import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.material.DualCannonMaterial;
+import com.cainiao1053.cbcmoreshells.cannons.flak_cannon.material.FlakcannonMaterial;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.material.ProjectileRackMaterial;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.material.TorpedoTubeMaterial;
 import com.jozufozu.flywheel.core.PartialModel;
 
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.DyeColor;
-//import rbasamoyai.createbigcannons.cannons.autocannon.material.AutocannonMaterial;
-import rbasamoyai.createbigcannons.crafting.casting.CannonCastShape;
 
 public class CBCMSBlockPartials {
 
@@ -24,6 +23,10 @@ public class CBCMSBlockPartials {
 	private static final Map<TorpedoTubeMaterial, PartialModel> SCREW_LOCK_BY_MATERIAL = new HashMap<>();
 	private static final Map<ProjectileRackMaterial, PartialModel> PROJECTILE_LOCK_BY_MATERIAL = new HashMap<>();
 	private static final Map<DualCannonMaterial, PartialModel> DUAL_CANNON_BREECHBLOCK_BY_MATERIAL = new HashMap<>();
+
+	private static final Map<FlakcannonMaterial, PartialModel> FLAKCANNON_SPRING_BY_MATERIAL = new HashMap<>();
+	private static final Map<FlakcannonMaterial, PartialModel> FLAKCANNON_EJECTOR_BY_MATERIAL = new HashMap<>();
+	private static final Map<DyeColor, PartialModel> FLAKCANNON_SEAT_BY_COLOR = new EnumMap<>(DyeColor.class);
 
 
 
@@ -61,7 +64,16 @@ public class CBCMSBlockPartials {
 		LARGE_BRASS_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.LARGE_SINGLE_BRASS, "large_steel_single_cannon_sliding_breechblock"),
 		LARGE_STEEL_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.LARGE_SINGLE_STEEL, "large_steel_single_cannon_sliding_breechblock"),
 		LARGE_SLATE_ALLOY_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.LARGE_SINGLE_SLATE_ALLOY, "large_steel_single_cannon_sliding_breechblock"),
-		LARGE_STEEL_DUAL_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.LARGE_STEEL, "large_steel_dual_cannon_sliding_breechblock")
+		LARGE_STEEL_DUAL_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.LARGE_STEEL, "large_steel_dual_cannon_sliding_breechblock"),
+		LARGE_MILITARY_SLATE_ALLOY_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.LARGE_SINGLE_MILITARY_SLATE_ALLOY, "large_steel_single_cannon_sliding_breechblock"),
+		LARGE_NETHER_STEEL_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.LARGE_SINGLE_NETHER_STEEL, "large_steel_single_cannon_sliding_breechblock"),
+
+
+
+	STEEL_FLAKCANNON_SPRING = flakcannonSpringPartial(CBCMSFlakcannonMaterials.STEEL, "flakcannon/steel_flakcannon_spring"),
+	STEEL_FLAKCANNON_EJECTOR = flakcannonEjectorPartial(CBCMSFlakcannonMaterials.STEEL, "steel"),
+
+	FLAKCANNON_SEAT_WHITE = flakcannonSeatPartial(DyeColor.WHITE, "flakcannon/seat_white")
 	;
 
 
@@ -110,6 +122,48 @@ public class CBCMSBlockPartials {
 
 	public static PartialModel dualCannonBreechblockFor(DualCannonMaterial material) {
 		return DUAL_CANNON_BREECHBLOCK_BY_MATERIAL.getOrDefault(material, STEEL_DUAL_CANNON_SLIDING_BREECHBLOCK);
+	}
+
+	private static PartialModel flakcannonSpringPartial(FlakcannonMaterial material, String path) {
+		return flakcannonSpringPartial(material, Cbcmoreshells.resource("block/" + path));
+	}
+
+	public static PartialModel flakcannonSpringPartial(FlakcannonMaterial material, ResourceLocation loc) {
+		PartialModel model = new PartialModel(loc);
+		FLAKCANNON_SPRING_BY_MATERIAL.put(material, model);
+		return model;
+	}
+
+	public static PartialModel flakcannonSpringFor(FlakcannonMaterial material) {
+		return FLAKCANNON_SPRING_BY_MATERIAL.getOrDefault(material, STEEL_FLAKCANNON_SPRING);
+	}
+
+	private static PartialModel flakcannonEjectorPartial(FlakcannonMaterial material, String path) {
+		return flakcannonEjectorPartial(material, Cbcmoreshells.resource("item/" + path + "_autocannon_breech_extractor"));
+	}
+
+	public static PartialModel flakcannonEjectorPartial(FlakcannonMaterial material, ResourceLocation loc) {
+		PartialModel model = new PartialModel(loc);
+		FLAKCANNON_EJECTOR_BY_MATERIAL.put(material, model);
+		return model;
+	}
+
+	public static PartialModel flakcannonEjectorFor(FlakcannonMaterial material) {
+		return FLAKCANNON_EJECTOR_BY_MATERIAL.getOrDefault(material, STEEL_FLAKCANNON_EJECTOR);
+	}
+
+	private static PartialModel flakcannonSeatPartial(DyeColor color, String path) {
+		return flakcannonSeatPartial(color, Cbcmoreshells.resource("block/" + path));
+	}
+
+	public static PartialModel flakcannonSeatPartial(DyeColor color, ResourceLocation loc) {
+		PartialModel model = new PartialModel(loc);
+		FLAKCANNON_SEAT_BY_COLOR.put(color, model);
+		return model;
+	}
+
+	public static PartialModel flakcannonSeatFor(DyeColor color) {
+		return FLAKCANNON_SEAT_BY_COLOR.getOrDefault(color, FLAKCANNON_SEAT_WHITE);
 	}
 
 

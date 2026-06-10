@@ -34,6 +34,22 @@
          "item": "cbcmoreshells:assembled_reinforced_torpedo_head"
         },
         {
+          "item": "createbigcannons:packed_guncotton"
+        }
+      ],
+      "results": [
+        {
+          "item": "cbcmoreshells:assembled_reinforced_torpedo_head"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+         "item": "cbcmoreshells:assembled_reinforced_torpedo_head"
+        },
+        {
           "item": "minecraft:redstone"
         }
       ],

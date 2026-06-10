@@ -16,6 +16,14 @@ import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.breeches.quick_firing_b
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.breeches.sliding_breech.DualCannonSlidingBreechBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.breeches.sliding_breech.DualCannonSlidingBreechInstance;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.dual_cannon_end.DualCannonEndBlockEntity;
+import com.cainiao1053.cbcmoreshells.cannons.flak_cannon.FlakcannonBlockEntity;
+import com.cainiao1053.cbcmoreshells.cannons.flak_cannon.breech.AbstractFlakcannonBreechBlockEntity;
+import com.cainiao1053.cbcmoreshells.cannons.flak_cannon.breech.FlakcannonBreechBlockEntity;
+import com.cainiao1053.cbcmoreshells.cannons.flak_cannon.breech.FlakcannonBreechInstance;
+import com.cainiao1053.cbcmoreshells.cannons.flak_cannon.breech.FlakcannonBreechRenderer;
+import com.cainiao1053.cbcmoreshells.cannons.flak_cannon.recoil_spring.FlakcannonRecoilSpringBlockEntity;
+import com.cainiao1053.cbcmoreshells.cannons.flak_cannon.recoil_spring.FlakcannonRecoilSpringInstance;
+import com.cainiao1053.cbcmoreshells.cannons.flak_cannon.recoil_spring.FlakcannonRecoilSpringRenderer;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.ProjectileRackBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.ProjectileRackBlockRenderer;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.breeches.quick_firing_breech.ProjectileRackQuickfiringBreechBlockEntity;
@@ -109,7 +117,9 @@ public class CBCMSBlockEntities {
 					CBCMSBlocks.LARGE_BRASS_SINGLE_CANNON_BARREL, CBCMSBlocks.LARGE_BRASS_SINGLE_CANNON_CHAMBER, CBCMSBlocks.LARGE_BRASS_SINGLE_CANNON_CHAMBER_SHIELDED,
 					CBCMSBlocks.LARGE_STEEL_SINGLE_CANNON_BARREL, CBCMSBlocks.LARGE_STEEL_SINGLE_CANNON_CHAMBER,CBCMSBlocks.LARGE_STEEL_SINGLE_CANNON_CHAMBER_SHIELDED,
 					CBCMSBlocks.LARGE_SLATE_ALLOY_SINGLE_CANNON_BARREL, CBCMSBlocks.LARGE_SLATE_ALLOY_SINGLE_CANNON_CHAMBER, CBCMSBlocks.LARGE_SLATE_ALLOY_SINGLE_CANNON_CHAMBER_SHIELDED,
-					CBCMSBlocks.LARGE_STEEL_DUAL_CANNON_BARREL, CBCMSBlocks.LARGE_STEEL_DUAL_CANNON_CHAMBER, CBCMSBlocks.LARGE_STEEL_DUAL_CANNON_CHARGER
+					CBCMSBlocks.LARGE_STEEL_DUAL_CANNON_BARREL, CBCMSBlocks.LARGE_STEEL_DUAL_CANNON_CHAMBER, CBCMSBlocks.LARGE_STEEL_DUAL_CANNON_CHARGER,
+					CBCMSBlocks.LARGE_MILITARY_SLATE_ALLOY_SINGLE_CANNON_BARREL, CBCMSBlocks.LARGE_MILITARY_SLATE_ALLOY_SINGLE_CANNON_CHAMBER, CBCMSBlocks.LARGE_MILITARY_SLATE_ALLOY_SINGLE_CANNON_CHAMBER_SHIELDED,
+					CBCMSBlocks.LARGE_NETHER_STEEL_SINGLE_CANNON_BARREL, CBCMSBlocks.LARGE_NETHER_STEEL_SINGLE_CANNON_CHAMBER, CBCMSBlocks.LARGE_NETHER_STEEL_SINGLE_CANNON_CHAMBER_SHIELDED
 			)
 			.register();
 
@@ -165,7 +175,9 @@ public class CBCMSBlockEntities {
 					CBCMSBlocks.MILITARY_SLATE_ALLOY_SINGLE_CANNON_MAGAZINE_BREECH,
 					CBCMSBlocks.WIDE_MILITARY_SLATE_ALLOY_SINGLE_CANNON_MAGAZINE_BREECH,
 					CBCMSBlocks.WIDE_SLATE_ALLOY_SINGLE_CANNON_MAGAZINE_BREECH,
-					CBCMSBlocks.SLATE_ALLOY_SINGLE_CANNON_MAGAZINE_BREECH
+					CBCMSBlocks.SLATE_ALLOY_SINGLE_CANNON_MAGAZINE_BREECH,
+					CBCMSBlocks.LARGE_MILITARY_SLATE_ALLOY_SINGLE_CANNON_QUICKFIRING_BREECH,
+					CBCMSBlocks.LARGE_NETHER_STEEL_SINGLE_CANNON_QUICKFIRING_BREECH
 			)
 			.register();
 
@@ -204,8 +216,29 @@ public class CBCMSBlockEntities {
 					CBCMSBlocks.LARGE_BRASS_SINGLE_CANNON_SLIDING_BREECH,
 					CBCMSBlocks.LARGE_STEEL_SINGLE_CANNON_SLIDING_BREECH,
 					CBCMSBlocks.LARGE_SLATE_ALLOY_SINGLE_CANNON_SLIDING_BREECH,
-					CBCMSBlocks.LARGE_STEEL_DUAL_CANNON_SLIDING_BREECH
+					CBCMSBlocks.LARGE_STEEL_DUAL_CANNON_SLIDING_BREECH,
+					CBCMSBlocks.LARGE_MILITARY_SLATE_ALLOY_SINGLE_CANNON_SLIDING_BREECH,
+					CBCMSBlocks.LARGE_NETHER_STEEL_SINGLE_CANNON_SLIDING_BREECH
 			)
+			.register();
+
+	public static final BlockEntityEntry<FlakcannonBlockEntity> FLAKCANNON = REGISTRATE
+			.blockEntity("flakcannon", FlakcannonBlockEntity::new)
+			.validBlocks()
+			.register();
+
+	public static final BlockEntityEntry<FlakcannonBreechBlockEntity> FLAKCANNON_BREECH = REGISTRATE
+			.blockEntity("flakcannon_breech", FlakcannonBreechBlockEntity::new)
+			.instance(() -> FlakcannonBreechInstance::new)
+			.renderer(() -> FlakcannonBreechRenderer::new)
+			.validBlocks()
+			.register();
+
+	public static final BlockEntityEntry<FlakcannonRecoilSpringBlockEntity> FLAKCANNON_RECOIL_SPRING = REGISTRATE
+			.blockEntity("flakcannon_recoil_spring", FlakcannonRecoilSpringBlockEntity::new)
+			.instance(() -> FlakcannonRecoilSpringInstance::new)
+			.renderer(() -> FlakcannonRecoilSpringRenderer::new)
+			.validBlocks()
 			.register();
 
 	public static final BlockEntityEntry<QuickfiringBreechBlockEntity> NETHERSTEELQUICKFIRING_BREECH = REGISTRATE

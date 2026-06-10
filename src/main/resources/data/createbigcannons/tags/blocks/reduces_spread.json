@@ -70,6 +70,12 @@
 "cbcmoreshells:large_steel_single_cannon_barrel",
 "cbcmoreshells:large_steel_single_cannon_chamber",
 "cbcmoreshells:large_steel_dual_cannon_barrel",
-"cbcmoreshells:large_steel_dual_cannon_chamber"
+"cbcmoreshells:large_steel_dual_cannon_chamber",
+"cbcmoreshells:large_military_slate_alloy_single_cannon_barrel",
+"cbcmoreshells:large_military_slate_alloy_single_cannon_chamber",
+"cbcmoreshells:large_military_slate_alloy_single_cannon_quickfiring_breech",
+"cbcmoreshells:large_nether_steel_single_cannon_barrel",
+"cbcmoreshells:large_nether_steel_single_cannon_chamber",
+"cbcmoreshells:large_nether_steel_single_cannon_quickfiring_breech"
   ]
 }
