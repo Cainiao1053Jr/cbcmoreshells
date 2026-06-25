@@ -32,6 +32,7 @@ public class TorpedoTubeComboItem extends CannonComboItem {
 		giveOrDrop(sp, new ItemStack(CBCMSBlocks.STEEL_TORPEDO_BARREL, 4));
 		giveOrDrop(sp, new ItemStack(CBCMSBlocks.STEEL_TORPEDO_CHAMBER, 2));
 		giveOrDrop(sp, new ItemStack(CBCMSBlocks.STEEL_TORPEDO_QUICKFIRING_BREECH, 1));
+		stack.shrink(1);
 		return InteractionResultHolder.success(stack);
 	}
 }

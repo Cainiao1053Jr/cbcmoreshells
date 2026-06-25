@@ -466,5 +466,22 @@
 "block.cbcmoreshells.wide_slate_alloy_single_cannon_magazine_breech": "Wide Slate Alloy Single Cannon Magazine Breech",
 "block.cbcmoreshells.slate_alloy_single_cannon_magazine_breech": "Slate Alloy Single Cannon Magazine Breech",
 "block.cbcmoreshells.military_slate_alloy_single_cannon_magazine_breech": "Military Slate Alloy Single Cannon Magazine Breech",
-"block.cbcmoreshells.wide_military_slate_alloy_single_cannon_magazine_breech": "Wide Military Slate Alloy Single Cannon Magazine Breech"
+"block.cbcmoreshells.wide_military_slate_alloy_single_cannon_magazine_breech": "Wide Military Slate Alloy Single Cannon Magazine Breech",
+"block.cbcmoreshells.large_military_slate_alloy_single_cannon_barrel": "Large Military Slate Alloy Single Cannon Barrel",
+  "block.cbcmoreshells.large_military_slate_alloy_single_cannon_chamber": "Large Military Slate Alloy Single Cannon Chamber",
+  "block.cbcmoreshells.large_military_slate_alloy_single_cannon_quickfiring_breech": "Large Military Slate Alloy Single Cannon Quick-Firing Breech",
+  "block.cbcmoreshells.large_nether_steel_single_cannon_barrel": "Large Nether Steel Single Cannon Barrel",
+  "block.cbcmoreshells.large_nether_steel_single_cannon_chamber": "Large Nether Steel Single Cannon Chamber",
+  "block.cbcmoreshells.large_nether_steel_single_cannon_quickfiring_breech": "Large Nether Steel Single Cannon Quick-Firing Breech",
+  "block.cbcmoreshells.material.wide_cast_iron": "Wide Cast Iron",
+  "block.cbcmoreshells.material.wide_bronze": "Wide Bronze",
+  "block.cbcmoreshells.material.large_brass": "Large Brass",
+  "block.cbcmoreshells.material.large_steel": "Large Steel",
+  "block.cbcmoreshells.material.large_slate_alloy": "Large Slate Alloy",
+  "block.cbcmoreshells.material.large_military_slate_alloy": "Large Military Slate Alloy",
+  "block.cbcmoreshells.material.large_nether_steel": "Large Nether Steel",
+  "block.cbcmoreshells.aphe_super_heavy_shell": "Super-Heavy APHE Shell",
+  "block.cbcmoreshells.aphe_super_heavy_shell.tooltip.ballisticInfo": "APHE Shell",
+  "block.cbcmoreshells.aphe_super_heavy_shell.tooltip.ballisticInfo.main": "This shell can penetrate armor and explode, with high power and a high-arcing trajectory. Projectile mass: _%s_, penetration: _%s_, starting ricochet angle: _%s_ degrees, explosive power: _%s_",
+  "item.cbcmoreshells.torpedo_tube_combo": "Torpedo Tube Combo"
 }

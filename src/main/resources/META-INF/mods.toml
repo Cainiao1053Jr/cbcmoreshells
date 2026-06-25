@@ -1,10 +1,10 @@
 modLoader="javafml"
 loaderVersion="[47,)"
-license="GPLv3"
+license="Custom"
 
 [[mods]]
 modId="cbcmoreshells"
-version="0.2.19-1.20.1"
+version="0.2.23-1.20.1"
 displayName="Create Big Cannons More Shells"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/"
 logoFile=""
