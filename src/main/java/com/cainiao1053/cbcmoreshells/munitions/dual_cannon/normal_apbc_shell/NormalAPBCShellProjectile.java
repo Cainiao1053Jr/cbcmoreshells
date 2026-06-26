@@ -72,6 +72,8 @@ public class NormalAPBCShellProjectile extends FuzedDualCannonProjectile {
 
 	@Override
 	protected ImpactResult calculateBlockPenetration(ProjectileContext projectileContext, BlockState state, BlockHitResult blockHitResult) {
+		ImpactResult vsEarly = vsCheckHead();
+		if (vsEarly != null) return vsEarly;
 		BlockPos pos = blockHitResult.getBlockPos();
 		Vec3 hitLoc = blockHitResult.getLocation();
 
@@ -171,9 +173,10 @@ public class NormalAPBCShellProjectile extends FuzedDualCannonProjectile {
 						sound.getVolume(), sound.getPitch());
 		}
 		//shatter |= this.onImpact(blockHitResult, new ImpactResult(outcome, shatter), projectileContext);
-		return new ImpactResult(outcome, shatter);
+		ImpactResult result = new ImpactResult(outcome, shatter);
+		vsCheckReturn(result, blockHitResult);
+		return result;
 	}
-
 
 	@Nonnull
 	@Override

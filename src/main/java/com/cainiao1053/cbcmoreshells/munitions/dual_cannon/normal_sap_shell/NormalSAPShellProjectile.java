@@ -66,6 +66,8 @@ public class NormalSAPShellProjectile extends FuzedDualCannonProjectile {
 
 	@Override
 	protected ImpactResult calculateBlockPenetration(ProjectileContext projectileContext, BlockState state, BlockHitResult blockHitResult) {
+		ImpactResult vsEarly = vsCheckHead();
+		if (vsEarly != null) return vsEarly;
 		BlockPos pos = blockHitResult.getBlockPos();
 		Vec3 hitLoc = blockHitResult.getLocation();
 
@@ -123,30 +125,6 @@ public class NormalSAPShellProjectile extends FuzedDualCannonProjectile {
 				}
 			}
 		}
-//		double bonusMomentum = 1 + Math.max(0, (velMag - 2f)
-//				* 0.15f);
-//		double incidentVel = velMag * incidence;
-//		double rawMomentum = mass * bonusMomentum * velMag;
-//		double excessMomentum = 0;
-//		double maximumMomentum = getMaximumMomentum();
-//		if(rawMomentum > maximumMomentum) {
-//			rawMomentum = maximumMomentum;
-//			excessMomentum = rawMomentum - maximumMomentum;
-//		}
-//		//double momentum = mass * incidentVel * bonusMomentum;
-//		double momentum = rawMomentum * incidence;
-//		durabilityPenalty = (float) toughness / (float) incidentVel + (float)excessMomentum;
-//
-//
-//
-//		if(momentum>toughness*2){
-//			penetrate = true;
-//		}else if(momentum > toughness*0.5){
-//			double penetrateChance = (momentum/toughness-0.15)/2;
-//			if(this.level().getRandom().nextDouble()<penetrateChance){
-//				penetrate = true;
-//			}
-//		}
 
 		ImpactResult.KinematicOutcome outcome;
 		if (!this.level().isClientSide && (penetrate || this.getSmashToughness()>toughness)) {
@@ -194,9 +172,10 @@ public class NormalSAPShellProjectile extends FuzedDualCannonProjectile {
 						sound.getVolume(), sound.getPitch());
 		}
 		//shatter |= this.onImpact(blockHitResult, new ImpactResult(outcome, shatter), projectileContext);
-		return new ImpactResult(outcome, shatter);
+		ImpactResult result = new ImpactResult(outcome, shatter);
+		vsCheckReturn(result, blockHitResult);
+		return result;
 	}
-
 
 	@Nonnull
 	@Override

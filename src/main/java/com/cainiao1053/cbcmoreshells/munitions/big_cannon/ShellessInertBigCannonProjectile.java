@@ -14,12 +14,16 @@ import rbasamoyai.createbigcannons.block_armor_properties.BlockArmorPropertiesHa
 import rbasamoyai.createbigcannons.index.CBCEntityTypes;
 import rbasamoyai.createbigcannons.munitions.ProjectileContext;
 import rbasamoyai.createbigcannons.munitions.big_cannon.AbstractBigCannonProjectile;
+import org.valkyrienskies.core.api.ships.LoadedShip;
+import org.valkyrienskies.mod.common.VSGameUtilsKt;
+import org.valkyrienskies.mod.common.util.IEntityDraggingInformationProvider;
 import rbasamoyai.createbigcannons.munitions.fragment_burst.CBCProjectileBurst;
 
 public abstract class ShellessInertBigCannonProjectile extends AbstractBigCannonProjectile {
 
 	public boolean tooManyCharges = false;
 	protected int ageRemaining;
+	protected Long vs$embeddedShipId = null;
 
 	protected ShellessInertBigCannonProjectile(EntityType<? extends ShellessInertBigCannonProjectile> type, Level level) {
 		super(type, level);
@@ -43,12 +47,33 @@ public abstract class ShellessInertBigCannonProjectile extends AbstractBigCannon
 			this.ageRemaining--;
 			if (this.ageRemaining <= 0)
 				this.expireProjectile();
+			if (vs$embeddedShipId != null && this.isInGround()) {
+				((IEntityDraggingInformationProvider) this)
+						.getDraggingInformation()
+						.setLastShipStoodOn(vs$embeddedShipId);
+			}
+		}
+	}
+
+	protected ImpactResult vsCheckHead() {
+		if (vs$embeddedShipId != null)
+			return new ImpactResult(ImpactResult.KinematicOutcome.STOP, false);
+		return null;
+	}
+
+	protected void vsCheckReturn(ImpactResult result, BlockHitResult bhr) {
+		if (result.kinematics() == ImpactResult.KinematicOutcome.STOP && !this.level().isClientSide) {
+			LoadedShip ship = VSGameUtilsKt.getShipObjectManagingPos(this.level(), bhr.getBlockPos());
+			if (ship != null)
+				vs$embeddedShipId = ship.getId();
 		}
 	}
 
 	@Override
 	protected ImpactResult calculateBlockPenetration(ProjectileContext projectileContext, BlockState state, BlockHitResult blockHitResult) {
-		ImpactResult result =  super.calculateBlockPenetration(projectileContext, state, blockHitResult);
+		ImpactResult vsEarly = vsCheckHead();
+		if (vsEarly != null) return vsEarly;
+		ImpactResult result = super.calculateBlockPenetration(projectileContext, state, blockHitResult);
 		if(result.kinematics() == ImpactResult.KinematicOutcome.PENETRATE) {
 			double toughness = BlockArmorPropertiesHandler.getProperties(state).toughness(this.level(),state,blockHitResult.getBlockPos(),true);
 			if(toughness > 11) {
@@ -60,6 +85,7 @@ public abstract class ShellessInertBigCannonProjectile extends AbstractBigCannon
 						oldDelta, shrapnelCount, 0.7);
 			}
 		}
+		vsCheckReturn(result, blockHitResult);
 		return result;
 	}
 

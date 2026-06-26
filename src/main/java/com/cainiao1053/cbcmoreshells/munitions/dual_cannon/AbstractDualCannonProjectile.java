@@ -69,6 +69,7 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 	protected int age = 0;
 	protected int maxAge;
 	protected double elasticity = 1.7;
+	protected Long vs$embeddedShipId = null;
 
 	private int sendTrail = 20;
 	private double xOldT;
@@ -167,6 +168,11 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 			this.age++;
 			if (this.age > maxAge)
 				this.discard();
+			if (vs$embeddedShipId != null && this.isInGround()) {
+				((IEntityDraggingInformationProvider) this)
+						.getDraggingInformation()
+						.setLastShipStoodOn(vs$embeddedShipId);
+			}
 		}
 	}
 
@@ -221,8 +227,24 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 
 	public abstract BlockState getRenderedBlockState();
 
+	protected ImpactResult vsCheckHead() {
+		if (vs$embeddedShipId != null)
+			return new ImpactResult(ImpactResult.KinematicOutcome.STOP, false);
+		return null;
+	}
+
+	protected void vsCheckReturn(ImpactResult result, BlockHitResult bhr) {
+		if (result.kinematics() == ImpactResult.KinematicOutcome.STOP && !this.level().isClientSide) {
+			LoadedShip ship = VSGameUtilsKt.getShipObjectManagingPos(this.level(), bhr.getBlockPos());
+			if (ship != null)
+				vs$embeddedShipId = ship.getId();
+		}
+	}
+
 	@Override
 	protected ImpactResult calculateBlockPenetration(ProjectileContext projectileContext, BlockState state, BlockHitResult blockHitResult) {
+		ImpactResult vsEarly = vsCheckHead();
+		if (vsEarly != null) return vsEarly;
 		BlockPos pos = blockHitResult.getBlockPos();
 		Vec3 hitLoc = blockHitResult.getLocation();
 
@@ -230,7 +252,7 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 
 		BallisticPropertiesComponent ballistics = this.getBallisticProperties();
 		BlockArmorPropertiesProvider blockArmor = BlockArmorPropertiesHandler.getProperties(state);
-		//boolean unbreakable = projectileContext.griefState() == CBCCfgMunitions.GriefState.NO_DAMAGE || state.getDestroySpeed(this.level(), pos) == -1;
+		double toughness = blockArmor.toughness(this.level(), state, pos, true);
 
 		Vec3 accel = this.getForces(this.position(), this.getDeltaMovement());
 		Vec3 curVel = this.getDeltaMovement().add(accel);
@@ -252,7 +274,6 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 		//double momentum = mass * incidentVel * bonusMomentum;
 		double momentum = rawMomentum * incidence;
 
-		double toughness = blockArmor.toughness(this.level(), state, pos, true);
 
 		double projectileDeflection = ballistics.deflection();
 		double baseChance = CBCConfigs.SERVER.munitions.baseProjectileBounceChance.getF();
@@ -321,7 +342,9 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 		}
 		boolean shatter = false;
 		shatter |= this.onImpact(blockHitResult, new ImpactResult(outcome, shatter), projectileContext);
-		return new ImpactResult(outcome, shatter);
+		ImpactResult result = new ImpactResult(outcome, shatter);
+		vsCheckReturn(result, blockHitResult);
+		return result;
 	}
 
 	public static double getHitNearbyAverageToughness(Level level, BlockPos pos, Direction face) {

@@ -9,7 +9,7 @@
     "CannonMountPointMixin",
     "MunitionFuzingRecipeMixin",
     "AbstractBigCannonProjectileMixin",
-    "MixinAbstractCannonProjectileVS"
+    "MixinAbstractBigCannonProjectileVS"
   ],
   "injectors": {
     "defaultRequire": 1

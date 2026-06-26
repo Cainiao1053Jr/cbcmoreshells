@@ -1,10 +1,6 @@
 package com.cainiao1053.cbcmoreshells.mixin;
 
-import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.AbstractDualCannonProjectile;
-import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.FuzedDualCannonProjectile;
-import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_ap_shell.NormalAPShellProjectile;
-import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_apbc_shell.NormalAPBCShellProjectile;
-import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_sap_shell.NormalSAPShellProjectile;
+import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
@@ -19,24 +15,13 @@ import org.valkyrienskies.mod.common.VSGameUtilsKt;
 import org.valkyrienskies.mod.common.util.IEntityDraggingInformationProvider;
 import rbasamoyai.createbigcannons.munitions.AbstractCannonProjectile.ImpactResult;
 import rbasamoyai.createbigcannons.munitions.ProjectileContext;
+import rbasamoyai.createbigcannons.munitions.big_cannon.AbstractBigCannonProjectile;
 
-@Mixin(value = {AbstractDualCannonProjectile.class}, remap = false)
-public abstract class MixinAbstractCannonProjectileVS {
+@Mixin(value = AbstractBigCannonProjectile.class, remap = false)
+public abstract class MixinAbstractBigCannonProjectileVS {
 
     @Unique
     private Long vs$embeddedShipId = null;
-
-    @Inject(method = "calculateBlockPenetration", at = @At("HEAD"), cancellable = true, remap = false)
-    private void cbcms$skipPenetrationIfEmbedded(
-            ProjectileContext projectileContext,
-            BlockState blockState,
-            BlockHitResult blockHitResult,
-            CallbackInfoReturnable<ImpactResult> cir) {
-        if (vs$embeddedShipId != null) {
-            cir.setReturnValue(new ImpactResult(ImpactResult.KinematicOutcome.STOP, false));
-        }
-    }
-
 
     @Inject(method = "calculateBlockPenetration", at = @At("RETURN"), remap = false)
     private void cbcms$onPenetrationCalculated(
@@ -44,9 +29,10 @@ public abstract class MixinAbstractCannonProjectileVS {
             BlockState blockState,
             BlockHitResult blockHitResult,
             CallbackInfoReturnable<ImpactResult> cir) {
+        if (vs$embeddedShipId != null) return;
         ImpactResult result = cir.getReturnValue();
         if (result.kinematics() == ImpactResult.KinematicOutcome.STOP) {
-            AbstractDualCannonProjectile self = (AbstractDualCannonProjectile) (Object) this;
+            AbstractBigCannonProjectile self = (AbstractBigCannonProjectile) (Object) this;
             if (!self.level().isClientSide) {
                 BlockPos blockPos = blockHitResult.getBlockPos();
                 LoadedShip ship = VSGameUtilsKt.getShipObjectManagingPos(self.level(), blockPos);
@@ -57,12 +43,11 @@ public abstract class MixinAbstractCannonProjectileVS {
         }
     }
 
-
     @Inject(method = "tick", at = @At("RETURN"), remap = true)
     private void cbcms$onTickReturn(CallbackInfo ci) {
         if (vs$embeddedShipId != null) {
-            AbstractDualCannonProjectile self = (AbstractDualCannonProjectile) (Object) this;
-            if (self.isInGround() && !self.level().isClientSide) {
+            AbstractBigCannonProjectile self = (AbstractBigCannonProjectile) (Object) this;
+            if (!self.level().isClientSide) {
                 ((IEntityDraggingInformationProvider) this)
                         .getDraggingInformation()
                         .setLastShipStoodOn(vs$embeddedShipId);

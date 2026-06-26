@@ -9,8 +9,13 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import org.valkyrienskies.core.api.ships.LoadedShip;
+import org.valkyrienskies.mod.common.VSGameUtilsKt;
+import org.valkyrienskies.mod.common.util.IEntityDraggingInformationProvider;
 import rbasamoyai.createbigcannons.munitions.ProjectileContext;
 import rbasamoyai.createbigcannons.munitions.big_cannon.AbstractBigCannonProjectile;
 import rbasamoyai.createbigcannons.munitions.big_cannon.config.BigCannonFuzePropertiesComponent;
@@ -25,6 +30,7 @@ public abstract class ShellessFuzedBigCannonProjectile extends AbstractBigCannon
 	public boolean tooManyCharges = false;
 	//protected int lifetime;
 	protected int ageRemaining;
+	protected Long vs$embeddedShipId = null;
 
 	protected ShellessFuzedBigCannonProjectile(EntityType<? extends ShellessFuzedBigCannonProjectile> type, Level level) {
 		super(type, level);
@@ -55,7 +61,35 @@ public abstract class ShellessFuzedBigCannonProjectile extends AbstractBigCannon
 			this.ageRemaining--;
 			if (this.ageRemaining <= 0)
 				this.expireProjectile();
+			if (vs$embeddedShipId != null) {
+				((IEntityDraggingInformationProvider) this)
+						.getDraggingInformation()
+						.setLastShipStoodOn(vs$embeddedShipId);
+			}
 		}
+	}
+
+	protected ImpactResult vsCheckHead() {
+		if (vs$embeddedShipId != null && this.isInGround())
+			return new ImpactResult(ImpactResult.KinematicOutcome.STOP, false);
+		return null;
+	}
+
+	protected void vsCheckReturn(ImpactResult result, BlockHitResult bhr) {
+		if (result.kinematics() == ImpactResult.KinematicOutcome.STOP && !this.level().isClientSide) {
+			LoadedShip ship = VSGameUtilsKt.getShipObjectManagingPos(this.level(), bhr.getBlockPos());
+			if (ship != null)
+				vs$embeddedShipId = ship.getId();
+		}
+	}
+
+	@Override
+	protected ImpactResult calculateBlockPenetration(ProjectileContext projectileContext, BlockState state, BlockHitResult blockHitResult) {
+		ImpactResult vsEarly = vsCheckHead();
+		if (vsEarly != null) return vsEarly;
+		ImpactResult result = super.calculateBlockPenetration(projectileContext, state, blockHitResult);
+		vsCheckReturn(result, blockHitResult);
+		return result;
 	}
 
 	@Override
