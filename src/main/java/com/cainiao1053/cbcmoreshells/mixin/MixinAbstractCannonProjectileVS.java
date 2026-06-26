@@ -22,6 +22,17 @@ public abstract class MixinAbstractCannonProjectileVS {
     @Unique
     private Long vs$embeddedShipId = null;
 
+    @Inject(method = "calculateBlockPenetration", at = @At("HEAD"), cancellable = true, remap = false)
+    private void cbcms$skipPenetrationIfEmbedded(
+            ProjectileContext projectileContext,
+            BlockState blockState,
+            BlockHitResult blockHitResult,
+            CallbackInfoReturnable<ImpactResult> cir) {
+        if (vs$embeddedShipId != null) {
+            cir.setReturnValue(new ImpactResult(ImpactResult.KinematicOutcome.STOP, false));
+        }
+    }
+
 
     @Inject(method = "calculateBlockPenetration", at = @At("RETURN"), remap = false)
     private void cbcms$onPenetrationCalculated(
