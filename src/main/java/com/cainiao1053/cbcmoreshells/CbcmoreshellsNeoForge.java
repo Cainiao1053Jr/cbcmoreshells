@@ -1,6 +1,7 @@
 package com.cainiao1053.cbcmoreshells;
 
 import com.cainiao1053.cbcmoreshells.blocks.ammo_rack.AmmoRackBlockEntity;
+import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.material.DualCannonMaterialPropertiesHandler;
 import com.cainiao1053.cbcmoreshells.compat.sable.CBCMSSableCompat;
 import com.cainiao1053.cbcmoreshells.config.CBCMSConfigs;
 import com.cainiao1053.cbcmoreshells.index.CBCMSArmInteractionPointTypes;
@@ -8,12 +9,14 @@ import com.cainiao1053.cbcmoreshells.index.CBCMSBlockEntities;
 import com.cainiao1053.cbcmoreshells.index.CBCMSContraptionTypes;
 import com.cainiao1053.cbcmoreshells.index.CBCMSDataComponents;
 import com.cainiao1053.cbcmoreshells.index.CBCMSSoundEvents;
+import com.cainiao1053.cbcmoreshells.network.CBCMSRootNetwork;
 import net.createmod.catnip.platform.CatnipServices;
 import net.neoforged.neoforge.capabilities.Capabilities;
 import net.neoforged.neoforge.capabilities.RegisterCapabilitiesEvent;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceKey;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.neoforged.bus.api.IEventBus;
@@ -23,6 +26,8 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.config.ModConfigEvent;
 import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.neoforged.neoforge.common.NeoForge;
+import net.neoforged.neoforge.event.AddReloadListenerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.registries.DeferredRegister;
 import net.neoforged.neoforge.registries.NewRegistryEvent;
 import net.neoforged.neoforge.registries.RegisterEvent;
@@ -55,6 +60,9 @@ public class CbcmoreshellsNeoForge {
 		modEventBus.addListener(this::onRegister);
         modEventBus.addListener(this::onRegisterCapabilities);
 
+        forgeEventBus.addListener(this::onAddReloadListeners);
+        forgeEventBus.addListener(this::onPlayerLoggedIn);
+
         CatnipServices.PLATFORM.executeOnClientOnly(() -> () -> CBCMSClientNeoForge.prepareClient(modEventBus, forgeEventBus));
 
     }
@@ -85,6 +93,16 @@ public class CbcmoreshellsNeoForge {
             CBCMSBlockEntities.AMMO_RACK.get(),
             (be, side) -> be.getItemHandler()
         );
+    }
+
+    private void onAddReloadListeners(AddReloadListenerEvent event) {
+        event.addListener(DualCannonMaterialPropertiesHandler.ReloadListener.INSTANCE);
+    }
+
+    private void onPlayerLoggedIn(PlayerEvent.PlayerLoggedInEvent event) {
+        if (event.getEntity() instanceof ServerPlayer player) {
+            CBCMSRootNetwork.onPlayerJoin(player);
+        }
     }
 
     private void onLoadConfig(ModConfigEvent.Loading evt) {

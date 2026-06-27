@@ -1,10 +1,10 @@
 package com.cainiao1053.cbcmoreshells.network;
 
+import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.material.DualCannonMaterialPropertiesHandler;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.network.codec.ByteBufCodecs;
 import net.minecraft.network.codec.StreamCodec;
@@ -28,7 +28,8 @@ public class CBCMSRootNetwork {
 		addMsg(id++, ClientboundCBCMSTrailPacket.class, ClientboundCBCMSTrailPacket.STREAM_CODEC);
 		addMsg(id++, ClientboundCBCMSSplashPacket.class, ClientboundCBCMSSplashPacket.STREAM_CODEC);
 		addMsg(id++, ClientboundCannonCmdSyncPacket.class, ClientboundCannonCmdSyncPacket.STREAM_CODEC);
-
+		addMsg(id++, DualCannonMaterialPropertiesHandler.ClientboundDualCannonMaterialPropertiesPacket.class,
+				DualCannonMaterialPropertiesHandler.ClientboundDualCannonMaterialPropertiesPacket.STREAM_CODEC);
 	}
 
 	private static <T extends RootPacket> void addMsg(int id, Class<T> clazz, StreamCodec<RegistryFriendlyByteBuf, T> streamCodec) {
@@ -50,6 +51,7 @@ public class CBCMSRootNetwork {
 	}
 
 	public static void onPlayerJoin(ServerPlayer player) {
+		DualCannonMaterialPropertiesHandler.syncTo(player);
 	}
 
 //	public static RootPacket constructPacket(FriendlyByteBuf buf, int id) {
