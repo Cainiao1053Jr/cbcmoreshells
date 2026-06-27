@@ -23,6 +23,9 @@ public abstract class MixinAbstractBigCannonProjectileVS {
     @Unique
     private Long vs$embeddedShipId = null;
 
+    @Unique
+    private int removeCountdown = -1;
+
     @Inject(method = "calculateBlockPenetration", at = @At("RETURN"), remap = false)
     private void cbcms$onPenetrationCalculated(
             ProjectileContext projectileContext,
@@ -34,6 +37,9 @@ public abstract class MixinAbstractBigCannonProjectileVS {
         if (result.kinematics() == ImpactResult.KinematicOutcome.STOP) {
             AbstractBigCannonProjectile self = (AbstractBigCannonProjectile) (Object) this;
             if (!self.level().isClientSide) {
+                if(removeCountdown < 0) {
+                    removeCountdown = 30;
+                }
                 BlockPos blockPos = blockHitResult.getBlockPos();
                 LoadedShip ship = VSGameUtilsKt.getShipObjectManagingPos(self.level(), blockPos);
                 if (ship != null) {
@@ -51,6 +57,12 @@ public abstract class MixinAbstractBigCannonProjectileVS {
                 ((IEntityDraggingInformationProvider) this)
                         .getDraggingInformation()
                         .setLastShipStoodOn(vs$embeddedShipId);
+                if(removeCountdown > 0){
+                    removeCountdown--;
+                    if(removeCountdown == 0){
+                        self.discard();
+                    }
+                }
             }
         }
     }
