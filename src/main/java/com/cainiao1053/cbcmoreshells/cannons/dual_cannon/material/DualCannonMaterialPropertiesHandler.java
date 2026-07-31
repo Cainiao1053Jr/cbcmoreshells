@@ -5,6 +5,8 @@ import java.util.concurrent.Executor;
 
 import javax.annotation.Nullable;
 
+import com.cainiao1053.cbcmoreshells.network.CBCMSNetwork;
+import com.cainiao1053.cbcmoreshells.network.CBCMSNetworkImpl;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 
@@ -67,11 +69,11 @@ public class DualCannonMaterialPropertiesHandler {
 	}
 
 	public static void syncTo(ServerPlayer player) {
-		NetworkPlatform.sendToClientPlayer(new ClientboundBigCannonMaterialPropertiesPacket(), player);
+		CBCMSNetworkImpl.sendToClientPlayer(new ClientboundBigCannonMaterialPropertiesPacket(), player);
 	}
 
 	public static void syncToAll(MinecraftServer server) {
-		NetworkPlatform.sendToClientAll(new ClientboundBigCannonMaterialPropertiesPacket(), server);
+		CBCMSNetworkImpl.sendToClientAll(new ClientboundBigCannonMaterialPropertiesPacket(), server);
 	}
 
 	public record ClientboundBigCannonMaterialPropertiesPacket(@Nullable FriendlyByteBuf buf) implements RootPacket {

@@ -1,5 +1,6 @@
 package com.cainiao1053.cbcmoreshells.network;
 
+import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.material.DualCannonMaterialPropertiesHandler;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntMap;
@@ -21,6 +22,8 @@ public class CBCMSRootNetwork {
 		addMsg(id++, ClientboundCBCMSTrailPacket.class, ClientboundCBCMSTrailPacket::new);
 		addMsg(id++, ClientboundCBCMSSplashPacket.class, ClientboundCBCMSSplashPacket::new);
 		addMsg(id++, ClientboundCannonCmdSyncPacket.class, ClientboundCannonCmdSyncPacket::new);
+		addMsg(id++, DualCannonMaterialPropertiesHandler.ClientboundBigCannonMaterialPropertiesPacket.class,
+				DualCannonMaterialPropertiesHandler.ClientboundBigCannonMaterialPropertiesPacket::copyOf);
 
 	}
 

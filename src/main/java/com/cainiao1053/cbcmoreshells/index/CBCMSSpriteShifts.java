@@ -25,7 +25,11 @@ public class CBCMSSpriteShifts {
 		MILITARY_SLATE_ALLOY_DUAL_CANNON_BARREL = dualCannon("dual_cannon/military_slate_alloy_dual_cannon_barrel"),
 		MILITARY_SLATE_ALLOY_DUAL_CANNON_CHAMBER = dualCannon("dual_cannon/military_slate_alloy_dual_cannon_chamber"),
 		SLATE_ALLOY_DUAL_CANNON_BARREL = dualCannon("dual_cannon/slate_alloy_dual_cannon_barrel"),
-		SLATE_ALLOY_DUAL_CANNON_CHAMBER = dualCannon("dual_cannon/slate_alloy_dual_cannon_chamber");
+		SLATE_ALLOY_DUAL_CANNON_CHAMBER = dualCannon("dual_cannon/slate_alloy_dual_cannon_chamber"),
+			ELECTRUM_DUAL_CANNON_BARREL = dualCannon("dual_cannon/electrum_dual_cannon_barrel"),
+			ELECTRUM_DUAL_CANNON_CHAMBER = dualCannon("dual_cannon/electrum_dual_cannon_chamber"),
+			CONSTANTAN_DUAL_CANNON_BARREL = dualCannon("dual_cannon/constantan_dual_cannon_barrel"),
+			CONSTANTAN_DUAL_CANNON_CHAMBER = dualCannon("dual_cannon/constantan_dual_cannon_chamber");
 
 
 

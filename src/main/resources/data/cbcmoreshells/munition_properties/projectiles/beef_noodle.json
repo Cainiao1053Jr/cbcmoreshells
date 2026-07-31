@@ -5,7 +5,7 @@
   "ignores_invulnerability": true,
   "ignores_entity_armor": true,
   "gravity": -0.02,
-  "drag": 0.03,
+  "drag": 0.022,
   "quadratic_drag": false,
   "knockback": 2,
   "added_charge_power": 1,

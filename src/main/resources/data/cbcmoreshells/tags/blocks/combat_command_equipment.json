@@ -8,6 +8,10 @@
     "cbcmoreshells:wide_military_slate_alloy_dual_cannon_charger",
     "cbcmoreshells:wide_slate_alloy_dual_cannon_charger",
     "cbcmoreshells:brass_dual_cannon_charger",
-    "cbcmoreshells:slate_alloy_dual_cannon_charger"
+    "cbcmoreshells:slate_alloy_dual_cannon_charger",
+    "cbcmoreshells:electrum_dual_cannon_charger",
+"cbcmoreshells:wide_electrum_dual_cannon_charger",
+"cbcmoreshells:constantan_dual_cannon_charger",
+"cbcmoreshells:wide_constantan_dual_cannon_charger"
   ]
 }

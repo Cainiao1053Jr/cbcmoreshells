@@ -67,6 +67,9 @@
     "cbcmoreshells:reductive_highspeed_torpedo",
     "cbcmoreshells:slow_long_range_torpedo",
     "cbcmoreshells:highspeed_long_range_torpedo",
-    "cbcmoreshells:aphe_super_heavy_shell"
+    "cbcmoreshells:aphe_super_heavy_shell",
+    "cbcmoreshells:light_apbc_shell",
+    "cbcmoreshells:normal_sap_super_heavy_shell",
+    "cbcmoreshells:extended_sap_shell"
   ]
 }

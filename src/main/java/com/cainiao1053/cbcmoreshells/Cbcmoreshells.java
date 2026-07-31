@@ -1,6 +1,7 @@
 package com.cainiao1053.cbcmoreshells;
 
 import com.cainiao1053.cbcmoreshells.cannon_control.cannon_types.CBCMSCannonContraptionTypes;
+import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.material.DualCannonMaterialPropertiesHandler;
 import com.cainiao1053.cbcmoreshells.index.*;
 import com.cainiao1053.cbcmoreshells.network.CBCMSNetwork;
 import com.cainiao1053.cbcmoreshells.network.CBCMSRootNetwork;
@@ -9,8 +10,11 @@ import com.simibubi.create.foundation.data.CreateRegistrate;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.AddReloadListenerEvent;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.OnDatapackSyncEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
+import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
@@ -90,6 +94,20 @@ public class Cbcmoreshells {
     private void addCreative(BuildCreativeModeTabContentsEvent event)
     {
 
+    }
+
+    @SubscribeEvent
+    public void onAddReloadListeners(AddReloadListenerEvent event) {
+        event.addListener(DualCannonMaterialPropertiesHandler.ReloadListener.INSTANCE);
+    }
+
+    @SubscribeEvent
+    public void onDatapackSync(OnDatapackSyncEvent event) {
+        if (event.getPlayer() == null) {
+            DualCannonMaterialPropertiesHandler.syncToAll(event.getPlayerList().getServer());
+        } else {
+            DualCannonMaterialPropertiesHandler.syncTo(event.getPlayer());
+        }
     }
 
     public static ResourceLocation resource(String path) {

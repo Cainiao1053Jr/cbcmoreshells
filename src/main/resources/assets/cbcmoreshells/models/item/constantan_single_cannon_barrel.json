@@ -1,0 +1,7 @@
+{
+  "parent": "cbcmoreshells:block/single_cannon_barrel",
+  "textures": {
+		"side": "cbcmoreshells:block/dual_cannon/constantan_dual_cannon_barrel_side",
+		"front": "cbcmoreshells:block/dual_cannon/constantan_dual_cannon_front"
+  }
+}

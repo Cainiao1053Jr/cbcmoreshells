@@ -1,0 +1,8 @@
+{
+  "parent": "cbcmoreshells:block/wide_dual_cannon_quickfiring_breech",
+  "textures": {
+    "top": "cbcmoreshells:block/dual_cannon/constantan_dual_cannon_qf_top",
+		"side": "cbcmoreshells:block/dual_cannon/constantan_dual_cannon_chamber_side",
+		"front": "cbcmoreshells:block/dual_cannon/constantan_dual_cannon_front"
+  }
+}

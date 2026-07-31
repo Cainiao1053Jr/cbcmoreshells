@@ -1,0 +1,9 @@
+{
+  "parent": "cbcmoreshells:block/dual_cannon_projectile_block",
+  "textures": {
+    "bottom": "cbcmoreshells:block/projectile/excess_powder_charge_top",
+    "particle": "cbcmoreshells:block/projectile/apbc_shot_top",
+    "side": "cbcmoreshells:block/projectile/light_apbc_shell",
+    "top": "cbcmoreshells:block/projectile/apbc_shot_top"
+  }
+}

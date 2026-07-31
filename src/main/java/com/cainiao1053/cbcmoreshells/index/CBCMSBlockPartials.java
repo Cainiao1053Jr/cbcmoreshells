@@ -67,6 +67,12 @@ public class CBCMSBlockPartials {
 		LARGE_STEEL_DUAL_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.LARGE_STEEL, "large_steel_dual_cannon_sliding_breechblock"),
 		LARGE_MILITARY_SLATE_ALLOY_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.LARGE_SINGLE_MILITARY_SLATE_ALLOY, "large_steel_single_cannon_sliding_breechblock"),
 		LARGE_NETHER_STEEL_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.LARGE_SINGLE_NETHER_STEEL, "large_steel_single_cannon_sliding_breechblock"),
+		WIDE_ELECTRUM_DUAL_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.WIDE_ELECTRUM, "wide_steel_dual_cannon_sliding_breechblock"),
+		WIDE_CONSTANTAN_DUAL_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.WIDE_CONSTANTAN, "wide_steel_dual_cannon_sliding_breechblock"),
+				ELECTRUM_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.SINGLE_ELECTRUM, "steel_single_cannon_sliding_breechblock"),
+				CONSTANTAN_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.SINGLE_CONSTANTAN, "steel_single_cannon_sliding_breechblock"),
+				WIDE_ELECTRUM_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.WIDE_SINGLE_ELECTRUM, "wide_steel_single_cannon_sliding_breechblock"),
+				WIDE_CONSTANTAN_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.WIDE_SINGLE_CONSTANTAN, "wide_steel_single_cannon_sliding_breechblock"),
 
 
 

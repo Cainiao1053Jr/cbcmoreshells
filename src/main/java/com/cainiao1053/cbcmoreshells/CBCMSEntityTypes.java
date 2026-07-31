@@ -45,6 +45,8 @@ import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.AbstractDualCannonPro
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.DualCannonProjectileRenderer;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.extended_antiair_he_shell.ExtendedAntiairHEShellProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.extended_ap_shot.ExtendedAPShotProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.extended_sap_shell.ExtendedSAPShellProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.light_apbc_shell.LightAPBCShellProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_antiair_he_shell.NormalAntiairHEShellProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_ap_shell.NormalAPShellProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_ap_shot.NormalAPShotProjectile;
@@ -52,6 +54,7 @@ import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_apbc_shell.Nor
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_he_shell.NormalHEShellProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_incendiary_he_shell.NormalIncendiaryHEShellProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_sap_shell.NormalSAPShellProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_sap_super_heavy_shell.NormalSAPSuperHeavyShellProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.AbstractRackedProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.RackedProjectileRenderer;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.aphe_bomb.APHEBombProjectile;
@@ -183,6 +186,9 @@ public class CBCMSEntityTypes {
 	public static final EntityEntry<NormalIncendiaryHEShellProjectile> NORMAL_INCENDIARY_HE_SHELL = dualCannonProjectile("normal_incendiary_he_shell", NormalIncendiaryHEShellProjectile::new, "Normal HE Shell", CBCMSMunitionPropertiesHandlers.DUAL_CANNON_INCENDIARY_PROPERTIES);
 	public static final EntityEntry<NormalAPBCShellProjectile> NORMAL_APBC_SHELL = dualCannonProjectile("normal_apbc_shell", NormalAPBCShellProjectile::new, "Normal APBC Shell", CBCMSMunitionPropertiesHandlers.DUAL_CANNON_PROPERTIES);
 	public static final EntityEntry<ExtendedAntiairHEShellProjectile> EXTENDED_ANTIAIR_HE_SHELL = dualCannonProjectile("extended_antiair_he_shell", ExtendedAntiairHEShellProjectile::new, "Extended Antiair HE Shell", CBCMSMunitionPropertiesHandlers.DUAL_CANNON_PROPERTIES);
+	public static final EntityEntry<LightAPBCShellProjectile> LIGHT_APBC_SHELL = dualCannonProjectile("light_apbc_shell", LightAPBCShellProjectile::new, "Light APBC Shell", CBCMSMunitionPropertiesHandlers.DUAL_CANNON_PROPERTIES);
+	public static final EntityEntry<NormalSAPSuperHeavyShellProjectile> NORMAL_SAP_SUPER_HEAVY_SHELL = dualCannonProjectile("normal_sap_super_heavy_shell", NormalSAPSuperHeavyShellProjectile::new, "Normal SAP Super Heavy Shell", CBCMSMunitionPropertiesHandlers.DUAL_CANNON_PROPERTIES);
+	public static final EntityEntry<ExtendedSAPShellProjectile> EXTENDED_SAP_SHELL = dualCannonProjectile("extended_sap_shell", ExtendedSAPShellProjectile::new, "Extended SAP Shell", CBCMSMunitionPropertiesHandlers.DUAL_CANNON_PROPERTIES);
 
 
 	public static final EntityEntry<AntiairMachineGunProjectile> ANTIAIR_MACHINE_GUN_BULLET = autocannonProjectile("antiair_machine_gun_bullet", AntiairMachineGunProjectile::new, CBCMSMunitionPropertiesHandlers.ANTIAIR_AUTOCANNON);

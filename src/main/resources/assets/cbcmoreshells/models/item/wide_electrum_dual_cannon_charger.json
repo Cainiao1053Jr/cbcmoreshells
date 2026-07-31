@@ -1,0 +1,7 @@
+{
+  "parent": "cbcmoreshells:block/wide_dual_cannon_charger",
+  "textures": {
+		"side": "cbcmoreshells:block/dual_cannon/electrum_dual_cannon_chamber_side",
+		"front": "cbcmoreshells:block/dual_cannon/electrum_dual_cannon_front"
+  }
+}

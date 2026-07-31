@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "cbcmoreshells:block/light_apbc_shell",
+      "x": 90
+    },
+    "facing=down": {
+      "model": "cbcmoreshells:block/light_apbc_shell",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "cbcmoreshells:block/light_apbc_shell",
+      "x": 90,
+      "y": 90
+    },
+    "facing=south": {
+      "model": "cbcmoreshells:block/light_apbc_shell",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "cbcmoreshells:block/light_apbc_shell"
+    },
+    "facing=west": {
+      "model": "cbcmoreshells:block/light_apbc_shell",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

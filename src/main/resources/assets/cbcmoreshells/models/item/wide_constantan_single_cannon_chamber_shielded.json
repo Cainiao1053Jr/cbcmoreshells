@@ -1,0 +1,8 @@
+{
+  "parent": "cbcmoreshells:block/wide_single_cannon_chamber_shielded",
+  "textures": {
+		"side": "cbcmoreshells:block/dual_cannon/constantan_dual_cannon_chamber_side",
+		"front": "cbcmoreshells:block/dual_cannon/constantan_dual_cannon_front",
+    "block": "create:block/constantan_block"
+  }
+}

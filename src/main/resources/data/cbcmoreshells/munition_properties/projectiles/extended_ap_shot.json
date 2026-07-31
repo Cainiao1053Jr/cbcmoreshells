@@ -22,6 +22,6 @@
   "smash_toughness": 10,
   "explosion_cooldown": 10,
   "maximum_momentum": 220,
-  "reload_time_coef": 1.25,
+  "reload_time_coef": 1.0,
   "cooldown_reduction_rate": 2
 }
