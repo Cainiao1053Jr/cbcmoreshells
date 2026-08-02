@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/cube_all",
+  "textures": {
+    "all": "cbcmoreshells:block/slate_steel/slate_steel_block"
+  }
+}

@@ -3,6 +3,7 @@ package com.cainiao1053.cbcmoreshells.index;
 import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
 import com.simibubi.create.foundation.block.connected.AllCTTypes;
 import com.simibubi.create.foundation.block.connected.CTSpriteShiftEntry;
+import com.simibubi.create.foundation.block.connected.CTSpriteShifter;
 
 import rbasamoyai.createbigcannons.connected_textures.CBCCTSpriteShifter;
 import rbasamoyai.createbigcannons.index.CBCCTTypes;
@@ -29,7 +30,8 @@ public class CBCMSSpriteShifts {
 			ELECTRUM_DUAL_CANNON_BARREL = dualCannon("dual_cannon/electrum_dual_cannon_barrel"),
 			ELECTRUM_DUAL_CANNON_CHAMBER = dualCannon("dual_cannon/electrum_dual_cannon_chamber"),
 			CONSTANTAN_DUAL_CANNON_BARREL = dualCannon("dual_cannon/constantan_dual_cannon_barrel"),
-			CONSTANTAN_DUAL_CANNON_CHAMBER = dualCannon("dual_cannon/constantan_dual_cannon_chamber");
+			CONSTANTAN_DUAL_CANNON_CHAMBER = dualCannon("dual_cannon/constantan_dual_cannon_chamber"),
+			SLATE_STEEL_BLOCK = omnidirectional("slate_steel/slate_steel_block");
 
 
 
@@ -45,5 +47,10 @@ public class CBCMSSpriteShifts {
 	}
 
 	private static CTSpriteShiftEntry dualCannon(String name) { return dualCannon(name, 1); }
+
+	private static CTSpriteShiftEntry omnidirectional(String name) {
+		return CTSpriteShifter.getCT(AllCTTypes.OMNIDIRECTIONAL, Cbcmoreshells.resource("block/" + name),
+			Cbcmoreshells.resource("block/" + name + "_connected"));
+	}
 
 }

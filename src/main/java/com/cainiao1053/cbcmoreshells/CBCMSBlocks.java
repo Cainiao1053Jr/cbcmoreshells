@@ -174,6 +174,7 @@ import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.ultraspeed_torpedo.U
 import com.cainiao1053.cbcmoreshells.munitions.torpedo_tube.ultraspeed_torpedo.UltraspeedTorpedoBlockItem;
 import com.simibubi.create.AllTags;
 import com.simibubi.create.content.decoration.copycat.CopycatPanelBlock;
+import com.simibubi.create.content.decoration.encasing.EncasedCTBehaviour;
 import com.simibubi.create.content.kinetics.BlockStressDefaults;
 import com.simibubi.create.content.redstone.displayLink.AllDisplayBehaviours;
 import com.simibubi.create.foundation.data.BuilderTransformers;
@@ -3620,6 +3621,8 @@ public class CBCMSBlocks {
 					.strength(4f,27f)
 					.noOcclusion())
 			.transform(axeOrPickaxe())
+			.onRegister(CreateRegistrate.connectedTextures(() -> new EncasedCTBehaviour(CBCMSSpriteShifts.SLATE_STEEL_BLOCK)))
+			.onRegister(CreateRegistrate.casingConnectivity((block, cc) -> cc.makeCasing(block, CBCMSSpriteShifts.SLATE_STEEL_BLOCK)))
 			.item(BlockItem::new)
 			.transform(customItemModel())
 			.register();
