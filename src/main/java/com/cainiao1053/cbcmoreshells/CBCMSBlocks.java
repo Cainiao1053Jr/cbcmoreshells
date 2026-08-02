@@ -193,6 +193,7 @@ import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.TorpedoTubeBlockItem;
 
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.tags.BlockTags;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.MapColor;
@@ -3607,6 +3608,19 @@ public class CBCMSBlocks {
 			.addLayer(() -> RenderType::translucent)
 			.transform(axeOrPickaxe())
 			.item(CommandDeployerBlockItem::new)
+			.transform(customItemModel())
+			.register();
+
+	public static final BlockEntry<Block> SLATE_STEEL_BLOCK = REGISTRATE
+			.block("slate_steel_block", Block::new)
+			.initialProperties(SharedProperties::stone)
+			.properties(p -> p
+					.mapColor(MapColor.DEEPSLATE)
+					.requiresCorrectToolForDrops()
+					.strength(4f,27f)
+					.noOcclusion())
+			.transform(axeOrPickaxe())
+			.item(BlockItem::new)
 			.transform(customItemModel())
 			.register();
 
