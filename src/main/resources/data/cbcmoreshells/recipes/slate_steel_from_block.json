@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "cbcmoreshells:slate_steel_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "cbcmoreshells:slate_steel_ingot"
+  }
+}

@@ -523,5 +523,12 @@
     "block.cbcmoreshells.normal_sap_super_heavy_shell": "标准超重半穿甲弹",
     "block.cbcmoreshells.normal_sap_super_heavy_shell.main": "这种炮弹可以同时穿透和爆炸，爆炸威力更大但初速度更低，但只能击穿一层装甲，爆炸和穿甲的威力受到武器和指令影响，爆炸受到的影响更小。炮弹的基础弹头质量为_%s_，基础爆炸威力为_%s_，出膛速度为_%sm/s_，初始散步为_%s_，最低散步为_%s_，基础存续时间为_%ss_，起始跳弹角为_%s度_，碾压厚度为_%s_，最大动量为_%s toughness_，装填时间系数为 _%s_",
     "block.cbcmoreshells.extended_sap_shell": "增程半穿甲弹",
-    "block.cbcmoreshells.extended_sap_shell.main": "这种炮弹可以同时穿透和爆炸，但只能击穿一层装甲，爆炸和穿甲的威力受到武器和指令影响，爆炸受到的影响更小。炮弹的基础弹头质量为_%s_，基础爆炸威力为_%s_，出膛速度为_%sm/s_，初始散步为_%s_，最低散步为_%s_，基础存续时间为_%ss_，起始跳弹角为_%s度_，碾压厚度为_%s_，最大动量为_%s toughness_，装填时间系数为 _%s_"
+    "block.cbcmoreshells.extended_sap_shell.main": "这种炮弹可以同时穿透和爆炸，但只能击穿一层装甲，爆炸和穿甲的威力受到武器和指令影响，爆炸受到的影响更小。炮弹的基础弹头质量为_%s_，基础爆炸威力为_%s_，出膛速度为_%sm/s_，初始散步为_%s_，最低散步为_%s_，基础存续时间为_%ss_，起始跳弹角为_%s度_，碾压厚度为_%s_，最大动量为_%s toughness_，装填时间系数为 _%s_",
+    "block.cbcmoreshells.material.constantan": "康铜",
+    "block.cbcmoreshells.material.wide_constantan": "宽康铜",
+    "block.cbcmoreshells.material.electrum": "琥珀金",
+    "block.cbcmoreshells.material.wide_electrum": "宽琥珀金",
+    "block.cbcmoreshells.slate_steel_block": "板岩合金块",
+    "item.cbcmoreshells.slate_steel_ingot": "板岩合金锭",
+    "item.cbcmoreshells.raw_slate_steel": "粗板岩钢"
 }

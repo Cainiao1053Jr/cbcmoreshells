@@ -33,5 +33,10 @@
     "block": "cbcmoreshells:aphe_rocket",
     "mass": 700.0,
     "friction": 0.3
+  },
+  {
+    "block": "cbcmoreshells:slate_steel_block",
+    "mass": 1800.0,
+    "friction": 0.3
   }
 ]

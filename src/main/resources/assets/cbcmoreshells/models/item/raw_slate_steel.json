@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "cbcmoreshells:item/raw_slate_steel"
+  }
+}

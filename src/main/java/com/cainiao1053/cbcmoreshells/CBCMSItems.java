@@ -44,7 +44,13 @@ public class CBCMSItems {
             .register(),
 
             REINFORCED_TORPEDO_HEAD = REGISTRATE.item("reinforced_torpedo_head", Item::new)
-            .register()
+            .register(),
+
+    SLATE_STEEL_INGOT = REGISTRATE.item("slate_steel_ingot", Item::new)
+            .register(),
+
+            RAW_SLATE_STEEL = REGISTRATE.item("raw_slate_steel", Item::new)
+                    .register()
             ;
 
     public static final ItemEntry<AntiairMachineGunRoundItem> ANTIAIR_MACHINE_GUN_ROUND = REGISTRATE

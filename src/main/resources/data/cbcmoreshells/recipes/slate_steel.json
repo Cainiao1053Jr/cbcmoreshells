@@ -1,0 +1,21 @@
+{
+  "type": "create:mixing",
+  "heatRequirement": "heated",
+  "ingredients": [
+    {
+      "item": "cbcmoreshells:raw_slate_steel"
+    },
+    {
+      "item": "cbcmoreshells:raw_slate_steel"
+    },
+    {
+      "tag": "minecraft:coals"
+    }
+  ],
+  "results": [
+    {
+      "count": 2,
+      "item": "cbcmoreshells:slate_steel_ingot"
+    }
+  ]
+}

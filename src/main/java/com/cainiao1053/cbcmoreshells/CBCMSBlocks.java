@@ -17,6 +17,7 @@ import com.cainiao1053.cbcmoreshells.blocks.dish_plate.DishPlateBlock;
 import com.cainiao1053.cbcmoreshells.blocks.dish_plate.DishPlateBlockItem;
 import com.cainiao1053.cbcmoreshells.blocks.landing_indicator.LandingIndicatorBlock;
 import com.cainiao1053.cbcmoreshells.blocks.landing_indicator.LandingIndicatorBlockItem;
+import com.cainiao1053.cbcmoreshells.blocks.slate_steel_block.SlateSteelBlock;
 import com.cainiao1053.cbcmoreshells.blocks.torpedo_detection_device.TorpedoDetectionDeviceBlock;
 import com.cainiao1053.cbcmoreshells.blocks.torpedo_detection_device.TorpedoDetectionDeviceBlockItem;
 import com.cainiao1053.cbcmoreshells.cannons.big_cannon.NethersteelQuickfiringBreechBlock;
@@ -193,6 +194,7 @@ import com.cainiao1053.cbcmoreshells.munitions.big_cannon.CannonRocketProjectile
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.TorpedoTubeBlockItem;
 
 import net.minecraft.client.renderer.RenderType;
+import net.minecraft.client.resources.sounds.Sound;
 import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.level.block.*;
@@ -3612,14 +3614,15 @@ public class CBCMSBlocks {
 			.transform(customItemModel())
 			.register();
 
-	public static final BlockEntry<Block> SLATE_STEEL_BLOCK = REGISTRATE
-			.block("slate_steel_block", Block::new)
+	public static final BlockEntry<SlateSteelBlock> SLATE_STEEL_BLOCK = REGISTRATE
+			.block("slate_steel_block", SlateSteelBlock::new)
 			.initialProperties(SharedProperties::stone)
 			.properties(p -> p
 					.mapColor(MapColor.DEEPSLATE)
 					.requiresCorrectToolForDrops()
-					.strength(4f,27f)
-					.noOcclusion())
+					.strength(4f,26f)
+					.noOcclusion()
+					.sound(SoundType.NETHERITE_BLOCK))
 			.transform(axeOrPickaxe())
 			.onRegister(CreateRegistrate.connectedTextures(() -> new EncasedCTBehaviour(CBCMSSpriteShifts.SLATE_STEEL_BLOCK)))
 			.onRegister(CreateRegistrate.casingConnectivity((block, cc) -> cc.makeCasing(block, CBCMSSpriteShifts.SLATE_STEEL_BLOCK)))
