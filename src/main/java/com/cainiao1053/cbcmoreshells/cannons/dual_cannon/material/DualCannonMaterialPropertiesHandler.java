@@ -20,7 +20,7 @@ import net.minecraft.server.packs.resources.ResourceManager;
 import net.minecraft.server.packs.resources.SimpleJsonResourceReloadListener;
 import net.minecraft.util.profiling.ProfilerFiller;
 import net.minecraft.world.entity.player.Player;
-import rbasamoyai.createbigcannons.multiloader.NetworkPlatform;
+import com.cainiao1053.cbcmoreshells.network.CBCMSNetworkImpl;
 import rbasamoyai.createbigcannons.network.RootPacket;
 
 public class DualCannonMaterialPropertiesHandler {
@@ -86,11 +86,11 @@ public class DualCannonMaterialPropertiesHandler {
 	}
 
 	public static void syncTo(ServerPlayer player) {
-		NetworkPlatform.sendToClientPlayer(new ClientboundDualCannonMaterialPropertiesPacket(), player);
+		CBCMSNetworkImpl.sendToClientPlayer(new ClientboundDualCannonMaterialPropertiesPacket(), player);
 	}
 
 	public static void syncToAll(MinecraftServer server) {
-		NetworkPlatform.sendToClientAll(new ClientboundDualCannonMaterialPropertiesPacket(), server);
+		CBCMSNetworkImpl.sendToClientAll(new ClientboundDualCannonMaterialPropertiesPacket(), server);
 	}
 
 //	public record ClientboundBigCannonMaterialPropertiesPacket(@Nullable FriendlyByteBuf buf) implements RootPacket {

@@ -125,10 +125,10 @@ public class NormalSAPShellProjectile extends FuzedDualCannonProjectile {
 		}
 
 		ImpactResult.KinematicOutcome outcome;
-		if (!this.level().isClientSide && (penetrate || this.getSmashToughness()>toughness)) {
-			outcome = ImpactResult.KinematicOutcome.PENETRATE;
-		} else if (surfaceImpact && incidence<=projectileDeflection && this.level().getRandom().nextDouble() < bounceChance) {
+		if (surfaceImpact && incidence<=projectileDeflection && this.level().getRandom().nextDouble() < bounceChance) {
 			outcome = ImpactResult.KinematicOutcome.BOUNCE;
+		} else if (!this.level().isClientSide && (penetrate || this.getSmashToughness()>toughness)) {
+			outcome = ImpactResult.KinematicOutcome.PENETRATE;
 		} else {
 			outcome = ImpactResult.KinematicOutcome.STOP;
 		}
