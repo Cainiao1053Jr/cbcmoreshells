@@ -166,6 +166,9 @@ repositories {
         }
     }
 
+    maven { url = "https://modmaven.dev/" } // Create, Flywheel
+
+
     maven { // Ritchie's Projectile Library
         url = "https://maven.realrobotix.me/master/"
         content {
@@ -177,10 +180,12 @@ repositories {
         url = "https://repo.essential.gg/repository/maven-public"
     }
 
-    maven {
-        name = "CottonMC"
-        url = "https://server.bbkr.space/artifactory/libs-release"
-    }
+    maven { url = "https://maven.ithundxr.dev/mirror/" } // Registrate
+
+//    maven {
+//        name = "CottonMC"
+//        url = "https://server.bbkr.space/artifactory/libs-release"
+//    }
 
     maven { url = "https://maven.bawnorton.com/releases" }
     gradlePluginPortal()
@@ -198,11 +203,16 @@ dependencies {
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.20.1-47.2.32'
 
-    implementation fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
-    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
+//    implementation fg.deobf("com.simibubi.create:create-${minecraft_version}:${create_version}:slim") { transitive = false }
+//    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${minecraft_version}:${flywheel_version}")
+//    implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
+
+    implementation fg.deobf("com.simibubi.create:create-${create_minecraft_version}:${create_version}:slim") { transitive = false }
+    implementation fg.deobf("com.jozufozu.flywheel:flywheel-forge-${flywheel_minecraft_version}:${flywheel_version}")
     implementation fg.deobf("com.tterrag.registrate:Registrate:${registrate_version}")
 
-    implementation fg.deobf("curse.maven:createbigcannons-646668:6064368")
+    //implementation fg.deobf("curse.maven:createbigcannons-646668:6064368")
+    implementation fg.deobf("com.rbasamoyai:createbigcannons:${cbc_version}") { transitive = false }
 
     implementation fg.deobf("org.valkyrienskies:valkyrienskies-120-forge:${vs2_version}") { transitive = false }
 
