@@ -28,10 +28,10 @@ public class CBCMSSoundEvents {
 			.category(SoundSource.BLOCKS)
 			.build();
 
-	public static final SoundEntry
-			SONAR_PULSE = create("sonar_pulse").subtitle("Sonar Pulse")
-			.category(SoundSource.BLOCKS)
-			.build();
+//	public static final SoundEntry
+//			SONAR_PULSE = create("sonar_pulse").subtitle("Sonar Pulse")
+//			.category(SoundSource.BLOCKS)
+//			.build();
 
 	public static final SoundEntry
 			SERVICEBELL = create("servicebell").subtitle("Servicebell")
