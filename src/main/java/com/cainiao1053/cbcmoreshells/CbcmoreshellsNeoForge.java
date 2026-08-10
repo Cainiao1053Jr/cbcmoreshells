@@ -56,7 +56,7 @@ public class CbcmoreshellsNeoForge {
         modEventBus.addListener(this::onNewRegistry);
         modEventBus.addListener(this::onLoadConfig);
         modEventBus.addListener(this::onReloadConfig);
-        modEventBus.addListener(this::onRegisterSounds);
+        //modEventBus.addListener(this::onRegisterSounds);
 		modEventBus.addListener(this::onRegister);
         modEventBus.addListener(this::onRegisterCapabilities);
 
