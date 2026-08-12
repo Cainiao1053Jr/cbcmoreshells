@@ -1,0 +1,122 @@
+================================================================================
+本次改动：新增"可缩放威力"的炮弹爆炸（方案 A，简单抗性乘法）
+================================================================================
+
+【目标】
+在不改变爆炸范围（半径 size）的前提下，能够单独缩放爆炸对方块的破坏威力。
+做法是给爆炸增加一个"抗性系数"参数，计算爆炸时把这个系数直接乘到每个方块的
+爆炸抗性上；系数作为构造参数传入新的爆炸类。
+
+--------------------------------------------------------------------------------
+一、新增文件（2 个，均在新包 com.cainiao1053.cbcmoreshells.munitions.explosion）
+--------------------------------------------------------------------------------
+
+1. ScaledResistanceExplosionDamageCalculator.java
+   自定义的 ExplosionDamageCalculator。
+
+   - 构造参数：(@Nullable Entity source, float resistanceFactor)
+   - 内部按原版规则选择一个被委托的计算器：
+       source != null -> new EntityBasedExplosionDamageCalculator(source)
+       source == null -> new ExplosionDamageCalculator()
+     这样 Forge 的 state.getExplosionResistance(level, pos, explosion) 重载、
+     实体自身的 getBlockExplosionResistance/shouldBlockExplode 逻辑全部原样保留。
+   - 重写 getBlockExplosionResistance(...)：
+       委托结果.map(r -> r * resistanceFactor)
+     系数在构造时用 Math.max(0, factor) 夹住，防止出现负抗性导致射线能量不减反增。
+   - 重写 shouldBlockExplode(...)：原样转发给被委托者，不做任何改动。
+   - 关键点：空气方块在原版里返回 Optional.empty()，这里用 .map() 保持为空，
+     不会凭空多出一份能量损耗，所以空中射程完全不受系数影响。
+
+2. ScaledShellExplosion.java
+   仿照 rbasamoyai.createbigcannons.munitions.ShellExplosion 实现的新爆炸类，
+   继承 rbasamoyai.createbigcannons.remix.CustomExplosion.Impl。
+
+   与 ShellExplosion 的唯一区别：
+     ShellExplosion 在调用 CustomExplosion.Impl 构造器时，ExplosionDamageCalculator
+     参数硬编码传的是 null；本类改为传入 ScaledResistanceExplosionDamageCalculator。
+
+   构造器（在 ShellExplosion 的参数表基础上，于 size 之后插入 resistanceFactor）：
+     ScaledShellExplosion(Level level, Entity source, DamageSource damageSource,
+                          double x, double y, double z,
+                          float size,               // 范围，语义与原来完全一致
+                          float resistanceFactor,   // 新增：抗性系数
+                          boolean fire,
+                          Level.ExplosionInteraction interaction,
+                          boolean noEffects)
+     以及省略 noEffects（默认 false）的重载。
+
+   其余成员完全照搬 ShellExplosion：
+     - isPlume：构造时按"上方是空气且下方不是空气"判定，用于烟柱粒子。
+     - spawnParticles()：ShellBlastWaveEffectParticleData + ShellExplosionCloudParticleData，
+       音效用 CBCSoundEvents.SHELL_EXPLOSION，参数与 ShellExplosion 逐个对齐。
+     - editBlock(...)：noEffects / CBCConfigs.SERVER.munitions.projectilesChangeSurroundings
+       / changedBlocks 去重三重判断后，调用 BlockImpactTransformationHandler.transformBlock
+       并 setBlock(pos, state, 11)。
+     - sendExplosionToClient(ServerPlayer)：距离平方 >= 263000 直接跳过；
+       取 getHitPlayers() 里的击退向量，用 ExplosionType.SHELL（noEffects 时用
+       SHELL_NO_EFFECTS）打包 ClientboundCBCExplodePacket，经 NetworkPlatform 下发。
+     - 额外提供 getResistanceFactor() 便于外部读取。
+
+--------------------------------------------------------------------------------
+二、未改动的内容
+--------------------------------------------------------------------------------
+- 没有改动任何现有炮弹（包括 HESHShellProjectile 等），现有弹种行为完全不变。
+- 没有新增 mixin、没有启用 accesstransformer、没有新增网络包或客户端代码。
+- 客户端不需要任何改动：威力计算只发生在服务端，被摧毁方块列表随
+  ClientboundCBCExplodePacket 下发，客户端沿用 CBC 自带的 SHELL 爆炸表现。
+
+--------------------------------------------------------------------------------
+三、用法
+--------------------------------------------------------------------------------
+在炮弹的 detonate(Position position) 里，把原来的：
+
+    ShellExplosion explosion = new ShellExplosion(this.level(), this,
+        this.indirectArtilleryFire(false), position.x(), position.y(), position.z(),
+        this.getAllProperties().explosion().explosivePower(), false,
+        CBCConfigs.SERVER.munitions.damageRestriction.get().explosiveInteraction());
+    CreateBigCannons.handleCustomExplosion(this.level(), explosion);
+
+替换为：
+
+    ScaledShellExplosion explosion = new ScaledShellExplosion(this.level(), this,
+        this.indirectArtilleryFire(false), position.x(), position.y(), position.z(),
+        this.getAllProperties().explosion().explosivePower(),   // 范围，不动
+        1.5f,                                                   // 抗性系数
+        false,
+        CBCConfigs.SERVER.munitions.damageRestriction.get().explosiveInteraction());
+    CreateBigCannons.handleCustomExplosion(this.level(), explosion);
+
+--------------------------------------------------------------------------------
+四、数值含义与调参参考
+--------------------------------------------------------------------------------
+系数 k 的语义："所有方块的爆炸抗性都变成 k 倍"。
+    k = 1.0  与原版 ShellExplosion 完全等价
+    k > 1.0  方块更耐炸 = 爆炸威力削弱
+    k < 1.0  方块更脆   = 爆炸威力增强
+    k = 0.0  忽略一切方块抗性，只受射程限制（会打穿基岩以外的所有东西，慎用）
+
+原版每步射线扣两项：固定 0.225（距离项）+ (抗性+0.3)*0.3（抗性项）。
+本改动只作用于抗性项，于是有：
+
+    空中最大射程 ≈ 1.333 * size          （与 k 无关，size 仍是射程硬上限）
+    穿透深度(格) ≈ size / (1.05 + k * R) （R = 方块爆炸抗性，随机因子取平均 1.0）
+
+以石头 R=6、size=8 为例（三档的空中范围都是约 10.7 格，完全一致）：
+    k = 0.5  ->  穿透约 2.0 格
+    k = 1.0  ->  穿透约 1.1 格   （原版表现）
+    k = 2.0  ->  穿透约 0.6 格
+
+反推：想让 size 的弹在抗性 R 的方块里正好穿 D 格，取 k = (size / D - 1.05) / R。
+
+注意：实体伤害与击退仍由 size 决定（原版写死实体半径 = size * 2），不受 k 影响。
+这正符合"范围不变、只改对方块威力"的需求；若以后需要单独调实体伤害，需另行处理。
+
+--------------------------------------------------------------------------------
+五、验证
+--------------------------------------------------------------------------------
+已执行 gradlew compileJava，编译通过（只有仓库原有的 deprecation/unchecked 警告，
+无新增错误或警告），两个新类均已生成 class 文件。游戏内实际穿深效果尚未实测。
+
+后续如需把系数做成可配置的 JSON 属性，可仿照
+munitions/big_cannon/config/ReductiveProjectilePropertiesComponent.java 的写法
+新增一个 properties component，并注册到 CBCMSMunitionPropertiesHandlers。
