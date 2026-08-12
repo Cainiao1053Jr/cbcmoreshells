@@ -10,6 +10,7 @@ import com.cainiao1053.cbcmoreshells.munitions.big_cannon.ShellessFuzedBigCannon
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.BigCannonShellessShellProperties;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.TorpedoProjectilePropertiesComponent;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.TorpedoProperties;
+import com.cainiao1053.cbcmoreshells.munitions.explosion.ScaledShellExplosion;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
 import net.minecraft.world.entity.EntityType;
@@ -39,8 +40,8 @@ public class ReinforcedShortRangeTorpedoProjectile extends FuzedCannonTorpedoPro
 		float explosivePower = this.getAllProperties().explosion().explosivePower();
 		if (normalDetonate()){explosivePower *=4;}
 
-		ShellExplosion explosion = new ShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
-			position.y(), position.z(), explosivePower, false,
+		ScaledShellExplosion explosion = new ScaledShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
+			position.y(), position.z(), explosivePower, this.getResistanceFactor(), false,
 			CBCConfigs.SERVER.munitions.damageRestriction.get().explosiveInteraction());
 		CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 	}

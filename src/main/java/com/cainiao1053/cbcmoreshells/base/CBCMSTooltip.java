@@ -147,12 +147,13 @@ public class CBCMSTooltip {
 		int lifetime = properties.lifetime();
 		int explosiveCooldown = properties.torpedoProperties().explosionCooldown();
 		int reloadTime = properties.torpedoProperties().reloadTime();
+		float resistanceFactor = properties.torpedoProperties().resistanceFactor();
 		TooltipHelper.Palette palette = getPalette(level, stack);
 		String key1 = "block.cbcmoreshells.torpedo" + ".tooltip.torpInfo";
 		tooltip.add(Components.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main", String.format("%.1f",torpSpeed*38.8),
 				String.format("%.1f", properties.explosion().explosivePower() * 4),
-				buoyancyFactor,String.format("%.1f",lifetime*torpSpeed),String.format("%.1f",explosiveCooldown*torpSpeed), String.format("%.1f",((float)reloadTime /20))
+				buoyancyFactor,String.format("%.1f",lifetime*torpSpeed),String.format("%.1f",explosiveCooldown*torpSpeed), String.format("%.1f",((float)reloadTime /20)), String.format("%.2f", resistanceFactor)
 		), palette.primary(), palette.highlight(), 1));
 	}
 
@@ -167,13 +168,14 @@ public class CBCMSTooltip {
 		int explosiveCooldown = properties.torpedoProperties().explosionCooldown();
 		float reduction = properties.reductiveProjectileProperties().percentReduction();
 		int reloadTime = properties.torpedoProperties().reloadTime();
+		float resistanceFactor = properties.torpedoProperties().resistanceFactor();
 		TooltipHelper.Palette palette = getPalette(level, stack);
 		String key1 = "block.cbcmoreshells.reductive_torpedo" + ".tooltip.torpInfo";
 		tooltip.add(Components.translatable(key1).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main", String.format("%.1f",torpSpeed*38.8),
 				String.format("%.1f", properties.explosion().explosivePower() * 4),
 				buoyancyFactor,String.format("%.1f",lifetime*torpSpeed),String.format("%.1f",explosiveCooldown*torpSpeed),String.format("%.1f",((float)reloadTime /20)),
-				String.format("%.1f",reduction * 100)
+				String.format("%.1f",reduction * 100), String.format("%.2f", resistanceFactor)
 		), palette.primary(), palette.highlight(), 1));
 	}
 
