@@ -1,0 +1,347 @@
+================================================================================
+在 CBC 体系下新建"可缩放威力"的爆炸（仿 ShellExplosion，范围不变、威力可调）
+================================================================================
+（本文只给方案 + 关键代码片段示意，未改动任何现有源码）
+
+--------------------------------------------------------------------------------
+一、先搞清楚现状：CBC 的爆炸到底是怎么算的
+--------------------------------------------------------------------------------
+
+1. 类结构（来自 createbigcannons-5.8.3-dev 反汇编结果）
+
+   net.minecraft.world.level.Explosion                （原版）
+     └── rbasamoyai.createbigcannons.remix.CustomExplosion$Impl   （abstract）
+           ├── rbasamoyai.createbigcannons.munitions.ShellExplosion
+           ├── rbasamoyai.createbigcannons.munitions.ImpactExplosion
+           └── FlakExplosion / ShrapnelExplosion / SmokeExplosion / FluidExplosion ...
+
+   CustomExplosion（接口）只有 4 个东西：
+     - playLocalSound(Level, x, y, z)                 default，播放自定义爆炸音
+     - editBlock(Level, BlockPos, BlockState, FluidState, float)  default，射线扫到方块时的回调
+     - sendExplosionToClient(ServerPlayer)            abstract，发包给客户端做表现
+     - getBlockInteraction()                          abstract
+
+   CustomExplosion$Impl 的构造器（关键！）：
+     public Impl(Level, Entity, DamageSource,
+                 ExplosionDamageCalculator,          <<<<<< 注意这个参数
+                 double x, double y, double z, float size,
+                 boolean fire, Level.ExplosionInteraction)
+
+   而 ShellExplosion 的构造器里，这个 ExplosionDamageCalculator 位置**硬编码传的是 null**
+   （字节码 aconst_null）。传 null 时原版 Explosion 会自动回退成：
+       source == null ? Explosion.EXPLOSION_DAMAGE_CALCULATOR
+                      : new EntityBasedExplosionDamageCalculator(source)
+   —— 这就是我们能插手的最干净的入口。
+
+2. CBC 并没有重写威力计算
+
+   CBC 只做了两件事（rbasamoyai/createbigcannons/mixin/ExplosionMixin）：
+     a. @Inject 进原版 Explosion.explode() 的射线内层循环，捕获局部变量
+        (float f, BlockPos, BlockState, FluidState)，回调 CustomExplosion.editBlock(...)
+        —— 这只是"顺便改一下方块外观"（BlockImpactTransformationHandler.transformBlock），
+           **不影响威力衰减**。
+     b. WrapOperation 包住 finalizeExplosion 里的播音，改成 playLocalSound。
+
+   CreateBigCannons.handleCustomExplosion(level, explosion) 做的事：
+       IndexPlatform.onExplosionStart(...) -> 若被取消则 return
+       explosion.explode();                      // 原版方法，没被替换
+       explosion.finalizeExplosion(level.isClientSide);
+       若服务端：遍历 ServerPlayer 调 sendExplosionToClient(p)
+
+   结论：**威力计算 100% 还是原版 Explosion.explode() 那一套**，
+         所以只要接管原版那套里的可插拔点就够了。
+
+3. 原版 1.20.1 Explosion.explode() 的威力公式（这是核心）
+
+   1352 条射线（16×16×16 立方体表面方向），每条射线：
+
+       float f = this.radius * (0.7F + random.nextFloat() * 0.6F);   // 起始能量，0.7~1.3 倍
+       for (步长 0.3F; f > 0; f -= 0.22500001F) {                    // ①"距离"损耗
+           Optional<Float> op = damageCalculator.getBlockExplosionResistance(
+                                    this, level, pos, state, fluid);
+           if (op.isPresent()) f -= (op.get() + 0.3F) * 0.3F;        // ②"抗性"损耗
+           if (f > 0 && damageCalculator.shouldBlockExplode(...)) toBlow.add(pos);
+           前进 0.3 格;
+       }
+       // 实体伤害另算：
+       float f2 = this.radius * 2.0F;                  // 实体作用半径 = 2×radius
+       damage = (int)((d*d + d)/2 * 7 * f2 + 1)        // d = (1-距离比)×可见度
+
+   把它换算成"每穿透 1 格方块的能量开销"（1 格 = 1/0.3 ≈ 3.333 步）：
+
+       空气（抗性返回 Optional.empty()，不走②）：
+           每格开销 = 3.333 × 0.225        = 0.75
+       实体方块（抗性 R）：
+           每格开销 = 3.333 × (0.225 + 0.3×(R+0.3)) = 1.05 + R
+
+   于是有两个非常好用的近似式：
+
+       空中最大射程   ≈ 1.333 × radius × (0.7~1.3)      —— 平均 1.333×radius
+       穿透深度 D(格) ≈ radius × (0.7~1.3) / (1.05 + R)  —— 平均 radius / (1.05 + R)
+
+   这正是你说的"半径同时表示范围和威力"：radius 一个数同时决定了①和②。
+
+4. 由此得到解法的本质
+
+   ① 距离损耗（0.225/步）是**常数**，与抗性无关 → 只要不动 radius，空中范围就永远不变，
+      而且 radius 天然是射程硬上限（威力放大也冲不出去）。
+   ② 抗性损耗是**唯一**跟"打不打得穿方块"有关的项，且它完全由
+      ExplosionDamageCalculator.getBlockExplosionResistance() 决定。
+
+   ==> 只要给爆炸换一个自定义的 ExplosionDamageCalculator，把方块抗性 R 乘上系数 k，
+       就实现了"范围不变、对方块威力可缩放"。k>1 = 威力削弱，k<1 = 威力增强。
+
+
+--------------------------------------------------------------------------------
+二、推荐方案 A：自定义 ExplosionDamageCalculator（首选，改动最小、最稳）
+--------------------------------------------------------------------------------
+
+【为什么不能直接 extends ShellExplosion】
+   ShellExplosion 的三个构造器都把 calculator 写死成 null，
+   而 Explosion.damageCalculator 是 private final、在构造器里赋值，子类没法覆盖。
+   所以要么复刻 ShellExplosion（推荐），要么用 AT 去改字段（见 2.4 备选）。
+
+2.1 新增三个类（建议放在 com.cainiao1053.cbcmoreshells.munitions.explosion 包）
+
+   (1) ScaledShellExplosion extends CustomExplosion.Impl
+       —— ShellExplosion 的复刻版，唯一区别是把 calculator 传进去。
+       ShellExplosion 全部逻辑只有 60 行左右，且引用的 CBC 类都是 public 的：
+         ShellBlastWaveEffectParticleData / ShellExplosionCloudParticleData
+         CBCSoundEvents.SHELL_EXPLOSION
+         BlockImpactTransformationHandler.transformBlock(state)
+         CBCConfigs.SERVER.munitions.projectilesChangeSurroundings
+         ClientboundCBCExplodePacket + ExplosionType.SHELL
+         NetworkPlatform.sendToClientPlayer(packet, player)
+       复刻时可以直接照抄，不需要任何 mixin / AT。
+
+       public class ScaledShellExplosion extends CustomExplosion.Impl {
+           private final Set<BlockPos> changedBlocks = new HashSet<>();
+           private final boolean isPlume;
+
+           public ScaledShellExplosion(Level level, Entity source, DamageSource dmg,
+                                       double x, double y, double z,
+                                       float radius,               // 范围，照旧
+                                       float powerScale,           // 威力倍率（或直接传 k）
+                                       boolean fire,
+                                       Level.ExplosionInteraction interaction) {
+               super(level, source, dmg,
+                     ScaledExplosionDamageCalculator.of(source, powerScale),   // <<< 关键
+                     x, y, z, radius, fire, interaction);
+               BlockPos p = BlockPos.containing(x, y, z);
+               this.isPlume = level.getBlockState(p.above()).isAir()
+                           && !level.getBlockState(p.below()).isAir();
+           }
+
+           @Override public void editBlock(...)            { /* 照抄 ShellExplosion */ }
+           @Override protected void spawnParticles()       { /* 照抄，可选，见下 */ }
+           @Override public void sendExplosionToClient(ServerPlayer p) {
+               /* 照抄，ExplosionType 继续用 SHELL 即可 */
+           }
+       }
+
+       ★ 关于表现：handleCustomExplosion 里 finalizeExplosion(level.isClientSide)，
+         服务端（含单人的集成服务端）isClientSide=false，所以 spawnParticles() 实际
+         只在客户端从包重建的那个对象上执行，而那个对象是 CBC 按 ExplosionType 自己
+         new 出来的 ShellExplosion。也就是说：
+         **客户端表现完全复用 SHELL，你不需要写任何客户端代码 / 新粒子 / 新网络包。**
+         威力缩放是纯服务端行为，toBlow 列表算完直接随包下发。
+
+   (2) ScaledExplosionDamageCalculator extends EntityBasedExplosionDamageCalculator
+
+       为什么继承 EntityBased 而不是基类：ShellExplosion 传的 source 是炮弹实体，
+       原版回退用的就是 EntityBasedExplosionDamageCalculator，它会额外调用
+       entity.getBlockExplosionResistance(...)（Forge 上还会走方块自己的
+       state.getExplosionResistance(level,pos,explosion) 重载，VS/CBC 的特殊方块靠这个）。
+       继承它 + 只在返回值上做乘法，可以把所有原有行为原封不动保留。
+
+       public class ScaledExplosionDamageCalculator extends EntityBasedExplosionDamageCalculator {
+           private final float powerScale;   // P：威力倍率，P>1 更强
+
+           @Override
+           public Optional<Float> getBlockExplosionResistance(Explosion e, BlockGetter reader,
+                                   BlockPos pos, BlockState state, FluidState fluid) {
+               return super.getBlockExplosionResistance(e, reader, pos, state, fluid)
+                           .map(r -> scale(r, state, pos));     // 空气仍然是 empty，射程不受影响
+           }
+
+           private float scale(float r, BlockState state, BlockPos pos) {
+               float k = BlockResistanceRegistry.factorOf(state) / this.powerScale;
+               // ↓ 二选一，见 2.2
+               return Math.max(0f, r * k);                                  // 简单版
+               // return Math.max(0f, (r + 0.3f) / this.powerScale - 0.3f); // 精确版
+           }
+       }
+       注意：source 可能为 null（客户端重建时），此时用 new ExplosionDamageCalculator() 兜底，
+       写一个静态工厂 of(entity, scale) 处理即可。
+
+   (3) BlockResistanceRegistry —— "给所有方块一个抗性系数"的查表器
+       见第三节。
+
+2.2 两种缩放公式，按需求二选一
+
+   (a) 简单版：抗性系数 k
+           R' = k × R
+       每格开销 = 1.05 + k×R，穿透深度 D ≈ radius / (1.05 + k×R)
+       语义直观（"这块方块对爆炸的抗性是 k 倍"），推荐做**逐方块系数**用这个。
+
+   (b) 精确版：整体威力倍率 P（严格等价于"把②项整体除以 P"）
+           R' = (R + 0.3) / P − 0.3        （结果 clamp 到 ≥ 0）
+       这样 f -= (R'+0.3)*0.3 == (R+0.3)*0.3 / P，
+       即"抗性损耗项精确缩放 P 倍"，而距离损耗 0.225/步 一点不动。
+       推荐做**整发炮弹的威力倍率**用这个。
+
+   最终可以两者叠乘：R' = ((R × k_block) + 0.3) / P_shell − 0.3
+
+2.3 数值标定参考（用 D ≈ radius / (1.05 + k×R)，随机因子取平均 1.0）
+
+   以石头 R=6 为例，radius = 8（空中范围恒定 ≈ 10.7 格，三档都一样）：
+       k=0.5  每格开销 4.05   → 穿透 ≈ 2.0 格
+       k=1.0  每格开销 7.05   → 穿透 ≈ 1.1 格   （= 原版 ShellExplosion）
+       k=2.0  每格开销 13.05  → 穿透 ≈ 0.6 格
+   以 CBC 钢制装甲之类高抗性方块（R 很大）时，k 的影响接近线性反比：D ≈ radius/(k×R)。
+
+   反推公式（想让 radius=Rg 的弹在抗性 R 的方块里正好穿 D 格）：
+       k = (Rg / D − 1.05) / R
+
+2.4 备选实现（如果不想复刻 ShellExplosion 那 60 行）
+   启用 build.gradle 里被注释掉的 accessTransformer，加一行：
+       public-f net.minecraft.world.level.Explosion f_46013_ # damageCalculator
+   然后 `class ScaledShellExplosion extends ShellExplosion`，在构造器里把字段重新赋值。
+   优点：3 行代码；缺点：依赖 AT、去 final、跨版本脆弱、别的 mod 也可能读这个字段。
+   —— 不推荐，仅作应急。
+
+
+--------------------------------------------------------------------------------
+三、"给所有方块一个抗性系数"的数据来源（BlockResistanceRegistry）
+--------------------------------------------------------------------------------
+
+三种做法，按工作量从小到大：
+
+  (1) 方块标签分档（最省事，强烈推荐先用这个）
+      建若干 tag：
+        data/cbcmoreshells/tags/blocks/explosion_resistance/x0_5.json
+        .../x2.json  .../x4.json  .../x8.json
+      查表：state.is(CBCMSTags.RES_X2) → 2.0f，都不命中 → 1.0f。
+      优点：数据包天然同步到客户端、整合包作者可覆盖、零网络代码。
+      缺点：只能分档，不能任意小数。
+
+  (2) 自定义 JSON 数据包 + 服务端同步（最灵活）
+      写一个 SimpleJsonResourceReloadListener 读
+        data/<ns>/cbcms_block_resistance/*.json
+      格式 { "minecraft:obsidian": 0.5, "#forge:stone": 3.0 }
+      解析成 Reference2FloatOpenHashMap<Block> + List<TagKey,factor>。
+      因为爆炸只在服务端算，**不需要同步到客户端**（可省掉网络包）。
+      这条路和 CBC 自己的 MunitionPropertiesHandler 风格一致。
+
+  (3) Forge Config（最简单但不可被数据包覆盖）
+      ConfigValue<List<? extends String>>，形如 "minecraft:obsidian=0.5"。
+
+  性能注意：getBlockExplosionResistance 每条射线每步都会调一次
+  （1352 条射线 × 每条几十步，量级 ~1e4~1e5 次/爆炸）。
+  查表务必用 Reference2FloatOpenHashMap<Block>（按 Block 而非 BlockState 缓存），
+  tag 判定放在 map miss 之后，并把结果缓存进同一张 map。不要在里面 new 对象 / 拼字符串。
+
+
+--------------------------------------------------------------------------------
+四、接到炮弹上（以复刻 HESHShellProjectile 为例）
+--------------------------------------------------------------------------------
+
+  现状（HESHShellProjectile.java:30-35）：
+      ShellExplosion explosion = new ShellExplosion(level(), this, indirectArtilleryFire(false),
+              x, y, z, getAllProperties().explosion().explosivePower(), false,
+              CBCConfigs.SERVER.munitions.damageRestriction.get().explosiveInteraction());
+      CreateBigCannons.handleCustomExplosion(level(), explosion);
+
+  改成（新弹种）：
+      ScaledShellExplosion explosion = new ScaledShellExplosion(level(), this,
+              indirectArtilleryFire(false), x, y, z,
+              getAllProperties().explosion().explosivePower(),      // 范围，不动
+              getAllProperties().scaledExplosion().powerScale(),    // 威力倍率，新加
+              false,
+              CBCConfigs.SERVER.munitions.damageRestriction.get().explosiveInteraction());
+      CreateBigCannons.handleCustomExplosion(level(), explosion);
+
+  让威力倍率变成可配置的 JSON 属性：直接照抄本仓库已有的模式，
+  参考 munitions/big_cannon/config/ReductiveProjectilePropertiesComponent.java：
+      public record ScaledExplosionPropertiesComponent(float powerScale) {
+          public static final ScaledExplosionPropertiesComponent DEFAULT = new ...(1.0f);
+          public static ... fromJson(String id, JsonObject obj) {
+              return new ...(Math.max(0.01f, GsonHelper.getAsFloat(obj, "power_scale", 1.0f)));
+          }
+          public static ... fromNetwork(FriendlyByteBuf buf) { ... }
+          public void toNetwork(FriendlyByteBuf buf) { ... }
+      }
+  再仿 ReductiveTorpedoProperties / ReductiveTorpedoPropertiesHandler 建
+  XxxProperties(record) + XxxPropertiesHandler，注册进 CBCMSMunitionPropertiesHandlers。
+  其余样板（Item / Block / EntityType / 模型 / recipe / munition_properties json）
+  完全照抄一个现有 HE 弹种目录即可。
+
+
+--------------------------------------------------------------------------------
+五、其它方案（备选，说明取舍）
+--------------------------------------------------------------------------------
+
+方案 B：在自己的爆炸类里整个 override public void explode()
+    自己写射线循环，把 range 和 power 拆成两个独立字段：
+        f -= 0.225f * (baseRadius / rangeRadius);       // 距离项按 range 走
+        f -= (R + 0.3f) * 0.3f / powerScale;            // 抗性项按 power 走
+    还能顺手独立缩放实体伤害（原版里实体半径写死 radius*2、伤害系数写死 7）。
+    优点：完全自由，可以做非线性衰减、方向性（HEAT 锥形）、爆轰波等。
+    ★ 必须注意的坑：
+      - CBC 的 editBlock 是 @Inject 进原版 explode() 的；你一旦不调 super.explode()，
+        editBlock 就不会被触发，方块烧灼/形变表现会丢失 —— 需要在自己的循环里手动调
+        this.editBlock(level, pos, state, fluid, f)。
+      - 同样要手动补 level.gameEvent(source, GameEvent.EXPLODE, ...) 和 Forge 的
+        ForgeEventFactory.onExplosionDetonate(level, this, entityList, f2)（否则别的 mod
+        的爆炸监听会失效）。
+      - 抄原版循环时注意 f -= 0.22500001F 这个魔数和 isInWorldBounds 的 break。
+    结论：只有当"抗性系数"不够用（要改实体伤害/衰减曲线/形状）时才上这个。
+
+方案 C：Mixin 到 Explosion.explode()，用 @ModifyExpressionValue 改抗性返回值
+    条件判断 `(Object)this instanceof IScaledExplosion` 再乘系数。
+    优点：可以顺带给**所有** CBC 爆炸（含 ImpactExplosion/ShrapnelExplosion）统一加系数。
+    缺点：侵入原版热点方法、和 CBC 已有的 ExplosionMixin 叠在同一方法上、
+          需要 MixinExtras、跨版本维护成本高。
+    ==> 只有"想全局给所有方块加抗性系数（不限于自己的新弹）"时才值得，
+        否则方案 A 完全覆盖需求。
+
+方案 D：不碰爆炸，改方块
+    给方块本身调 explosion resistance —— 但那会影响 TNT/苦力怕/所有 mod，副作用太大，排除。
+
+
+--------------------------------------------------------------------------------
+六、几条容易踩的边界
+--------------------------------------------------------------------------------
+
+1. 空气必须继续返回 Optional.empty()。若改成 Optional.of(0)，
+   每步会多扣 (0+0.3)*0.3=0.09，空中射程会从 1.333×radius 缩到约 0.95×radius，
+   "范围不变"就破了。所以务必用 super 的返回值 .map(...) 而不是自己造 Optional。
+
+2. 缩放后的抗性 clamp 到 ≥ 0。若允许负值且 < −0.3，f 会不减反增 → 射线永不衰减 → 卡服。
+
+3. 实体伤害与击退不受 calculator 影响（走的是 radius*2 和固定系数）。
+   这对"范围不变"其实是好事：改威力不会顺带改对生物的杀伤。
+   若确实要单独调实体伤害，用 Forge 的 ExplosionEvent.Detonate 摘掉实体自行结算，
+   或走方案 B。
+
+4. 掉落率在 finalizeExplosion 里按 1/radius 算，同样不受影响。
+
+5. shouldBlockExplode 保持默认（EntityBased 会转给 entity.shouldBlockExplode），
+   不要顺手覆盖，否则 CBC 的伤害限制/保护区逻辑会失效。
+
+6. CBCConfigs.SERVER.munitions.damageRestriction 的 explosiveInteraction 照旧传，
+   不要绕过，否则整合包的"炮弹不破坏方块"开关会失灵。
+
+7. 客户端不需要任何改动：sendExplosionToClient 继续用 ExplosionType.SHELL，
+   toBlow 列表已经是服务端算好的结果，客户端只做粒子和击退。
+
+
+--------------------------------------------------------------------------------
+七、落地顺序建议
+--------------------------------------------------------------------------------
+   1) 先加 ScaledExplosionDamageCalculator（只带一个全局 float powerScale，公式用精确版）
+   2) 复刻出 ScaledShellExplosion（照抄 ShellExplosion 的 editBlock/sendExplosionToClient）
+   3) 拿一个现有 HE 弹改 detonate() 硬编码 powerScale=0.5 / 2.0，进游戏打墙对比穿深，
+      验证"空中范围不变、穿深按预期变化"
+   4) 再接 BlockResistanceRegistry（先用方块 tag 分档）
+   5) 最后做成 JSON 属性（ScaledExplosionPropertiesComponent + Handler），量产新弹种
