@@ -246,9 +246,9 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
 
     public void installMagazine() {
         this.hasMagazine = true;
-        this.equipmentReloadModifier += 0.12F;
+        this.equipmentReloadModifier += 0.18F;
         this.equipmentDurabilityModifier += -0.07F;
-        this.equipmentSpreadModifier += 0.1F;
+        this.equipmentSpreadModifier += 0.15F;
     }
 
     private boolean isValidCannonBlock(LevelAccessor level, BlockState state, BlockPos pos) {
