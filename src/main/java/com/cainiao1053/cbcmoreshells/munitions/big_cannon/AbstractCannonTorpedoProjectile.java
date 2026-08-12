@@ -273,6 +273,9 @@ public abstract class AbstractCannonTorpedoProjectile extends AbstractCannonProj
 	public float getBuoyancyFactor(){return this.getBigCannonProjectileProperties().buoyancyFactor();}
 	public float getTorpedoSpeed(){return this.getBigCannonProjectileProperties().torpedoSpeed();}
 	public float getTorpedoSpread(){return this.getBigCannonProjectileProperties().torpedoSpread();}
+	public float getResistanceFactor(){
+		return this.getBigCannonProjectileProperties().resistanceFactor();
+	}
 
 
 

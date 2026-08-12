@@ -26,20 +26,6 @@ import rbasamoyai.createbigcannons.multiloader.NetworkPlatform;
 import rbasamoyai.createbigcannons.network.ClientboundCBCExplodePacket;
 import rbasamoyai.createbigcannons.remix.CustomExplosion;
 
-/**
- * 与 {@link rbasamoyai.createbigcannons.munitions.ShellExplosion} 行为一致的爆炸，唯一区别是
- * 额外接收一个抗性系数 {@code resistanceFactor}，用来在范围（size）不变的前提下缩放对方块的威力。
- *
- * <p>系数会通过 {@link ScaledResistanceExplosionDamageCalculator} 直接乘到每个方块的爆炸抗性上：
- * 系数 &gt; 1 = 方块更耐炸（威力削弱），系数 &lt; 1 = 方块更脆（威力增强），系数 = 1 时与
- * 原版 ShellExplosion 完全等价。</p>
- *
- * <p>穿透深度的近似公式：{@code 穿透格数 ≈ size / (1.05 + resistanceFactor * 方块爆炸抗性)}，
- * 空中最大射程恒为 {@code ≈ 1.333 * size}，不随系数变化。</p>
- *
- * <p>客户端表现沿用 CBC 自带的 SHELL 爆炸：威力计算只发生在服务端，被摧毁的方块列表随
- * {@link ClientboundCBCExplodePacket} 下发，因此无需任何客户端改动。</p>
- */
 public class ScaledShellExplosion extends CustomExplosion.Impl {
 
 	private final Set<BlockPos> changedBlocks = new HashSet<>();

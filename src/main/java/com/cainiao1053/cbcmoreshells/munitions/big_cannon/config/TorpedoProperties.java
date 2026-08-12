@@ -8,5 +8,6 @@ import rbasamoyai.createbigcannons.munitions.config.components.ExplosionProperti
 
 public record TorpedoProperties(BallisticPropertiesComponent ballistics, EntityDamagePropertiesComponent damage,
 											 TorpedoProjectilePropertiesComponent torpedoProperties,
-											 BigCannonFuzePropertiesComponent fuze, ExplosionPropertiesComponent explosion, float maxCharges, int lifetime) {
+											 BigCannonFuzePropertiesComponent fuze, ExplosionPropertiesComponent explosion, float maxCharges, int lifetime
+) {
 }

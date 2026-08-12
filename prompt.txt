@@ -1,2 +1,2 @@
-使用方案A并使用简单的抗性修改算法，给每个方块增加一个抗性修改参数，直接乘上去修改爆炸抗性，这个系数也作为输入进入这个新的爆炸类，其余内容仿照ShellExplosion实现
-同时把变化用中文写进changes.txt
+对比原先的ShellExplosion，让新的ScaledShellExplosion和原来的做对比，给出爆炸威力的等效关系，原先和现在的爆炸威力对照关系
+把结果用中文写进compare.txt
