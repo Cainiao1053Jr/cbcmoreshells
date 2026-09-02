@@ -10,10 +10,10 @@
   "minimum_spread": 1.1,
   "spread_reduction_per_barrel": 2.5,
   "added_lifetime": 95,
-  "reload_time_modifier": 3.25,
-  "durability_mass_modifier": 2,
+  "reload_time_modifier": 3.2,
+  "durability_mass_modifier": 2.11,
   "barrel_gap": 1,
-  "combat_command_cooldown": 2400,
-  "combat_command_duration": 300,
+  "combat_command_cooldown": 1200,
+  "combat_command_duration": 200,
   "is_single_barrel": true
 }

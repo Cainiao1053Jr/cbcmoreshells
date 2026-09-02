@@ -316,10 +316,8 @@ public abstract class AbstractDualCannonProjectile extends AbstractCannonProject
 			}
 		}
 		if (outcome == ImpactResult.KinematicOutcome.PENETRATE) {
-			if(momentum>toughness*3){
-				this.setProjectileMass(incidentVel < 1e-4d ? 0 : Math.max(this.getProjectileMass() - durabilityPenalty*1.3f, 0));
-			}else if (momentum>toughness*2){
-				this.setProjectileMass(incidentVel < 1e-4d ? 0 : Math.max(this.getProjectileMass() - durabilityPenalty*1.08f, 0));
+			if (momentum>toughness*2){
+				this.setProjectileMass(incidentVel < 1e-4d ? 0 : Math.max(this.getProjectileMass() - durabilityPenalty, 0));
 			} else{
 				this.setProjectileMass(0.1f);
 			}

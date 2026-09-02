@@ -3,8 +3,10 @@ package com.cainiao1053.cbcmoreshells.munitions.big_cannon;
 import com.cainiao1053.cbcmoreshells.cannon_control.contraption.MountedTorpedoTubeContraption;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.TorpedoProjectilePropertiesComponent;
 import com.mojang.math.Constants;
+import com.simibubi.create.content.kinetics.fan.AirFlowParticleData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -25,16 +27,23 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import rbasamoyai.createbigcannons.CBCClientCommon;
 import rbasamoyai.createbigcannons.CreateBigCannons;
 import rbasamoyai.createbigcannons.block_armor_properties.BlockArmorPropertiesHandler;
 import rbasamoyai.createbigcannons.block_armor_properties.BlockArmorPropertiesProvider;
 import rbasamoyai.createbigcannons.config.CBCCfgMunitions;
 import rbasamoyai.createbigcannons.config.CBCConfigs;
+import rbasamoyai.createbigcannons.effects.particles.smoke.TrailSmokeParticleData;
+import rbasamoyai.createbigcannons.effects.particles.splashes.ProjectileSplashParticleData;
+import rbasamoyai.createbigcannons.effects.particles.splashes.SplashSprayParticleData;
 import rbasamoyai.createbigcannons.index.CBCDamageTypes;
+import rbasamoyai.createbigcannons.index.CBCSoundEvents;
+import rbasamoyai.createbigcannons.multiloader.EnvExecute;
 import rbasamoyai.createbigcannons.munitions.AbstractCannonProjectile;
 import rbasamoyai.createbigcannons.munitions.CannonDamageSource;
 import rbasamoyai.createbigcannons.munitions.ImpactExplosion;
 import rbasamoyai.createbigcannons.munitions.ProjectileContext;
+import rbasamoyai.createbigcannons.munitions.big_cannon.AbstractBigCannonProjectile;
 import rbasamoyai.createbigcannons.munitions.big_cannon.ProjectileBlock;
 import rbasamoyai.createbigcannons.munitions.config.components.BallisticPropertiesComponent;
 import rbasamoyai.createbigcannons.network.ClientboundPlayBlockHitEffectPacket;
@@ -64,6 +73,21 @@ public abstract class AbstractCannonTorpedoProjectile extends AbstractCannonProj
 		if (this.level().isClientSide || this.level().hasChunk(cpos.x, cpos.z)) {
 			Vec3 oldPos = this.position();
 			super.tick();
+			if (!this.isInGround() && this.isInWater()) {
+				int lifetime = 80;
+				ParticleOptions options = new SplashSprayParticleData(1, 1, 1, 0.5f, 0.9f, 6);
+				for (int i = 0; i < 5; ++i) {
+					double partial = (double) ((float) i * 0.2F);
+					double dx = Mth.lerp(partial, this.xOld, this.getX());
+					double dy = Mth.lerp(partial, this.yOld, this.getY());
+					double dz = Mth.lerp(partial, this.zOld, this.getZ());
+					double sx = this.level().random.nextDouble() * 0.004 - 0.002;
+					double sy = this.level().random.nextDouble() * 0.004 - 0.002;
+					double sz = this.level().random.nextDouble() * 0.004 - 0.002;
+					this.level().addAlwaysVisibleParticle(options, true, dx, dy, dz, sx, sy, sz);
+				}
+
+			}
 		}
 	}
 

@@ -25,5 +25,5 @@
   "reload_time": 900,
   "explosion_cooldown": 26,
   "percent_reduction": 0,
-  "resistance_factor": 0.4
+  "resistance_factor": 0.32
 }

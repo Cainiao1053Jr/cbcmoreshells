@@ -11,7 +11,7 @@
   "spread_reduction_per_barrel": 2.5,
   "added_lifetime": 70,
   "reload_time_modifier": 1.48,
-  "durability_mass_modifier": 1.35,
+  "durability_mass_modifier": 1.38,
   "barrel_gap": 0,
   "combat_command_cooldown": 1800,
   "combat_command_duration": 600,

@@ -3,6 +3,7 @@ package com.cainiao1053.cbcmoreshells.munitions.racked_projectile.depth_charge;
 import com.cainiao1053.cbcmoreshells.CBCMSBlocks;
 import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
 import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
+import com.cainiao1053.cbcmoreshells.munitions.explosion.ScaledShellExplosion;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.AbstractDepthChargeProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.config.RackedProjectilePropertiesComponent;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.config.RackedShrapnelProjectileProperties;
@@ -49,8 +50,8 @@ public class DepthChargeProjectile extends AbstractDepthChargeProjectile {
 			}
 		}
 		Vec3 oldDelta = this.getDeltaMovement().normalize().scale(5);
-		ShellExplosion explosion = new ShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
-			position.y(), position.z(), explosivePower, false,
+		ScaledShellExplosion explosion = new ScaledShellExplosion(this.level(), this, this.indirectArtilleryFire(false), position.x(),
+			position.y(), position.z(), explosivePower, 0.45f, false,
 			CBCConfigs.SERVER.munitions.damageRestriction.get().explosiveInteraction());
 		CreateBigCannons.handleCustomExplosion(this.level(), explosion);
 		CBCProjectileBurst.spawnConeBurst(this.level(), CBCMSEntityTypes.TORPEDO_BURST.get(), new Vec3(position.x(), position.y(), position.z()),

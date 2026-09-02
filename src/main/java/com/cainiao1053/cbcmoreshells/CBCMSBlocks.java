@@ -3620,7 +3620,7 @@ public class CBCMSBlocks {
 			.properties(p -> p
 					.mapColor(MapColor.DEEPSLATE)
 					.requiresCorrectToolForDrops()
-					.strength(4f,26f)
+					.strength(4f,27f)
 					.noOcclusion()
 					.sound(SoundType.NETHERITE_BLOCK))
 			.transform(axeOrPickaxe())
