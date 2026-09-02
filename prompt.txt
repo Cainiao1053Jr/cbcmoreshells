@@ -1,2 +1,0 @@
-对比原先的ShellExplosion，让新的ScaledShellExplosion和原来的做对比，给出爆炸威力的等效关系，原先和现在的爆炸威力对照关系
-把结果用中文写进compare.txt
