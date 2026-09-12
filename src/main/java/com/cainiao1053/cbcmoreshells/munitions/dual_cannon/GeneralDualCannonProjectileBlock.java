@@ -5,8 +5,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import rbasamoyai.createbigcannons.index.CBCBlockEntities;
 import rbasamoyai.createbigcannons.munitions.big_cannon.FuzedBlockEntity;
 
-public abstract class GeneralDualCannonProjectileBlock<ENTITY_TYPE extends FuzedDualCannonProjectile>
-	extends FuzedDualCannonProjectileBlock<FuzedBlockEntity, ENTITY_TYPE> {
+public abstract class GeneralDualCannonProjectileBlock extends FuzedDualCannonProjectileBlock<FuzedBlockEntity> {
 
 	protected GeneralDualCannonProjectileBlock(Properties properties) {
 		super(properties);

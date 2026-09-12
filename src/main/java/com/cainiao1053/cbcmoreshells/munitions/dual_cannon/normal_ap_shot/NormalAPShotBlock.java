@@ -1,14 +1,15 @@
 package com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_ap_shot;
 
-import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.InertDualCannonProjectileBlock;
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.shaolib.CBCMSDualCannonProjectiles;
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.shaolib.DualCannonState;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.world.entity.EntityType;
+import com.verr1.shaolib.api.projectile.ProjectileType;
 import net.minecraft.world.level.block.DirectionalBlock;
 
 
 
-public class NormalAPShotBlock extends InertDualCannonProjectileBlock<NormalAPShotProjectile> {
+public class NormalAPShotBlock extends InertDualCannonProjectileBlock {
 
 	private static final MapCodec<NormalAPShotBlock> CODEC = simpleCodec(NormalAPShotBlock::new);
 
@@ -22,8 +23,8 @@ public class NormalAPShotBlock extends InertDualCannonProjectileBlock<NormalAPSh
 	}
 
 	@Override
-	public EntityType<? extends NormalAPShotProjectile> getAssociatedEntityType() {
-		return CBCMSEntityTypes.NORMAL_AP_SHOT.get();
+	public ProjectileType<DualCannonState> getAssociatedProjectile() {
+		return CBCMSDualCannonProjectiles.NORMAL_AP_SHOT;
 	}
 
 }

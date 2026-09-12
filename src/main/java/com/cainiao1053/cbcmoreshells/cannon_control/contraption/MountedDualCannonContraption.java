@@ -423,7 +423,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
                         subLength++;
                     }
                 }
-            } else if (block instanceof DualCannonProjectileBlock<?> projBlock && (primary == null || secondary == null)) {
+            } else if (block instanceof DualCannonProjectileBlock projBlock && (primary == null || secondary == null)) {
                 if (canFail && airGapPresent && rollFailToIgnite(rand)) {
                     Vec3 failIgnitePos = entity.toGlobalVector(Vec3.atCenterOf(currentPos.relative(this.initialOrientation)), 0);
                     level.playSound(null, failIgnitePos.x, failIgnitePos.y, failIgnitePos.z, cannonInfo.state().getSoundType().getBreakSound(), SoundSource.BLOCKS, 5.0f, 0.0f);
@@ -436,7 +436,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
                 for (ListIterator<StructureBlockInfo> projIter = projectileBlocks.listIterator(); projIter.hasNext(); ) {
                     int i = projIter.nextIndex();
                     StructureBlockInfo projInfo = projIter.next();
-                    if (projInfo.state().getBlock() instanceof DualCannonProjectileBlock<?> cproj1 && cproj1.isValidAddition(copy, projInfo, i, this.initialOrientation))
+                    if (projInfo.state().getBlock() instanceof DualCannonProjectileBlock cproj1 && cproj1.isValidAddition(copy, projInfo, i, this.initialOrientation))
                         continue;
                     if (canFail)
                         this.fail(currentPos, level, entity, behavior.blockEntity, (int) propelCtx.chargesUsed);
@@ -477,7 +477,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
         }
         if ((primary == null && secondary == null) && !projectileBlocks.isEmpty()) {
             StructureBlockInfo info = projectileBlocks.get(0);
-            if (!(info.state().getBlock() instanceof DualCannonProjectileBlock<?> projBlock)) {
+            if (!(info.state().getBlock() instanceof DualCannonProjectileBlock projBlock)) {
                 if (canFail) this.fail(currentPos, level, entity, null, (int) 4);
                 return;
             }
@@ -498,7 +498,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
                 for (ListIterator<StructureBlockInfo> projIter = projectileBlocks.listIterator(); projIter.hasNext(); ) {
                     int j = projIter.nextIndex();
                     StructureBlockInfo projInfo = projIter.next();
-                    if (projInfo.state().getBlock() instanceof DualCannonProjectileBlock<?> cproj1 && cproj1.isValidAddition(copy, projInfo, j, this.initialOrientation))
+                    if (projInfo.state().getBlock() instanceof DualCannonProjectileBlock cproj1 && cproj1.isValidAddition(copy, projInfo, j, this.initialOrientation))
                         continue;
                     if (canFail) this.fail(currentPos, level, entity, null, (int) 4);
                     return;
@@ -594,7 +594,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
                                DualCannonMunitionProperties props) {
 
         @Nullable
-        static LoadedRound of(DualCannonProjectileBlock<?> block, List<StructureBlockInfo> blocks,
+        static LoadedRound of(DualCannonProjectileBlock block, List<StructureBlockInfo> blocks,
                               HolderLookup.Provider registries) {
             CBCMSDualCannonMunitionRegistry.Entry entry = CBCMSDualCannonMunitionRegistry.of(block);
             if (entry == null) return null;
@@ -706,7 +706,7 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
     public ItemStack getLoadedMunition(Level level) {
         if (!(this.presentBlockEntities.get(this.startPos) instanceof IDualCannonBlockEntity cbe)) return null;
         StructureBlockInfo contained = cbe.cannonBehavior().block();
-        if (contained.state().getBlock() instanceof DualCannonProjectileBlock<?> projBlock)
+        if (contained.state().getBlock() instanceof DualCannonProjectileBlock projBlock)
             return projBlock.getExtractedItem(contained, level.registryAccess());
         return ItemStack.EMPTY;
     }

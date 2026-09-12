@@ -1,14 +1,14 @@
 package com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_incendiary_he_shell;
 
-import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
-import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.GeneralDualCannonProjectileBlock;
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.shaolib.CBCMSDualCannonProjectiles;
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.shaolib.DualCannonState;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.world.entity.EntityType;
+import com.verr1.shaolib.api.projectile.ProjectileType;
 import net.minecraft.world.level.block.DirectionalBlock;
 
 
-public class NormalIncendiaryHEShellBlock extends GeneralDualCannonProjectileBlock<NormalIncendiaryHEShellProjectile> {
+public class NormalIncendiaryHEShellBlock extends GeneralDualCannonProjectileBlock {
 
 	private static final MapCodec<NormalIncendiaryHEShellBlock> CODEC = simpleCodec(NormalIncendiaryHEShellBlock::new);
 
@@ -22,18 +22,8 @@ public class NormalIncendiaryHEShellBlock extends GeneralDualCannonProjectileBlo
 	}
 
 	@Override
-	public boolean isBaseFuze() {
-		return CBCMSMunitionPropertiesHandlers.DUAL_CANNON_INCENDIARY_PROPERTIES.getPropertiesOf(this.getAssociatedEntityType()).fuze().baseFuze();
-	}
-
-//	@Override
-//	public int getLifetimeFromBlock() {
-//		return CBCMSMunitionPropertiesHandlers.RACKED_PROJECTILE.getPropertiesOf(this.getAssociatedEntityType()).lifetime();
-//	}
-
-	@Override
-	public EntityType<? extends NormalIncendiaryHEShellProjectile> getAssociatedEntityType() {
-		return CBCMSEntityTypes.NORMAL_INCENDIARY_HE_SHELL.get();
+	public ProjectileType<DualCannonState> getAssociatedProjectile() {
+		return CBCMSDualCannonProjectiles.NORMAL_INCENDIARY_HE_SHELL;
 	}
 
 }

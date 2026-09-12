@@ -2,8 +2,11 @@ package com.cainiao1053.cbcmoreshells.munitions.dual_cannon;
 
 import java.util.List;
 
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.shaolib.CBCMSDualCannonProjectiles;
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.shaolib.DualCannonState;
 import com.simibubi.create.AllShapes;
 import com.simibubi.create.content.equipment.wrench.IWrenchable;
+import com.verr1.shaolib.api.projectile.ProjectileType;
 
 import net.createmod.catnip.math.VoxelShaper;
 import net.minecraft.core.BlockPos;
@@ -13,7 +16,6 @@ import net.minecraft.core.component.DataComponentMap;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.NbtOps;
 import net.minecraft.nbt.Tag;
-import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.ItemContainerContents;
@@ -38,7 +40,7 @@ import rbasamoyai.createbigcannons.munitions.big_cannon.BigCannonMunitionBlock;
 import rbasamoyai.createbigcannons.munitions.big_cannon.BigCannonProjectileBlockEntity;
 import rbasamoyai.createbigcannons.utils.CBCUtils;
 
-public abstract class DualCannonProjectileBlock<ENTITY extends AbstractDualCannonProjectile> extends DirectionalBlock implements IWrenchable, BigCannonMunitionBlock {
+public abstract class DualCannonProjectileBlock extends DirectionalBlock implements IWrenchable, BigCannonMunitionBlock {
 
 	private final VoxelShaper shapes;
 
@@ -98,13 +100,6 @@ public abstract class DualCannonProjectileBlock<ENTITY extends AbstractDualCanno
 		return state.setValue(FACING, mirror.mirror(state.getValue(FACING)));
 	}
 
-	public abstract AbstractDualCannonProjectile getProjectile(Level level, List<StructureBlockInfo> projectileBlocks);
-	public abstract AbstractDualCannonProjectile getProjectile(Level level, ItemStack itemStack);
-
-
-	public AbstractDualCannonProjectile getProjectile(Level level, BlockPos pos, BlockState state) {
-		return this.getAssociatedEntityType().create(level);
-	}
 	@Override
 	public boolean canBeLoaded(BlockState state, Direction.Axis facing) {
 		return state.getValue(FACING).getAxis() == facing;
@@ -137,7 +132,8 @@ public abstract class DualCannonProjectileBlock<ENTITY extends AbstractDualCanno
 		return stack;
 	}
 
-	public abstract EntityType<? extends ENTITY> getAssociatedEntityType();
+	/** The shaolib projectile this block is fired as, from {@link CBCMSDualCannonProjectiles}. */
+	public abstract ProjectileType<DualCannonState> getAssociatedProjectile();
 
 	public boolean isValidAddition(List<StructureBlockInfo> total, StructureBlockInfo data, int index, Direction dir) {
 		return total.size() == 1 && total.get(0) == data;

@@ -1,7 +1,5 @@
 package com.cainiao1053.cbcmoreshells.munitions.dual_cannon;
 
-import java.util.List;
-
 import com.cainiao1053.cbcmoreshells.index.CBCMSBlockEntities;
 import com.simibubi.create.foundation.block.IBE;
 
@@ -17,38 +15,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate;
 import net.minecraft.world.phys.BlockHitResult;
 import rbasamoyai.createbigcannons.index.CBCBlockEntities;
 import rbasamoyai.createbigcannons.index.CBCItems;
 
 import rbasamoyai.createbigcannons.munitions.big_cannon.BigCannonProjectileBlockEntity;
 
-public abstract class InertDualCannonProjectileBlock<S extends AbstractDualCannonProjectile> extends DualCannonProjectileBlock<AbstractDualCannonProjectile> implements IBE<BigCannonProjectileBlockEntity> {
+public abstract class InertDualCannonProjectileBlock extends DualCannonProjectileBlock implements IBE<BigCannonProjectileBlockEntity> {
 
 	protected InertDualCannonProjectileBlock(Properties properties) {
 		super(properties);
-	}
-
-	@Override
-	public AbstractDualCannonProjectile getProjectile(Level level, List<StructureTemplate.StructureBlockInfo> projectileBlocks) {
-		AbstractDualCannonProjectile projectile = this.getAssociatedEntityType().create(level);
-		projectile.setTracer(getTracerFromBlocks(projectileBlocks, level.registryAccess()));
-		return projectile;
-	}
-
-	@Override
-	public AbstractDualCannonProjectile getProjectile(Level level, ItemStack itemStack) {
-		AbstractDualCannonProjectile projectile = this.getAssociatedEntityType().create(level);
-		projectile.setTracer(getTracerFromItemStack(itemStack));
-		return projectile;
-	}
-
-	//@Override
-	public AbstractDualCannonProjectile getProjectile(Level level, BlockPos pos, BlockState state) {
-		AbstractDualCannonProjectile projectile = this.getAssociatedEntityType().create(level);
-		projectile.setTracer(getTracerFromBlock(level, pos, state));
-		return projectile;
 	}
 
 //	@Override

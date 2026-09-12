@@ -1,14 +1,14 @@
 package com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_sap_shell;
 
-import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
-import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.GeneralDualCannonProjectileBlock;
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.shaolib.CBCMSDualCannonProjectiles;
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.shaolib.DualCannonState;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.world.entity.EntityType;
+import com.verr1.shaolib.api.projectile.ProjectileType;
 import net.minecraft.world.level.block.DirectionalBlock;
 
 
-public class NormalSAPShellBlock extends GeneralDualCannonProjectileBlock<NormalSAPShellProjectile> {
+public class NormalSAPShellBlock extends GeneralDualCannonProjectileBlock {
 
 	private static final MapCodec<NormalSAPShellBlock> CODEC = simpleCodec(NormalSAPShellBlock::new);
 
@@ -22,18 +22,8 @@ public class NormalSAPShellBlock extends GeneralDualCannonProjectileBlock<Normal
 	}
 
 	@Override
-	public boolean isBaseFuze() {
-		return CBCMSMunitionPropertiesHandlers.RACKED_PROJECTILE.getPropertiesOf(this.getAssociatedEntityType()).fuze().baseFuze();
-	}
-
-//	@Override
-//	public int getLifetimeFromBlock() {
-//		return CBCMSMunitionPropertiesHandlers.RACKED_PROJECTILE.getPropertiesOf(this.getAssociatedEntityType()).lifetime();
-//	}
-
-	@Override
-	public EntityType<? extends NormalSAPShellProjectile> getAssociatedEntityType() {
-		return CBCMSEntityTypes.NORMAL_SAP_SHELL.get();
+	public ProjectileType<DualCannonState> getAssociatedProjectile() {
+		return CBCMSDualCannonProjectiles.NORMAL_SAP_SHELL;
 	}
 
 }

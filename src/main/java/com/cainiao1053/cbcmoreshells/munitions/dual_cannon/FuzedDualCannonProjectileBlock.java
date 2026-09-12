@@ -1,5 +1,6 @@
 package com.cainiao1053.cbcmoreshells.munitions.dual_cannon;
 
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.shaolib.CBCMSDualCannonMunitionRegistry;
 import com.simibubi.create.foundation.block.IBE;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -27,8 +28,8 @@ import rbasamoyai.createbigcannons.munitions.fuzes.FuzeItem;
 
 import java.util.List;
 
-public abstract class FuzedDualCannonProjectileBlock<BLOCK_ENTITY extends FuzedBlockEntity, ENTITY extends FuzedDualCannonProjectile>
-	extends DualCannonProjectileBlock<ENTITY> implements IBE<BLOCK_ENTITY> {
+public abstract class FuzedDualCannonProjectileBlock<BLOCK_ENTITY extends FuzedBlockEntity>
+	extends DualCannonProjectileBlock implements IBE<BLOCK_ENTITY> {
 
 	protected FuzedDualCannonProjectileBlock(Properties properties) {
 		super(properties);
@@ -37,22 +38,6 @@ public abstract class FuzedDualCannonProjectileBlock<BLOCK_ENTITY extends FuzedB
 	public static ItemStack getFuzeFromItemStack(ItemStack stack) {
 		ItemContainerContents items = stack.getOrDefault(CBCDataComponents.FUZE, ItemContainerContents.EMPTY);
 		return items.copyOne();
-	}
-
-	@Override
-	public AbstractDualCannonProjectile getProjectile(Level level, List<StructureBlockInfo> projectileBlocks) {
-		FuzedDualCannonProjectile projectile = this.getAssociatedEntityType().create(level);
-		projectile.setTracer(getTracerFromBlocks(projectileBlocks, level.registryAccess()));
-		projectile.setFuze(getFuzeFromBlocks(projectileBlocks, level.registryAccess()));
-		return projectile;
-	}
-
-	@Override
-	public AbstractDualCannonProjectile getProjectile(Level level, ItemStack itemStack) {
-		FuzedDualCannonProjectile projectile = this.getAssociatedEntityType().create(level);
-		projectile.setTracer(getTracerFromItemStack(itemStack));
-		projectile.setFuze(getFuzeFromItemStack(itemStack));
-		return projectile;
 	}
 
 	public static ItemStack getFuzeFromBlocks(List<StructureBlockInfo> blocks, HolderLookup.Provider registries) {
@@ -142,6 +127,13 @@ public abstract class FuzedDualCannonProjectileBlock<BLOCK_ENTITY extends FuzedB
 		return true;
 	}
 
-	public abstract boolean isBaseFuze();
+	/**
+	 * Which end of the shell takes the fuze. Read from the shaolib munition registry — the entry a
+	 * shell is fired as is the same entry that describes its fuze socket.
+	 */
+	public boolean isBaseFuze() {
+		CBCMSDualCannonMunitionRegistry.Entry entry = CBCMSDualCannonMunitionRegistry.of(this);
+		return entry != null && entry.baseFuze();
+	}
 
 }

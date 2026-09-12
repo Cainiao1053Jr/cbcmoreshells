@@ -1,14 +1,14 @@
 package com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_antiair_he_shell;
 
-import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
-import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.GeneralDualCannonProjectileBlock;
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.shaolib.CBCMSDualCannonProjectiles;
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.shaolib.DualCannonState;
 import com.mojang.serialization.MapCodec;
-import net.minecraft.world.entity.EntityType;
+import com.verr1.shaolib.api.projectile.ProjectileType;
 import net.minecraft.world.level.block.DirectionalBlock;
 
 
-public class NormalAntiairHEShellBlock extends GeneralDualCannonProjectileBlock<NormalAntiairHEShellProjectile> {
+public class NormalAntiairHEShellBlock extends GeneralDualCannonProjectileBlock {
 
 	private static final MapCodec<NormalAntiairHEShellBlock> CODEC = simpleCodec(NormalAntiairHEShellBlock::new);
 
@@ -22,13 +22,8 @@ public class NormalAntiairHEShellBlock extends GeneralDualCannonProjectileBlock<
 	}
 
 	@Override
-	public boolean isBaseFuze() {
-		return CBCMSMunitionPropertiesHandlers.DUAL_CANNON_PROPERTIES.getPropertiesOf(this.getAssociatedEntityType()).fuze().baseFuze();
-	}
-
-	@Override
-	public EntityType<? extends NormalAntiairHEShellProjectile> getAssociatedEntityType() {
-		return CBCMSEntityTypes.NORMAL_ANTIAIR_HE_SHELL.get();
+	public ProjectileType<DualCannonState> getAssociatedProjectile() {
+		return CBCMSDualCannonProjectiles.NORMAL_ANTIAIR_HE_SHELL;
 	}
 
 }
