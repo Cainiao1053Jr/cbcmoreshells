@@ -2,18 +2,6 @@ package com.cainiao1053.cbcmoreshells.munitions.dual_cannon.table;
 
 import java.util.List;
 
-/**
- * One barrel material's row: its stat columns, its equivalent momentum at each distance, and how
- * far down the row it can still reach before the shell expires.
- *
- * <p>The arrays are view state, not identity — do not use a row as a map key.
- *
- * @param missingSingleVariant this alloy has no single-barrel material yet and only appears because
- *                             the filter is filling gaps; the UI should mark it
- * @param statValues           parallel to {@code DualCannonTable.materialStats()}
- * @param momentum             parallel to the skeleton's points
- * @param reachable            parallel to the skeleton's points; false once the shell has expired
- */
 public record MaterialRow(DualCannonLoadout loadout, boolean missingSingleVariant,
 						  double[] statValues, double[] momentum, boolean[] reachable) {
 

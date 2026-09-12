@@ -51,11 +51,6 @@ public final class CBCMSDualCannonMunitionRegistry {
 		return Collections.unmodifiableCollection(map().values());
 	}
 
-	/**
-	 * Every registered projectile block, in registration order. An {@link Entry} does not point back
-	 * at its block, so this is the way in for anything that needs the block's item — firing tables
-	 * hang their per-shell hooks off {@code FuzedDualCannonProjectileBlockItem}.
-	 */
 	public static Collection<Block> blocks() {
 		return Collections.unmodifiableCollection(map().keySet());
 	}

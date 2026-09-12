@@ -5,16 +5,6 @@ import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.material.DualCannonMate
 import javax.annotation.Nullable;
 import java.util.List;
 
-/**
- * Everything one shell's comparison table needs, minus the rows themselves — those are computed a
- * page at a time by {@link DualCannonTableSource}.
- *
- * @param shellStats    shown once above the rows; fixed by the shell
- * @param materialStats one column each, in declaration order, already trimmed to the width budget
- * @param skeleton      the distance columns, or null when this shell's flight cannot be solved
- * @param modes         what the distance columns can show, first entry is the default
- * @param materials     rows to show, in display order
- */
 public record DualCannonTable(DualCannonShellContext shell,
 							  List<StatSpec<DualCannonShellContext>> shellStats,
 							  List<StatSpec<DualCannonLoadout>> materialStats,

@@ -2,10 +2,6 @@ package com.cainiao1053.cbcmoreshells.munitions.dual_cannon.table;
 
 import java.util.Locale;
 
-/**
- * How a {@link StatSpec} value turns into table text. Also carries the unit conversion, so specs
- * can hand back raw game units and the table never has to remember which column needs a {@code * 20}.
- */
 public enum StatFormat {
 
 	/** As-is, no decimals. */

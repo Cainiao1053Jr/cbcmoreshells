@@ -1,16 +1,7 @@
 package com.cainiao1053.cbcmoreshells.munitions.dual_cannon.shaolib;
 
-/**
- * How a barrel's durability mass modifier scales a shell's non-ballistic payload.
- *
- * <p>These used to live on {@link DualCannonBehavior} as instance methods reading the projectile
- * context, which made them unreachable to anything without a live shell — firing tables and
- * tooltips had to copy the formulas and would drift out of sync. They are static here so the
- * behavior and any UI share one definition.
- */
 public final class DualCannonModifiers {
 
-	/** Metres of climb that buy one extra multiple of AA burst power. */
 	private static final double ANTIAIR_ALTITUDE_SCALE = 80.0;
 	private static final double ANTIAIR_MAX_MULTIPLIER = 3.0;
 
@@ -28,10 +19,6 @@ public final class DualCannonModifiers {
 		};
 	}
 
-	/**
-	 * AA shells burst harder the higher they climb, up to {@link #ANTIAIR_MAX_MULTIPLIER}. Stacks
-	 * on top of {@link #explosionPower}; a firing table with no altitude to report should use 1.0.
-	 */
 	public static double antiairAltitude(double climbBlocks) {
 		return Math.min(Math.max(0.0, climbBlocks) / ANTIAIR_ALTITUDE_SCALE + 1.0, ANTIAIR_MAX_MULTIPLIER);
 	}

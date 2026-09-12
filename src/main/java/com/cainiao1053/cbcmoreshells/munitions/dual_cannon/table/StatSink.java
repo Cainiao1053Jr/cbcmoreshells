@@ -5,12 +5,6 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * Collects the stats a shell wants shown. A shell declares its columns by calling {@link #add} in
- * the order it wants them; how many survive is up to the table's width budget.
- *
- * @param <C> context the collected stats read, see {@link StatSpec}
- */
 public final class StatSink<C> {
 
 	private final List<StatSpec<C>> specs = new ArrayList<>();
@@ -32,11 +26,6 @@ public final class StatSink<C> {
 		return this.specs.size();
 	}
 
-	/**
-	 * At most {@code max} stats: drops the lowest priorities first, then whatever was declared last,
-	 * but keeps the survivors in declaration order so columns do not reshuffle when the table is
-	 * narrowed.
-	 */
 	public List<StatSpec<C>> limited(int max) {
 		if (max >= this.specs.size()) return this.specs();
 		if (max <= 0) return List.of();

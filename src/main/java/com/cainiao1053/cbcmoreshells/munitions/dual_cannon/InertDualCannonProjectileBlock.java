@@ -27,49 +27,6 @@ public abstract class InertDualCannonProjectileBlock extends DualCannonProjectil
 		super(properties);
 	}
 
-//	@Override
-//	public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-//		if (hand == InteractionHand.OFF_HAND)
-//			return InteractionResult.PASS;
-//		BigCannonProjectileBlockEntity projectileBlock = this.getBlockEntity(level, pos);
-//		if (projectileBlock == null)
-//			return InteractionResult.PASS;
-//		ItemStack stack = player.getItemInHand(hand);
-//
-//		if (stack.isEmpty()) {
-//			if (projectileBlock.getItem(0).isEmpty())
-//				return InteractionResult.PASS;
-//			if (!level.isClientSide) {
-//				ItemStack resultStack = projectileBlock.removeItem(0, 1);
-//				if (!player.addItem(resultStack) && !player.isCreative()) {
-//					ItemEntity item = player.drop(resultStack, false);
-//					if (item != null) {
-//						item.setNoPickUpDelay();
-//						item.setTarget(player.getUUID());
-//					}
-//				}
-//				projectileBlock.notifyUpdate();
-//			}
-//			level.playSound(player, pos, SoundEvents.ITEM_FRAME_REMOVE_ITEM, SoundSource.NEUTRAL, 1.0f, 1.0f);
-//			return InteractionResult.sidedSuccess(level.isClientSide);
-//		} else {
-//			int slot = -1;
-//			if (CBCItems.TRACER_TIP.isIn(stack)) {
-//				slot = 0;
-//			}
-//			if (slot == -1 || !projectileBlock.getItem(slot).isEmpty())
-//				return InteractionResult.PASS;
-//			if (!level.isClientSide) {
-//				ItemStack copy = player.getAbilities().instabuild ? stack.copy() : stack.split(1);
-//				copy.setCount(1);
-//				projectileBlock.setItem(slot, copy);
-//				projectileBlock.notifyUpdate();
-//			}
-//			level.playSound(null, pos, SoundEvents.ITEM_FRAME_ADD_ITEM, SoundSource.NEUTRAL, 1.0f, 1.0f);
-//			return InteractionResult.sidedSuccess(level.isClientSide);
-//		}
-//	}
-
 	@Override
 	public ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
 		if (hand == InteractionHand.OFF_HAND)

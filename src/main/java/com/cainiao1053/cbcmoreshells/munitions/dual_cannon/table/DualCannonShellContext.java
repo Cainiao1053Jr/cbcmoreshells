@@ -11,14 +11,6 @@ import javax.annotation.Nullable;
 import java.util.Objects;
 import net.minecraft.world.level.block.Block;
 
-/**
- * A shell on its own, with no barrel attached. Everything reachable from here is fixed by the
- * datapack: muzzle velocity, drag and gravity carry no barrel modifier, and per-shot overrides only
- * touch durability mass, so these are the values the round really flies with.
- *
- * <p>Stats that read this context therefore cannot vary between barrel materials, which is the
- * point — they belong in the table's header block, not in the per-material rows.
- */
 public record DualCannonShellContext(FuzedDualCannonProjectileBlockItem item,
 									 CBCMSDualCannonMunitionRegistry.Entry entry,
 									 DualCannonMunitionProperties shell) {
@@ -29,10 +21,6 @@ public record DualCannonShellContext(FuzedDualCannonProjectileBlockItem item,
 		Objects.requireNonNull(shell, "shell");
 	}
 
-	/**
-	 * Resolves a projectile block into a context, or null when the block is not a registered dual
-	 * cannon round or its item does not carry the firing table hooks.
-	 */
 	@Nullable
 	public static DualCannonShellContext of(Block block) {
 		if (!(block.asItem() instanceof FuzedDualCannonProjectileBlockItem item)) return null;
@@ -45,7 +33,6 @@ public record DualCannonShellContext(FuzedDualCannonProjectileBlockItem item,
 		return this.entry.kind();
 	}
 
-	/** Blocks per tick. Tooltips show this multiplied by 20. */
 	public double muzzleVelocity() {
 		return this.shell.dualCannon().initialVelocity();
 	}
@@ -103,10 +90,6 @@ public record DualCannonShellContext(FuzedDualCannonProjectileBlockItem item,
 			: null;
 	}
 
-	/**
-	 * Whether {@code CBCMSBallisticUtils} can describe this shell's flight. Its closed form assumes
-	 * linear drag pulling a shell back down, which every dual cannon round currently satisfies.
-	 */
 	public boolean ballisticsSupported() {
 		return !this.shell.ballistics().quadraticDrag()
 			&& this.muzzleVelocity() > 0.0

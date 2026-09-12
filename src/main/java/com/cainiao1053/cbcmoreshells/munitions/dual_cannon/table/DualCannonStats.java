@@ -3,22 +3,11 @@ package com.cainiao1053.cbcmoreshells.munitions.dual_cannon.table;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.shaolib.DualCannonModifiers;
 import com.cainiao1053.cbcmoreshells.utils.CBCMSBallisticUtils;
 
-/**
- * Every stat a firing table can show. Adding one means adding a constant here and one
- * {@code sink.add(...)} line in whichever shell items want it — nothing else changes.
- *
- * <p>Split by context on purpose: {@link #shellStat} values cannot read the barrel, so a stat that
- * belongs in the header block cannot accidentally end up varying per material, and vice versa.
- */
 public final class DualCannonStats {
 
 	private static final String PREFIX = "cbcmoreshells.firing_table.stat.";
 
 	private DualCannonStats() {}
-
-	// ---------------------------------------------------------------------------------------------
-	// Shell stats: fixed by the datapack, shown once above the material rows
-	// ---------------------------------------------------------------------------------------------
 
 	public static final StatSpec<DualCannonShellContext> MUZZLE_VELOCITY =
 		shellStat("muzzle_velocity", DualCannonShellContext::muzzleVelocity, StatFormat.M_PER_SEC);
@@ -73,11 +62,6 @@ public final class DualCannonStats {
 		shellStat("aa_altitude_bonus", shell -> DualCannonModifiers.antiairAltitude(Double.MAX_VALUE),
 			StatFormat.PLAIN1);
 
-	// ---------------------------------------------------------------------------------------------
-	// Material stats: one column each in the material rows
-	// ---------------------------------------------------------------------------------------------
-
-	/** Shell base plus barrel bonus. Required: it decides how far a material can actually shoot. */
 	public static final StatSpec<DualCannonLoadout> LIFETIME =
 		materialStat("lifetime", DualCannonLoadout::lifetimeTicks, StatFormat.SECONDS,
 			StatSpec.PRIORITY_REQUIRED);

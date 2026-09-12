@@ -127,10 +127,6 @@ public abstract class FuzedDualCannonProjectileBlock<BLOCK_ENTITY extends FuzedB
 		return true;
 	}
 
-	/**
-	 * Which end of the shell takes the fuze. Read from the shaolib munition registry — the entry a
-	 * shell is fired as is the same entry that describes its fuze socket.
-	 */
 	public boolean isBaseFuze() {
 		CBCMSDualCannonMunitionRegistry.Entry entry = CBCMSDualCannonMunitionRegistry.of(this);
 		return entry != null && entry.baseFuze();

@@ -13,17 +13,6 @@ import java.util.Map;
 import java.util.Set;
 import net.minecraft.world.level.block.Block;
 
-/**
- * Assembles firing tables on demand and caches them for the life of one screen.
- *
- * <p>Deliberately lazy in two steps. Listing shells resolves nothing — a screen showing nine icons
- * should not parse nine property sets. Picking a shell builds its skeleton once. Rows are built per
- * material as the page needs them, which is cheap because the skeleton is already there and only
- * the momentum column is per material.
- *
- * <p>Nothing survives the screen, so a {@code /reload} that changes the datapack shows up the next
- * time the table is opened.
- */
 public final class DualCannonTableSource {
 
 	/** Default width budget: material name, its stat columns, and the distances share this. */
@@ -50,7 +39,6 @@ public final class DualCannonTableSource {
 		this.highArc = highArc;
 	}
 
-	/** Projectile blocks that can be tabulated, in registration order. Resolves no properties. */
 	public List<Block> shells() {
 		if (this.shells == null) {
 			List<Block> found = new ArrayList<>();
@@ -62,11 +50,6 @@ public final class DualCannonTableSource {
 		return this.shells;
 	}
 
-	/**
-	 * The table for one shell, built on first request.
-	 *
-	 * @return null when the block is not a tabulatable dual cannon round
-	 */
 	@Nullable
 	public DualCannonTable table(Block shell) {
 		DualCannonTable cached = this.tables.get(shell);
@@ -97,11 +80,6 @@ public final class DualCannonTableSource {
 		return table;
 	}
 
-	/**
-	 * One material's row, built on first request.
-	 *
-	 * @return null when the shell has no table or its flight cannot be solved
-	 */
 	@Nullable
 	public MaterialRow row(Block shell, DualCannonMaterial material) {
 		DualCannonTable table = this.table(shell);

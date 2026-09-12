@@ -273,10 +273,6 @@ public class DualCannonBehavior<P extends DualCannonMunitionProperties>
 		return ordinal >= 0 && ordinal < values.length ? values[ordinal] : ProjectileChunkLoadPolicy.IF_ALREADY_LOADED;
 	}
 
-	/**
-	 * Selects the impact and detonation rules for a shell class. One behavior class covers all of
-	 * them so the flight pipeline stays in a single place.
-	 */
 	public enum Kind {
 		/** Solid shot: no burst charge, penetrates or ricochets and then lies where it lands. */
 		AP_SHOT,

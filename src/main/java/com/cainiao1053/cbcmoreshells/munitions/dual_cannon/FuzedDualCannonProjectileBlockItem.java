@@ -48,63 +48,33 @@ public class FuzedDualCannonProjectileBlockItem extends FuzedProjectileBlockItem
 
 	}
 
-	/**
-	 * This round's entry in the dual cannon registry, or null if the block was never registered
-	 * there. {@code getBlock()} is per-instance, so two rounds sharing an item class still resolve
-	 * to their own entry.
-	 */
 	@Nullable
 	public CBCMSDualCannonMunitionRegistry.Entry getMunitionEntry() {
 		return CBCMSDualCannonMunitionRegistry.of(this.getBlock());
 	}
 
-	/**
-	 * Datapack properties for this round. Carries no per-shot override, but overrides only touch
-	 * {@code durability_mass}, so drag, gravity and muzzle velocity here are what the shell really
-	 * flies with. Only call this after registration has finished.
-	 */
 	@Nullable
 	public DualCannonMunitionProperties getProjectileProperties() {
 		CBCMSDualCannonMunitionRegistry.Entry entry = this.getMunitionEntry();
 		return entry == null ? null : CBCMSDualCannonMunitionRegistry.properties(entry);
 	}
 
-	// -------------------------------------------------------------------------------------------
-	// Firing table hooks
-	//
-	// A shell class declares what its table shows by overriding these; the table itself knows
-	// nothing about shell kinds. Subclasses call super and add, so the shared rows stay in one
-	// place.
-	// -------------------------------------------------------------------------------------------
 
-	/**
-	 * Stats that do not change with the barrel material, shown once above the material rows. The
-	 * context cannot reach a barrel, so nothing declared here can accidentally vary per material.
-	 */
 	public void collectShellStats(StatSink<DualCannonShellContext> sink) {
 		sink.add(DualCannonStats.MUZZLE_VELOCITY);
 		sink.add(DualCannonStats.DEFLECTION_ANGLE);
 		sink.add(DualCannonStats.BOUNCE_ANGLE);
 	}
 
-	/**
-	 * Stats that change with the barrel material, one column each in the material rows. Kept short
-	 * on purpose — every column here costs a distance column in the ballistic block.
-	 */
 	public void collectMaterialStats(StatSink<DualCannonLoadout> sink) {
 		sink.add(DualCannonStats.RELOAD);
 		sink.add(DualCannonStats.RECOIL);
 	}
 
-	/**
-	 * What the distance columns can show, in the order the toggle button cycles them. The first
-	 * entry is the default.
-	 */
 	public List<BallisticColumnMode> ballisticModes() {
 		return List.of(BallisticColumnMode.MOMENTUM, BallisticColumnMode.FLIGHT_TIME);
 	}
 
-	/** How this shell class converts impact speed into penetrating power. */
 	public DualCannonMomentumModel momentumModel() {
 		return DualCannonMomentumModel.CAPPED;
 	}

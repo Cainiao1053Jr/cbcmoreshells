@@ -3,19 +3,6 @@ package com.cainiao1053.cbcmoreshells.munitions.dual_cannon.table;
 import java.util.Objects;
 import java.util.function.ToDoubleFunction;
 
-/**
- * One column or one line of a firing table: where to get the number, how to print it, and how
- * willing the table is to drop it when it runs out of width.
- *
- * <p>The value function takes the whole context rather than named arguments, so adding an input
- * later means adding a field to {@link DualCannonShellContext} or {@link DualCannonLoadout} and
- * nothing else has to change. Returning a non-finite value means "not applicable to this shell",
- * and the table shows {@link StatFormat#NOT_APPLICABLE} or skips the row entirely.
- *
- * @param <C> the context this stat reads. Shell-only stats use {@link DualCannonShellContext} so
- *            they cannot accidentally depend on the barrel; per-material stats use
- *            {@link DualCannonLoadout}.
- */
 public record StatSpec<C>(String key, ToDoubleFunction<C> value, StatFormat format, int priority) {
 
 	/** Columns the table must never drop. */

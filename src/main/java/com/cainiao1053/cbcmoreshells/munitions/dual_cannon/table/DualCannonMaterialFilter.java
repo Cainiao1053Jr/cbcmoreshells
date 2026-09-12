@@ -16,7 +16,6 @@ public enum DualCannonMaterialFilter {
 	private static final String SINGLE = "single_";
 	private static final String[] BORE_PREFIXES = {"wide_", "large_"};
 
-	/** Materials to show, lightest durability mass modifier first. */
 	public List<DualCannonMaterial> select() {
 		List<DualCannonMaterial> selected = new ArrayList<>();
 		for (DualCannonMaterial material : DualCannonMaterial.all()) {
