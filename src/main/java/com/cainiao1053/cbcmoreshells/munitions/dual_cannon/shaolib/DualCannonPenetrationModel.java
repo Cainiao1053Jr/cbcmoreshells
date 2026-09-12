@@ -19,6 +19,8 @@ import com.verr1.shaolib.munitions.projectile.impact.MunitionImpactUtil;
 import java.util.Optional;
 import java.util.UUID;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -32,11 +34,19 @@ public final class DualCannonPenetrationModel {
 	private static final double ELASTICITY = 1.7;
 	private static final double EPSILON = 1.0E-6;
 
+	/** How much of the accumulation coefficient each further block into the armour stack costs. */
+	private static final double TOUGHNESS_REDUCTION_RATE = 0.25;
+	/** Toughness at or below which a block counts as a gap, ending the accumulation. */
+	private static final double AIR_TOUGHNESS_THRESHOLD = 1.0;
+	/** Hard bound on the accumulation walk so a mis-set reduction rate cannot spin forever. */
+	private static final int MAX_TOUGHNESS_ACCUMULATION_STEPS = 16;
+
 	private DualCannonPenetrationModel() {}
 
 	public static <S extends DualCannonState> MunitionImpactOutcome resolve(ProjectileServerContext<S> context,
 																			ShaolibBlockHitResult hit,
-																			CbcLikeMunitionProperties properties) {
+																			CbcLikeMunitionProperties properties,
+																			DualCannonBehavior.Kind kind) {
 		if (!(properties instanceof DualCannonMunitionProperties dualProperties)) {
 			throw new IllegalArgumentException("Dual cannon projectile requires DualCannonMunitionProperties");
 		}
@@ -71,10 +81,15 @@ public final class DualCannonPenetrationModel {
 
 		DualCannonImpactProperties dualImpact = dualProperties.dualImpact();
 		double cappedMomentum = getCappedMomentum(dualProperties, state.durabilityModifier(), speed, mass);
-		double toughness = Math.max(0.0, armor.toughness(context.level(), state1, blockPos, true));
+		// HSAP defeats armour by stacking the plates behind the entry face instead of reading the
+		// entry face alone, and it does so head-on: obliquity plays no part in its momentum.
+		boolean stacked = kind == DualCannonBehavior.Kind.HSAP;
+		double toughness = stacked
+			? accumulatedToughness(context, state1, blockPos, hit.localDirection().getOpposite())
+			: Math.max(0.0, armor.toughness(context.level(), state1, blockPos, true));
 		toughness *= bodyResistanceMultiplier(context, hit, blockPos, state1, toughness);
 		boolean unbreakable = !impact.breakBlocks() || state1.getDestroySpeed(context.level(), blockPos) < 0.0F;
-		double momentum = cappedMomentum * incidence;
+		double momentum = stacked ? cappedMomentum : cappedMomentum * incidence;
 		double durabilityPenalty = incidentVelocity <= EPSILON ? mass : toughness / incidentVelocity;
 
 		boolean penetrate = momentum > toughness * 1.5;
@@ -92,6 +107,36 @@ public final class DualCannonPenetrationModel {
 		}
 		return penetrateBlock(context, dualProperties, hit, state1, armor, blockPos, velocity, direction, mass, momentum,
 			toughness, durabilityPenalty);
+	}
+
+	/**
+	 * Walks one block at a time from the entry block along {@code inward} — the inward normal of the
+	 * face that was hit — and sums each block's toughness weighted by a coefficient that starts at 1
+	 * and drops by {@link #TOUGHNESS_REDUCTION_RATE} per step, so deeper plates back the armour up by
+	 * less and less. The walk ends once the coefficient goes negative, or as soon as a block is thin
+	 * enough to count as a gap (toughness below {@link #AIR_TOUGHNESS_THRESHOLD}); the gap itself
+	 * contributes nothing.
+	 */
+	private static double accumulatedToughness(ProjectileServerContext<?> context, BlockState entryState,
+											   BlockPos entryPos, Direction inward) {
+		ServerLevel level = context.level();
+		double accumulated = 0.0;
+		double accCoef = 1.0;
+		BlockPos cursor = entryPos;
+		BlockState blockState = entryState;
+		for (int step = 0; accCoef >= 0.0 && step < MAX_TOUGHNESS_ACCUMULATION_STEPS; ++step) {
+			double blockToughness = Math.max(0.0,
+				BlockArmorPropertiesHandler.getProperties(blockState).toughness(level, blockState, cursor, true));
+			// Toughness stands in for the block lookup here: anything this soft is a void in the stack.
+			if (step > 0 && blockToughness < AIR_TOUGHNESS_THRESHOLD) break;
+			accumulated += blockToughness * accCoef;
+			accCoef -= TOUGHNESS_REDUCTION_RATE;
+
+			cursor = cursor.relative(inward);
+			if (!level.isLoaded(cursor)) break;
+			blockState = level.getBlockState(cursor);
+		}
+		return accumulated;
 	}
 
 	public static double getCappedMomentum(DualCannonMunitionProperties dualProperties, double dmm, double speed, double mass){

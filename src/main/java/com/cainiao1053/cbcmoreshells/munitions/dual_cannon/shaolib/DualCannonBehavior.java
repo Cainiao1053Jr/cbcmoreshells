@@ -95,10 +95,7 @@ public class DualCannonBehavior<P extends DualCannonMunitionProperties>
 				this.applyFuzeResult(sweepContext, MunitionFuzes.onClip(sweepContext, clipStart, clipEnd), clipStart),
 			this::applyImpactOutcome,
 			this::applyEntityImpact,
-				(prjContext, hit, result) -> {
-			return DualCannonPenetrationModel.resolve(prjContext, hit, result);
-				}
-			//DualCannonPenetrationModel::resolve
+				(prjContext, hit, result) -> DualCannonPenetrationModel.resolve(prjContext, hit, result, this.kind)
 		);
 
 		if (!sweep.stopped() && state.travelled() >= properties.runtime().maxDistance()) {
