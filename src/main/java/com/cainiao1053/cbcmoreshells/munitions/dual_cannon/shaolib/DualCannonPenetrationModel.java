@@ -92,10 +92,15 @@ public final class DualCannonPenetrationModel {
 		double momentum = stacked ? cappedMomentum : cappedMomentum * incidence;
 		double durabilityPenalty = incidentVelocity <= EPSILON ? mass : toughness / incidentVelocity;
 
-		boolean penetrate = momentum > toughness * 1.5;
-		if (!penetrate && momentum > toughness * 0.5 && toughness > EPSILON) {
-			double penetrationChance = Math.max(0.0, ((momentum / toughness) - 0.5));
-			penetrate = context.level().random.nextDouble() < penetrationChance;
+		boolean penetrate = false;
+		if(!stacked){
+			penetrate = momentum > toughness * 1.5;
+			if (!penetrate && momentum > toughness * 0.5 && toughness > EPSILON) {
+				double penetrationChance = Math.max(0.0, ((momentum / toughness) - 0.5));
+				penetrate = context.level().random.nextDouble() < penetrationChance;
+			}
+		}else{
+			penetrate = momentum > toughness;
 		}
 
 		boolean canPenetrate = state.penetrations() < impact.maxPenetrations();
@@ -109,14 +114,6 @@ public final class DualCannonPenetrationModel {
 			toughness, durabilityPenalty);
 	}
 
-	/**
-	 * Walks one block at a time from the entry block along {@code inward} — the inward normal of the
-	 * face that was hit — and sums each block's toughness weighted by a coefficient that starts at 1
-	 * and drops by {@link #TOUGHNESS_REDUCTION_RATE} per step, so deeper plates back the armour up by
-	 * less and less. The walk ends once the coefficient goes negative, or as soon as a block is thin
-	 * enough to count as a gap (toughness below {@link #AIR_TOUGHNESS_THRESHOLD}); the gap itself
-	 * contributes nothing.
-	 */
 	private static double accumulatedToughness(ProjectileServerContext<?> context, BlockState entryState,
 											   BlockPos entryPos, Direction inward) {
 		ServerLevel level = context.level();
