@@ -1,7 +1,7 @@
 {
-  "minimum_velocity_per_barrel": 1.3333333333333333,
-  "weight": 2.0,
-  "max_safe_propellant_stress": 4,
+  "minimum_velocity_per_barrel": 1.0,
+  "weight": 1.0,
+  "max_safe_propellant_stress": 10,
   "failure_mode": "rupture",
   "connects_in_survival": true,
   "is_weldable": true,
@@ -9,11 +9,12 @@
   "weld_stress_penalty": 0,
   "minimum_spread": 2.1,
   "spread_reduction_per_barrel": 2.5,
-  "added_lifetime": 30,
+  "added_lifetime": 30.0,
   "reload_time_modifier": 1.5,
-  "durability_mass_modifier": 1.15,
-  "barrel_gap": 0.0,
-  "combat_command_cooldown": 1800,
-  "combat_command_duration": 400,
-  "is_single_barrel": true
+  "durability_mass_modifier": 1.14,
+  "barrel_gap": 1.0,
+  "combat_command_cooldown": 1200,
+  "combat_command_duration": 300,
+  "is_single_barrel": true,
+  "recoil_multiplier": 2.75
 }

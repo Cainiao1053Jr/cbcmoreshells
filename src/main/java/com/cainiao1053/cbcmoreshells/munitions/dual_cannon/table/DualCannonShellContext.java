@@ -50,6 +50,10 @@ public record DualCannonShellContext(FuzedDualCannonProjectileBlockItem item,
 		return this.shell.dualCannon().initialVelocity();
 	}
 
+	public double runtimeMaxRange(){
+		return this.shell.runtime().maxDistance();
+	}
+
 	/** Fraction of speed lost per tick. */
 	public double drag() {
 		return this.shell.ballistics().drag();

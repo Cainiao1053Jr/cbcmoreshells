@@ -2931,6 +2931,554 @@ public class CBCMSBlocks {
 			.register();
 	//
 
+	public static final BlockEntry<DualCannonBodyBlock> LARGE_MILITARY_SLATE_ALLOY_SINGLE_CANNON_BARREL = REGISTRATE
+			.block("large_military_slate_alloy_single_cannon_barrel", p -> DualCannonBodyBlock.singleLarge(p, CBCMSDualCannonMaterials.LARGE_SINGLE_MILITARY_SLATE_ALLOY))
+			.transform(CBCBuilderTransformers.cannonBarrel("large_single_military_slate_alloy", true))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.MILITARY_SLATE_ALLOY_DUAL_CANNON_BARREL)))
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> LARGE_MILITARY_SLATE_ALLOY_SINGLE_CANNON_CHAMBER = REGISTRATE
+			.block("large_military_slate_alloy_single_cannon_chamber", p -> DualCannonBodyBlock.singleLarge(p, CBCMSDualCannonMaterials.LARGE_SINGLE_MILITARY_SLATE_ALLOY))
+			.transform(CBCBuilderTransformers.cannonChamber("large_single_military_slate_alloy", true))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.MILITARY_SLATE_ALLOY_DUAL_CANNON_CHAMBER)))
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> LARGE_MILITARY_SLATE_ALLOY_SINGLE_CANNON_CHAMBER_SHIELDED = REGISTRATE
+			.block("large_military_slate_alloy_single_cannon_chamber_shielded", p -> DualCannonBodyBlock.singleLarge(p, CBCMSDualCannonMaterials.LARGE_SINGLE_MILITARY_SLATE_ALLOY))
+			.transform(CBCBuilderTransformers.cannonChamber("large_single_military_slate_alloy", true))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.MILITARY_SLATE_ALLOY_DUAL_CANNON_CHAMBER)))
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonQuickfiringBreechBlock> LARGE_MILITARY_SLATE_ALLOY_SINGLE_CANNON_QUICKFIRING_BREECH = REGISTRATE
+			.block("large_military_slate_alloy_single_cannon_quickfiring_breech", p -> DualCannonQuickfiringBreechBlock.singleLarge(p, CBCMSDualCannonMaterials.LARGE_SINGLE_MILITARY_SLATE_ALLOY, largeMilitarySlateAlloySingleSlidingBreech()))
+			//.lang("Wide Slate Alloy Single Cannon Quick-Firing Breech")
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.transform(CBCMSBuilderTransformers.dualCannonSlidingBreech("dual_cannon_sliding_breech/large_single_military_slate_alloy"))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	private static NonNullSupplier<? extends Block> largeMilitarySlateAlloySingleSlidingBreech() {
+		return LARGE_MILITARY_SLATE_ALLOY_SINGLE_CANNON_SLIDING_BREECH;
+	}
+
+	public static final BlockEntry<DualCannonSlidingBreechBlock> LARGE_MILITARY_SLATE_ALLOY_SINGLE_CANNON_SLIDING_BREECH = REGISTRATE
+			.block("large_military_slate_alloy_single_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.LARGE_SINGLE_MILITARY_SLATE_ALLOY, LARGE_MILITARY_SLATE_ALLOY_SINGLE_CANNON_QUICKFIRING_BREECH))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.transform(CBCDefaultStress.setImpact(32.0d))
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> LARGE_NETHER_STEEL_SINGLE_CANNON_BARREL = REGISTRATE
+			.block("large_nether_steel_single_cannon_barrel", p -> DualCannonBodyBlock.singleLarge(p, CBCMSDualCannonMaterials.LARGE_SINGLE_NETHER_STEEL))
+			.transform(CBCBuilderTransformers.cannonBarrel("large_single_nether_steel", true))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.NETHER_STEEL_DUAL_CANNON_BARREL)))
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> LARGE_NETHER_STEEL_SINGLE_CANNON_CHAMBER = REGISTRATE
+			.block("large_nether_steel_single_cannon_chamber", p -> DualCannonBodyBlock.singleLarge(p, CBCMSDualCannonMaterials.LARGE_SINGLE_NETHER_STEEL))
+			.transform(CBCBuilderTransformers.cannonChamber("large_single_nether_steel", true))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.NETHER_STEEL_DUAL_CANNON_CHAMBER)))
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> LARGE_NETHER_STEEL_SINGLE_CANNON_CHAMBER_SHIELDED = REGISTRATE
+			.block("large_nether_steel_single_cannon_chamber_shielded", p -> DualCannonBodyBlock.singleLarge(p, CBCMSDualCannonMaterials.LARGE_SINGLE_NETHER_STEEL))
+			.transform(CBCBuilderTransformers.cannonChamber("large_single_nether_steel", true))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.NETHER_STEEL_DUAL_CANNON_CHAMBER)))
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonQuickfiringBreechBlock> LARGE_NETHER_STEEL_SINGLE_CANNON_QUICKFIRING_BREECH = REGISTRATE
+			.block("large_nether_steel_single_cannon_quickfiring_breech", p -> DualCannonQuickfiringBreechBlock.singleLarge(p, CBCMSDualCannonMaterials.LARGE_SINGLE_NETHER_STEEL, largeNetherSteelSingleSlidingBreech()))
+			//.lang("Wide Slate Alloy Single Cannon Quick-Firing Breech")
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.transform(CBCMSBuilderTransformers.dualCannonSlidingBreech("dual_cannon_sliding_breech/large_single_nether_steel"))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	private static NonNullSupplier<? extends Block> largeNetherSteelSingleSlidingBreech() {
+		return LARGE_NETHER_STEEL_SINGLE_CANNON_SLIDING_BREECH;
+	}
+
+	public static final BlockEntry<DualCannonSlidingBreechBlock> LARGE_NETHER_STEEL_SINGLE_CANNON_SLIDING_BREECH = REGISTRATE
+			.block("large_nether_steel_single_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.LARGE_SINGLE_NETHER_STEEL, LARGE_NETHER_STEEL_SINGLE_CANNON_QUICKFIRING_BREECH))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.transform(CBCDefaultStress.setImpact(32.0d))
+			.register();
+
+	/// /// electrum
+
+	public static final BlockEntry<DualCannonBodyBlock> ELECTRUM_DUAL_CANNON_BARREL = REGISTRATE
+			.block("electrum_dual_cannon_barrel", p -> DualCannonBodyBlock.verySmall(p, CBCMSDualCannonMaterials.ELECTRUM))
+			.transform(CBCBuilderTransformers.cannonBarrel("electrum", true))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.ELECTRUM_DUAL_CANNON_BARREL)))
+			.item(DualCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> ELECTRUM_DUAL_CANNON_CHAMBER = REGISTRATE
+			.block("electrum_dual_cannon_chamber", p -> DualCannonBodyBlock.medium(p, CBCMSDualCannonMaterials.ELECTRUM))
+			.transform(CBCBuilderTransformers.cannonChamber("electrum", true))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.ELECTRUM_DUAL_CANNON_CHAMBER)))
+			.item(DualCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> ELECTRUM_DUAL_CANNON_CHARGER = REGISTRATE
+			.block("electrum_dual_cannon_charger", p -> DualCannonBodyBlock.medium(p, CBCMSDualCannonMaterials.ELECTRUM))
+			.transform(CBCBuilderTransformers.cannonChamber("electrum", true))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.ELECTRUM_DUAL_CANNON_CHAMBER)))
+			.item(DualCannonChargerBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonQuickfiringBreechBlock> ELECTRUM_DUAL_CANNON_QUICKFIRING_BREECH = REGISTRATE
+			.block("electrum_dual_cannon_quickfiring_breech", p -> DualCannonQuickfiringBreechBlock.medium(p, CBCMSDualCannonMaterials.ELECTRUM, electrumDualSlidingBreech()))
+			.lang("Electrum Dual Cannon Quick-Firing Breech")
+			.transform(CBCMSBuilderTransformers.dualCannonSlidingBreech("dual_cannon_sliding_breech/electrum"))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.item(DualCannonBlockItem::new).build()
+			.register();
+
+	private static NonNullSupplier<? extends Block> electrumDualSlidingBreech() {
+		return ELECTRUM_DUAL_CANNON_SLIDING_BREECH;
+	}
+
+	public static final BlockEntry<DualCannonSlidingBreechBlock> ELECTRUM_DUAL_CANNON_SLIDING_BREECH = REGISTRATE
+			.block("electrum_dual_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.ELECTRUM, ELECTRUM_DUAL_CANNON_QUICKFIRING_BREECH))
+			.transform(CBCDefaultStress.setImpact(32.0d))
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> WIDE_ELECTRUM_DUAL_CANNON_BARREL = REGISTRATE
+			.block("wide_electrum_dual_cannon_barrel", p -> DualCannonBodyBlock.wide(p, CBCMSDualCannonMaterials.WIDE_ELECTRUM))
+			.transform(CBCBuilderTransformers.cannonBarrel("wide_electrum", true))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.ELECTRUM_DUAL_CANNON_BARREL)))
+			.item(DualCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> WIDE_ELECTRUM_DUAL_CANNON_CHAMBER = REGISTRATE
+			.block("wide_electrum_dual_cannon_chamber", p -> DualCannonBodyBlock.wide(p, CBCMSDualCannonMaterials.WIDE_ELECTRUM))
+			.transform(CBCBuilderTransformers.cannonChamber("wide_electrum", true))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.ELECTRUM_DUAL_CANNON_CHAMBER)))
+			.item(DualCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> WIDE_ELECTRUM_DUAL_CANNON_CHARGER = REGISTRATE
+			.block("wide_electrum_dual_cannon_charger", p -> DualCannonBodyBlock.wide(p, CBCMSDualCannonMaterials.WIDE_ELECTRUM))
+			.transform(CBCBuilderTransformers.cannonChamber("wide_electrum", true))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.ELECTRUM_DUAL_CANNON_CHAMBER)))
+			.item(DualCannonChargerBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonQuickfiringBreechBlock> WIDE_ELECTRUM_DUAL_CANNON_QUICKFIRING_BREECH = REGISTRATE
+			.block("wide_electrum_dual_cannon_quickfiring_breech", p -> DualCannonQuickfiringBreechBlock.wide(p, CBCMSDualCannonMaterials.WIDE_ELECTRUM, wideelectrumDualSlidingBreech()))
+			.lang("Wide Electrum Dual Cannon Quick-Firing Breech")
+			.transform(CBCMSBuilderTransformers.dualCannonSlidingBreech("dual_cannon_sliding_breech/wide_electrum"))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.item(DualCannonBlockItem::new).build()
+			.register();
+
+	private static NonNullSupplier<? extends Block> wideelectrumDualSlidingBreech() {
+		return WIDE_ELECTRUM_DUAL_CANNON_SLIDING_BREECH;
+	}
+
+	public static final BlockEntry<DualCannonSlidingBreechBlock> WIDE_ELECTRUM_DUAL_CANNON_SLIDING_BREECH = REGISTRATE
+			.block("wide_electrum_dual_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.WIDE_ELECTRUM, WIDE_ELECTRUM_DUAL_CANNON_QUICKFIRING_BREECH))
+			.transform(CBCDefaultStress.setImpact(32.0d))
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> ELECTRUM_SINGLE_CANNON_BARREL = REGISTRATE
+			.block("electrum_single_cannon_barrel", p -> DualCannonBodyBlock.singleSmall(p, CBCMSDualCannonMaterials.SINGLE_ELECTRUM))
+			.transform(CBCBuilderTransformers.cannonBarrel("single_electrum", true))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.ELECTRUM_DUAL_CANNON_BARREL)))
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> ELECTRUM_SINGLE_CANNON_CHAMBER = REGISTRATE
+			.block("electrum_single_cannon_chamber", p -> DualCannonBodyBlock.singleMedium(p, CBCMSDualCannonMaterials.SINGLE_ELECTRUM))
+			.transform(CBCBuilderTransformers.cannonChamber("single_electrum", true))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.ELECTRUM_DUAL_CANNON_CHAMBER)))
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonQuickfiringBreechBlock> ELECTRUM_SINGLE_CANNON_QUICKFIRING_BREECH = REGISTRATE
+			.block("electrum_single_cannon_quickfiring_breech", p -> DualCannonQuickfiringBreechBlock.singleMedium(p, CBCMSDualCannonMaterials.SINGLE_ELECTRUM, electrumSingleSlidingBreech()))
+			.lang("Electrum Single Cannon Quick-Firing Breech")
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.transform(CBCMSBuilderTransformers.dualCannonSlidingBreech("dual_cannon_sliding_breech/single_electrum"))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonQuickfiringBreechBlock> ELECTRUM_SINGLE_CANNON_MAGAZINE_BREECH = REGISTRATE
+			.block("electrum_single_cannon_magazine_breech", p -> DualCannonQuickfiringBreechBlock.singleMedium(p, CBCMSDualCannonMaterials.SINGLE_ELECTRUM, electrumSingleSlidingBreech()))
+			.lang("Electrum Single Cannon Quick-Firing Breech")
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.transform(CBCMSBuilderTransformers.dualCannonSlidingBreech("dual_cannon_sliding_breech/single_electrum"))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	private static NonNullSupplier<? extends Block> electrumSingleSlidingBreech() {
+		return ELECTRUM_SINGLE_CANNON_SLIDING_BREECH;
+	}
+
+	public static final BlockEntry<DualCannonSlidingBreechBlock> ELECTRUM_SINGLE_CANNON_SLIDING_BREECH = REGISTRATE
+			.block("electrum_single_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.SINGLE_ELECTRUM, ELECTRUM_SINGLE_CANNON_QUICKFIRING_BREECH))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.transform(CBCDefaultStress.setImpact(32.0d))
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> WIDE_ELECTRUM_SINGLE_CANNON_BARREL = REGISTRATE
+			.block("wide_electrum_single_cannon_barrel", p -> DualCannonBodyBlock.singleMedium(p, CBCMSDualCannonMaterials.WIDE_SINGLE_ELECTRUM))
+			.transform(CBCBuilderTransformers.cannonBarrel("wide_single_electrum", true))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.ELECTRUM_DUAL_CANNON_BARREL)))
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> WIDE_ELECTRUM_SINGLE_CANNON_CHAMBER = REGISTRATE
+			.block("wide_electrum_single_cannon_chamber", p -> DualCannonBodyBlock.singleMedium(p, CBCMSDualCannonMaterials.WIDE_SINGLE_ELECTRUM))
+			.transform(CBCBuilderTransformers.cannonChamber("wide_single_electrum", true))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.ELECTRUM_DUAL_CANNON_CHAMBER)))
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> WIDE_ELECTRUM_SINGLE_CANNON_CHAMBER_SHIELDED = REGISTRATE
+			.block("wide_electrum_single_cannon_chamber_shielded", p -> DualCannonBodyBlock.singleMedium(p, CBCMSDualCannonMaterials.WIDE_SINGLE_ELECTRUM))
+			.transform(CBCBuilderTransformers.cannonChamber("wide_single_electrum", true))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.ELECTRUM_DUAL_CANNON_CHAMBER)))
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonQuickfiringBreechBlock> WIDE_ELECTRUM_SINGLE_CANNON_QUICKFIRING_BREECH = REGISTRATE
+			.block("wide_electrum_single_cannon_quickfiring_breech", p -> DualCannonQuickfiringBreechBlock.singleWide(p, CBCMSDualCannonMaterials.WIDE_SINGLE_ELECTRUM, wideElectrumSingleSlidingBreech()))
+			.lang("Wide Electrum Single Cannon Quick-Firing Breech")
+			//.transform(strongCannonBlock(false))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.transform(CBCMSBuilderTransformers.dualCannonSlidingBreech("dual_cannon_sliding_breech/wide_single_electrum"))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonQuickfiringBreechBlock> WIDE_ELECTRUM_SINGLE_CANNON_MAGAZINE_BREECH = REGISTRATE
+			.block("wide_electrum_single_cannon_magazine_breech", p -> DualCannonQuickfiringBreechBlock.singleWide(p, CBCMSDualCannonMaterials.WIDE_SINGLE_ELECTRUM, wideElectrumSingleSlidingBreech()))
+			.lang("Wide Electrum Single Cannon Quick-Firing Breech")
+			//.transform(strongCannonBlock(false))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.transform(CBCMSBuilderTransformers.dualCannonSlidingBreech("dual_cannon_sliding_breech/wide_single_electrum"))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	private static NonNullSupplier<? extends Block> wideElectrumSingleSlidingBreech() {
+		return WIDE_ELECTRUM_SINGLE_CANNON_SLIDING_BREECH;
+	}
+
+	public static final BlockEntry<DualCannonSlidingBreechBlock> WIDE_ELECTRUM_SINGLE_CANNON_SLIDING_BREECH = REGISTRATE
+			.block("wide_electrum_single_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.WIDE_SINGLE_ELECTRUM, WIDE_ELECTRUM_SINGLE_CANNON_QUICKFIRING_BREECH))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.transform(CBCDefaultStress.setImpact(32.0d))
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> CONSTANTAN_DUAL_CANNON_BARREL = REGISTRATE
+			.block("constantan_dual_cannon_barrel", p -> DualCannonBodyBlock.verySmall(p, CBCMSDualCannonMaterials.CONSTANTAN))
+			.transform(CBCBuilderTransformers.cannonBarrel("constantan", true))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.CONSTANTAN_DUAL_CANNON_BARREL)))
+			.item(DualCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> CONSTANTAN_DUAL_CANNON_CHAMBER = REGISTRATE
+			.block("constantan_dual_cannon_chamber", p -> DualCannonBodyBlock.medium(p, CBCMSDualCannonMaterials.CONSTANTAN))
+			.transform(CBCBuilderTransformers.cannonChamber("constantan", true))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.CONSTANTAN_DUAL_CANNON_CHAMBER)))
+			.item(DualCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> CONSTANTAN_DUAL_CANNON_CHARGER = REGISTRATE
+			.block("constantan_dual_cannon_charger", p -> DualCannonBodyBlock.medium(p, CBCMSDualCannonMaterials.CONSTANTAN))
+			.transform(CBCBuilderTransformers.cannonChamber("constantan", true))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.CONSTANTAN_DUAL_CANNON_CHAMBER)))
+			.item(DualCannonChargerBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonQuickfiringBreechBlock> CONSTANTAN_DUAL_CANNON_QUICKFIRING_BREECH = REGISTRATE
+			.block("constantan_dual_cannon_quickfiring_breech", p -> DualCannonQuickfiringBreechBlock.medium(p, CBCMSDualCannonMaterials.CONSTANTAN, constantanDualSlidingBreech()))
+			.lang("Constantan Dual Cannon Quick-Firing Breech")
+			.transform(CBCMSBuilderTransformers.dualCannonSlidingBreech("dual_cannon_sliding_breech/constantan"))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.item(DualCannonBlockItem::new).build()
+			.register();
+
+	private static NonNullSupplier<? extends Block> constantanDualSlidingBreech() {
+		return CONSTANTAN_DUAL_CANNON_SLIDING_BREECH;
+	}
+
+	public static final BlockEntry<DualCannonSlidingBreechBlock> CONSTANTAN_DUAL_CANNON_SLIDING_BREECH = REGISTRATE
+			.block("constantan_dual_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.CONSTANTAN, CONSTANTAN_DUAL_CANNON_QUICKFIRING_BREECH))
+			.transform(CBCDefaultStress.setImpact(32.0d))
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> WIDE_CONSTANTAN_DUAL_CANNON_BARREL = REGISTRATE
+			.block("wide_constantan_dual_cannon_barrel", p -> DualCannonBodyBlock.wide(p, CBCMSDualCannonMaterials.WIDE_CONSTANTAN))
+			.transform(CBCBuilderTransformers.cannonBarrel("wide_constantan", true))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.CONSTANTAN_DUAL_CANNON_BARREL)))
+			.item(DualCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> WIDE_CONSTANTAN_DUAL_CANNON_CHAMBER = REGISTRATE
+			.block("wide_constantan_dual_cannon_chamber", p -> DualCannonBodyBlock.wide(p, CBCMSDualCannonMaterials.WIDE_CONSTANTAN))
+			.transform(CBCBuilderTransformers.cannonChamber("wide_constantan", true))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.CONSTANTAN_DUAL_CANNON_CHAMBER)))
+			.item(DualCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> WIDE_CONSTANTAN_DUAL_CANNON_CHARGER = REGISTRATE
+			.block("wide_constantan_dual_cannon_charger", p -> DualCannonBodyBlock.wide(p, CBCMSDualCannonMaterials.WIDE_CONSTANTAN))
+			.transform(CBCBuilderTransformers.cannonChamber("wide_constantan", true))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.CONSTANTAN_DUAL_CANNON_CHAMBER)))
+			.item(DualCannonChargerBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonQuickfiringBreechBlock> WIDE_CONSTANTAN_DUAL_CANNON_QUICKFIRING_BREECH = REGISTRATE
+			.block("wide_constantan_dual_cannon_quickfiring_breech", p -> DualCannonQuickfiringBreechBlock.wide(p, CBCMSDualCannonMaterials.WIDE_CONSTANTAN, wideconstantanDualSlidingBreech()))
+			.lang("Wide Constantan Dual Cannon Quick-Firing Breech")
+			.transform(CBCMSBuilderTransformers.dualCannonSlidingBreech("dual_cannon_sliding_breech/wide_constantan"))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.item(DualCannonBlockItem::new).build()
+			.register();
+
+	private static NonNullSupplier<? extends Block> wideconstantanDualSlidingBreech() {
+		return WIDE_CONSTANTAN_DUAL_CANNON_SLIDING_BREECH;
+	}
+
+	public static final BlockEntry<DualCannonSlidingBreechBlock> WIDE_CONSTANTAN_DUAL_CANNON_SLIDING_BREECH = REGISTRATE
+			.block("wide_constantan_dual_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.WIDE_CONSTANTAN, WIDE_CONSTANTAN_DUAL_CANNON_QUICKFIRING_BREECH))
+			.transform(CBCDefaultStress.setImpact(32.0d))
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> CONSTANTAN_SINGLE_CANNON_BARREL = REGISTRATE
+			.block("constantan_single_cannon_barrel", p -> DualCannonBodyBlock.singleSmall(p, CBCMSDualCannonMaterials.SINGLE_CONSTANTAN))
+			.transform(CBCBuilderTransformers.cannonBarrel("single_constantan", true))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.CONSTANTAN_DUAL_CANNON_BARREL)))
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> CONSTANTAN_SINGLE_CANNON_CHAMBER = REGISTRATE
+			.block("constantan_single_cannon_chamber", p -> DualCannonBodyBlock.singleMedium(p, CBCMSDualCannonMaterials.SINGLE_CONSTANTAN))
+			.transform(CBCBuilderTransformers.cannonChamber("single_constantan", true))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.CONSTANTAN_DUAL_CANNON_CHAMBER)))
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonQuickfiringBreechBlock> CONSTANTAN_SINGLE_CANNON_QUICKFIRING_BREECH = REGISTRATE
+			.block("constantan_single_cannon_quickfiring_breech", p -> DualCannonQuickfiringBreechBlock.singleMedium(p, CBCMSDualCannonMaterials.SINGLE_CONSTANTAN, constantanSingleSlidingBreech()))
+			.lang("Constantan Single Cannon Quick-Firing Breech")
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.transform(CBCMSBuilderTransformers.dualCannonSlidingBreech("dual_cannon_sliding_breech/single_constantan"))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonQuickfiringBreechBlock> CONSTANTAN_SINGLE_CANNON_MAGAZINE_BREECH = REGISTRATE
+			.block("constantan_single_cannon_magazine_breech", p -> DualCannonQuickfiringBreechBlock.singleMedium(p, CBCMSDualCannonMaterials.SINGLE_CONSTANTAN, constantanSingleSlidingBreech()))
+			.lang("Constantan Single Cannon Quick-Firing Breech")
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.transform(CBCMSBuilderTransformers.dualCannonSlidingBreech("dual_cannon_sliding_breech/single_constantan"))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	private static NonNullSupplier<? extends Block> constantanSingleSlidingBreech() {
+		return CONSTANTAN_SINGLE_CANNON_SLIDING_BREECH;
+	}
+
+	public static final BlockEntry<DualCannonSlidingBreechBlock> CONSTANTAN_SINGLE_CANNON_SLIDING_BREECH = REGISTRATE
+			.block("constantan_single_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.SINGLE_CONSTANTAN, CONSTANTAN_SINGLE_CANNON_QUICKFIRING_BREECH))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.transform(CBCDefaultStress.setImpact(32.0d))
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> WIDE_CONSTANTAN_SINGLE_CANNON_BARREL = REGISTRATE
+			.block("wide_constantan_single_cannon_barrel", p -> DualCannonBodyBlock.singleMedium(p, CBCMSDualCannonMaterials.WIDE_SINGLE_CONSTANTAN))
+			.transform(CBCBuilderTransformers.cannonBarrel("wide_single_constantan", true))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.CONSTANTAN_DUAL_CANNON_BARREL)))
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> WIDE_CONSTANTAN_SINGLE_CANNON_CHAMBER = REGISTRATE
+			.block("wide_constantan_single_cannon_chamber", p -> DualCannonBodyBlock.singleMedium(p, CBCMSDualCannonMaterials.WIDE_SINGLE_CONSTANTAN))
+			.transform(CBCBuilderTransformers.cannonChamber("wide_single_constantan", true))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.CONSTANTAN_DUAL_CANNON_CHAMBER)))
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonBodyBlock> WIDE_CONSTANTAN_SINGLE_CANNON_CHAMBER_SHIELDED = REGISTRATE
+			.block("wide_constantan_single_cannon_chamber_shielded", p -> DualCannonBodyBlock.singleMedium(p, CBCMSDualCannonMaterials.WIDE_SINGLE_CONSTANTAN))
+			.transform(CBCBuilderTransformers.cannonChamber("wide_single_constantan", true))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new DualCannonCTBehavior(CBCMSSpriteShifts.CONSTANTAN_DUAL_CANNON_CHAMBER)))
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonQuickfiringBreechBlock> WIDE_CONSTANTAN_SINGLE_CANNON_QUICKFIRING_BREECH = REGISTRATE
+			.block("wide_constantan_single_cannon_quickfiring_breech", p -> DualCannonQuickfiringBreechBlock.singleWide(p, CBCMSDualCannonMaterials.WIDE_SINGLE_CONSTANTAN, wideConstantanSingleSlidingBreech()))
+			.lang("Wide Constantan Single Cannon Quick-Firing Breech")
+			//.transform(strongCannonBlock(false))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.transform(CBCMSBuilderTransformers.dualCannonSlidingBreech("dual_cannon_sliding_breech/wide_single_constantan"))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<DualCannonQuickfiringBreechBlock> WIDE_CONSTANTAN_SINGLE_CANNON_MAGAZINE_BREECH = REGISTRATE
+			.block("wide_constantan_single_cannon_magazine_breech", p -> DualCannonQuickfiringBreechBlock.singleWide(p, CBCMSDualCannonMaterials.WIDE_SINGLE_CONSTANTAN, wideConstantanSingleSlidingBreech()))
+			.lang("Wide Constantan Single Cannon Quick-Firing Breech")
+			//.transform(strongCannonBlock(false))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.transform(CBCMSBuilderTransformers.dualCannonSlidingBreech("dual_cannon_sliding_breech/wide_single_constantan"))
+			.properties(p -> p.strength(5.0f,14f))
+			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.item(SingleCannonBlockItem::new).build()
+			.register();
+
+	private static NonNullSupplier<? extends Block> wideConstantanSingleSlidingBreech() {
+		return WIDE_CONSTANTAN_SINGLE_CANNON_SLIDING_BREECH;
+	}
+
+	public static final BlockEntry<DualCannonSlidingBreechBlock> WIDE_CONSTANTAN_SINGLE_CANNON_SLIDING_BREECH = REGISTRATE
+			.block("wide_constantan_single_cannon_sliding_breech", p -> new DualCannonSlidingBreechBlock(p, CBCMSDualCannonMaterials.WIDE_SINGLE_CONSTANTAN, WIDE_CONSTANTAN_SINGLE_CANNON_QUICKFIRING_BREECH))
+			.loot(CBCBuilderTransformers.steelScrapLoot(10))
+			.transform(CBCDefaultStress.setImpact(32.0d))
+			.register();
+
 
 
 	public static final BlockEntry<TorpedoDetectionDeviceBlock> TORPEDO_DETECTION_DEVICE = REGISTRATE

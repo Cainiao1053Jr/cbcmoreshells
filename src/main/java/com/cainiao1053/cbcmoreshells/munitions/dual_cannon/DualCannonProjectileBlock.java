@@ -119,29 +119,6 @@ public abstract class DualCannonProjectileBlock<ENTITY extends AbstractDualCanno
 		return oldState.setValue(BlockStateProperties.FACING, facing);
 	}
 
-//	@Override
-//	public StructureBlockInfo getHandloadingInfo(ItemStack stack, BlockPos localPos, Direction cannonOrientation) {
-//		BlockState state = this.defaultBlockState().setValue(FACING, cannonOrientation);
-//		CompoundTag baseTag = stack.getOrCreateTag();
-//		if (baseTag.contains("BlockEntityTag")) {
-//			CompoundTag tag = baseTag.getCompound("BlockEntityTag").copy();
-//			tag.remove("x");
-//			tag.remove("y");
-//			tag.remove("z");
-//			return new StructureBlockInfo(localPos, state, tag);
-//		}
-//		return new StructureBlockInfo(localPos, state, null);
-//	}
-//
-//	@Override
-//	public ItemStack getExtractedItem(StructureBlockInfo info) {
-//		ItemStack stack = new ItemStack(this);
-//		if (info.nbt() != null) {
-//			stack.getOrCreateTag().put("BlockEntityTag", info.nbt());
-//		}
-//		return stack;
-//	}
-
 	@Override
 	public StructureBlockInfo getHandloadingInfo(ItemStack stack, BlockPos localPos, Direction cannonOrientation, HolderLookup.Provider registries) {
 		BlockState state = this.defaultBlockState().setValue(FACING, cannonOrientation);
@@ -174,19 +151,6 @@ public abstract class DualCannonProjectileBlock<ENTITY extends AbstractDualCanno
 
 	@Override public Direction.Axis getAxis(BlockState state) { return state.getValue(FACING).getAxis(); }
 
-//	public static ItemStack getTracerFromBlocks(List<StructureBlockInfo> blocks) {
-//		if (blocks.isEmpty())
-//			return ItemStack.EMPTY;
-//		StructureBlockInfo info = blocks.get(0);
-//		if (info.nbt() == null)
-//			return ItemStack.EMPTY;
-//		BlockEntity load = BlockEntity.loadStatic(info.pos(), info.state(), info.nbt());
-//		return load instanceof BigCannonProjectileBlockEntity projectile ? projectile.getItem(0) : ItemStack.EMPTY;
-//	}
-//
-//	public static ItemStack getTracerFromBlock(Level level, BlockPos pos, BlockState state) {
-//		return level.getBlockEntity(pos) instanceof BigCannonProjectileBlockEntity projectile ? projectile.getTracer() : ItemStack.EMPTY;
-//	}
 
 	public static ItemStack getTracerFromBlocks(List<StructureBlockInfo> blocks, HolderLookup.Provider registries) {
 		if (blocks.isEmpty())

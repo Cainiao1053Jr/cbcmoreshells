@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "cbcmoreshells:block/normal_sap_super_heavy_shell",
+      "x": 90
+    },
+    "facing=down": {
+      "model": "cbcmoreshells:block/normal_sap_super_heavy_shell",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "cbcmoreshells:block/normal_sap_super_heavy_shell",
+      "x": 90,
+      "y": 90
+    },
+    "facing=south": {
+      "model": "cbcmoreshells:block/normal_sap_super_heavy_shell",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "cbcmoreshells:block/normal_sap_super_heavy_shell"
+    },
+    "facing=west": {
+      "model": "cbcmoreshells:block/normal_sap_super_heavy_shell",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

@@ -24,7 +24,7 @@ public final class DualCannonModifiers {
 			case ANTIAIR_HE -> (durabilityModifier - 1.0) / 1.5 + 1.0;
 			case APHE -> durabilityModifier * 0.47 + 0.4;
 			case APBC -> durabilityModifier * 0.45 + 0.4;
-			case SAP -> durabilityModifier * 0.82 + 0.18;
+			case SAP, HSAP -> durabilityModifier * 0.82 + 0.18;
 		};
 	}
 

@@ -119,7 +119,7 @@ public final class DualCannonStats {
 
 	private static CBCMSBallisticUtils.DualCannonShot maxRange(DualCannonShellContext shell) {
 		if (!shell.ballisticsSupported()) return null;
-		return CBCMSBallisticUtils.dualCannonMaxRange(shell.muzzleVelocity(), shell.drag(), shell.gravity());
+		return CBCMSBallisticUtils.dualCannonMaxRangeWithLimit(shell.muzzleVelocity(), shell.drag(), shell.gravity(), shell.runtimeMaxRange());
 	}
 
 }

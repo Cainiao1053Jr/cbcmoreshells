@@ -95,7 +95,11 @@ public class DualCannonBehavior<P extends DualCannonMunitionProperties>
 				this.applyFuzeResult(sweepContext, MunitionFuzes.onClip(sweepContext, clipStart, clipEnd), clipStart),
 			this::applyImpactOutcome,
 			this::applyEntityImpact,
-			DualCannonPenetrationModel::resolve);
+				(prjContext, hit, result) -> {
+			return DualCannonPenetrationModel.resolve(prjContext, hit, result);
+				}
+			//DualCannonPenetrationModel::resolve
+		);
 
 		if (!sweep.stopped() && state.travelled() >= properties.runtime().maxDistance()) {
 			context.runtime().discard("max_distance");
@@ -167,7 +171,7 @@ public class DualCannonBehavior<P extends DualCannonMunitionProperties>
 		if (this.kind == Kind.AP_SHOT) {
 			return this.applyApShotImpactOutcome(context, outcome);
 		}
-		if (this.kind == Kind.SAP && outcome.kinematics() == MunitionImpactKinematics.PENETRATE) {
+		if (this.kind.isSAP() && outcome.kinematics() == MunitionImpactKinematics.PENETRATE) {
 			context.state().setDurabilityMass(0.0);
 			this.detonate(context, this.blockImpactDetonationPosition(outcome.hit()));
 			return false;
@@ -290,11 +294,16 @@ public class DualCannonBehavior<P extends DualCannonMunitionProperties>
 		/** Semi armour-piercing: bursts at the entry face instead of carrying on through. */
 		SAP,
 		/** High explosive incendiary: HE burst plus a fire-starting payload. */
-		INCENDIARY;
+		INCENDIARY,
+		HSAP;
 
 		/** True for shells whose fuze is only consulted after the armour is defeated. */
 		public boolean isApheLike() {
 			return this == APHE || this == APBC;
+		}
+
+		public boolean isSAP(){
+			return this == SAP || this == HSAP;
 		}
 	}
 

@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "cbcmoreshells:block/extended_sap_shell",
+      "x": 90
+    },
+    "facing=down": {
+      "model": "cbcmoreshells:block/extended_sap_shell",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "cbcmoreshells:block/extended_sap_shell",
+      "x": 90,
+      "y": 90
+    },
+    "facing=south": {
+      "model": "cbcmoreshells:block/extended_sap_shell",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "cbcmoreshells:block/extended_sap_shell"
+    },
+    "facing=west": {
+      "model": "cbcmoreshells:block/extended_sap_shell",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

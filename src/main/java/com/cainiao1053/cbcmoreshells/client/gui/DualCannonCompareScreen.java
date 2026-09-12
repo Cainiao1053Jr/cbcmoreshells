@@ -46,7 +46,7 @@ public class DualCannonCompareScreen extends AbstractSimiScreen {
 	private static final int COLOUR_TITLE = 0xFF2B2118;
 	private static final int COLOUR_LABEL = 0xFF6B5B4A;
 	private static final int COLOUR_VALUE = 0xFF33291E;
-	private static final int COLOUR_SKELETON = 0xFF1F4E6B;
+	private static final int COLOUR_SKELETON = 0xFF685015;
 	private static final int COLOUR_GAP_MATERIAL = 0xFF8A5A12;
 	private static final int COLOUR_UNREACHABLE = 0xFF9A9086;
 	private static final int COLOUR_RULE = 0x40000000;
@@ -262,9 +262,9 @@ public class DualCannonCompareScreen extends AbstractSimiScreen {
 
 		for (MaterialRow row : this.visibleRows) {
 			String name = I18n.get(DualCannonMaterialFilter.translationKey(row.loadout().material()));
-			if (row.missingSingleVariant()) name = "* " + name;
+			if (row.missingSingleVariant()){}
 			graphics.drawString(this.font, this.font.plainSubstrByWidth(name, NAME_COLUMN - 4), left, y,
-				row.missingSingleVariant() ? COLOUR_GAP_MATERIAL : COLOUR_VALUE, false);
+				COLOUR_VALUE, false);
 
 			for (int i = 0; i < statSpecs.size(); i++) {
 				this.drawCell(graphics, left + NAME_COLUMN + i * STAT_COLUMN, y,

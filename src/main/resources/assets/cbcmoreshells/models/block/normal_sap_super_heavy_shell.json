@@ -1,0 +1,9 @@
+{
+  "parent": "cbcmoreshells:block/dual_cannon_projectile_block",
+  "textures": {
+    "bottom": "cbcmoreshells:block/projectile/shelless_he_shell_bottom",
+    "particle": "cbcmoreshells:block/projectile/sap_super_heavy_shell_top",
+    "side": "cbcmoreshells:block/projectile/normal_sap_super_heavy_shell",
+    "top": "cbcmoreshells:block/projectile/sap_super_heavy_shell_top"
+  }
+}

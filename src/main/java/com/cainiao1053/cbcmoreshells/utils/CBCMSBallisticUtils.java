@@ -373,6 +373,14 @@ public class CBCMSBallisticUtils {
         return dualCannonShotAt(0.5 * (lo + hi), v0, drag, gravity);
     }
 
+    public static DualCannonShot dualCannonMaxRangeWithLimit(double v0, double drag, double gravity, double maxRange){
+        DualCannonShot initial = dualCannonMaxRange(v0, drag, gravity);
+        if(initial != null && initial.range() > maxRange){
+            return new CBCMSBallisticUtils.DualCannonShot(initial.angle(), maxRange, initial.flightTicks(), initial.impactSpeed());
+        }
+        return initial;
+    }
+
     private static double rangeOrZero(double theta, double v0, double drag, double gravity) {
         double range = dualCannonFlatRange(theta, v0, drag, gravity);
         return Double.isNaN(range) ? 0.0 : range;
@@ -457,9 +465,9 @@ public class CBCMSBallisticUtils {
      * shell's maximum, each with the elevation, flight time and impact speed needed to hit it.
      */
     public static List<DualCannonShot> dualCannonRangeTable(double v0, double drag, double gravity, int rows,
-                                                            boolean highArc) {
+                                                            boolean highArc, double maxRange) {
         List<DualCannonShot> table = new ArrayList<>();
-        DualCannonShot furthest = dualCannonMaxRange(v0, drag, gravity);
+        DualCannonShot furthest = dualCannonMaxRangeWithLimit(v0, drag, gravity, maxRange);
         if (furthest == null || rows < 1) return table;
 
         for (int i = 1; i <= rows; i++) {

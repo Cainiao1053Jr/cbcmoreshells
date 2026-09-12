@@ -10,6 +10,10 @@
     "cbcmoreshells:military_slate_alloy_single_cannon_magazine_breech",
     "cbcmoreshells:wide_military_slate_alloy_single_cannon_magazine_breech",
     "cbcmoreshells:slate_alloy_single_cannon_magazine_breech",
-    "cbcmoreshells:wide_slate_alloy_single_cannon_magazine_breech"
+    "cbcmoreshells:wide_slate_alloy_single_cannon_magazine_breech",
+    "cbcmoreshells:electrum_single_cannon_magazine_breech",
+"cbcmoreshells:wide_electrum_single_cannon_magazine_breech",
+"cbcmoreshells:constantan_single_cannon_magazine_breech",
+"cbcmoreshells:wide_constantan_single_cannon_magazine_breech"
   ]
 }

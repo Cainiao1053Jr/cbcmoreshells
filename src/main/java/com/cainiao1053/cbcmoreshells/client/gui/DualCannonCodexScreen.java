@@ -46,7 +46,6 @@ public class DualCannonCodexScreen extends AbstractSimiScreen {
 	private DualCannonTableSource source;
 	private List<Block> shells = List.of();
 	private DualCannonMaterialFilter filter;
-	private int columnChoice;
 	private int gridTop;
 	private int gridLeft;
 
@@ -62,7 +61,6 @@ public class DualCannonCodexScreen extends AbstractSimiScreen {
 		this.source = source;
 		this.lastSelection = lastSelection;
 		this.filter = DualCannonMaterialFilter.SINGLE_PLUS_GAPS;
-		this.columnChoice = 1;
 	}
 
 	@Override
@@ -80,10 +78,10 @@ public class DualCannonCodexScreen extends AbstractSimiScreen {
 		int left = this.guiLeft + PADDING;
 		int top = this.guiTop + PADDING;
 
-		this.addRenderableWidget(Button.builder(this.filterLabel(), button -> this.cycleFilter())
-			.bounds(left, top + 12, 150, 16).build());
-		this.addRenderableWidget(Button.builder(this.columnLabel(), button -> this.cycleColumns())
-			.bounds(left + 154, top + 12, 90, 16).build());
+//		this.addRenderableWidget(Button.builder(this.filterLabel(), button -> this.cycleFilter())
+//			.bounds(left, top + 12, 150, 16).build());
+//		this.addRenderableWidget(Button.builder(this.columnLabel(), button -> this.cycleColumns())
+//			.bounds(left + 154, top + 12, 90, 16).build());
 
 		this.gridTop = top + HEADER_HEIGHT;
 		this.gridLeft = this.guiLeft + (this.windowWidth - gridWidth) / 2;
@@ -94,7 +92,7 @@ public class DualCannonCodexScreen extends AbstractSimiScreen {
 	}
 
 	private DualCannonTableSource buildSource() {
-		return new DualCannonTableSource(COLUMN_CHOICES[this.columnChoice], this.filter, false);
+		return new DualCannonTableSource(12, this.filter, false);
 	}
 
 	private Component filterLabel() {
@@ -102,9 +100,9 @@ public class DualCannonCodexScreen extends AbstractSimiScreen {
 			I18n.get("cbcmoreshells.firing_table.filter." + this.filter.name().toLowerCase()));
 	}
 
-	private Component columnLabel() {
-		return Component.translatable("cbcmoreshells.firing_table.columns", COLUMN_CHOICES[this.columnChoice]);
-	}
+//	private Component columnLabel() {
+//		return Component.translatable("cbcmoreshells.firing_table.columns", COLUMN_CHOICES[this.columnChoice]);
+//	}
 
 	/** Changing either setting throws the cached tables away, since both change their shape. */
 	private void cycleFilter() {
@@ -114,11 +112,11 @@ public class DualCannonCodexScreen extends AbstractSimiScreen {
 		this.rebuildWidgets();
 	}
 
-	private void cycleColumns() {
-		this.columnChoice = (this.columnChoice + 1) % COLUMN_CHOICES.length;
-		this.source = this.buildSource();
-		this.rebuildWidgets();
-	}
+//	private void cycleColumns() {
+//		this.columnChoice = (this.columnChoice + 1) % COLUMN_CHOICES.length;
+//		this.source = this.buildSource();
+//		this.rebuildWidgets();
+//	}
 
 	@Override
 	protected void renderWindow(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {

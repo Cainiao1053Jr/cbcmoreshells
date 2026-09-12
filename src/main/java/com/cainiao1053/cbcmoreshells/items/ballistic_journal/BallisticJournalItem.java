@@ -25,8 +25,6 @@ public class BallisticJournalItem extends Item {
 		ItemStack stack = player.getItemInHand(hand);
 		if (!level.isClientSide) return InteractionResultHolder.success(stack);
 
-		// Indirection through CatnipServices keeps the screen class off a dedicated server's
-		// classloader; naming it directly here would be enough to break one.
 		CatnipServices.PLATFORM.executeOnClientOnly(() -> CBCMSScreens::openBallisticJournal);
 		return InteractionResultHolder.success(stack);
 	}

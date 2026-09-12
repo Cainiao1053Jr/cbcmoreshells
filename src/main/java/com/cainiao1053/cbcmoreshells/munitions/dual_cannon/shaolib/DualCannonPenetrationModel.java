@@ -68,16 +68,12 @@ public final class DualCannonPenetrationModel {
 		double incidentVelocity = speed * incidence;
 		BlockPos blockPos = BlockImpactSupport.impactedBlockPos(hit);
 		BlockArmorPropertiesProvider armor = BlockArmorPropertiesHandler.getProperties(state1);
+
+		DualCannonImpactProperties dualImpact = dualProperties.dualImpact();
+		double cappedMomentum = getCappedMomentum(dualProperties, state.durabilityModifier(), speed, mass);
 		double toughness = Math.max(0.0, armor.toughness(context.level(), state1, blockPos, true));
 		toughness *= bodyResistanceMultiplier(context, hit, blockPos, state1, toughness);
 		boolean unbreakable = !impact.breakBlocks() || state1.getDestroySpeed(context.level(), blockPos) < 0.0F;
-
-		DualCannonImpactProperties dualImpact = dualProperties.dualImpact();
-		double bonusMomentum =
-			1.0 + Math.max(0.0, (speed - impact.minVelocityForPenetrationBonus()) * impact.penetrationBonusScale());
-		double rawMomentum = mass * bonusMomentum * speed;
-		double cappedMomentum =
-			dualImpact.maximumMomentum() <= EPSILON ? rawMomentum : Math.min(rawMomentum, dualImpact.maximumMomentum());
 		double momentum = cappedMomentum * incidence;
 		double durabilityPenalty = incidentVelocity <= EPSILON ? mass : toughness / incidentVelocity;
 
@@ -98,14 +94,14 @@ public final class DualCannonPenetrationModel {
 			toughness, durabilityPenalty);
 	}
 
-	public static double getCappedMomentum(DualCannonMunitionProperties dualProperties, double speed, double mass){
+	public static double getCappedMomentum(DualCannonMunitionProperties dualProperties, double dmm, double speed, double mass){
 		DualCannonImpactProperties dualImpact = dualProperties.dualImpact();
 		MunitionPropertyComponents.ImpactProperties impact = dualProperties.impact();
 		double bonusMomentum =
 				1.0 + Math.max(0.0, (speed - impact.minVelocityForPenetrationBonus()) * impact.penetrationBonusScale());
 		double rawMomentum = mass * bonusMomentum * speed;
 		double cappedMomentum =
-				dualImpact.maximumMomentum() <= EPSILON ? rawMomentum : Math.min(rawMomentum, dualImpact.maximumMomentum());
+				dualImpact.maximumMomentum() <= EPSILON ? rawMomentum : Math.min(rawMomentum, dualImpact.maximumMomentum() * dmm);
 		return cappedMomentum;
 	}
 

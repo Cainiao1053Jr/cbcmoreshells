@@ -3,13 +3,13 @@
     "gravity": -0.04,
     "drag": 0.011,
     "quadratic_drag": false,
-    "durability_mass": 6.5,
-    "penetration": 2.5,
+    "durability_mass": 5.5,
+    "penetration": 2.0,
     "toughness": 1.0,
-    "deflection": 0.7
+    "deflection": 0.707
   },
   "runtime": {
-    "max_distance": 5000.0,
+    "max_distance": 750.0,
     "terminal_ttl_ticks": 80,
     "detonation_ttl_ticks": 10
   },
@@ -21,7 +21,7 @@
     "break_blocks": true,
     "base_bounce_chance": 0.05,
     "min_velocity_for_penetration_bonus": 2.0,
-    "penetration_bonus_scale": 0.15,
+    "penetration_bonus_scale": 0.1,
     "bounce_velocity_retained": 0.62,
     "penetration_velocity_retained": 0.92,
     "minimum_velocity_retained": 0.25,
@@ -52,18 +52,21 @@
     "minimum_charge_power": 1.0,
     "can_squib": true,
     "added_recoil": 1.0,
-    "initial_velocity": 8.0,
+    "initial_velocity": 10.0,
     "projectile_spread": 8.0,
     "minimum_spread": 0.4,
     "reload_time_coefficient": 1.0,
-    "cooldown_reduction_rate": 2.0
+    "cooldown_reduction_rate": 2.0,
+    "baseRecoil": 1.0,
+    "baseLifetime": 40
   },
   "dual_impact": {
     "smash_toughness": 0.0,
-    "maximum_momentum": 400.0,
+    "maximum_momentum": 200.0,
     "spall_explosion_power": 1.0,
     "high_penetration_mass_penalty_scale": 1.3,
     "penetration_mass_penalty_scale": 1.0,
-    "bounce_mass_penalty_scale": 0.3333333333333333
+    "bounce_mass_penalty_scale": 0.333,
+    "minDeflection": 0.5
   }
 }

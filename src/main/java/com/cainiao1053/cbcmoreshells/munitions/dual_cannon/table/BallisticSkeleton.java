@@ -38,13 +38,14 @@ public record BallisticSkeleton(DualCannonShellContext shell, boolean highArc, d
 		double v0 = shell.muzzleVelocity();
 		double drag = shell.drag();
 		double gravity = shell.gravity();
+		double maxRange = shell.runtimeMaxRange();
 
 		CBCMSBallisticUtils.DualCannonShot furthest =
-			CBCMSBallisticUtils.dualCannonMaxRange(v0, drag, gravity);
+			CBCMSBallisticUtils.dualCannonMaxRangeWithLimit(v0, drag, gravity, maxRange);
 		if (furthest == null || !(furthest.range() > 0.0)) return null;
 
 		List<CBCMSBallisticUtils.DualCannonShot> shots =
-			CBCMSBallisticUtils.dualCannonRangeTable(v0, drag, gravity, columns, highArc);
+			CBCMSBallisticUtils.dualCannonRangeTable(v0, drag, gravity, columns, highArc, maxRange);
 		if (shots.isEmpty()) return null;
 
 		List<BallisticPoint> points = new ArrayList<>(shots.size() + 1);

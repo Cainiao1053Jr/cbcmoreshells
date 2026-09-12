@@ -1,0 +1,27 @@
+{
+  "variants": {
+    "facing=down": {
+      "model": "cbcmoreshells:block/constantan_dual_cannon_barrel",
+      "x": 90
+    },
+    "facing=east": {
+      "model": "cbcmoreshells:block/constantan_dual_cannon_barrel",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "cbcmoreshells:block/constantan_dual_cannon_barrel"
+    },
+    "facing=south": {
+      "model": "cbcmoreshells:block/constantan_dual_cannon_barrel",
+      "y": 180
+    },
+    "facing=up": {
+      "model": "cbcmoreshells:block/constantan_dual_cannon_barrel",
+      "x": 90
+    },
+    "facing=west": {
+      "model": "cbcmoreshells:block/constantan_dual_cannon_barrel",
+      "y": 270
+    }
+  }
+}

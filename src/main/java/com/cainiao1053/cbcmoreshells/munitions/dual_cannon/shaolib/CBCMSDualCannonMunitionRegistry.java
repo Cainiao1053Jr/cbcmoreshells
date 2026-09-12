@@ -96,33 +96,33 @@ public final class CBCMSDualCannonMunitionRegistry {
 		// Inert shot: no burst charge, so no fuze socket either.
 		put(entries, CBCMSBlocks.NORMAL_AP_SHOT.get(), CBCMSDualCannonProjectiles.NORMAL_AP_SHOT,
 			CBCMSDualCannonPropertyTypes.NORMAL_AP_SHOT, DualCannonBehavior.Kind.AP_SHOT, 40, false, false,
-			"normal_ap_shot");
+			"normal_ap_shot_block");
 		put(entries, CBCMSBlocks.EXTENDED_AP_SHOT.get(), CBCMSDualCannonProjectiles.EXTENDED_AP_SHOT,
 			CBCMSDualCannonPropertyTypes.EXTENDED_AP_SHOT, DualCannonBehavior.Kind.AP_SHOT, 20, false, false,
-			"normal_ap_shot");
+			"normal_ap_shot_block");
 
 		put(entries, CBCMSBlocks.NORMAL_HE_SHELL.get(), CBCMSDualCannonProjectiles.NORMAL_HE_SHELL,
 			CBCMSDualCannonPropertyTypes.NORMAL_HE_SHELL, DualCannonBehavior.Kind.HE, 20, true, false,
-			"normal_he_shell");
+			"normal_he_shell_block");
 		put(entries, CBCMSBlocks.NORMAL_ANTIAIR_HE_SHELL.get(), CBCMSDualCannonProjectiles.NORMAL_ANTIAIR_HE_SHELL,
 			CBCMSDualCannonPropertyTypes.NORMAL_ANTIAIR_HE_SHELL, DualCannonBehavior.Kind.ANTIAIR_HE, 0, true, false,
-			"normal_antiair_he_shell");
+			"normal_antiair_he_shell_block");
 		put(entries, CBCMSBlocks.EXTENDED_ANTIAIR_HE_SHELL.get(), CBCMSDualCannonProjectiles.EXTENDED_ANTIAIR_HE_SHELL,
 			CBCMSDualCannonPropertyTypes.EXTENDED_ANTIAIR_HE_SHELL, DualCannonBehavior.Kind.ANTIAIR_HE, 0, true, false,
-			"normal_antiair_he_shell");
+			"normal_antiair_he_shell_block");
 		put(entries, CBCMSBlocks.NORMAL_AP_SHELL.get(), CBCMSDualCannonProjectiles.NORMAL_AP_SHELL,
 			CBCMSDualCannonPropertyTypes.NORMAL_AP_SHELL, DualCannonBehavior.Kind.APHE, 30, true, false,
-			"normal_ap_shell");
+			"normal_ap_shell_block");
 		put(entries, CBCMSBlocks.NORMAL_APBC_SHELL.get(), CBCMSDualCannonProjectiles.NORMAL_APBC_SHELL,
 			CBCMSDualCannonPropertyTypes.NORMAL_APBC_SHELL, DualCannonBehavior.Kind.APBC, 30, true, false,
-			"normal_apbc_shell");
+			"normal_apbc_shell_block");
 		put(entries, CBCMSBlocks.NORMAL_SAP_SHELL.get(), CBCMSDualCannonProjectiles.NORMAL_SAP_SHELL,
 			CBCMSDualCannonPropertyTypes.NORMAL_SAP_SHELL, DualCannonBehavior.Kind.SAP, 30, true, false,
-			"normal_sap_shell");
+			"normal_sap_shell_block");
 		put(entries, CBCMSBlocks.NORMAL_INCENDIARY_HE_SHELL.get(),
 			CBCMSDualCannonProjectiles.NORMAL_INCENDIARY_HE_SHELL,
 			CBCMSDualCannonPropertyTypes.NORMAL_INCENDIARY_HE_SHELL, DualCannonBehavior.Kind.INCENDIARY, 20, true,
-			false, "normal_incendiary_he_shell");
+			false, "normal_incendiary_he_shell_block");
 
 		return Map.copyOf(entries);
 	}
