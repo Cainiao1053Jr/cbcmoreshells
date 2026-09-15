@@ -1,0 +1,670 @@
+================================================================================
+CBCMS v6 — Dual Cannon 放置辅助（Placement Assist）+ 虚影预览 方案
+（方案文档，不含代码改动；参照 Create CopycatPanel / PoleHelper 的实现路径）
+================================================================================
+
+目录
+  0. 结论摘要
+  1. Create 是怎么做的：catnip placement 管线全拆解
+  2. 本项目现状盘点（Dual Cannon 侧）
+  3. 炮管规则 vs Copycat 规则：差异与形式化
+  4. 方案总体设计（新增 / 修改文件清单）
+  5. 核心算法（扫描 + 选端 + 定向）伪代码
+  6. 渲染：虚影与准星指示器（不需要自己写渲染代码）
+  7. 三个必须处理的坑
+  8. 实施顺序与逐步验证清单
+  9. 可选扩展（ProjectileRack / TorpedoTube 复用）
+ 10. 关键 API 速查表（均已从 jar 反编译核对）
+
+================================================================================
+0. 结论摘要
+================================================================================
+
+【最重要的发现 1】
+放置辅助 + 虚影这一整套管线在 1.21.1 里已经不在 Create 里了，而是在
+catnip 的 `net.createmod.catnip.placement` 包，由 **ponder-neoforge** jar 提供。
+本项目 build.gradle 已经有：
+
+    implementation("net.createmod.ponder:ponder-neoforge:1.0.81+mc1.21.1")
+
+也就是说 **不需要加任何依赖**，直接 import 即可。
+
+【最重要的发现 2】
+整条客户端管线是 ponder 自动驱动的，我们 **一行渲染代码都不用写**：
+
+    PonderClient.onTick()
+      -> PlacementClient.tick()
+           -> 遍历 PlacementHelpers.getHelpersView()
+           -> helper.matchesItem(手持物) && helper.matchesState(准星指向的方块)
+           -> helper.getOffset(player, level, state, pos, ray, heldItem)
+           -> 成功则 helper.renderAt(...) -> displayGhost(...)
+                -> GhostBlocks.getInstance().showGhostState(...).breathingAlpha()
+      -> GhostBlocks.tickGhosts()
+    PonderClient.onRenderWorld() -> GHOST_BLOCKS.renderAll(...)
+    NeoForgePonderClient$ClientEvents -> PlacementClient.onRenderCrosshairOverlay(...)
+
+我们只需要：
+  (a) 写一个 `IPlacementHelper` 实现；
+  (b) 在公共初始化里 `PlacementHelpers.register(helper)` 注册一次；
+  (c) 在方块的 `useItemOn` 里调用同一个 helper 完成"右键自动放置"。
+
+【最重要的发现 3 —— 必须警惕】
+`PlacementOffset.placeInWorld()` **不走 `BlockItem.place()`**，它是自己
+`level.setBlockAndUpdate(pos, state)` + `setPlacedBy(...)`。
+而本项目的炮管连接逻辑（`DualCannonBlock.onPlace`）目前写在
+`DualCannonBlockItem.place()` / `SingleCannonBlockItem.place()` /
+`DualCannonChargerBlockItem.place()` 里 —— 也就是说：
+**辅助放置出来的炮管不会和相邻炮管建立连接（connectedFace），炮就组装不起来。**
+必须把连接逻辑迁移到 `Block#setPlacedBy`。这是本方案里唯一一个"不改就一定坏"的点。
+
+【规则落地（用户需求的形式化结果）】
+  - 只在炮管轴向（clicked.getFacing(state).getAxis()）的两个方向上放置；
+  - 同材料才生效（DualCannonMaterial 相等，SINGLE_STEEL != STEEL）；
+  - 手持"炮管类"：从点击处沿轴向扫到该方向的末端，放在末端 +1；
+    若该端已被封闭（炮闩 / 底封），则只能放在另一端；
+  - 手持"炮闩类"：整门炮已存在任何封闭端 → 直接 fail（一门炮只有一个炮闩）；
+    否则按视线方向选端放置；
+  - Shift + 右键 = 走原版放置，绕过辅助（与 Create 一致）。
+
+================================================================================
+1. Create 是怎么做的：catnip placement 管线全拆解
+================================================================================
+
+1.1 三个核心类型（`net.createmod.catnip.placement`，在 ponder-neoforge jar 内）
+
+  interface IPlacementHelper
+      Predicate<ItemStack>  getItemPredicate();          // 手持物过滤
+      Predicate<BlockState> getStatePredicate();         // 准星指向方块过滤
+      PlacementOffset getOffset(Player, Level, BlockState, BlockPos, BlockHitResult);
+      default PlacementOffset getOffset(..., ItemStack heldItem);   // 客户端走这个
+      default void renderAt(BlockPos, BlockState, BlockHitResult, PlacementOffset);
+      default void displayGhost(PlacementOffset);
+      static List<Direction> orderedByDistance(BlockPos, Vec3[, Predicate<Direction>]);
+      static List<Direction> orderedByDistanceOnlyAxis(BlockPos, Vec3, Axis[, Predicate]);
+      static List<Direction> orderedByDistanceExceptAxis(BlockPos, Vec3, Axis[, ...]);
+      static void renderArrow(Vec3 center, Vec3 target, Direction plane[, double dist]);
+
+  class PlacementOffset
+      static PlacementOffset fail();
+      static PlacementOffset success();
+      static PlacementOffset success(Vec3i pos);
+      static PlacementOffset success(Vec3i pos, Function<BlockState,BlockState> transform);
+      PlacementOffset at(Vec3i) / withTransform(fn) / withGhostState(BlockState);
+      boolean isSuccessful() / hasGhostState() / isReplaceable(Level);
+      BlockPos getBlockPos();
+      ItemInteractionResult placeInWorld(Level, BlockItem, Player, InteractionHand, BlockHitResult);
+
+  class PlacementHelpers
+      static int register(IPlacementHelper);      // 返回 id
+      static IPlacementHelper get(int id);
+      static List<IPlacementHelper> getHelpersView();
+
+  注：`PlacementHelpers` 是 **公共（common）** 类，Create 就是在方块的 static
+  初始化里注册的，服务端也会跑，没问题。`PlacementClient` 才是客户端专用，
+  由 ponder 自己调用，我们不碰。
+
+1.2 CopycatPanelBlock 的做法（com.simibubi.create.content.decoration.copycat）
+
+  a) 方块里一个静态字段完成注册：
+        private static final int placementHelperId =
+            PlacementHelpers.register(new CopycatPanelBlock.PlacementHelper());
+
+  b) 内部类 PlacementHelper：
+        getItemPredicate() -> AllBlocks.COPYCAT_PANEL::isIn
+        getStatePredicate() -> AllBlocks.COPYCAT_PANEL::has
+        getOffset(...):
+            directions = IPlacementHelper.orderedByDistanceExceptAxis(
+                pos, ray.getLocation(), state.getValue(FACING).getAxis(),
+                dir -> world.getBlockState(pos.relative(dir)).canBeReplaced());
+            return directions.isEmpty() ? fail()
+                 : success(pos.relative(directions.get(0)),
+                           s -> s.setValue(FACING, state.getValue(FACING)));
+     —— 即：**在与面板法线垂直的四个方向里，挑离射线命中点最近、且目标位置可替换的那个**，
+        并把新方块的 FACING 强制对齐成被点击面板的 FACING。
+
+  c) 右键自动放置（关键，虚影只是"看"，放置是这里做的）：
+        @Override protected ItemInteractionResult useItemOn(
+            ItemStack stack, BlockState state, Level level, BlockPos pos,
+            Player player, InteractionHand hand, BlockHitResult hitResult) {
+            if (!player.isShiftKeyDown() && player.mayBuild()) {
+                IPlacementHelper h = PlacementHelpers.get(placementHelperId);
+                if (h.matchesItem(stack)) {
+                    h.getOffset(player, level, state, pos, hitResult)
+                     .placeInWorld(level, (BlockItem) stack.getItem(), player, hand, hitResult);
+                    return ItemInteractionResult.SUCCESS;
+                }
+            }
+            return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
+        }
+
+1.3 PoleHelper 的做法（com.simibubi.create.foundation.placement.PoleHelper）
+    —— 这个才是炮管真正该抄的模板，因为它处理"沿轴向一直延伸到末端"。
+
+        attachedPoles(world, pos, direction):
+            沿 direction 一直走，只要 matchesAxis(state, axis) 就 count++
+        getOffset(...):
+            for (dir : orderedByDistance(pos, ray.getLocation(),
+                                         d -> d.getAxis() == axisOf(state))) {
+                range = AllConfigs.server().equipment.placementAssistRange.get();
+                if (玩家带 ExtendoGrip) range += 4;
+                poles = attachedPoles(world, pos, dir);
+                if (poles < range) {
+                    newPos = pos.relative(dir, poles + 1);
+                    if (world.getBlockState(newPos).canBeReplaced())
+                        return success(newPos, s -> s.setValue(property, state.getValue(property)));
+                }
+            }
+            return fail();
+
+1.4 虚影从哪来
+    `IPlacementHelper.getOffset(..., ItemStack heldItem)` 的 **默认实现** 会把
+    `blockItem.getBlock().defaultBlockState()` 挂成 ghostState；
+    `displayGhost()` 再用 `offset.getTransform().apply(ghostState)` 应用我们的
+    状态变换后交给 `GhostBlocks` 渲染（带呼吸透明度 breathingAlpha）。
+    ==> **只要我们的 transform 正确，虚影朝向就自动正确。**
+    ==> **注意：若我们重写了 6 参版 getOffset，必须自己补 `withGhostState(...)`，否则没虚影。**
+
+================================================================================
+2. 本项目现状盘点（Dual Cannon 侧）
+================================================================================
+
+2.1 类型层次（src/main/java/com/cainiao1053/cbcmoreshells/cannons/dual_cannon/）
+
+  interface DualCannonBlock extends WeldableBlock, CannonContraptionProviderBlock,
+                                    InteractableCannonBlock
+      DualCannonMaterial getCannonMaterial();
+      Direction getFacing(BlockState);
+      DualCannonEnd getDefaultOpeningType();                 // CLOSED / OPEN / PARTIAL
+      DualCannonEnd getOpeningType(Level, BlockState, BlockPos);
+      DualCannonMaterial getCannonMaterialInLevel(LevelAccessor, BlockState, BlockPos);
+      static void onPlace(Level, BlockPos);                  // ★ 建立 connectedFace 的地方
+      （继承自 CannonContraptionProviderBlock）
+      default boolean canConnectToSide(BlockState state, Direction face) {
+          return this.getFacing(state).getAxis() == face.getAxis();   // 默认只看轴
+      }
+
+  abstract DualCannonBaseBlock extends DirectionalBlock implements DualCannonBlock
+      ├─ DualCannonBodyBlock                  （炮管 / 药室 / 装药段，OPEN）
+      ├─ DualCannonQuickfiringBreechBlock     （速射炮闩，CLOSED，多一个 AXIS 属性）
+      └─ abstract SolidDualCannonBlock<TE>
+             └─ DualCannonEndBlock            （底封，CLOSED；
+                                               getFacing() = FACING 取反；
+                                               canConnectToSide 只允许 getFacing 一侧）
+
+  DualCannonSlidingBreechBlock  **不继承 DualCannonBaseBlock**，
+      extends DirectionalAxisKineticBlock implements IBE<...>, DualCannonBlock
+      —— 因此 useItemOn / setPlacedBy 要单独重写一遍。
+
+2.2 物品：DualCannonBlockItem / SingleCannonBlockItem / DualCannonChargerBlockItem
+    三者结构相同，都在 `place(BlockPlaceContext)` 里：
+        InteractionResult result = super.place(context);
+        if (player != null && (material.properties().connectsInSurvival() || player.isCreative()))
+            DualCannonBlock.onPlace(context.getLevel(), context.getClickedPos());
+    ★ 这就是坑 1（见第 7 节）。
+
+2.3 组装侧语义（MountedDualCannonContraption.collectCannonBlocks）
+    - 从任意一块开始沿 `getFacing(state).getAxis()` 双向扫；
+    - 每一步要求 `isValidCannonBlock`（是 DualCannonBlock）
+      且 `isConnectedToCannon`（同材料 + 双方 cannonBehavior().isConnectedTo(...)）；
+    - 遇到 `getOpeningType != OPEN` 的方块就停（那一端算封闭端）；
+    - **`positiveEnd == negativeEnd` 直接 invalidCannon()**
+      ==> 一门合法的炮必须是"一端开、一端闭"，
+          这正是"只能有一个炮闩"的机制根源，我们的规则和它是一致的。
+    - `startPos` = 封闭端里面那一格；`startPos.relative(orientation.getOpposite())` = 炮闩。
+
+2.4 连接纹理：DualCannonCTBehavior
+    `buildContext()` 里会根据 `cBlock.getFacing(state).getAxisDirection()` 是否为
+    POSITIVE 来 **翻转 up/down 上下文**。
+    ==> **FACING 的正负号会影响连接纹理**，辅助放置必须把新方块的 FACING
+        对齐成被点击那块的 FACING（不能只对齐轴），否则一串炮管纹理会错位。
+        这是"每个方块自己决定放置状态"的接口方法存在的主要理由之一。
+
+2.5 注册入口
+    `Cbcmoreshells.init()`（src/main/java/com/cainiao1053/cbcmoreshells/Cbcmoreshells.java）
+    公共初始化，客户端/服务端都会走，适合放 `PlacementHelpers.register(...)`。
+
+================================================================================
+3. 炮管规则 vs Copycat 规则：差异与形式化
+================================================================================
+
+              Copycat Panel                      Dual Cannon
+  ------------------------------------------------------------------------------
+  候选方向     法线轴以外的 4 个方向              **只有轴向的 2 个方向**
+  放置位置     紧邻被点击方块                     **沿轴扫到该方向末端再 +1**
+  过滤条件     目标格可替换                       同材料 + 末端可向外延伸 + 可替换
+  状态对齐     复制 FACING                        复制 FACING（CT 需要）+ 炮闩另设 AXIS
+  数量约束     无                                 **一门炮至多一个封闭端（炮闩/底封）**
+
+3.1 名词定义（本方案统一用词）
+
+  - 「炮体串（run）」：包含被点击方块的、沿轴向的极大连续同材料 DualCannonBlock 序列。
+  - 「封闭块（closing block）」：`getDefaultOpeningType() != DualCannonEnd.OPEN`
+       的方块（速射炮闩、滑动炮闩、DualCannonEndBlock 底封）。
+       ★ 用 **getDefaultOpeningType()** 而不是 `getOpeningType(level,...)`：
+         速射炮闩打开时动态类型会变成 OPEN，不能用来判断结构。
+  - 「炮闩块（breech）」：封闭块的子集，语义上真正的炮闩。
+       新增 `DualCannonBlock#isBreechBlock(BlockState)`，默认 false，
+       由 DualCannonQuickfiringBreechBlock / DualCannonSlidingBreechBlock 覆写为 true。
+  - 「可向外延伸」：末端块 T 在方向 d 上能不能再接一块。规则：
+       * run 长度 >= 2：T 是封闭块 -> 不可延伸（炮已经在它内侧了，外侧就是炮尾）；
+                        T 不是封闭块 -> 看 `T.canConnectToSide(state, d)`。
+       * run 长度 == 1（只点了孤零零一块）：一律看 `canConnectToSide(state, d)`。
+         —— 这样"先放一个孤炮闩，再往视线方向接炮管"能正常工作；
+            孤底封因为自身 canConnectToSide 只允许一侧，也天然正确。
+       ★ 这个定义的好处：**完全不依赖炮闩 FACING 正负号的约定**（项目里
+         DualCannonQuickfiringBreechBlock 用 getNearestLookingDirection()、
+         DualCannonSlidingBreechBlock 用 getNearestLookingDirection().getOpposite()，
+         两者约定本来就不一致），只靠世界里的实际结构判断，稳。
+
+3.2 最终规则表
+
+  前置：手持物是 BlockItem 且其 block 是 DualCannonBlock；被点方块是 DualCannonBlock；
+        两者 DualCannonMaterial 相等；玩家未 Shift；player.mayBuild()。
+
+  (A) 手持 = 炮管类（非炮闩）
+      1. 扫 run，得到 endPos[+] / endPos[-]、以及两端是否"可向外延伸"。
+      2. 按视线（射线命中点）排序两个轴向；
+      3. 取第一个满足「可向外延伸 && 目标格 canBeReplaced()」的方向；
+      4. 都不满足 -> fail。
+      ==> 已有炮闩时，炮闩那一端天然"不可向外延伸"，所以自动只会往另一端接。
+          这正是需求里的"如果已有炮闩则只在另一端放置炮管"。
+
+  (B) 手持 = 炮闩类
+      1. 扫 run；若 run 中 **存在任何封闭块** -> fail（一门炮只有一个炮闩；
+         已有底封时再加炮闩会导致两端皆闭 -> invalidCannon）；
+      2. 否则按视线排序轴向，取第一个满足「可向外延伸 && 可替换」的方向；
+      3. 都不满足 -> fail。
+      ==> 这正是需求里的"当没有炮闩时会根据视线方向放置炮闩"。
+
+  (C) 长度上限
+      沿用 Create 的 `AllConfigs.server().equipment.placementAssistRange`
+      （PoleHelper 就用这个；带 ExtendoGrip 再 +4）作为扫描步数上限，
+      避免对超长炮做无界扫描。可另外叠一个和 collectCannonBlocks 一致的硬上限。
+
+3.3 "视线方向"的取法
+
+  首选：`IPlacementHelper.orderedByDistanceOnlyAxis(pos, ray.getLocation(), axis)`
+        —— 按"射线命中点相对方块中心"排序，和 Create 全系一致，稳定、可预期：
+           点端面 -> 就是那一端；点侧面 -> 取命中点偏向的那一端。
+  可选加强：当命中点在轴向上的偏移量 |d| < 0.05（正好点在侧面正中）时，
+        用 `player.getLookAngle().dot(Vec3.atLowerCornerOf(dir.getNormal()))`
+        做二次排序，让"看哪头就放哪头"更贴合直觉。
+
+================================================================================
+4. 方案总体设计（新增 / 修改文件清单）
+================================================================================
+
+4.1 新增
+
+  [N1] cannons/dual_cannon/placement/DualCannonPlacementHelper.java
+       implements IPlacementHelper。单例，全材料共用一个实例（材料判等在
+       getOffset 里做，不做成每材料一个 helper —— 材料几十种，注册几十个
+       helper 会让 PlacementClient 每 tick 空转）。
+
+       public static final DualCannonPlacementHelper INSTANCE = new ...;
+       public static final int ID = PlacementHelpers.register(INSTANCE);
+
+       getItemPredicate():
+           stack -> stack.getItem() instanceof BlockItem bi
+                    && bi.getBlock() instanceof DualCannonBlock
+       getStatePredicate():
+           state -> state.getBlock() instanceof DualCannonBlock
+
+       ★ 必须重写 **6 参** 的 getOffset（带 ItemStack），因为要知道手里拿的是
+         炮管还是炮闩、以及它的材料；并在成功时自己补 withGhostState：
+
+           @Override public PlacementOffset getOffset(Player p, Level l,
+                   BlockState s, BlockPos pos, BlockHitResult ray, ItemStack held) {
+               PlacementOffset o = compute(p, l, s, pos, ray, held);
+               if (o.isSuccessful() && held.getItem() instanceof BlockItem bi)
+                   o = o.withGhostState(bi.getBlock().defaultBlockState());
+               return o;
+           }
+           @Override public PlacementOffset getOffset(Player p, Level l,
+                   BlockState s, BlockPos pos, BlockHitResult ray) {
+               // 5 参版只在没有 stack 上下文时被调到；退化为主手 -> 副手
+               ...
+           }
+
+  [N2] cannons/dual_cannon/placement/DualCannonRun.java（可选，建议有）
+       扫描结果的小记录类：
+           record DualCannonRun(BlockPos endPositive, BlockPos endNegative,
+                                BlockState endPositiveState, BlockState endNegativeState,
+                                int lengthPositive, int lengthNegative,
+                                boolean hasBreech, boolean hasClosingBlock) {}
+       配一个 static scan(Level, BlockPos, Direction.Axis, DualCannonMaterial, int maxRange)。
+       —— 把扫描逻辑从 helper 里拆出来，后面 ProjectileRack / TorpedoTube 好复用。
+
+4.2 修改
+
+  [M1] cannons/dual_cannon/DualCannonBlock.java  —— 加 3 个默认方法
+       (a) default boolean isBreechBlock(BlockState state) { return false; }
+       (b) default boolean isClosingBlock(BlockState state) {
+               return this.getDefaultOpeningType() != DualCannonEnd.OPEN;
+           }
+       (c) default BlockState getAssistedPlacementState(
+                   BlockState newDefaultState, BlockState anchorState,
+                   Direction placementDir, @Nullable Player player) {
+               // 默认：把 FACING 对齐成被点击块的炮向（含正负号，CT 需要）
+               Direction anchorFacing = ((DualCannonBlock) anchorState.getBlock())
+                                            .getFacing(anchorState);
+               return newDefaultState.setValue(DirectionalBlock.FACING, anchorFacing);
+           }
+
+  [M2] DualCannonQuickfiringBreechBlock
+       - override isBreechBlock -> true
+       - override getAssistedPlacementState：在父类基础上再 `.setValue(AXIS, ...)`
+         （AXIS = DirectionalAxisKineticBlock.AXIS_ALONG_FIRST_COORDINATE；
+          按现有 getStateForPlacement 的语义取 player 朝向的轴是否为 Z）
+
+  [M3] DualCannonSlidingBreechBlock
+       - override isBreechBlock -> true
+       - override getAssistedPlacementState（FACING + AXIS_ALONG_FIRST_COORDINATE）
+       - **单独实现 useItemOn**（它不继承 DualCannonBaseBlock）
+       - **单独实现 setPlacedBy**（同上）
+
+  [M4] DualCannonEndBlock
+       - override getAssistedPlacementState：
+         它的 `getFacing()` 是 FACING 取反，所以这里要 `setValue(FACING, placementDir)`
+         （属性指向外侧 -> getFacing() 指回炮身 -> canConnectToSide 正确）。
+
+  [M5] DualCannonBaseBlock  —— 加 useItemOn（覆盖 Body / Quickfiring / Solid / End）
+       @Override
+       protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state,
+               Level level, BlockPos pos, Player player, InteractionHand hand,
+               BlockHitResult hit) {
+           if (!player.isShiftKeyDown() && player.mayBuild()) {
+               IPlacementHelper h = PlacementHelpers.get(DualCannonPlacementHelper.ID);
+               if (h.matchesItem(stack)) {
+                   PlacementOffset offset = h.getOffset(player, level, state, pos, hit, stack);
+                   if (offset.isSuccessful())      // ★ 和 Copycat 不同：失败就放行
+                       return offset.placeInWorld(level, (BlockItem) stack.getItem(),
+                                                  player, hand, hit);
+               }
+           }
+           return super.useItemOn(stack, state, level, pos, player, hand, hit);
+       }
+       注：Copycat 是无条件 return SUCCESS；我们在 fail 时 fall through 到 super，
+       这样"手持炮闩点一门已有炮闩的炮"仍能触发方块本身的其它交互，体验更好。
+       IWrenchable 不经过 useItemOn（扳手走 WrenchItem#useOn），不冲突。
+
+  [M6] DualCannonBaseBlock + DualCannonSlidingBreechBlock —— 加 setPlacedBy
+       @Override public void setPlacedBy(Level level, BlockPos pos, BlockState state,
+               @Nullable LivingEntity placer, ItemStack stack) {
+           super.setPlacedBy(level, pos, state, placer, stack);
+           DualCannonMaterial m = this.getCannonMaterial();
+           if (placer instanceof Player p && (m.properties().connectsInSurvival() || p.isCreative()))
+               DualCannonBlock.onPlace(level, pos);
+       }
+       ★ DualCannonSlidingBreechBlock 继承自 KineticBlock 链，super 调用不能省。
+
+  [M7] DualCannonBlockItem / SingleCannonBlockItem / DualCannonChargerBlockItem
+       **删掉 place() 里的 DualCannonBlock.onPlace 调用**（逻辑已迁到 M6），
+       否则普通放置会连接两次（重复粒子 + 重复 notifyUpdate）。
+       删完这三个 place() 重写体就只剩 super.place()，可以整个删掉该重写。
+
+  [M8] Cbcmoreshells.init()
+       加一行触发 helper 注册（触发类静态初始化即可）：
+           DualCannonPlacementHelper.init();     // 空方法，仅为触发 <clinit>
+       放在 CBCMSBlocks.register() 之后即可；注册顺序无要求。
+
+4.3 不需要做的事
+  - 不需要写任何渲染代码 / BER / RenderType（ponder 全包了）；
+  - 不需要注册任何客户端事件（CBCMSClientEvents 不用动）；
+  - 不需要加 mods.toml 依赖（ponder 随 Create 必装）；
+  - 不需要网络包（放置由服务端 useItemOn 执行，虚影纯客户端本地计算）。
+
+================================================================================
+5. 核心算法（扫描 + 选端 + 定向）伪代码
+================================================================================
+
+5.1 扫描
+
+  scan(level, from, dir, material, maxRange):
+      cur   = from
+      state = level.getBlockState(from)
+      len   = 0
+      hasBreech  = ((DualCannonBlock) state.getBlock()).isBreechBlock(state)
+      hasClosing = ((DualCannonBlock) state.getBlock()).isClosingBlock(state)
+      while (len < maxRange):
+          next = cur.relative(dir)
+          ns   = level.getBlockState(next)
+          if !(ns.getBlock() instanceof DualCannonBlock nb) break
+          if nb.getCannonMaterialInLevel(level, ns, next) != material break
+          if nb.getFacing(ns).getAxis() != dir.getAxis() break
+          // 物理相邻即可，**不要求 cannonBehavior().isConnectedTo**：
+          // connectsInSurvival=false 的材料在焊接前 connected 全 false，
+          // 用连接标志扫会让辅助功能对这些材料完全失效。
+          if !((DualCannonBlock) state.getBlock()).canConnectToSide(state, dir) break
+          if !nb.canConnectToSide(ns, dir.getOpposite()) break
+          cur = next; state = ns; len++
+          hasBreech  |= nb.isBreechBlock(ns)
+          hasClosing |= nb.isClosingBlock(ns)
+      return { endPos: cur, endState: state, length: len, hasBreech, hasClosing }
+
+5.2 可延伸判定
+
+  canExtend(run, dir):
+      DualCannonBlock t = (DualCannonBlock) run.endState.getBlock()
+      totalLen = runPositive.length + runNegative.length + 1
+      if (totalLen >= 2 && t.isClosingBlock(run.endState)) return false   // 炮尾外侧
+      return t.canConnectToSide(run.endState, dir)
+
+5.3 主流程
+
+  compute(player, level, clickedState, clickedPos, ray, heldStack):
+      if !(heldStack.getItem() instanceof BlockItem bi)                 return fail()
+      if !(bi.getBlock() instanceof DualCannonBlock heldBlock)          return fail()
+      if !(clickedState.getBlock() instanceof DualCannonBlock clicked)  return fail()
+
+      material = clicked.getCannonMaterialInLevel(level, clickedState, clickedPos)
+      if (heldBlock.getCannonMaterial() != material)                    return fail()
+
+      axis     = clicked.getFacing(clickedState).getAxis()
+      positive = Direction.get(POSITIVE, axis); negative = positive.getOpposite()
+      range    = AllConfigs.server().equipment.placementAssistRange.get()
+                 + (玩家带 ExtendoGrip ? 4 : 0)
+
+      runP = scan(level, clickedPos, positive, material, range)
+      runN = scan(level, clickedPos, negative, material, range)
+
+      heldIsBreech  = heldBlock.isBreechBlock(heldBlock.defaultBlockState())
+      cannonHasClosing = runP.hasClosing || runN.hasClosing        // 含被点击块自身
+
+      if (heldIsBreech && cannonHasClosing) return fail()          // 只能有一个炮闩
+
+      for (dir : IPlacementHelper.orderedByDistanceOnlyAxis(clickedPos, ray.getLocation(), axis)):
+          run = (dir == positive) ? runP : runN
+          if !canExtend(run, dir)                       continue
+          target = run.endPos.relative(dir)
+          if !level.getBlockState(target).canBeReplaced()  continue
+          if !level.isInWorldBounds(target)                continue
+          final Direction d = dir
+          return PlacementOffset.success(target,
+                     s -> heldBlock.getAssistedPlacementState(s, clickedState, d, player))
+      return fail()
+
+  注：`PlacementOffset.placeInWorld` 内部还会再做一次 `isReplaceable(level)` 与
+      `level.mayInteract(player, newPos)` 检查，权限/保护插件那一层它替我们兜住了。
+
+================================================================================
+6. 渲染：虚影与准星指示器（不需要自己写渲染代码）
+================================================================================
+
+6.1 虚影
+    来自 `GhostBlocks.getInstance().showGhostState(key, state).at(pos).breathingAlpha()`，
+    由 `IPlacementHelper.displayGhost(offset)` 默认实现触发。
+    我们只要保证 6 参 getOffset 里挂上了 ghostState（见 [N1]）。
+
+6.2 准星指示器
+    `PlacementClient.onRenderCrosshairOverlay` 由 ponder 的 ClientEvents 直接挂在
+    RenderGuiOverlay 上，会在准星旁画一个指向目标格的小箭头/贴图
+    （PonderConfig.client().placementIndicator：TRIANGLE / TEXTURE / NONE）。
+    我们不用管，注册了就有。
+
+6.3 需要提前知道的视觉限制
+    - GhostBlocks 只渲染 **静态方块模型**。速射炮闩 / 滑动炮闩的可动闩体是
+      BER（DualCannonQuickfiringBreechBlockEntityRenderer）+ flywheel visual 画的，
+      **虚影里不会出现闩体**，只有底座模型。属预期行为，Create 的泵、齿轮箱同理。
+      如果一定要全量预览，需要自己实现 `renderAt` 并手动画 PartialModel
+      —— 不建议在第一版做。
+    - 连接纹理（CT）在虚影里不会按邻居计算，虚影用的是 defaultBlockState 的
+      基础贴图，正式放下去才会连纹理。也是 Create 的既有行为。
+    - 可选增强：override `renderAt(...)`，在调用 `displayGhost(offset)` 之外再加
+      `Outliner.getInstance().showAABB(key, aabb).colored(...).lineWidth(1/16f)`
+      给目标格描边，或用 `IPlacementHelper.renderArrow(...)` 画一个从被点击块
+      指向目标格的箭头 —— 对"炮管会接到很远的另一头"这个行为，箭头提示价值很大，
+      建议第二版加上。
+
+================================================================================
+7. 三个必须处理的坑
+================================================================================
+
+【坑 1 ★★★】placeInWorld 绕过 BlockItem.place
+    `PlacementOffset.placeInWorld` 的实际动作是：
+        state = transform.apply(blockItem.getBlock().defaultBlockState())
+        if (state.hasProperty(WATERLOGGED)) 按目标格流体设置
+        CatnipServices.HOOKS.playerPlaceSingleBlock(player, world, newPos, state)
+            -> level.setBlockAndUpdate(pos, newState) + EntityPlaceEvent
+        ... playSound / gameEvent / awardStat
+        newState.getBlock().setPlacedBy(world, newPos, newState, player, stackBefore)
+        if (!player.isCreative()) context.getItemInHand().shrink(1)
+    **完全不经过 BlockItem.place / getStateForPlacement**。
+    后果：
+      a) 炮管连接（DualCannonBlock.onPlace）不执行 -> 炮装不起来。
+         解法见 [M6]/[M7]：迁移到 setPlacedBy。
+      b) `getStateForPlacement` 不执行 -> 状态完全由我们的 transform 决定。
+         所以炮闩的 AXIS、底封的 FACING 反转都必须在
+         `getAssistedPlacementState` 里显式写出来，漏一个就会出现
+         "辅助放的炮闩朝向和手动放的不一样"。
+
+【坑 2 ★★】material 相等性用哪个方法
+    扫描/判等一律用 `getCannonMaterialInLevel(level, state, pos)`
+    （与 MountedDualCannonContraption.isConnectedToCannon 保持一致），
+    手持物那侧没有世界坐标，用 `getCannonMaterial()`。
+    SINGLE_STEEL 与 STEEL 是两个不同 material，单管炮和双管炮天然不会互相吸附，
+    符合预期，不要特殊处理。
+
+【坑 3 ★★】封闭判定必须用 getDefaultOpeningType
+    `DualCannonSlidingBreechBlock.getOpeningType(level, state, pos)` 会在闩体打开时
+    返回 OPEN。若用它判断"这端是否封闭"，玩家开着炮闩时辅助放置就会允许往
+    炮闩背后接炮管，装配时直接 invalidCannon。必须用 `getDefaultOpeningType()`。
+
+【次要提醒】
+  - `useItemOn` 在客户端也会被调用一次，`placeInWorld` 在 `world.isClientSide`
+    时直接 return SUCCESS（只出手臂挥动动画），不会双放，无需自己判边。
+  - Shift 按下时 helper 整体不生效（PlacementClient 与 useItemOn 都判了
+    `isShiftKeyDown`），玩家想精确手动放置时的逃生口，别去掉。
+  - helper 一旦注册，只要手持任意 DualCannonBlock 物品看向任意 DualCannonBlock
+    方块，`getOffset` 每 tick 都会跑一次（客户端）。扫描要早退、别做 BlockEntity
+    查询（我们的方案只读 BlockState，OK）。
+
+================================================================================
+8. 实施顺序与逐步验证清单
+================================================================================
+
+  步骤 1  [M1] 给 DualCannonBlock 加 isBreechBlock / isClosingBlock /
+               getAssistedPlacementState 三个默认方法。
+          验证：编译通过，行为零变化。
+
+  步骤 2  [M2][M3][M4] 三个子类覆写。
+          验证：编译通过；`getAssistedPlacementState` 对着现有
+                getStateForPlacement 逐属性核对（FACING 正负、AXIS）。
+
+  步骤 3  [M6][M7] 连接逻辑迁移到 setPlacedBy，删掉 3 个 BlockItem 的 place()。
+          验证（先于任何辅助功能）：
+            - 手动依次摆 3 节炮管 -> 仍有连接粒子，仍能被炮架装配；
+            - 粒子只出现一次（没有重复）；
+            - connectsInSurvival=false 的材料在生存下仍然不自动连接、焊接后可用；
+            - 创造模式下同材料仍自动连接。
+
+  步骤 4  [N2] 扫描类 + [N1] helper（先只做"手持炮管类"分支，炮闩分支直接 fail）。
+          [M8] 注册。
+          验证：手持炮管看向同材料炮管 -> 出现虚影 + 准星箭头；
+                看向异材料 -> 无虚影；Shift -> 无虚影。
+
+  步骤 5  [M5]+[M3] useItemOn。
+          验证：右键 -> 炮管接在正确的末端；生存模式扣物品；
+                目标格被占 -> 换另一端；两端都被占 -> 走原版放置逻辑。
+
+  步骤 6  打开 helper 的炮闩分支。
+          验证矩阵：
+            - 光炮管一串（无炮闩）+ 手持炮闩 -> 按视线方向放到任一端；
+            - 已有炮闩 + 手持炮闩 -> 无虚影、右键不放置（fall through）；
+            - 已有炮闩 + 手持炮管 -> 只能接在炮闩的对侧；
+            - 已有底封（DualCannonEndBlock）+ 手持炮闩 -> 无虚影（避免两端皆闭）；
+            - 孤零零一个炮闩 + 手持炮管 -> 按视线方向接上；
+            - 孤零零一个底封 + 手持炮管 -> 只能接在底封 getFacing() 那一侧。
+
+  步骤 7  端到端：用辅助功能拼一门完整的炮（炮闩 + N 节炮管 + 可选底封/炮口），
+          装到炮架上组装、装填、开火。
+          验证：MountedDualCannonContraption.assemble 不抛 invalidCannon /
+                hasIncompleteCannonBlocks；连接纹理沿整条炮身连贯（验证 [M1](c)
+                复制 FACING 正负号是有效的）。
+
+  步骤 8（可选）虚影目标格描边 / 箭头提示（6.3）。
+
+================================================================================
+9. 可选扩展（ProjectileRack / TorpedoTube 复用）
+================================================================================
+
+`cannons/projectile_rack/` 与 `cannons/torpedo_tube/` 两套是 dual_cannon 的
+同构拷贝（ProjectileRackBaseBlock / ProjectileRackBlock / ProjectileRackEndBlock…，
+TorpedoTubeBaseBlock / TorpedoTubeBlock / TorpedoTubeEndBlock…，
+连 canConnectToSide、onPlace、CTBehavior 的结构都一模一样）。
+
+若要一并支持，推荐把 [N1][N2] 泛型化，而不是复制三份：
+
+    abstract class AxialCannonPlacementHelper<B> implements IPlacementHelper {
+        abstract Optional<B> asCannonBlock(Block block);
+        abstract Object materialOf(B block, ...);
+        abstract Direction facingOf(B block, BlockState state);
+        abstract boolean isClosing(B block, BlockState state);
+        abstract boolean isBreech(B block, BlockState state);
+        abstract BlockState assistedState(B held, BlockState def, BlockState anchor,
+                                          Direction dir, Player player);
+    }
+
+三个家族各写一个 ~30 行的子类 + 各自注册一次即可。
+建议第一版只做 dual_cannon，跑通后再泛型化，避免一次性改动面过大。
+
+================================================================================
+10. 关键 API 速查表（均已从 jar 反编译核对，1.21.1 / Create 6.0.10-280 /
+    ponder-neoforge 1.0.8x）
+================================================================================
+
+  放置辅助（ponder-neoforge jar 内，catnip）
+    net.createmod.catnip.placement.IPlacementHelper
+    net.createmod.catnip.placement.PlacementHelpers   #register / #get / #getHelpersView
+    net.createmod.catnip.placement.PlacementOffset    #fail / #success / #withTransform
+                                                      #withGhostState / #placeInWorld
+    net.createmod.catnip.placement.PlacementClient    （ponder 自己调，别碰）
+    net.createmod.catnip.ghostblock.GhostBlocks       #showGhostState(...).breathingAlpha()
+    net.createmod.catnip.outliner.Outliner            #showAABB / #showLine
+
+  Create 侧参考实现
+    com.simibubi.create.content.decoration.copycat.CopycatPanelBlock$PlacementHelper
+    com.simibubi.create.foundation.placement.PoleHelper            ← 炮管真正的模板
+    com.simibubi.create.content.kinetics.simpleRelays.ShaftBlock$PlacementHelper
+    com.simibubi.create.content.decoration.girder.GirderPlacementHelper
+    配置：AllConfigs.server().equipment.placementAssistRange
+
+  MC 1.21.1 交互签名（注意 1.20 -> 1.21 的变化）
+    protected ItemInteractionResult useItemOn(ItemStack, BlockState, Level, BlockPos,
+                                              Player, InteractionHand, BlockHitResult)
+    public void setPlacedBy(Level, BlockPos, BlockState, @Nullable LivingEntity, ItemStack)
+    BlockState#canBeReplaced()                （原来的 material.isReplaceable）
+
+  本项目关键位置
+    DualCannonBlock#onPlace                       DualCannonBlock.java:122
+    DualCannonBlock#canConnectToSide 默认实现      （CannonContraptionProviderBlock，同轴即可）
+    DualCannonBaseBlock#getStateForPlacement      DualCannonBaseBlock.java:44
+    DualCannonQuickfiringBreechBlock#AXIS         DualCannonQuickfiringBreechBlock.java:60
+    DualCannonEndBlock#getFacing（取反）           DualCannonEndBlock.java:37
+    DualCannonCTBehavior#buildContext（正负号翻转） DualCannonCTBehavior.java:67
+    MountedDualCannonContraption#collectCannonBlocks  行 126-220（一开一闭的约束）
+    Cbcmoreshells#init                            Cbcmoreshells.java:56
+
+================================================================================
+（完）本文档只描述方案，未改动任何代码。
+================================================================================
