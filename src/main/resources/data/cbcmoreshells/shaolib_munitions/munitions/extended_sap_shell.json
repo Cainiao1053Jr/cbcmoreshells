@@ -1,0 +1,72 @@
+{
+  "ballistics": {
+    "gravity": -0.06,
+    "drag": 0.01,
+    "quadratic_drag": false,
+    "durability_mass": 2.75,
+    "penetration": 2.0,
+    "toughness": 1.0,
+    "deflection": 0.342
+  },
+  "runtime": {
+    "max_distance": 900.0,
+    "terminal_ttl_ticks": 80,
+    "detonation_ttl_ticks": 10
+  },
+  "impact": {
+    "stop_speed": 0.25,
+    "max_penetrations": 32,
+    "max_ricochets": 1,
+    "can_bounce": true,
+    "break_blocks": true,
+    "base_bounce_chance": 0.05,
+    "min_velocity_for_penetration_bonus": 2.0,
+    "penetration_bonus_scale": 0.15,
+    "bounce_velocity_retained": 0.62,
+    "penetration_velocity_retained": 0.92,
+    "minimum_velocity_retained": 0.25,
+    "bounce_exit_distance": 0.08,
+    "penetration_exit_distance": 0.42
+  },
+  "effects": {
+    "block_hit_effects": true,
+    "trail_smoke": true,
+    "flyby_sound": true,
+    "cbc_projectile_effect_entity": "createbigcannons:ap_shell",
+    "explosion": {
+      "kind": "cbc_shell",
+      "power": 3.5,
+      "fire": false,
+      "no_effects": false
+    }
+  },
+  "damage": {
+    "entity_damage": 40.0,
+    "renders_invulnerable": true,
+    "ignores_invulnerability": true,
+    "ignores_entity_armor": true,
+    "knockback": 2.0
+  },
+  "dual_cannon": {
+    "added_charge_power": 0.0,
+    "minimum_charge_power": 1.0,
+    "can_squib": true,
+    "added_recoil": 1.0,
+    "initial_velocity": 14.0,
+    "projectile_spread": 8.0,
+    "minimum_spread": 0.4,
+    "reload_time_coefficient": 1.25,
+    "cooldown_reduction_rate": 2.0,
+    "baseRecoil": 1.25,
+    "baseLifetime": 10
+  },
+  "dual_impact": {
+    "smash_toughness": 0.0,
+    "maximum_momentum": 60.0,
+    "spall_explosion_power": 1.0,
+    "high_penetration_mass_penalty_scale": 1.3,
+    "penetration_mass_penalty_scale": 1.0,
+    "bounce_mass_penalty_scale": 0.333,
+    "minDeflection": 0.259
+  }
+}

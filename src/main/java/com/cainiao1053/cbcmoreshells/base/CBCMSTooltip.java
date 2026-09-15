@@ -68,12 +68,13 @@ public class CBCMSTooltip {
 		tooltip.add(Component.literal(" " + I18n.get(rootKey + ".accuracy")).withStyle(ChatFormatting.GRAY));
 		float spread = material.minimumSpread();
 		float spreadReduction = material.spreadReductionPerBarrel();
+		int caliber = material.refCaliber();
 
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(rootKey + ".accuracy.info", spreadReduction, spread),
 				palette.primary(), palette.highlight(), 2));
 
 		tooltip.add(Component.literal(" " + I18n.get(rootKey + ".damageMultiplier")).withStyle(ChatFormatting.GRAY));
-		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(rootKey + ".damageMultiplier.info", material.durabilityMassModifier()),
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(rootKey + ".damageMultiplier.info", caliber, material.durabilityMassModifier()),
 				palette.primary(), palette.highlight(), 2));
 
 		tooltip.add(Component.literal(" " + I18n.get(rootKey + ".addedLifetime")).withStyle(ChatFormatting.GRAY));
@@ -108,12 +109,13 @@ public class CBCMSTooltip {
 		tooltip.add(Component.literal(" " + I18n.get(rootKey + ".accuracy")).withStyle(ChatFormatting.GRAY));
 		float spread = material.minimumSpread();
 		float spreadReduction = material.spreadReductionPerBarrel();
+		int caliber = material.refCaliber();
 
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(rootKey + ".accuracy.info", spreadReduction, spread),
 				palette.primary(), palette.highlight(), 2));
 
 		tooltip.add(Component.literal(" " + I18n.get(rootKey + ".damageMultiplier")).withStyle(ChatFormatting.GRAY));
-		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(rootKey + ".damageMultiplier.info", material.durabilityMassModifier()),
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(rootKey + ".damageMultiplier.info", caliber, material.durabilityMassModifier()),
 				palette.primary(), palette.highlight(), 2));
 
 		tooltip.add(Component.literal(" " + I18n.get(rootKey + ".addedLifetime")).withStyle(ChatFormatting.GRAY));

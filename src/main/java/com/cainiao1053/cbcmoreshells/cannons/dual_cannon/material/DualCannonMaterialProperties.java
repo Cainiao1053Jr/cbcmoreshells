@@ -20,7 +20,7 @@ public record DualCannonMaterialProperties(double minimumVelocityPerBarrel, floa
 										  int weldDamage, int weldStressPenalty, float minimumSpread,
 										  float spreadReductionPerBarrel, int addedLifetime, float reloadTimeModifier,
 										   float durabilityMassModifier, float barrelGap, int combatCommandCooldown, int combatCommandDuration, boolean isSingleBarrel,
-										   float recoilMultiplier
+										   float recoilMultiplier, int refCaliber
 ) {
 
 	public DualCannonMaterialProperties {
@@ -74,9 +74,10 @@ public record DualCannonMaterialProperties(double minimumVelocityPerBarrel, floa
 		int combatCommandDuration = Math.max(GsonHelper.getAsInt(obj, "combat_command_duration", 400), 0);
 		boolean isSingleBarrel = GsonHelper.getAsBoolean(obj, "is_single_barrel", false);
 		float recoilMultiplier = Math.max(GsonHelper.getAsFloat(obj, "recoil_multiplier", 1), 0);
+		int refCaliber = Math.max(GsonHelper.getAsInt(obj, "ref_caliber", 100), 0);
 		return new DualCannonMaterialProperties(minimumVelocityPerBarrel, weight, maxSafeBaseCharges, failureMode,
 			connectsInSurvival, isWeldable, weldDamage, weldStressPenalty, minimumSpread, spreadReductionPerBarrel, addedLifetime, reloadTimeModifier, durabilityMassModifier, barrelGap,
-				combatCommandCooldown, combatCommandDuration, isSingleBarrel, recoilMultiplier);
+				combatCommandCooldown, combatCommandDuration, isSingleBarrel, recoilMultiplier, refCaliber);
 	}
 
 	public JsonObject serialize() {
@@ -99,6 +100,7 @@ public record DualCannonMaterialProperties(double minimumVelocityPerBarrel, floa
 		obj.addProperty("combat_command_duration", this.combatCommandDuration);
 		obj.addProperty("is_single_barrel", this.isSingleBarrel);
 		obj.addProperty("recoil_multiplier", this.recoilMultiplier);
+		obj.addProperty("ref_caliber", this.refCaliber);
 		return obj;
 	}
 
@@ -120,7 +122,8 @@ public record DualCannonMaterialProperties(double minimumVelocityPerBarrel, floa
 		buf.writeVarInt(this.combatCommandCooldown);
 		buf.writeVarInt(this.combatCommandDuration)
 				.writeBoolean(this.isSingleBarrel)
-				.writeFloat(recoilMultiplier);
+				.writeFloat(recoilMultiplier)
+				.writeInt(refCaliber);
 	}
 
 	public static DualCannonMaterialProperties fromBuf(FriendlyByteBuf buf) {
@@ -142,9 +145,10 @@ public record DualCannonMaterialProperties(double minimumVelocityPerBarrel, floa
 		int combatCommandDuration = buf.readVarInt();
 		boolean isSingleBarrel = buf.readBoolean();
 		float recoilMultiplier = buf.readFloat();
+		int refCaliber = buf.readInt();
 		return new DualCannonMaterialProperties(minimumVelocityPerBarrel, weight, maxSafeBaseCharges, mode, connectsInSurvival,
 			isWeldable, weldDamage, weldStressPenalty, minimumSpread, spreadReductionPerBarrel, addedLifetime, reloadTimeModifier, durabilityMassModifier, barrelGap,
-				combatCommandCooldown, combatCommandDuration, isSingleBarrel, recoilMultiplier);
+				combatCommandCooldown, combatCommandDuration, isSingleBarrel, recoilMultiplier, refCaliber);
 	}
 
 	public enum FailureMode implements StringRepresentable {
@@ -193,6 +197,7 @@ public record DualCannonMaterialProperties(double minimumVelocityPerBarrel, floa
 		private int combatCommandDuration;
 		private boolean isSingleBarrel;
 		private float recoilMultiplier;
+		private int refCaliber;
 
 		private Builder() {
 		}
@@ -288,6 +293,11 @@ public record DualCannonMaterialProperties(double minimumVelocityPerBarrel, floa
 			return this;
 		}
 
+		public Builder refCaliber(int refCaliber){
+			this.refCaliber = refCaliber;
+			return this;
+		}
+
 		public DualCannonMaterialProperties build() {
 			if (this.failureMode == null) {
 				throw new IllegalStateException("Missing required property: failureMode");
@@ -295,7 +305,8 @@ public record DualCannonMaterialProperties(double minimumVelocityPerBarrel, floa
 			return new DualCannonMaterialProperties(this.minimumVelocityPerBarrel, this.weight,
 				this.maxSafePropellantStress, this.failureMode, this.connectsInSurvival, this.isWeldable,
 				this.weldDamage, this.weldStressPenalty, this.minimumSpread, this.spreadReductionPerBarrel, this.addedLifetime, this.reloadTimeModifier,
-					this.durabilityMassModifier, this.barrelGap, this.combatCommandCooldown, this.combatCommandDuration, this.isSingleBarrel, this.recoilMultiplier);
+					this.durabilityMassModifier, this.barrelGap, this.combatCommandCooldown, this.combatCommandDuration, this.isSingleBarrel, this.recoilMultiplier,
+					this.refCaliber);
 		}
 	}
 }

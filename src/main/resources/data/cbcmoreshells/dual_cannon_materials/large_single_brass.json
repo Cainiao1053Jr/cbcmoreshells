@@ -12,9 +12,10 @@
   "added_lifetime": 75.0,
   "reload_time_modifier": 2.52,
   "durability_mass_modifier": 1.85,
-  "barrel_gap": 1.0,
+  "barrel_gap": 0.0,
   "combat_command_cooldown": 2400,
   "combat_command_duration": 500,
   "is_single_barrel": true,
-  "recoil_multiplier": 6.0
+  "recoil_multiplier": 64.52499375000001,
+  "ref_caliber": 283
 }

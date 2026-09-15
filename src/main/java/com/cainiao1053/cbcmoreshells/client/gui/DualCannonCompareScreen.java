@@ -123,9 +123,6 @@ public class DualCannonCompareScreen extends AbstractSimiScreen {
 		if (this.pageControls != null) this.pageControls.refresh();
 	}
 
-	// -------------------------------------------------------------------------------------------
-	// Layout
-	// -------------------------------------------------------------------------------------------
 
 	private int computeWidth() {
 		int table = NAME_COLUMN + this.table.materialStats().size() * STAT_COLUMN
@@ -150,9 +147,6 @@ public class DualCannonCompareScreen extends AbstractSimiScreen {
 			+ column * BALLISTIC_COLUMN;
 	}
 
-	// -------------------------------------------------------------------------------------------
-	// Rendering
-	// -------------------------------------------------------------------------------------------
 
 	@Override
 	protected void renderWindow(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {

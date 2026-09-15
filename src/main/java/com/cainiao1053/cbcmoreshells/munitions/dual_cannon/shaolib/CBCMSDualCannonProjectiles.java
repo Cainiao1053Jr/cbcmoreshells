@@ -38,6 +38,15 @@ public final class CBCMSDualCannonProjectiles {
 	public static final ProjectileType<DualCannonState> NORMAL_SAP_SHELL =
 		register("normal_sap_shell", CBCMSDualCannonPropertyTypes.NORMAL_SAP_SHELL, DualCannonBehavior.Kind.SAP);
 
+	public static final ProjectileType<DualCannonState> NORMAL_SAP_SUPER_HEAVY_SHELL =
+			register("normal_sap_super_heavy_shell", CBCMSDualCannonPropertyTypes.NORMAL_SAP_SUPER_HEAVY_SHELL, DualCannonBehavior.Kind.HSAP);
+
+	public static final ProjectileType<DualCannonState> EXTENDED_SAP_SHELL =
+			register("extended_sap_shell", CBCMSDualCannonPropertyTypes.EXTENDED_SAP_SHELL, DualCannonBehavior.Kind.SAP);
+
+	public static final ProjectileType<DualCannonState> BALL =
+			register("ball", CBCMSDualCannonPropertyTypes.BALL, DualCannonBehavior.Kind.AP_SHOT);
+
 	public static final ProjectileType<DualCannonState> NORMAL_INCENDIARY_HE_SHELL =
 		register("normal_incendiary_he_shell", CBCMSDualCannonPropertyTypes.NORMAL_INCENDIARY_HE_SHELL,
 			DualCannonBehavior.Kind.INCENDIARY);

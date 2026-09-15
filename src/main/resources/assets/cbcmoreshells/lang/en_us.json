@@ -163,7 +163,7 @@
     "block.cbcmoreshells.dual_cannon.tooltip.accuracy": "Accuracy",
     "block.cbcmoreshells.dual_cannon.tooltip.accuracy.info": "Each barrel reduces dispersion by _%s_, with a minimum dispersion of _%s_",
     "block.cbcmoreshells.dual_cannon.tooltip.damageMultiplier": "Damage",
-    "block.cbcmoreshells.dual_cannon.tooltip.damageMultiplier.info": "Damage multiplier is _%s_, the actual effect depends on projectile features",
+    "block.cbcmoreshells.dual_cannon.tooltip.damageMultiplier.info": "Reference Caliber is _%smm_, Damage multiplier is _%s_, the actual effect depends on projectile features",
     "block.cbcmoreshells.dual_cannon.tooltip.addedLifetime": "Available Range",
     "block.cbcmoreshells.dual_cannon.tooltip.addedLifetime.info": "Additional projectile lifetime is _%s_",
     "block.cbcmoreshells.dual_cannon.tooltip.reloadTime": "Reload Time",

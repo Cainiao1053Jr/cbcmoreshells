@@ -62,7 +62,7 @@
     "block.cbcmoreshells.long_range_torpedo.tooltip.torpInfo": "普通鱼雷",
     "block.cbcmoreshells.long_range_torpedo.tooltip.torpInfo.main": "这种鱼雷的最大速度为_%s_节，浮力系数为_%s_，最大射程为_%s_m，起始有效距离为_%s_m，装填时间为_%s_s",
     "block.cbcmoreshells.long_range_torpedo": "长程鱼雷",
-    "block.cbcmoreshells.antiblast_panel": "无碰撞防爆伪装板",
+    "block.cbcmoreshells.antiblast_panel": "不防爆的无碰撞防爆伪装板(历史遗留，别用)",
     "block.cbcmoreshells.antiair_he_shell": "防空高爆",
     "block.cbcmoreshells.antiair_he_shell.tooltip.title":"防空高爆",
     "block.cbcmoreshells.antiair_he_shell.tooltip.desc":"这种炮弹的爆炸威力会随着高度变高逐渐增加",
@@ -161,7 +161,7 @@
     "block.cbcmoreshells.dual_cannon.tooltip.accuracy": "精度",
     "block.cbcmoreshells.dual_cannon.tooltip.accuracy.info": "每根炮管降低 _%s_ 的散步，最低散步为 _%s_",
     "block.cbcmoreshells.dual_cannon.tooltip.damageMultiplier": "伤害",
-    "block.cbcmoreshells.dual_cannon.tooltip.damageMultiplier.info": "伤害乘数为 _%s_ ，具体效果和弹头也有关联",
+    "block.cbcmoreshells.dual_cannon.tooltip.damageMultiplier.info": "参考口径为 _%smm_，伤害乘数为 _%s_ ，具体效果和弹头也有关联",
     "block.cbcmoreshells.dual_cannon.tooltip.addedLifetime": "射程",
     "block.cbcmoreshells.dual_cannon.tooltip.addedLifetime.info": "发射的弹药追加 _%s_ 秒最大存续时间",
     "block.cbcmoreshells.dual_cannon.tooltip.reloadTime": "装填",
@@ -613,5 +613,7 @@
     "block.cbcmoreshells.material.large_single_military_slate_alloy": "超宽单军用板岩合金",
     "block.cbcmoreshells.material.large_single_nether_steel": "超宽单下界钢",
     "block.cbcmoreshells.slate_steel_block": "板岩合金块",
-    "item.cbcmoreshells.slate_steel_ingot": "板岩合金锭"
+    "item.cbcmoreshells.slate_steel_ingot": "板岩合金锭",
+    "block.cbcmoreshells.ball": "标准皮球弹",
+    "block.cbcmoreshells.ball.main": "这是一个可以发射出去的皮球，能够反复弹跳，伤害不高但是看起来很好玩。(据说是充气铅球，不要被砸到了)"
 }

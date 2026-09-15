@@ -1,0 +1,30 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "cbcmoreshells:block/ball",
+      "x": 90
+    },
+    "facing=down": {
+      "model": "cbcmoreshells:block/ball",
+      "x": 180
+    },
+    "facing=east": {
+      "model": "cbcmoreshells:block/ball",
+      "x": 90,
+      "y": 90
+    },
+    "facing=south": {
+      "model": "cbcmoreshells:block/ball",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up": {
+      "model": "cbcmoreshells:block/ball"
+    },
+    "facing=west": {
+      "model": "cbcmoreshells:block/ball",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

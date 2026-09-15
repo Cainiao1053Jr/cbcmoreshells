@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "": {
+      "model": "cbcmoreshells:block/ball_block",
+      "x": 90
+    }
+  }
+}

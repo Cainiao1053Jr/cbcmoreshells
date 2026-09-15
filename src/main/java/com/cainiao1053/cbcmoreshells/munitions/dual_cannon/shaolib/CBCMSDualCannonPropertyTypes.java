@@ -30,6 +30,14 @@ public final class CBCMSDualCannonPropertyTypes {
 		DualCannonProjectileProperties.createType(id("normal_sap_shell"),
 			DualCannonProjectileProperties::normalSapShellFallback);
 
+	public static final MunitionPropertyType<DualCannonProjectileProperties> EXTENDED_SAP_SHELL =
+			DualCannonProjectileProperties.createType(id("extended_sap_shell"),
+					DualCannonProjectileProperties::extendedSapShellFallback);
+
+	public static final MunitionPropertyType<DualCannonProjectileProperties> NORMAL_SAP_SUPER_HEAVY_SHELL =
+			DualCannonProjectileProperties.createType(id("normal_sap_super_heavy_shell"),
+					DualCannonProjectileProperties::normalSapSuperHeavyShellFallback);
+
 	public static final MunitionPropertyType<DualCannonIncendiaryProjectileProperties> NORMAL_INCENDIARY_HE_SHELL =
 		DualCannonIncendiaryProjectileProperties.createType(id("normal_incendiary_he_shell"),
 			DualCannonIncendiaryProjectileProperties::normalIncendiaryHeShellFallback);
@@ -41,6 +49,10 @@ public final class CBCMSDualCannonPropertyTypes {
 	public static final MunitionPropertyType<DualCannonProjectileProperties> EXTENDED_ANTIAIR_HE_SHELL =
 		DualCannonProjectileProperties.createType(id("extended_antiair_he_shell"),
 			DualCannonProjectileProperties::extendedAntiairHeShellFallback);
+
+	public static final MunitionPropertyType<DualCannonProjectileProperties> BALL =
+			DualCannonProjectileProperties.createType(id("ball"),
+					DualCannonProjectileProperties::ballFallback);
 
 	private CBCMSDualCannonPropertyTypes() {}
 

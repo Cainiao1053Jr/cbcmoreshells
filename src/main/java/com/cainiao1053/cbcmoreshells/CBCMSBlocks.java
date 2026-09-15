@@ -85,10 +85,14 @@ import com.cainiao1053.cbcmoreshells.munitions.big_cannon.shelless_sap_shell.She
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.shelless_sap_shell.ShellessSAPShellBlock;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.shellless_ap_shot.ShellessAPProjectileBlockItem;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.shellless_ap_shot.ShellessAPShotBlock;
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.ball.BallBlock;
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.ball.BallBlockItem;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.extended_antiair_he_shell.ExtendedAntiairHEShellBlock;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.extended_antiair_he_shell.ExtendedAntiairHEShellBlockItem;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.extended_ap_shot.ExtendedAPShotBlock;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.extended_ap_shot.ExtendedAPShotBlockItem;
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.extended_sap_shell.ExtendedSAPShellBlock;
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.extended_sap_shell.ExtendedSAPShellBlockItem;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_antiair_he_shell.NormalAntiairHEShellBlock;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_antiair_he_shell.NormalAntiairHEShellBlockItem;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_ap_shell.NormalAPShellBlock;
@@ -103,6 +107,8 @@ import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_incendiary_he_
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_incendiary_he_shell.NormalIncendiaryHEShellBlockItem;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_sap_shell.NormalSAPShellBlock;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_sap_shell.NormalSAPShellBlockItem;
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_sap_super_heavy_shell.NormalSAPSuperHeavyShellBlock;
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_sap_super_heavy_shell.NormalSAPSuperHeavyShellBlockItem;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.aphe_bomb.APHEBombBlock;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.aphe_bomb.APHEBombBlockItem;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.aphe_bouncing_bomb.APHEBouncingBombBlock;
@@ -1045,6 +1051,30 @@ public class CBCMSBlocks {
 			.build()
 			.register();
 
+	public static final BlockEntry<NormalSAPSuperHeavyShellBlock> NORMAL_SAP_SUPER_HEAVY_SHELL = REGISTRATE
+			.block("normal_sap_super_heavy_shell", NormalSAPSuperHeavyShellBlock::new)
+			.transform(shell(MapColor.COLOR_YELLOW))
+			.transform(axeOrPickaxe())
+			.transform(CBCBuilderTransformers.projectile("projectile/normal_sap_super_heavy_shell"))
+			//.transform(CBCBuilderTransformers.safeNbt())
+			.loot(CBCBuilderTransformers.shellLoot())
+			.item(NormalSAPSuperHeavyShellBlockItem::new)
+			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
+			.build()
+			.register();
+
+	public static final BlockEntry<ExtendedSAPShellBlock> EXTENDED_SAP_SHELL = REGISTRATE
+			.block("extended_sap_shell", ExtendedSAPShellBlock::new)
+			.transform(shell(MapColor.COLOR_YELLOW))
+			.transform(axeOrPickaxe())
+			.transform(CBCBuilderTransformers.projectile("projectile/extended_sap_shell"))
+			//.transform(CBCBuilderTransformers.safeNbt())
+			.loot(CBCBuilderTransformers.shellLoot())
+			.item(ExtendedSAPShellBlockItem::new)
+			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
+			.build()
+			.register();
+
 	public static final BlockEntry<NormalAPShellBlock> NORMAL_AP_SHELL = REGISTRATE
 			.block("normal_ap_shell", NormalAPShellBlock::new)
 			.transform(shell(MapColor.COLOR_YELLOW))
@@ -1122,11 +1152,27 @@ public class CBCMSBlocks {
 			.build()
 			.register();
 
+	public static final BlockEntry<BallBlock> BALL = REGISTRATE
+			.block("ball", BallBlock::new)
+			.transform(shell(MapColor.COLOR_YELLOW))
+			.transform(axeOrPickaxe())
+			.transform(CBCBuilderTransformers.projectile("projectile/ball"))
+			//.transform(CBCBuilderTransformers.safeNbt())
+			.loot(CBCBuilderTransformers.shellLoot())
+			.item(BallBlockItem::new)
+			.tag(CBCTags.CBCItemTags.BIG_CANNON_PROJECTILES)
+			.build()
+			.register();
+
 
 
 
 	public static final BlockEntry<Block> NORMAL_AP_SHOT_BLOCK = REGISTRATE
 			.block("normal_ap_shot_block", Block::new)
+			.register();
+
+	public static final BlockEntry<Block> BALL_BLOCK = REGISTRATE
+			.block("ball_block", Block::new)
 			.register();
 
 	public static final BlockEntry<Block> NORMAL_HE_SHELL_BLOCK = REGISTRATE

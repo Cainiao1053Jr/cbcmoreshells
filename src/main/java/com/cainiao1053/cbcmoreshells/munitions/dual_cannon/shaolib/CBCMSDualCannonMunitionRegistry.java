@@ -114,10 +114,23 @@ public final class CBCMSDualCannonMunitionRegistry {
 		put(entries, CBCMSBlocks.NORMAL_SAP_SHELL.get(), CBCMSDualCannonProjectiles.NORMAL_SAP_SHELL,
 			CBCMSDualCannonPropertyTypes.NORMAL_SAP_SHELL, DualCannonBehavior.Kind.SAP, 30, true, false,
 			"normal_sap_shell_block");
+
+		put(entries, CBCMSBlocks.NORMAL_SAP_SUPER_HEAVY_SHELL.get(), CBCMSDualCannonProjectiles.NORMAL_SAP_SUPER_HEAVY_SHELL,
+				CBCMSDualCannonPropertyTypes.NORMAL_SAP_SUPER_HEAVY_SHELL, DualCannonBehavior.Kind.HSAP, 30, true, false,
+				"normal_sap_shell_block");
+
+		put(entries, CBCMSBlocks.EXTENDED_SAP_SHELL.get(), CBCMSDualCannonProjectiles.EXTENDED_SAP_SHELL,
+				CBCMSDualCannonPropertyTypes.EXTENDED_SAP_SHELL, DualCannonBehavior.Kind.SAP, 30, true, false,
+				"normal_sap_shell_block");
+
 		put(entries, CBCMSBlocks.NORMAL_INCENDIARY_HE_SHELL.get(),
 			CBCMSDualCannonProjectiles.NORMAL_INCENDIARY_HE_SHELL,
 			CBCMSDualCannonPropertyTypes.NORMAL_INCENDIARY_HE_SHELL, DualCannonBehavior.Kind.INCENDIARY, 20, true,
 			false, "normal_incendiary_he_shell_block");
+
+		put(entries, CBCMSBlocks.BALL.get(), CBCMSDualCannonProjectiles.BALL,
+				CBCMSDualCannonPropertyTypes.BALL, DualCannonBehavior.Kind.AP_SHOT, 40, false, false,
+				"ball_block");
 
 		return Map.copyOf(entries);
 	}

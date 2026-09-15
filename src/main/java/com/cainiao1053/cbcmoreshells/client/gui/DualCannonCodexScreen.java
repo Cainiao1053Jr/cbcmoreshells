@@ -14,28 +14,15 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 
-/**
- * Shell picker. Shows the dual cannon rounds as a grid of icons and opens a comparison table for
- * whichever one is chosen; the table's shape (material filter, column budget) is chosen here so it
- * applies to every shell.
- *
- * <p>Names appear only on hover, so the grid stays compact no matter how long the shell names get.
- *
- * <p>Listing shells resolves no properties — that only happens once a shell is picked.
- */
+
 public class DualCannonCodexScreen extends AbstractSimiScreen {
 
 	private static final int PADDING = 8;
 	private static final int ICON_SIZE = 16;
-
-	/** Icons per row. Change this to reshape the grid. */
 	private static final int GRID_COLUMNS = 5;
-	/** Space each icon gets, icon plus its share of the gutter. */
 	private static final int CELL_SIZE = 24;
-	/** Height of the title plus the settings buttons above the grid. */
 	private static final int HEADER_HEIGHT = 34;
 
-	// Ink on aged paper: the journal background is light (~#C0B7AA), so everything is dark.
 	private static final int COLOUR_TITLE = 0xFF2B2118;
 	private static final int COLOUR_LABEL = 0xFF6B5B4A;
 	private static final int COLOUR_HOVER = 0x30000000;
@@ -69,10 +56,10 @@ public class DualCannonCodexScreen extends AbstractSimiScreen {
 		this.shells = this.source.shells();
 
 		int gridWidth = GRID_COLUMNS * CELL_SIZE;
-		int gridHeight = Math.max(1, this.rowCount()) * CELL_SIZE;
+		//int gridHeight = Math.max(1, this.rowCount()) * CELL_SIZE;
 		// Wide enough for the grid, but never narrower than the two settings buttons need.
-		int width = Math.max(gridWidth, 248) + PADDING * 2;
-		this.setWindowSize(width, PADDING * 2 + HEADER_HEIGHT + gridHeight);
+		//int width = Math.max(gridWidth, 248) + PADDING * 2;
+		this.setWindowSize(300, 200); //PADDING * 2 + HEADER_HEIGHT + gridHeight
 		super.init();
 
 		int left = this.guiLeft + PADDING;
@@ -94,29 +81,6 @@ public class DualCannonCodexScreen extends AbstractSimiScreen {
 	private DualCannonTableSource buildSource() {
 		return new DualCannonTableSource(12, this.filter, false);
 	}
-
-	private Component filterLabel() {
-		return Component.translatable("cbcmoreshells.firing_table.filter",
-			I18n.get("cbcmoreshells.firing_table.filter." + this.filter.name().toLowerCase()));
-	}
-
-//	private Component columnLabel() {
-//		return Component.translatable("cbcmoreshells.firing_table.columns", COLUMN_CHOICES[this.columnChoice]);
-//	}
-
-	/** Changing either setting throws the cached tables away, since both change their shape. */
-	private void cycleFilter() {
-		DualCannonMaterialFilter[] values = DualCannonMaterialFilter.values();
-		this.filter = values[(this.filter.ordinal() + 1) % values.length];
-		this.source = this.buildSource();
-		this.rebuildWidgets();
-	}
-
-//	private void cycleColumns() {
-//		this.columnChoice = (this.columnChoice + 1) % COLUMN_CHOICES.length;
-//		this.source = this.buildSource();
-//		this.rebuildWidgets();
-//	}
 
 	@Override
 	protected void renderWindow(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
@@ -148,10 +112,6 @@ public class DualCannonCodexScreen extends AbstractSimiScreen {
 		}
 	}
 
-	/**
-	 * Names live here rather than in {@link #renderWindow} so the tooltip lands on top of the
-	 * buttons and icons instead of underneath them.
-	 */
 	@Override
 	protected void renderWindowForeground(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
 		super.renderWindowForeground(graphics, mouseX, mouseY, partialTicks);
@@ -169,7 +129,6 @@ public class DualCannonCodexScreen extends AbstractSimiScreen {
 		return this.gridTop + (index / GRID_COLUMNS) * CELL_SIZE;
 	}
 
-	/** Index of the shell under the cursor, or -1. */
 	private int cellAt(double mouseX, double mouseY) {
 		int column = (int) Math.floor((mouseX - this.gridLeft) / CELL_SIZE);
 		int row = (int) Math.floor((mouseY - this.gridTop) / CELL_SIZE);
@@ -191,7 +150,6 @@ public class DualCannonCodexScreen extends AbstractSimiScreen {
 		return true;
 	}
 
-	/** So a table reopened from the picker starts on the shell that was being viewed. */
 	@Nullable
 	public Block lastSelection() {
 		return this.lastSelection;

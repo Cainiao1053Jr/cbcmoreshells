@@ -61,6 +61,14 @@ public record DualCannonProjectileProperties(
 		return base("normal_sap_shell", 3.8, 0.75, 4.8F, 38.0F);
 	}
 
+	public static DualCannonProjectileProperties normalSapSuperHeavyShellFallback() {
+		return base("normal_sap_super_heavy_shell", 3.8, 0.75, 4.8F, 38.0F);
+	}
+
+	public static DualCannonProjectileProperties extendedSapShellFallback() {
+		return base("extended_sap_shell", 3.8, 0.75, 4.8F, 38.0F);
+	}
+
 	public static DualCannonProjectileProperties extendedApShotFallback() {
 		return withReach(normalApShotFallback(), 1.5);
 	}
@@ -69,11 +77,10 @@ public record DualCannonProjectileProperties(
 		return withReach(normalAntiairHeShellFallback(), 1.5);
 	}
 
-	/**
-	 * @param projectileBlock path of the cbcms block whose model represents this shell in flight and
-	 *                        whose CBC projectile effect entity is reused for impact effects
-	 * @param explosionPower  zero means the shell carries no burst charge at all
-	 */
+	public static DualCannonProjectileProperties ballFallback() {
+		return base("normal_ap_shot", 6.0, 0.78, 0.0F, 52.0F);
+	}
+
 	private static DualCannonProjectileProperties base(String projectileBlock, double durabilityMass, double deflection,
 													   float explosionPower, float entityDamage) {
 		MunitionPropertyComponents.ExplosionKind kind = explosionPower <= 0.0F

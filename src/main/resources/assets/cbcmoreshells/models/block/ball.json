@@ -1,0 +1,9 @@
+{
+  "parent": "cbcmoreshells:block/dual_cannon_projectile_block",
+  "textures": {
+    "bottom": "cbcmoreshells:block/projectile/normal_ap_shot_bottom",
+    "particle": "cbcmoreshells:block/projectile/ball_block",
+    "side": "cbcmoreshells:block/projectile/ball",
+    "top": "cbcmoreshells:block/projectile/ball_block"
+  }
+}

@@ -213,6 +213,9 @@ public class ModGroup {
 				CBCMSBlocks.NORMAL_INCENDIARY_HE_SHELL.asStack(),
 				CBCMSBlocks.NORMAL_APBC_SHELL.asStack(),
 				CBCMSBlocks.EXTENDED_ANTIAIR_HE_SHELL.asStack(),
+				CBCMSBlocks.EXTENDED_SAP_SHELL.asStack(),
+				CBCMSBlocks.NORMAL_SAP_SUPER_HEAVY_SHELL.asStack(),
+				CBCMSBlocks.BALL.asStack(),
 
 				CBCMSItems.COMBAT_COMMAND_INFO.asStack(),
 				CBCMSBlocks.COMMAND_DEPLOYER.asStack(),
