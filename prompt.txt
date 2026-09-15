@@ -1,0 +1,4 @@
+给DualCannonBaseBlock增加功能，添加类似于CopycatPanel的辅助放置功能，手持炮管悬浮在同材料炮管上时能预览方块，右键炮管自动放置
+同时一门炮只能有一个炮闩，当炮闩没有放置时，可以自动放置，如果炮闩已经放置了则不自动放置，只给quickfiring breech做这个功能，不要管sliding breech
+查看MountedDualCannonContraption来查找正确的炮闩放置方向
+当火炮有炮闩时，自动放置炮管只会在炮闩的对面放置方块

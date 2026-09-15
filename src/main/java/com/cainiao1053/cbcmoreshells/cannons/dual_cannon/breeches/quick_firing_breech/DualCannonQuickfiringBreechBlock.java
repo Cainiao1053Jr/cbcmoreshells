@@ -273,9 +273,4 @@ public class DualCannonQuickfiringBreechBlock extends DualCannonBaseBlock implem
 			.setValue(AXIS, old.getValue(AXIS));
 	}
 
-	@Override
-	public InteractionResult onSneakWrenched(BlockState state, UseOnContext context) {
-		return InteractionResult.PASS;
-	}
-
 }
