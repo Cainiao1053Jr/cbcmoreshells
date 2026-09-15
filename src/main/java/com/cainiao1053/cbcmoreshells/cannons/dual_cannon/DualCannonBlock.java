@@ -18,6 +18,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -57,6 +58,36 @@ public interface DualCannonBlock extends WeldableBlock, CannonContraptionProvide
 
 	default DualCannonMaterial getCannonMaterialInLevel(LevelAccessor level, BlockState state, BlockPos pos) {
 		return this.getCannonMaterial();
+	}
+
+	/**
+	 * Whether this block terminates a cannon. Structurally decided, so it uses the default opening
+	 * type instead of {@link #getOpeningType}: a quick-firing breech reports OPEN while its
+	 * breechblock is retracted, which says nothing about the cannon's shape.
+	 */
+	default boolean closesCannonEnd() {
+		return this.getDefaultOpeningType() != DualCannonEnd.OPEN;
+	}
+
+	/** Whether this block may be placed by the placement assist while held. */
+	default boolean supportsPlacementAssist() {
+		return this.getDefaultOpeningType() == DualCannonEnd.OPEN;
+	}
+
+	/** Whether this block counts as the cannon's single breech for the placement assist. */
+	default boolean isPlacementAssistBreech() {
+		return false;
+	}
+
+	/**
+	 * Orientation of a block placed by the placement assist.
+	 *
+	 * @param state        the default state of the block being placed
+	 * @param placementDir the direction the cannon is being extended in
+	 * @param cannonFacing {@link #getFacing} of the block the new one will sit against
+	 */
+	default BlockState getAssistedPlacementState(BlockState state, Direction placementDir, Direction cannonFacing) {
+		return state.setValue(DirectionalBlock.FACING, cannonFacing);
 	}
 
     default boolean isImmovable(BlockState state) {

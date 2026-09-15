@@ -118,6 +118,19 @@ public class DualCannonQuickfiringBreechBlock extends DualCannonBaseBlock implem
 		return super.getStateForPlacement(context).setValue(AXIS, context.getNearestLookingDirection().getAxis() == Direction.Axis.Z);
 	}
 
+	@Override public boolean supportsPlacementAssist() { return true; }
+	@Override public boolean isPlacementAssistBreech() { return true; }
+
+	@Override
+	public BlockState getAssistedPlacementState(BlockState state, Direction placementDir, Direction cannonFacing) {
+		// The breech sits at the cannon's closed end, so it faces back into the barrel: that is the
+		// orientation MountedDualCannonContraption assembles around, with initialOrientation running
+		// from the breech towards the open end.
+		Direction facing = placementDir.getOpposite();
+		return state.setValue(FACING, facing)
+			.setValue(AXIS, facing.getAxis() == Direction.Axis.Z);
+	}
+
 	@Override
 	public Class<DualCannonQuickfiringBreechBlockEntity> getBlockEntityClass() {
 		return DualCannonQuickfiringBreechBlockEntity.class;

@@ -1,9 +1,13 @@
 package com.cainiao1053.cbcmoreshells.cannons.dual_cannon;
 
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.material.DualCannonMaterial;
+import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.placement.DualCannonPlacementHelper;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.ItemInteractionResult;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -13,6 +17,7 @@ import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.material.PushReaction;
+import net.minecraft.world.phys.BlockHitResult;
 
 public abstract class DualCannonBaseBlock extends DirectionalBlock implements DualCannonBlock {
 
@@ -43,6 +48,15 @@ public abstract class DualCannonBaseBlock extends DirectionalBlock implements Du
 	@Override
 	public BlockState getStateForPlacement(BlockPlaceContext context) {
 		return this.defaultBlockState().setValue(FACING, context.getNearestLookingDirection());
+	}
+
+	@Override
+	protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos,
+											  Player player, InteractionHand hand, BlockHitResult hitResult) {
+		ItemInteractionResult result = DualCannonPlacementHelper.tryAssistedPlacement(stack, state, level, pos, player,
+			hand, hitResult);
+		if (result != ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION) return result;
+		return super.useItemOn(stack, state, level, pos, player, hand, hitResult);
 	}
 
 	@Override public BlockState rotate(BlockState state, Rotation rotation) { return state.setValue(FACING, rotation.rotate(state.getValue(FACING))); }
