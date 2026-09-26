@@ -1,1 +1,2 @@
-阅读crash.txt并修复这个问题，在facing为up或者down时getCounterClockWise无法返回内容并抛出错误，需要在facing 为up和down时单独处理
+需要修改漏斗过滤器的位置，中间的是过滤槽位，左右两边才是储备过滤，并且这个漏斗右键木桶等方块时不会放下而是优先执行打开面板，需要把放置的优先级提高
+同时注册 FunnelMovementBehaviour.brass()，让它在装置上也像黄铜漏斗一样工作
