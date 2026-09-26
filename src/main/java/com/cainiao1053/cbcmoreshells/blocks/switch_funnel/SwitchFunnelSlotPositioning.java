@@ -12,7 +12,7 @@ public class SwitchFunnelSlotPositioning extends FunnelFilterSlotPositioning {
 
 	private static final double SPACING = 5 / 16.0;
 	private static final double HIT_RADIUS = 2.4 / 16.0;
-	private static final double OUTWARD = 1 / 16.0;
+	private static final double OUTWARD = 0.2 / 16.0;
 
 	private final int column;
 

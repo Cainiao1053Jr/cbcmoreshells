@@ -1,0 +1,16 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "create:brass_funnel"
+    },
+    {
+      "item": "create:precision_mechanism"
+    }
+  ],
+  "results": [
+    {
+      "id": "cbcmoreshells:switch_funnel"
+    }
+  ]
+}
