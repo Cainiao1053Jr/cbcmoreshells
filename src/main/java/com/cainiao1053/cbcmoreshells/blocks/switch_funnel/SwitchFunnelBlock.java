@@ -1,6 +1,8 @@
 package com.cainiao1053.cbcmoreshells.blocks.switch_funnel;
 
+import com.cainiao1053.cbcmoreshells.CBCMSBlocks;
 import com.cainiao1053.cbcmoreshells.index.CBCMSBlockEntities;
+import com.simibubi.create.content.logistics.funnel.BeltFunnelBlock;
 import com.simibubi.create.content.logistics.funnel.FunnelBlock;
 import com.simibubi.create.content.logistics.funnel.FunnelBlockEntity;
 import net.minecraft.core.BlockPos;
@@ -40,6 +42,14 @@ public class SwitchFunnelBlock extends FunnelBlock {
 
 	@Override
 	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+		tickRedstone(state, level, pos);
+	}
+
+	/**
+	 * Shared by the funnel and its belt variant. POWERED stays false so the block entity never pauses;
+	 * the signal level lives in TRIGGERED and each rising edge cycles the filters.
+	 */
+	static void tickRedstone(BlockState state, ServerLevel level, BlockPos pos) {
 		boolean powered = level.hasNeighborSignal(pos);
 		if (powered == state.getValue(TRIGGERED))
 			return;
@@ -48,17 +58,26 @@ public class SwitchFunnelBlock extends FunnelBlock {
 			be.cycleFilters();
 	}
 
+	/** Keeps the remembered signal level when switching between funnel and belt funnel. */
+	static BlockState copyTriggered(BlockState from, BlockState to) {
+		if (from == to || !from.hasProperty(TRIGGERED) || !to.hasProperty(TRIGGERED))
+			return to;
+		return to.setValue(TRIGGERED, from.getValue(TRIGGERED));
+	}
+
 	@Override
 	public BlockState getEquivalentBeltFunnel(BlockGetter world, BlockPos pos, BlockState state) {
-		return state;
+		Direction facing = getFacing(state);
+		return CBCMSBlocks.SWITCH_BELT_FUNNEL.getDefaultState()
+			.setValue(BeltFunnelBlock.HORIZONTAL_FACING, facing)
+			.setValue(POWERED, false)
+			.setValue(TRIGGERED, state.getValue(TRIGGERED));
 	}
 
 	@Override
 	public BlockState updateShape(BlockState state, Direction direction, BlockState neighbourState, LevelAccessor world,
 								  BlockPos pos, BlockPos neighbourPos) {
-		// No belt funnel variant: skip FunnelBlock's conversion when placed above a belt
-		updateWater(world, state, pos);
-		return state;
+		return copyTriggered(state, super.updateShape(state, direction, neighbourState, world, pos, neighbourPos));
 	}
 
 	@Override

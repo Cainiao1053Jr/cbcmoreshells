@@ -386,7 +386,7 @@ public class CBCMSBlockEntities {
 	public static final BlockEntityEntry<SwitchFunnelBlockEntity> SWITCH_FUNNEL = REGISTRATE
 			.blockEntity("switch_funnel", SwitchFunnelBlockEntity::new)
 			.visual(() -> FunnelVisual::new)
-			.validBlocks(CBCMSBlocks.SWITCH_FUNNEL)
+			.validBlocks(CBCMSBlocks.SWITCH_FUNNEL, CBCMSBlocks.SWITCH_BELT_FUNNEL)
 			.renderer(() -> FunnelRenderer::new)
 			.register();
 

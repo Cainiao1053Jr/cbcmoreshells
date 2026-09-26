@@ -3,6 +3,7 @@ package com.cainiao1053.cbcmoreshells;
 import com.cainiao1053.cbcmoreshells.blocks.LootBarrelBlock;
 import com.cainiao1053.cbcmoreshells.blocks.ammo_rack.AmmoRackBlock;
 import com.cainiao1053.cbcmoreshells.blocks.ammo_rack.AmmoRackBlockItem;
+import com.cainiao1053.cbcmoreshells.blocks.switch_funnel.SwitchBeltFunnelBlock;
 import com.cainiao1053.cbcmoreshells.blocks.switch_funnel.SwitchFunnelBlock;
 import com.cainiao1053.cbcmoreshells.blocks.switch_funnel.SwitchFunnelBlockItem;
 import com.simibubi.create.api.behaviour.movement.MovementBehaviour;
@@ -3567,6 +3568,13 @@ public class CBCMSBlocks {
 			.onRegister(MovementBehaviour.movementBehaviour(FunnelMovementBehaviour.brass()))
 			.item(SwitchFunnelBlockItem::new)
 			.transform(customItemModel())
+			.register();
+
+	public static final BlockEntry<SwitchBeltFunnelBlock> SWITCH_BELT_FUNNEL = REGISTRATE.block("switch_belt_funnel",
+					p -> new SwitchBeltFunnelBlock(SWITCH_FUNNEL, p))
+			.initialProperties(SharedProperties::softMetal)
+			.properties(p -> p.mapColor(MapColor.TERRACOTTA_YELLOW).sound(SoundType.NETHERITE_BLOCK).noOcclusion())
+			.transform(axeOrPickaxe())
 			.register();
 
 //	public static final BlockEntry<DishPlateBlock> DISH_PLATE = REGISTRATE.block("dish_plate", DishPlateBlock::new)
