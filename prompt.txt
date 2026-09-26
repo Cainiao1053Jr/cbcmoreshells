@@ -1,2 +1,2 @@
-需要修改漏斗过滤器的位置，中间的是过滤槽位，左右两边才是储备过滤，并且这个漏斗右键木桶等方块时不会放下而是优先执行打开面板，需要把放置的优先级提高
-同时注册 FunnelMovementBehaviour.brass()，让它在装置上也像黄铜漏斗一样工作
+首先SwitchFunnelBlockItem中移除subscribe event，不要在这种物品类里面直接subscribe event，这代码很cursed
+然后，当前的SwitchFunnel并未兼容放置在传送带和置物台等物体上方的behavior，和brass funnel有明显差异，先查看brass funnel如何兼容置物台，再修改这部分代码使其兼容

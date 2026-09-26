@@ -17,11 +17,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
-/**
- * Brass-funnel-like funnel with two reserve filter slots. Redstone never pauses it:
- * POWERED is always kept false (it would put the block entity into PAUSED mode), the signal level
- * is tracked in TRIGGERED instead, and each rising edge cycles the filters.
- */
 public class SwitchFunnelBlock extends FunnelBlock {
 
 	public static final BooleanProperty TRIGGERED = BlockStateProperties.TRIGGERED;
