@@ -28,6 +28,9 @@ public class SwitchFunnelBlockEntity extends FunnelBlockEntity {
 				FilteringBehaviour main = (FilteringBehaviour) behaviour;
 				// FunnelBlockEntity only enables filtering for Create's brass funnels
 				main.onlyActiveWhen(() -> true);
+				// Default extraction amount "up to 1" instead of Create's "up to 64"; saved values still override it
+				main.count = 1;
+				main.upTo = true;
 				((FilteringBehaviourAccessor) main).cbcms$setSlotPositioning(new SwitchFunnelSlotPositioning(0));
 				break;
 			}
