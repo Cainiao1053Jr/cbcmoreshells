@@ -1,0 +1,430 @@
+================================================================================
+CBCMS v6 — 切换漏斗（Switch Funnel）方案
+（方案文档，不含代码改动；所有 Create API 均已从 create-1.21.1-6.0.10-280.jar
+  用 vineflower 反编译核对）
+================================================================================
+
+目录
+  0. 结论摘要
+  1. 需求形式化
+  2. Create 原版漏斗的关键实现（与本需求相关的部分）
+  3. 必须绕开的 5 个坑
+  4. 总体设计：新增 / 修改文件清单
+  5. 各类详细设计（含伪代码）
+  6. 资源文件（blockstate / model / lang / 配方）
+  7. 实施顺序与验证清单
+  8. 可选扩展 / 待定决策
+
+================================================================================
+0. 结论摘要
+================================================================================
+
+- 新增 SwitchFunnelBlock extends FunnelBlock，SwitchFunnelBlockEntity extends
+  FunnelBlockEntity，全部行为（吸取/抽取/传送带输入/扳手切换模式/过滤/数量）
+  直接继承 Create，与黄铜漏斗一致。
+- 两个"储备过滤槽"用 FilteringBehaviour 的子类 ReserveFilteringBehaviour 实现，
+  **每个槽必须有独立的 BehaviourType 和独立的 NBT 子标签**，否则会互相覆盖。
+  Create 的渲染（FilteringRenderer）和点击（ValueSettingsInputHandler）都是遍历
+  sbe.getAllBehaviours() 找 FilteringBehaviour 的，所以多加两个行为后
+  **显示 / 右键放置过滤器 / 取回 FilterItem 全部自动可用，无需写渲染代码。**
+- 红石：**不使用 POWERED 属性**（POWERED=true 会让 Create 的 BE 进入 PAUSED，
+  而 determineCurrentMode() 是包私有、无法覆写）。改为新增自己的
+  BooleanProperty TRIGGERED 记录红石电平，POWERED 恒为 false；
+  在方块 tick 里检测 false→true 的上升沿，调用 BE 的 cycleFilters()。
+- 切换逻辑：[主槽, 储备1, 储备2] 循环左移：
+      主槽 ← 储备1，储备1 ← 储备2，储备2 ← 原主槽
+  只移动过滤物品本身，用 public 的 getFilter()/setFilter()，不产生/销毁物品。
+- 唯一需要的 Mixin：一个 @Accessor 修改 FilteringBehaviour.slotPositioning
+  （包私有字段），用于把主槽也换成缩小版的定位，三个槽排成一行不重叠。
+  （不想加 Mixin 也有退路，见 5.4 的 Plan B。）
+
+================================================================================
+1. 需求形式化
+================================================================================
+
+  槽位：S0 = 主过滤槽（Create 原有，参与实际过滤）
+        S1, S2 = 储备槽（只存放，不参与过滤）
+  红石：电平从 0 → >0 的那一 tick（上升沿）执行一次
+        (S0, S1, S2) := (S1, S2, S0)
+        高电平保持期间 / 下降沿：什么都不做，漏斗照常工作（不锁定）。
+  其余：与黄铜漏斗完全一致——吸取/抽取模式（扳手或潜行放置切换）、
+        数量设置（抽取模式下 S0 显示数量）、传送带顶部输入、机械臂交互、
+        过滤器物品（列表过滤器/属性过滤器）可放入任一槽。
+
+================================================================================
+2. Create 原版漏斗的关键实现
+================================================================================
+
+继承链：
+  Block
+   └ AbstractFunnelBlock          (POWERED, WATERLOGGED; neighborChanged→scheduleTick;
+   │                               tick() 同步 POWERED; tryInsert(); getBlockEntityType()
+   │                               固定返回 AllBlockEntityTypes.FUNNEL)
+   └ AbstractDirectionalFunnelBlock (FACING)
+   └ FunnelBlock (abstract)       (EXTRACTING; getStateForPlacement; useItemOn; onWrenched;
+   │                               entityInside; canInsertIntoFunnel(); updateShape 会在
+   │                               下方是传送带时变成 getEquivalentBeltFunnel())
+   └ BrassFunnelBlock             (只实现 getEquivalentBeltFunnel → BRASS_BELT_FUNNEL)
+
+  SmartBlockEntity
+   └ FunnelBlockEntity
+       - private FilteringBehaviour filtering    (FunnelFilterSlotPositioning)
+       - filtering.onlyActiveWhen(this::supportsFiltering)
+         supportsFiltering() = AllBlocks.BRASS_BELT_FUNNEL.has(state)
+                             || AllBlocks.BRASS_FUNNEL.has(state)     ← 私有，硬编码
+       - Mode determineCurrentMode()   ← 包私有，POWERED=true → PAUSED
+       - tick(): PAUSED 时不抽取；handleDirectBeltInput(): PAUSED 时拒收
+       - clearContent(): 只清主过滤器
+
+  AbstractFunnelBlock.tryInsert(level,pos,stack,sim)：
+       用 BlockEntityBehaviour.get(level,pos, FilteringBehaviour.TYPE) 取过滤器
+       → 只会拿到 TYPE 对应的那一个（主槽），储备槽天然不参与过滤。✔
+
+  SmartBlockEntity 构造函数里直接调用 addBehaviours(list)，然后
+       behaviours.put(b.getType(), b)   ← Map 以 BehaviourType 为 key
+  FilteringBehaviour.write/read 固定写 "Filter" / "FilterAmount" / "UpTo"。
+
+  FilteringRenderer.tick() / ValueSettingsInputHandler：
+       for (b : sbe.getAllBehaviours()) if (b instanceof FilteringBehaviour) ...
+       → 多个过滤行为都能渲染、都能点击；点击时"第一个 testHit 命中的"生效
+         （Reference2ObjectArrayMap 保持插入顺序）。
+  ValueSettingsPacket 用 behaviour.netId() 区分行为（FilteringBehaviour 默认返回 1）。
+
+================================================================================
+3. 必须绕开的 5 个坑
+================================================================================
+
+【坑 1】BehaviourType 冲突
+  三个 FilteringBehaviour 若都返回 FilteringBehaviour.TYPE，Map 里只剩最后一个。
+  → ReserveFilteringBehaviour 覆写 getType()，每个槽一个静态 BehaviourType：
+      public static final BehaviourType<ReserveFilteringBehaviour> TYPE_1 = new BehaviourType<>("switch_funnel_reserve_1");
+      public static final BehaviourType<ReserveFilteringBehaviour> TYPE_2 = new BehaviourType<>("switch_funnel_reserve_2");
+    （BehaviourType 构造参数请以 jar 为准，有无参和带名字两种写法都可以）
+
+【坑 2】NBT 键冲突
+  所有 behaviour 都写进同一个 CompoundTag，三个都写 "Filter" 会互相覆盖。
+  → 覆写 write/read，写进子标签：
+      write(nbt,…){ CompoundTag sub = new CompoundTag(); super.write(sub,…); nbt.put(key, sub); }
+      read (nbt,…){ super.read(nbt.getCompound(key),…); }
+    key = "SwitchReserve1" / "SwitchReserve2"。主槽保持原键不动 →
+    FunnelMovementBehaviour（装置上移动的漏斗）读取 "Filter" 依然正确。
+  同理覆写 getClipboardKey()（"SwitchReserve1/2"），避免剪贴板复制粘贴时串槽；
+  netId() 返回 2 / 3（主槽为 1）。
+
+【坑 3】红石会锁死漏斗
+  POWERED=true → determineCurrentMode()==PAUSED → 不抽取、传送带拒收；
+  canInsertIntoFunnel() 也检查 POWERED。determineCurrentMode 包私有无法覆写。
+  → SwitchFunnelBlock：POWERED 永远保持 false；新增属性 TRIGGERED 保存红石电平；
+    覆写 tick(BlockState, ServerLevel, BlockPos, RandomSource)，**不调用 super.tick**
+    （super 会去改 POWERED）；覆写 getStateForPlacement 强制 POWERED=false。
+    neighborChanged 无需改（它只负责通知 InvManipulation + scheduleTick，正好复用）。
+
+【坑 4】过滤不生效
+  supportsFiltering() 硬编码 BRASS_FUNNEL，我们的方块不在其中 → filtering.isActive()
+  为 false，过滤框不显示，test() 仍然会被调用但 getAmountToExtract 变成 1。
+  → 在 SwitchFunnelBlockEntity.addBehaviours 里 super.addBehaviours(list) 之后，
+    从 list 中找到主 FilteringBehaviour，调用 onlyActiveWhen(() -> true)。
+    （注意此时 getBehaviour() 还不能用，Map 在 addBehaviours 返回后才填充，只能扫 list。）
+
+【坑 5】构造期字段初始化顺序
+  addBehaviours 在 SmartBlockEntity 构造函数中被调用，早于子类字段初始化。
+  → SwitchFunnelBlockEntity 中保存行为引用的字段 **不要写初始值**
+    （写成 `private ReserveFilteringBehaviour reserve1;`，不要 `= null`），
+    否则会在 addBehaviours 之后被重置成 null。
+    更稳妥：不存字段，需要时用 getBehaviour(TYPE_1) 取；主槽用
+    getBehaviour(FilteringBehaviour.TYPE) 取。
+
+另外两个"顺手要处理"的点：
+  - AbstractFunnelBlock.getBlockEntityType() 固定返回 Create 的 FUNNEL 类型，
+    必须覆写 getBlockEntityClass()/getBlockEntityType() 指向我们的 BE。
+  - FunnelBlock.updateShape 在水平朝向且下方是传送带时会把方块替换成
+    getEquivalentBeltFunnel()。我们没有"切换版传送带漏斗"，所以覆写 updateShape
+    只做 updateWater 然后原样返回 state；getEquivalentBeltFunnel 返回 state 本身。
+    （即：切换漏斗放在传送带侧面时就是普通的墙面漏斗形态，不变形。见 8.3）
+
+================================================================================
+4. 总体设计：新增 / 修改文件清单
+================================================================================
+
+新增（包 com.cainiao1053.cbcmoreshells.blocks.switch_funnel）：
+  SwitchFunnelBlock.java              方块
+  SwitchFunnelBlockEntity.java        方块实体
+  ReserveFilteringBehaviour.java      储备槽行为（FilteringBehaviour 子类）
+  SwitchFunnelSlotPositioning.java    三槽定位（FunnelFilterSlotPositioning 子类）
+
+新增 Mixin：
+  mixin/FilteringBehaviourAccessor.java   @Accessor 设置 slotPositioning
+  cbcmoreshells.mixins.json 的 "mixins" 数组加入 "FilteringBehaviourAccessor"
+
+修改：
+  CBCMSBlocks.java             注册 SWITCH_FUNNEL 方块 + BlockItem
+  index/CBCMSBlockEntities.java 注册 SWITCH_FUNNEL 方块实体（复用 Create 的
+                                FunnelRenderer / FunnelVisual 画挡板）
+  ModGroup.java                加入创造物品栏
+  资源：blockstates / models / lang / 配方 / 掉落表（见第 6 节）
+
+不需要：
+  - 新渲染器（FunnelRenderer/FunnelVisual 泛型是 FunnelBlockEntity，直接复用；
+    其内 `instanceof FunnelBlock` 判断会选中 FUNNEL_FLAP，正确）
+  - 网络包（setFilter 内部会 sendData() 同步客户端）
+  - FunnelFlapPacket 改动（构造参数是 FunnelBlockEntity，子类可用）
+
+================================================================================
+5. 各类详细设计
+================================================================================
+
+5.1 SwitchFunnelBlock
+--------------------------------------------------------------------------------
+public class SwitchFunnelBlock extends FunnelBlock {
+    public static final BooleanProperty TRIGGERED = BlockStateProperties.TRIGGERED;
+
+    ctor: super(p); registerDefaultState(defaultBlockState().setValue(TRIGGERED, false));
+
+    createBlockStateDefinition(builder):
+        super.createBlockStateDefinition(builder.add(TRIGGERED));
+
+    getStateForPlacement(ctx):
+        BlockState s = super.getStateForPlacement(ctx);   // 含 FACING / EXTRACTING / 水
+        return s.setValue(POWERED, false)
+                .setValue(TRIGGERED, ctx.getLevel().hasNeighborSignal(ctx.getClickedPos()));
+        // 放置时已有信号：只记录电平，不触发切换
+
+    tick(state, level, pos, random):          // 由 neighborChanged 调度，不调 super
+        boolean powered = level.hasNeighborSignal(pos);
+        boolean was     = state.getValue(TRIGGERED);
+        if (powered == was) return;
+        level.setBlock(pos, state.setValue(TRIGGERED, powered), 2);
+        if (powered)   // 上升沿
+            withBlockEntityDo(level, pos, be -> ((SwitchFunnelBlockEntity) be).cycleFilters());
+
+    getEquivalentBeltFunnel(world, pos, state): return state;
+
+    updateShape(state, dir, nState, world, pos, nPos):
+        updateWater(world, state, pos);
+        return state;                          // 不转换为传送带漏斗
+
+    getBlockEntityClass():  return (Class) SwitchFunnelBlockEntity.class;
+        // IBE<FunnelBlockEntity> 的签名要求 Class<FunnelBlockEntity>，需要一次原始类型强转
+    getBlockEntityType():   return CBCMSBlockEntities.SWITCH_FUNNEL.get();
+}
+
+说明：
+  - canInsertIntoFunnel() 不用改：它检查 POWERED（恒 false）和 EXTRACTING，正好符合"不锁定"。
+  - useItemOn / onWrenched / entityInside / getShape / 碰撞箱全部继承。
+  - 旋转/镜像继承 AbstractDirectionalFunnelBlock。
+  - 若希望红石输入时漏斗外观上的红石指示灯变亮，在 blockstate 里用 TRIGGERED
+    选 _powered 贴图即可（见 6）。
+
+5.2 SwitchFunnelBlockEntity
+--------------------------------------------------------------------------------
+public class SwitchFunnelBlockEntity extends FunnelBlockEntity {
+
+    ctor(type, pos, state): super(type, pos, state);
+
+    addBehaviours(list):
+        super.addBehaviours(list);
+        FilteringBehaviour main = (FilteringBehaviour) list.stream()
+                .filter(b -> b.getType() == FilteringBehaviour.TYPE).findFirst().orElseThrow();
+        main.onlyActiveWhen(() -> true);                                   // 坑 4
+        ((FilteringBehaviourAccessor) main).cbcms$setSlotPositioning(
+                new SwitchFunnelSlotPositioning(-1));                      // 主槽：左列，缩小
+
+        ReserveFilteringBehaviour r1 = new ReserveFilteringBehaviour(this,
+                new SwitchFunnelSlotPositioning(0), 1);                     // 储备1：中列
+        ReserveFilteringBehaviour r2 = new ReserveFilteringBehaviour(this,
+                new SwitchFunnelSlotPositioning(+1), 2);                    // 储备2：右列
+        list.add(r1); list.add(r2);                                         // 布局说明见 5.4
+
+    public void cycleFilters():            // 仅服务端调用
+        FilteringBehaviour m  = getBehaviour(FilteringBehaviour.TYPE);
+        FilteringBehaviour r1 = getBehaviour(ReserveFilteringBehaviour.TYPE_1);
+        FilteringBehaviour r2 = getBehaviour(ReserveFilteringBehaviour.TYPE_2);
+        ItemStack a = m.getFilter().copy(), b = r1.getFilter().copy(), c = r2.getFilter().copy();
+        m.setFilter(b);  r1.setFilter(c);  r2.setFilter(a);
+        // setFilter 会：触发主槽 callback → invVersionTracker.reset()（让抽取立即按新过滤重试），
+        //              setChanged() + sendData() 同步客户端
+        // 可选：播放一个音效 / flap，给玩家反馈
+
+    clearContent():
+        super.clearContent();              // 清主槽
+        r1.setFilter(ItemStack.EMPTY); r2.setFilter(ItemStack.EMPTY);
+
+    // 其余全部继承：tick / 抽取 / 冷却 / 传送带输入 / write / read / 挡板
+}
+
+注意：
+  - 不要调用 m.setFilter(Direction, …) 以外的私有逻辑，也不要试图直接改 filter 字段：
+    filter 是 protected，但在 ReserveFilteringBehaviour 里只能访问"同为子类实例"的
+    字段，访问不到主槽（普通 FilteringBehaviour）的，所以统一用 public API。
+  - setFilter 在 !upTo 时会把 count 截到新物品的最大堆叠数，行为与玩家手动换过滤器一致。
+  - 三次 setFilter 会发三次 sendData，频率极低（仅上升沿），不必合并。
+  - 方块被破坏时 IBE.onRemove → 每个行为的 destroy()；FilteringBehaviour.destroy()
+    会把 FilterItem 类型的过滤器掉落出来 → 储备槽里的列表过滤器同样会掉落，不会吞物品。✔
+  - 数量（count/upTo）默认 **留在主槽，不随切换移动**；若希望每个预设各自带数量，见 8.1。
+
+5.3 ReserveFilteringBehaviour
+--------------------------------------------------------------------------------
+public class ReserveFilteringBehaviour extends FilteringBehaviour {
+    public static final BehaviourType<ReserveFilteringBehaviour> TYPE_1 = new BehaviourType<>();
+    public static final BehaviourType<ReserveFilteringBehaviour> TYPE_2 = new BehaviourType<>();
+    private final int index;   // 1 或 2
+
+    ctor(be, slot, index):
+        super(be, slot); this.index = index;
+        setLabel(Component.translatable("cbcmoreshells.switch_funnel.reserve_" + index));
+        // showCount 默认 false → acceptsValueSettings()=false → 点击只放/取过滤器，
+        // 不会弹数量面板
+
+    getType():          return index == 1 ? TYPE_1 : TYPE_2;
+    netId():            return 1 + index;                     // 2 / 3
+    getClipboardKey():  return "SwitchReserve" + index;
+    write(nbt, reg, client):  CompoundTag sub = new CompoundTag();
+                              super.write(sub, reg, client);
+                              nbt.put("SwitchReserve" + index, sub);
+    read(nbt, reg, client):   super.read(nbt.getCompound("SwitchReserve" + index), reg, client);
+}
+
+  - test() 不会被漏斗逻辑调用（tryInsert / handleDirectBeltInput / InvManipulation
+    都只认 FilteringBehaviour.TYPE），所以储备槽纯存储。✔
+  - isActive 默认 true，显示与交互条件与主槽相同（都由定位类的 isSideActive 控制）。
+  - 旧存档读到不存在的子标签 → getCompound 返回空标签 → 空过滤器、count 被
+    read() 修正为最大值，安全。
+
+5.4 SwitchFunnelSlotPositioning（三槽布局）
+--------------------------------------------------------------------------------
+Create 原主槽位置：
+  水平朝向：voxel(8, 12.2, 8.55)，绕 Y 转到朝向面，再绕 X 倾斜 -22.5°（斜面上沿）
+  竖直朝向：voxel(8, 2 或 14, 15.5)，出现在四个水平侧面
+  默认 scale 0.5；testHit 半径 = scale/2 = 0.25 格 = 4px；
+  放了 FilterItem 时框宽约 ±0.45*scale 格。
+→ 三个 4px 半径的点击区放在 16px 宽的面上一定重叠，所以全部缩小并横向排开：
+
+public class SwitchFunnelSlotPositioning extends FunnelFilterSlotPositioning {
+    private final int column;   // -1 左, 0 中, +1 右（以玩家面对该面时的左右为准）
+    static final double SPACING = 5 / 16.0;    // 槽间距 5px
+    static final double HIT_R   = 2.4 / 16.0;
+
+    getScale(): return 0.35f;      // 注意：父类在构造时用 getScale() 初始化 scale 字段，
+                                   // 覆写方法是可以生效的（返回常量，不依赖子类字段）
+    getLocalOffset(level,pos,state):
+        Vec3 base = super.getLocalOffset(level, pos, state);
+        Direction face = FunnelBlock.getFunnelFacing(state).getAxis().isHorizontal()
+                       ? FunnelBlock.getFunnelFacing(state) : getSide();
+        Direction right = face.getCounterClockWise();   // 面对该面的玩家的右手方向
+        return base.add(Vec3.atLowerCornerOf(right.getNormal()).scale(column * SPACING));
+    testHit(level,pos,state,localHit):
+        return isSideActive(state, getSide())
+            && localHit.distanceTo(getLocalOffset(level,pos,state)) < HIT_R;
+}
+  rotate() 直接继承（横向平移不影响倾斜）。
+
+推荐布局（左→右）：[ 主槽 S0 | 储备 S1 | 储备 S2 ] = column -1 / 0 / +1
+  直观表达"右边的依次左移进主槽"。也可以主槽居中 [S1 | S0 | S2]，按喜好。
+  以上坐标、缩放是初值，需进游戏看效果微调（水平漏斗斜面有效宽度可能不足 16px）。
+
+主槽换定位需要的 Mixin（FilteringBehaviour.slotPositioning 为包私有、非 final）：
+  @Mixin(value = FilteringBehaviour.class, remap = false)
+  public interface FilteringBehaviourAccessor {
+      @Accessor("slotPositioning") void cbcms$setSlotPositioning(ValueBoxTransform t);
+  }
+  （Create 类本身不混淆，remap=false）
+
+Plan B（不加 Mixin）：
+  主槽保持 Create 原位置/大小（居中、半径 4px），储备槽放 column ±1 且间距加大到
+  5.5px 左右；并在 addBehaviours 里用 list.add(0, r) 把储备槽插到列表最前面，
+  使 ValueSettingsInputHandler 在重叠区优先命中储备槽。代价：重叠区高亮会同时
+  亮两个框，观感稍差。
+
+================================================================================
+6. 资源文件
+================================================================================
+
+注册（CBCMSBlocks，参考 AMMO_RACK 的写法）：
+  SWITCH_FUNNEL = REGISTRATE.block("switch_funnel", SwitchFunnelBlock::new)
+      .initialProperties(() -> Blocks.IRON_BLOCK 或 SharedProperties::softMetal)
+      .properties(p -> p.mapColor(MapColor.TERRACOTTA_YELLOW).sound(SoundType.NETHERITE_BLOCK)
+                        .noOcclusion())
+      .transform(axeOrPickaxe())  // 或 pickaxeOnly，与 Create 黄铜漏斗一致即可
+      .blockstate(...)            // 可手写 JSON，见下
+      .item()                     // 普通 BlockItem，**不要用 Create 的 FunnelItem**
+                                  // （FunnelItem 会在传送带上尝试放置传送带漏斗）
+      .transform(customItemModel())
+      .register();
+  可选：.onRegister(...) 注册 FunnelMovementBehaviour.brass()，让它在装置上
+       也像黄铜漏斗一样工作（参考 Create AllBlocks.BRASS_FUNNEL 的注册写法，
+       写代码时请以 jar 中实际的 movementBehaviour 注册 API 为准）。装置上不做切换。
+
+  CBCMSBlockEntities：
+  SWITCH_FUNNEL = REGISTRATE.blockEntity("switch_funnel", SwitchFunnelBlockEntity::new)
+      .visual(() -> FunnelVisual::new)
+      .validBlocks(CBCMSBlocks.SWITCH_FUNNEL)
+      .renderer(() -> FunnelRenderer::new)
+      .register();
+
+blockstate（assets/cbcmoreshells/blockstates/switch_funnel.json）：
+  直接引用 Create 已生成的模型，无需自己画：
+    create:block/brass_funnel_horizontal_{pull|push}_{unpowered|powered}
+    create:block/brass_funnel_vertical_{pull|push}_{unpowered|powered}
+  变体维度：facing × extracting × triggered（powered 恒 false，可在 JSON 里忽略）
+  旋转规则与 FunnelGenerator 一致：
+    x = (facing == down) ? 180 : 0
+    y = horizontalAngle(facing) + 180
+  注意：Create 的 vertical_*_powered 模型把漏斗口画成"关闭"(funnel_closed)，
+  对不锁定的切换漏斗会误导。建议：
+    - 方案 A：triggered 一律用 _unpowered 模型（最省事）；
+    - 方案 B：自己写 4 个模型 extends create:block/funnel/block_{horizontal|vertical}，
+      redstone 贴图用 brass_funnel_powered，open 贴图固定 funnel_open，
+      并换一个自己的 base 贴图做外观区分（推荐，便于玩家分辨切换漏斗和黄铜漏斗）。
+  物品模型：parent create:block/funnel/item，贴图同 Create itemModel("brass")，
+  可替换 base 贴图区分。
+
+lang（en_us / zh_cn）：
+  block.cbcmoreshells.switch_funnel            Switch Funnel / 切换漏斗
+  cbcmoreshells.switch_funnel.reserve_1        Reserve Filter 1 / 储备过滤 1
+  cbcmoreshells.switch_funnel.reserve_2        Reserve Filter 2 / 储备过滤 2
+  （如有 tooltip 系统 CBCMSTooltip，可补一段"红石上升沿轮换过滤"说明）
+
+配方 / 掉落表 / 挖掘标签：
+  配方建议：黄铜漏斗 + 红石比较器（或电子管）+ 黄铜板，机械合成或普通合成均可。
+  掉落表：掉落自身（datagen 或手写 loot_tables/blocks/switch_funnel.json）。
+  标签：mineable/pickaxe（及 axe，若与 Create 一致）。
+
+================================================================================
+7. 实施顺序与验证清单
+================================================================================
+
+ 1) 写 ReserveFilteringBehaviour + SwitchFunnelSlotPositioning + Mixin Accessor。
+ 2) 写 SwitchFunnelBlockEntity（先不做 cycleFilters），注册 BE + 方块 + 最简 blockstate。
+    验证：放置后三个过滤框都显示；三个槽分别放入不同物品，退出重进存档后内容不串。
+ 3) 验证过滤：只有主槽影响吸取/抽取；抽取模式下主槽显示数量并可调节，储备槽不弹数量面板。
+ 4) 写 SwitchFunnelBlock 的 TRIGGERED / tick 上升沿 → cycleFilters。
+    验证：
+     - 拉杆打开：内容 (A,B,C) → (B,C,A)，漏斗不停止工作；
+     - 保持高电平：不再变化；关闭拉杆：不变化；再打开：(C,A,B)；
+     - 按钮 / 红石脉冲（1 tick 以上）每次触发一次；
+     - 在已有信号的位置放置：不触发；
+     - 切换后抽取立即按新过滤工作（依赖 invVersionTracker.reset）。
+ 5) 其他回归：扳手切换吸取/抽取；潜行放置为吸取模式；朝上放在传送带末端可接收；
+    机械臂可投入/取出；破坏方块时三个槽里的列表过滤器都会掉落；
+    /clone、蓝图（Schematic）后三个槽内容保留；剪贴板复制粘贴不串槽。
+ 6) 资源与外观、配方、语言文件。
+
+================================================================================
+8. 可选扩展 / 待定决策
+================================================================================
+
+8.1 数量是否随槽切换？（默认：否，数量属于主槽）
+    若希望每个预设带自己的抽取数量：储备槽 showCountWhen(与主槽同条件)，
+    cycleFilters 同时轮换 count / upTo（都是 public 字段），并在 setFilter 之后赋值
+    再 sendData。此时储备槽会弹出数量面板，netId 2/3 已区分，可直接工作。
+
+8.2 空槽是否参与轮换？（默认：参与，纯循环，行为可预期）
+    备选：跳过空的储备槽（例如只放了 S1 时，在 S0/S1 之间来回切）。
+
+8.3 传送带漏斗形态
+    本方案不做"切换版传送带漏斗"。若需要，要再做 SwitchBeltFunnelBlock extends
+    BeltFunnelBlock 共用同一 BE 类型，并让 getEquivalentBeltFunnel / BeltFunnelBlock
+    的 getEquivalentFunnel 互相指向；工作量约等于本方案的一半，建议后续再做。
+
+8.4 比较器输出 / 当前槽指示
+    可让方块输出比较器信号或在 goggle 信息里显示"下一个过滤"，非必需。
