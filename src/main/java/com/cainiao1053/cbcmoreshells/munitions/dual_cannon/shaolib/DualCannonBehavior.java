@@ -3,10 +3,15 @@ package com.cainiao1053.cbcmoreshells.munitions.dual_cannon.shaolib;
 import com.cainiao1053.cbcmoreshells.network.CBCMSNetworkImpl;
 import com.cainiao1053.cbcmoreshells.network.ClientboundCBCMSSplashPacket;
 import com.cainiao1053.cbcmoreshells.network.ClientboundCBCMSTrailPacket;
+import com.verr1.shaolib.api.cache.CacheQueryOptions;
+import com.verr1.shaolib.api.cache.QuerySourcePolicy;
+import com.verr1.shaolib.api.cache.ShaolibCache;
+import com.verr1.shaolib.api.cache.StaleCachePolicy;
 import com.verr1.shaolib.api.projectile.ProjectileInstance;
 import com.verr1.shaolib.api.projectile.ProjectileServerContext;
 import com.verr1.shaolib.api.projectile.chunkload.ProjectileChunkLoadPolicy;
 import com.verr1.shaolib.api.projectile.entity.ProjectileEntityHitOptions;
+import com.verr1.shaolib.cache.core.BlockSummary;
 import com.verr1.shaolib.munitions.config.properties.MunitionPropertyComponents;
 import com.verr1.shaolib.munitions.config.properties.MunitionPropertyResolver;
 import com.verr1.shaolib.munitions.fuze.FuzeResult;
@@ -18,9 +23,9 @@ import com.verr1.shaolib.munitions.projectile.impact.MunitionImpactOutcome;
 import com.verr1.shaolib.munitions.projectile.impact.MunitionImpactSweep;
 import com.verr1.shaolib.munitions.projectile.shell.AbstractFuzedShellBehavior;
 import com.verr1.shaolib.munitions.projectile.shell.FuzedShellData;
+import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.world.phys.Vec3;
 
@@ -30,6 +35,11 @@ public class DualCannonBehavior<P extends DualCannonMunitionProperties>
 	private static final int TRAIL_IDLE = 200;
 	private static final int TRAIL_INITIAL_DELAY = 20;
 	private static final double TRAIL_ENDPOINT_PULLBACK = 0.75;
+	// Fluid check reads shaolib's chunk snapshot cache only, so it never touches or loads live chunks.
+	private static final CacheQueryOptions TRAIL_FLUID_QUERY = CacheQueryOptions.builder()
+		.sourcePolicy(QuerySourcePolicy.CACHE_ONLY)
+		.stalePolicy(StaleCachePolicy.ALLOW_STALE)
+		.build();
 
 	private final Kind kind;
 
@@ -127,7 +137,7 @@ public class DualCannonBehavior<P extends DualCannonMunitionProperties>
 		Vec3 position = projectile.position();
 		boolean grounded =
 			projectile.isEmbedded() || !FuzedShellData.isFlyingState(projectile.get(FuzedShellData.STATE));
-		boolean inWater = level.getFluidState(projectile.blockPosition()).is(FluidTags.WATER);
+		boolean inWater = isCachedLiquid(level, projectile.blockPosition());
 
 		if (!grounded && !inWater) {
 			this.broadcastTrail(level, position, anchor, false);
@@ -145,6 +155,13 @@ public class DualCannonBehavior<P extends DualCannonMunitionProperties>
 		this.broadcastTrail(level, endpoint, anchor, inWater);
 		state.setTrailStage(DualCannonState.TRAIL_STAGE_DONE);
 		state.setTrailCooldown(TRAIL_IDLE);
+	}
+
+	private static boolean isCachedLiquid(ServerLevel level, BlockPos pos) {
+		return ShaolibCache.view(level)
+			.flatMap(view -> view.block(pos, TRAIL_FLUID_QUERY).summary())
+			.map(summary -> summary == BlockSummary.LIQUID)
+			.orElse(false);
 	}
 
 	private void broadcastTrail(ServerLevel level, Vec3 to, Vec3 from, boolean splash) {
