@@ -1,2 +1,1 @@
-首先SwitchFunnelBlockItem中移除subscribe event，不要在这种物品类里面直接subscribe event，这代码很cursed
-然后，当前的SwitchFunnel并未兼容放置在传送带和置物台等物体上方的behavior，和brass funnel有明显差异，先查看brass funnel如何兼容置物台，再修改这部分代码使其兼容
+给切换过滤的时候增加一个逻辑，兼容存在空位的情况以确保主过滤槽位不为空。即切换时将主槽位物品切换为下一个不为空的备选槽位

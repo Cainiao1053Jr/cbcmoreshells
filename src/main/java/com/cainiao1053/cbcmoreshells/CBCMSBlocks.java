@@ -3562,6 +3562,7 @@ public class CBCMSBlocks {
 			.register();
 
 	public static final BlockEntry<SwitchFunnelBlock> SWITCH_FUNNEL = REGISTRATE.block("switch_funnel", SwitchFunnelBlock::new)
+			.addLayer(() -> RenderType::cutoutMipped)
 			.initialProperties(SharedProperties::softMetal)
 			.properties(p -> p.mapColor(MapColor.TERRACOTTA_YELLOW).sound(SoundType.NETHERITE_BLOCK).noOcclusion())
 			.transform(axeOrPickaxe())
@@ -3572,6 +3573,7 @@ public class CBCMSBlocks {
 
 	public static final BlockEntry<SwitchBeltFunnelBlock> SWITCH_BELT_FUNNEL = REGISTRATE.block("switch_belt_funnel",
 					p -> new SwitchBeltFunnelBlock(SWITCH_FUNNEL, p))
+			.addLayer(() -> RenderType::cutoutMipped)
 			.initialProperties(SharedProperties::softMetal)
 			.properties(p -> p.mapColor(MapColor.TERRACOTTA_YELLOW).sound(SoundType.NETHERITE_BLOCK).noOcclusion())
 			.transform(axeOrPickaxe())
