@@ -1,3 +1,1 @@
-我需要写一个带有切换功能的funnel，从create的funnelBlock改动得到。写一个SwitchFunnelBlock extends FunnelBlock以及配套的blockEntity SwitchFunnelBlockEntity extends FunnelBlockEntity,
-这个漏斗除了自带的过滤槽位外还有两个类似槽位，可以存放过滤储备，受到红石信号后不会锁定，而是在上升沿依次切换槽位内容顺序来完成过滤内容的切换，其余功能和BrassFunnel一致
-先把方案写进answer3.txt，不改代码
+用这个方案实现功能
