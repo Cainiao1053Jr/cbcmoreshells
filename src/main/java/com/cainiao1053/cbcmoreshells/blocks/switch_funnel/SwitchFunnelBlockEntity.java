@@ -37,7 +37,10 @@ public class SwitchFunnelBlockEntity extends FunnelBlockEntity {
 		behaviours.add(new ReserveFilteringBehaviour(this, new SwitchFunnelSlotPositioning(1), 2));
 	}
 
-	/** Main <- reserve 1 <- reserve 2 <- main. */
+	/**
+	 * Rotates main <- reserve 1 <- reserve 2 <- main, repeating the rotation past empty slots so the
+	 * main slot receives the next non-empty filter. E.g. (A, empty, C) becomes (C, A, empty).
+	 */
 	public void cycleFilters() {
 		FilteringBehaviour main = getBehaviour(FilteringBehaviour.TYPE);
 		FilteringBehaviour reserve1 = getBehaviour(ReserveFilteringBehaviour.TYPE_1);
@@ -45,15 +48,25 @@ public class SwitchFunnelBlockEntity extends FunnelBlockEntity {
 		if (main == null || reserve1 == null || reserve2 == null)
 			return;
 
-		ItemStack a = main.getFilter().copy();
-		ItemStack b = reserve1.getFilter().copy();
-		ItemStack c = reserve2.getFilter().copy();
-		if (a.isEmpty() && b.isEmpty() && c.isEmpty())
+		FilteringBehaviour[] slots = {main, reserve1, reserve2};
+		ItemStack[] filters = new ItemStack[slots.length];
+		for (int i = 0; i < slots.length; i++)
+			filters[i] = slots[i].getFilter().copy();
+
+		// Smallest rotation that puts a non-empty filter into the main slot
+		int shift = 0;
+		for (int k = 1; k < slots.length; k++) {
+			if (!filters[k].isEmpty()) {
+				shift = k;
+				break;
+			}
+		}
+		// Reserves all empty: nothing to switch to, keep the current main filter
+		if (shift == 0)
 			return;
 
-		main.setFilter(b);
-		reserve1.setFilter(c);
-		reserve2.setFilter(a);
+		for (int i = 0; i < slots.length; i++)
+			slots[i].setFilter(filters[(i + shift) % slots.length]);
 
 		if (level != null)
 			level.playSound(null, worldPosition, SoundEvents.ITEM_FRAME_ROTATE_ITEM, SoundSource.BLOCKS, 0.5f, 1.2f);
