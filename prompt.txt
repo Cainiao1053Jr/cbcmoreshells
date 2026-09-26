@@ -1,4 +1,3 @@
-实现这个功能，手持炮管悬浮在同类型炮管上时，显示放置辅助的渲染，如果炮管还没有炮闩，则炮闩能够渲染并自动放置，如果已有炮闩，则只有炮管会自动放置，且方向位于炮闩的反向
-同时，所有炮管在放置时，方块本身的朝向要一致，炮闩的方向取决于如何被正确组装，这个需要去MountedDualCannonContraption里面查看
-在没有炮闩时，炮闩的放置位置为视线看过去的那一侧
-只给quickfiring breech加这个功能，slingding breech不要管
+我需要写一个带有切换功能的funnel，从create的funnelBlock改动得到。写一个SwitchFunnelBlock extends FunnelBlock以及配套的blockEntity SwitchFunnelBlockEntity extends FunnelBlockEntity,
+这个漏斗除了自带的过滤槽位外还有两个类似槽位，可以存放过滤储备，受到红石信号后不会锁定，而是在上升沿依次切换槽位内容顺序来完成过滤内容的切换，其余功能和BrassFunnel一致
+先把方案写进answer3.txt，不改代码

@@ -16,6 +16,6 @@
   "combat_command_cooldown": 2400,
   "combat_command_duration": 500,
   "is_single_barrel": true,
-  "recoil_multiplier": 77.1645252,
+  "recoil_multiplier": 69.8155228,
   "ref_caliber": 310
 }

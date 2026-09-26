@@ -2,6 +2,7 @@ package com.cainiao1053.cbcmoreshells.cannons.dual_cannon;
 
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.material.DualCannonMaterial;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.placement.DualCannonPlacementHelper;
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
@@ -19,7 +20,7 @@ import net.minecraft.world.level.block.state.StateDefinition.Builder;
 import net.minecraft.world.level.material.PushReaction;
 import net.minecraft.world.phys.BlockHitResult;
 
-public abstract class DualCannonBaseBlock extends DirectionalBlock implements DualCannonBlock {
+public abstract class DualCannonBaseBlock extends DirectionalBlock implements DualCannonBlock, IWrenchable {
 
 	private final DualCannonMaterial material;
 
