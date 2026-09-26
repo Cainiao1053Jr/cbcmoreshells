@@ -8,10 +8,6 @@ import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-/**
- * Funnel filter slot shifted sideways by {@code column} slots, so three slots fit in a row on one face.
- * Column -1 / 0 / +1 = left / middle / right, as seen by a player looking at that face.
- */
 public class SwitchFunnelSlotPositioning extends FunnelFilterSlotPositioning {
 
 	private static final double SPACING = 5 / 16.0;
@@ -25,7 +21,7 @@ public class SwitchFunnelSlotPositioning extends FunnelFilterSlotPositioning {
 
 	@Override
 	public float getScale() {
-		return 0.35f;
+		return 0.4f;
 	}
 
 	@Override

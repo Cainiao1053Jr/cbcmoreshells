@@ -11,10 +11,6 @@ import java.util.List;
 
 import static com.cainiao1053.cbcmoreshells.base.CBCMSTooltip.addHoldShift;
 
-/**
- * Extends Create's FunnelItem to share its behaviour: places onto containers instead of opening them,
- * and places the belt funnel variant when used above a belt or depot.
- */
 public class SwitchFunnelBlockItem extends FunnelItem {
 
 	public SwitchFunnelBlockItem(SwitchFunnelBlock block, Properties properties) {

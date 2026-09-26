@@ -1,10 +1,10 @@
 {
-  "parent": "create:block/funnel/item",
+  "parent": "create:block/belt_funnel/block_retracted",
   "textures": {
     "base": "cbcmoreshells:block/funnel/switch_funnel",
     "block": "cbcmoreshells:block/military_slate_alloy_block",
     "direction": "cbcmoreshells:block/funnel/switch_funnel_neutral",
     "particle": "cbcmoreshells:block/military_slate_alloy_block",
-    "redstone": "cbcmoreshells:block/funnel/switch_funnel_unpowered"
+    "redstone": "cbcmoreshells:block/funnel/switch_funnel_powered"
   }
 }

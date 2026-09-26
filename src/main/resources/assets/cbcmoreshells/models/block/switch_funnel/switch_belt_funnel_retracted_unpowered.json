@@ -1,5 +1,5 @@
 {
-  "parent": "create:block/funnel/item",
+  "parent": "create:block/belt_funnel/block_retracted",
   "textures": {
     "base": "cbcmoreshells:block/funnel/switch_funnel",
     "block": "cbcmoreshells:block/military_slate_alloy_block",

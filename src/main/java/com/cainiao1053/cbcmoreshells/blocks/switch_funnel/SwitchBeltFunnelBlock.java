@@ -17,11 +17,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 
 import static com.cainiao1053.cbcmoreshells.blocks.switch_funnel.SwitchFunnelBlock.TRIGGERED;
 
-/**
- * Belt/depot form of the switch funnel, the counterpart of Create's brass belt funnel.
- * The switch funnel turns into this block when placed horizontally above a belt or depot, and back again
- * when that support is gone; both share {@link SwitchFunnelBlockEntity}.
- */
 public class SwitchBeltFunnelBlock extends BeltFunnelBlock {
 
 	public SwitchBeltFunnelBlock(BlockEntry<SwitchFunnelBlock> parent, Properties properties) {

@@ -37,10 +37,6 @@ public class SwitchFunnelBlockEntity extends FunnelBlockEntity {
 		behaviours.add(new ReserveFilteringBehaviour(this, new SwitchFunnelSlotPositioning(1), 2));
 	}
 
-	/**
-	 * Rotates main <- reserve 1 <- reserve 2 <- main, repeating the rotation past empty slots so the
-	 * main slot receives the next non-empty filter. E.g. (A, empty, C) becomes (C, A, empty).
-	 */
 	public void cycleFilters() {
 		FilteringBehaviour main = getBehaviour(FilteringBehaviour.TYPE);
 		FilteringBehaviour reserve1 = getBehaviour(ReserveFilteringBehaviour.TYPE_1);

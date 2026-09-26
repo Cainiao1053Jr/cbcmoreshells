@@ -45,10 +45,6 @@ public class SwitchFunnelBlock extends FunnelBlock {
 		tickRedstone(state, level, pos);
 	}
 
-	/**
-	 * Shared by the funnel and its belt variant. POWERED stays false so the block entity never pauses;
-	 * the signal level lives in TRIGGERED and each rising edge cycles the filters.
-	 */
 	static void tickRedstone(BlockState state, ServerLevel level, BlockPos pos) {
 		boolean powered = level.hasNeighborSignal(pos);
 		if (powered == state.getValue(TRIGGERED))
@@ -58,7 +54,6 @@ public class SwitchFunnelBlock extends FunnelBlock {
 			be.cycleFilters();
 	}
 
-	/** Keeps the remembered signal level when switching between funnel and belt funnel. */
 	static BlockState copyTriggered(BlockState from, BlockState to) {
 		if (from == to || !from.hasProperty(TRIGGERED) || !to.hasProperty(TRIGGERED))
 			return to;
