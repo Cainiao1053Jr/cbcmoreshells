@@ -12,6 +12,7 @@ public class SwitchFunnelSlotPositioning extends FunnelFilterSlotPositioning {
 
 	private static final double SPACING = 5 / 16.0;
 	private static final double HIT_RADIUS = 2.4 / 16.0;
+	private static final double OUTWARD = 1 / 16.0;
 
 	private final int column;
 
@@ -36,7 +37,12 @@ public class SwitchFunnelSlotPositioning extends FunnelFilterSlotPositioning {
 		if (face.getAxis().isVertical())
 			return base;
 		Direction right = face.getCounterClockWise();
-		return base.add(Vec3.atLowerCornerOf(right.getNormal()).scale(column * SPACING));
+		Vec3 offset = base.add(Vec3.atLowerCornerOf(right.getNormal()).scale(column * SPACING));
+		// Horizontal funnels: nudge the slots out of the model so the funnel frame does not cover them
+		// (not for the extended belt funnel, whose slot sits on the top face)
+		if (funnelFacing.getAxis().isHorizontal() && getSide().getAxis().isHorizontal())
+			offset = offset.add(Vec3.atLowerCornerOf(face.getNormal()).scale(OUTWARD));
+		return offset;
 	}
 
 	@Override
