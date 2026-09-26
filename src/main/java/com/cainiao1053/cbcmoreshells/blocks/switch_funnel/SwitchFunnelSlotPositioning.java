@@ -35,6 +35,10 @@ public class SwitchFunnelSlotPositioning extends FunnelFilterSlotPositioning {
 		if (base == null || funnelFacing == null)
 			return base;
 		Direction face = funnelFacing.getAxis().isHorizontal() ? funnelFacing : getSide();
+		// Vertical funnels only have slots on horizontal sides; an up/down side (also the Sided default)
+		// has no left/right, and getCounterClockWise() throws for it
+		if (face.getAxis().isVertical())
+			return base;
 		Direction right = face.getCounterClockWise();
 		return base.add(Vec3.atLowerCornerOf(right.getNormal()).scale(column * SPACING));
 	}
