@@ -1,1 +1,1 @@
-用这个方案实现功能
+阅读crash.txt并修复这个问题，在facing为up或者down时getCounterClockWise无法返回内容并抛出错误，需要在facing 为up和down时单独处理
