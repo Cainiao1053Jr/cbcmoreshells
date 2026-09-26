@@ -3,6 +3,9 @@ package com.cainiao1053.cbcmoreshells.index;
 import com.cainiao1053.cbcmoreshells.CBCMSBlocks;
 import com.cainiao1053.cbcmoreshells.blocks.ammo_rack.AmmoRackBlockEntity;
 import com.cainiao1053.cbcmoreshells.blocks.ammo_rack.AmmoRackRenderer;
+import com.cainiao1053.cbcmoreshells.blocks.switch_funnel.SwitchFunnelBlockEntity;
+import com.simibubi.create.content.logistics.funnel.FunnelRenderer;
+import com.simibubi.create.content.logistics.funnel.FunnelVisual;
 import com.cainiao1053.cbcmoreshells.blocks.command_deployer.CommandDeployerBlockEntity;
 import com.cainiao1053.cbcmoreshells.blocks.command_deployer.CommandDeployerRenderer;
 import com.cainiao1053.cbcmoreshells.blocks.command_displayer.CommandDisplayerBlockEntity;
@@ -378,6 +381,13 @@ public class CBCMSBlockEntities {
 			.blockEntity("ammo_rack", AmmoRackBlockEntity::new)
 			.validBlocks(CBCMSBlocks.AMMO_RACK, CBCMSBlocks.STEEL_AMMO_RACK)
 			.renderer(()-> AmmoRackRenderer::new)
+			.register();
+
+	public static final BlockEntityEntry<SwitchFunnelBlockEntity> SWITCH_FUNNEL = REGISTRATE
+			.blockEntity("switch_funnel", SwitchFunnelBlockEntity::new)
+			.visual(() -> FunnelVisual::new)
+			.validBlocks(CBCMSBlocks.SWITCH_FUNNEL)
+			.renderer(() -> FunnelRenderer::new)
 			.register();
 
 //	public static final BlockEntityEntry<DishPlateBlockEntity> DISH_PLATE = REGISTRATE

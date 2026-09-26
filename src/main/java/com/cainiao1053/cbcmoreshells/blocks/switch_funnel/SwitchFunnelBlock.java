@@ -1,0 +1,80 @@
+package com.cainiao1053.cbcmoreshells.blocks.switch_funnel;
+
+import com.cainiao1053.cbcmoreshells.index.CBCMSBlockEntities;
+import com.simibubi.create.content.logistics.funnel.FunnelBlock;
+import com.simibubi.create.content.logistics.funnel.FunnelBlockEntity;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.LevelAccessor;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+
+/**
+ * Brass-funnel-like funnel with two reserve filter slots. Redstone never pauses it:
+ * POWERED is always kept false (it would put the block entity into PAUSED mode), the signal level
+ * is tracked in TRIGGERED instead, and each rising edge cycles the filters.
+ */
+public class SwitchFunnelBlock extends FunnelBlock {
+
+	public static final BooleanProperty TRIGGERED = BlockStateProperties.TRIGGERED;
+
+	public SwitchFunnelBlock(Properties properties) {
+		super(properties);
+		registerDefaultState(defaultBlockState().setValue(TRIGGERED, false));
+	}
+
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder.add(TRIGGERED));
+	}
+
+	@Override
+	public BlockState getStateForPlacement(BlockPlaceContext context) {
+		BlockState state = super.getStateForPlacement(context);
+		return state.setValue(POWERED, false)
+			.setValue(TRIGGERED, context.getLevel().hasNeighborSignal(context.getClickedPos()));
+	}
+
+	@Override
+	public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+		boolean powered = level.hasNeighborSignal(pos);
+		if (powered == state.getValue(TRIGGERED))
+			return;
+		level.setBlock(pos, state.setValue(TRIGGERED, powered), 2);
+		if (powered && level.getBlockEntity(pos) instanceof SwitchFunnelBlockEntity be)
+			be.cycleFilters();
+	}
+
+	@Override
+	public BlockState getEquivalentBeltFunnel(BlockGetter world, BlockPos pos, BlockState state) {
+		return state;
+	}
+
+	@Override
+	public BlockState updateShape(BlockState state, Direction direction, BlockState neighbourState, LevelAccessor world,
+								  BlockPos pos, BlockPos neighbourPos) {
+		// No belt funnel variant: skip FunnelBlock's conversion when placed above a belt
+		updateWater(world, state, pos);
+		return state;
+	}
+
+	@Override
+	@SuppressWarnings({"unchecked", "rawtypes"})
+	public Class<FunnelBlockEntity> getBlockEntityClass() {
+		return (Class) SwitchFunnelBlockEntity.class;
+	}
+
+	@Override
+	public BlockEntityType<? extends FunnelBlockEntity> getBlockEntityType() {
+		return CBCMSBlockEntities.SWITCH_FUNNEL.get();
+	}
+
+}

@@ -260,6 +260,7 @@ public class ModGroup {
 				CBCMSBlocks.TORPEDO_DETECTION_DEVICE.asStack(),
 				CBCMSBlocks.AMMO_RACK.asStack(),
 				CBCMSBlocks.STEEL_AMMO_RACK.asStack(),
+				CBCMSBlocks.SWITCH_FUNNEL.asStack(),
 				CBCMSItems.FIRE_EXTINGUISHER.asStack(),
 				CBCMSItems.BALLISTIC_JOURNAL.asStack(),
 //				CBCMSBlocks.LANDING_INDICATOR.asStack(),

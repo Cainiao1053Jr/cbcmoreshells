@@ -9,7 +9,8 @@
     "CannonMountPointMixin",
     "MunitionFuzingRecipeMixin",
     "AbstractBigCannonProjectileMixin",
-    "CompatMountPointMixin"
+    "CompatMountPointMixin",
+    "FilteringBehaviourAccessor"
   ],
   "injectors": {
     "defaultRequire": 1

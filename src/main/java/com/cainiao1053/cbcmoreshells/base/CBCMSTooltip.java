@@ -287,6 +287,17 @@ public class CBCMSTooltip {
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main"), palette.primary(), palette.highlight(), 1));
 	}
 
+	public static void appendSwitchFunnelInfo(ItemStack stack, TooltipContext ctx, List<Component> tooltip,
+											  TooltipFlag flag) {
+		if (!Screen.hasShiftDown()) {
+			return;
+		}
+		FontHelper.Palette palette = getPalette();
+		String key1 = "block.cbcmoreshells.switch_funnel.tooltip";
+		tooltip.add(Component.translatable(key1).withStyle(ChatFormatting.GRAY));
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(key1 + ".main"), palette.primary(), palette.highlight(), 1));
+	}
+
 	public static void appendDishPlateInfo(ItemStack stack, TooltipContext ctx, List<Component> tooltip,
 										  TooltipFlag flag) {
 		if (!Screen.hasShiftDown()) {

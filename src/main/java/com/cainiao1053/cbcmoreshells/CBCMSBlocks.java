@@ -3,6 +3,10 @@ package com.cainiao1053.cbcmoreshells;
 import com.cainiao1053.cbcmoreshells.blocks.LootBarrelBlock;
 import com.cainiao1053.cbcmoreshells.blocks.ammo_rack.AmmoRackBlock;
 import com.cainiao1053.cbcmoreshells.blocks.ammo_rack.AmmoRackBlockItem;
+import com.cainiao1053.cbcmoreshells.blocks.switch_funnel.SwitchFunnelBlock;
+import com.cainiao1053.cbcmoreshells.blocks.switch_funnel.SwitchFunnelBlockItem;
+import com.simibubi.create.api.behaviour.movement.MovementBehaviour;
+import com.simibubi.create.content.logistics.funnel.FunnelMovementBehaviour;
 import com.cainiao1053.cbcmoreshells.blocks.command_deployer.CommandDeployerBlock;
 import com.cainiao1053.cbcmoreshells.blocks.command_deployer.CommandDeployerBlockItem;
 import com.cainiao1053.cbcmoreshells.blocks.command_displayer.CommandDisplayerBlock;
@@ -3553,6 +3557,15 @@ public class CBCMSBlocks {
 			.initialProperties(SharedProperties::softMetal)
 			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK).noOcclusion())
 			.item(AmmoRackBlockItem::new)
+			.transform(customItemModel())
+			.register();
+
+	public static final BlockEntry<SwitchFunnelBlock> SWITCH_FUNNEL = REGISTRATE.block("switch_funnel", SwitchFunnelBlock::new)
+			.initialProperties(SharedProperties::softMetal)
+			.properties(p -> p.mapColor(MapColor.TERRACOTTA_YELLOW).sound(SoundType.NETHERITE_BLOCK).noOcclusion())
+			.transform(axeOrPickaxe())
+			.onRegister(MovementBehaviour.movementBehaviour(FunnelMovementBehaviour.brass()))
+			.item(SwitchFunnelBlockItem::new)
 			.transform(customItemModel())
 			.register();
 
