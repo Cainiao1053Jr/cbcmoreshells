@@ -22,7 +22,7 @@ public class SwitchFunnelSlotPositioning extends FunnelFilterSlotPositioning {
 
 	@Override
 	public float getScale() {
-		return 0.4f;
+		return 0.35f;
 	}
 
 	@Override

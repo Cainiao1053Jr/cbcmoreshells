@@ -1,1 +1,1 @@
-SwitchFunnelSlotPositioning中调整位置，把过滤器再非up down情况下的位置略微朝外移动以避免被模型阻挡
+把主过滤槽位的默认数量变成最多1
