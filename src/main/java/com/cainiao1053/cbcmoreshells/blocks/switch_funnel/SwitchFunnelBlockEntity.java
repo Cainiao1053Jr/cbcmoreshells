@@ -28,11 +28,12 @@ public class SwitchFunnelBlockEntity extends FunnelBlockEntity {
 				FilteringBehaviour main = (FilteringBehaviour) behaviour;
 				// FunnelBlockEntity only enables filtering for Create's brass funnels
 				main.onlyActiveWhen(() -> true);
-				((FilteringBehaviourAccessor) main).cbcms$setSlotPositioning(new SwitchFunnelSlotPositioning(-1));
+				((FilteringBehaviourAccessor) main).cbcms$setSlotPositioning(new SwitchFunnelSlotPositioning(0));
 				break;
 			}
 		}
-		behaviours.add(new ReserveFilteringBehaviour(this, new SwitchFunnelSlotPositioning(0), 1));
+		// Layout: [reserve 1 | main | reserve 2]
+		behaviours.add(new ReserveFilteringBehaviour(this, new SwitchFunnelSlotPositioning(-1), 1));
 		behaviours.add(new ReserveFilteringBehaviour(this, new SwitchFunnelSlotPositioning(1), 2));
 	}
 
