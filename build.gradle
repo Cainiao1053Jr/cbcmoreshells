@@ -136,9 +136,9 @@ dependencies {
 
     implementation "curse.maven:shaolib-1427600:8728420"
     implementation "curse.maven:shaolib-munitions-1667342:8728437"
-    implementation "curse.maven:synaxis-1526348:8606652"
-    implementation "curse.maven:ldlib-626676:8813684"
-    implementation "curse.maven:sable-schematic-tool-1526951:8606655"
+    //implementation "curse.maven:synaxis-1526348:8606652"
+    //implementation "curse.maven:ldlib-626676:8813684"
+    //implementation "curse.maven:sable-schematic-tool-1526951:8606655"
     implementation "curse.maven:jei-238222:8829744"
 //            {
 //        exclude group: "info.journeymap"       // version conflict: old API shadows JourneyMap's bundled newer API

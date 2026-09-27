@@ -647,20 +647,12 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
         }
     }
 
-    /** Reproduces vanilla {@code Projectile.shoot} scatter, which is no longer reachable without an entity. */
     private static Vec3 applySpread(Vec3 direction, double velocity, float spread, RandomSource random) {
         double deviation = 0.0172275D * spread;
         return direction.add(random.triangle(0.0D, deviation), random.triangle(0.0D, deviation),
                 random.triangle(0.0D, deviation)).scale(velocity);
     }
 
-    /**
-     * Shortens the combat command cooldown the first time this shot lands on a ship, replacing
-     * {@code AbstractDualCannonProjectile.reduceCooldownOnHit}.
-     *
-     * <p>Held on the projectile state as a transient field, so it does not survive a save/load. That
-     * matches the entity implementation, which held a plain reference to the contraption.
-     */
     private DualCannonHitCallback createHitCallback(float cooldownReductionRate) {
         boolean[] alreadyCounted = {false};
         return (context, outcome) -> {
@@ -767,39 +759,6 @@ public class MountedDualCannonContraption extends AbstractMountedCannonContrapti
         if (oldInfo == null) return;
         StructureBlockInfo consumedInfo = new StructureBlockInfo(oldInfo.pos(), oldInfo.state(), tag);
         this.blocks.put(oldInfo.pos(), consumedInfo);
-    }
-
-    private static boolean rollSquib(RandomSource random) {
-        float f = CBCConfigs.server().failure.squibChance.getF();
-        return f != 0 && random.nextFloat() <= f;
-    }
-
-    private void squibBlocks(BlockPos currentPos, List<StructureBlockInfo> projectileBlocks, HolderLookup.Provider registries) {
-        for (int i = 0; i < projectileBlocks.size(); ++i) {
-            BlockPos pos = currentPos.relative(this.initialOrientation, i);
-            StructureBlockInfo cannonInfo1 = this.blocks.get(pos);
-            BlockEntity be1 = this.presentBlockEntities.get(pos);
-            StructureBlockInfo projBlock = projectileBlocks.get(i);
-
-            if (cannonInfo1 != null && be1 instanceof IDualCannonBlockEntity cbe1) {
-                BigCannonBehavior behavior1 = cbe1.cannonBehavior();
-                behavior1.loadBlock(projBlock);
-                CompoundTag tag = behavior1.blockEntity.saveWithFullMetadata(registries);
-                tag.remove("x");
-                tag.remove("y");
-                tag.remove("z");
-                StructureBlockInfo squibInfo = new StructureBlockInfo(cannonInfo1.pos(), cannonInfo1.state(), tag);
-                this.blocks.put(cannonInfo1.pos(), squibInfo);
-            } else {
-                CompoundTag tag = projBlock.nbt();
-                if (tag != null) {
-                    tag.remove("x");
-                    tag.remove("y");
-                    tag.remove("z");
-                }
-                this.blocks.put(pos, new StructureBlockInfo(pos, projBlock.state(), tag));
-            }
-        }
     }
 
     public void activateCombatCommand() {

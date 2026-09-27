@@ -6,16 +6,6 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 
-/**
- * Windowed view over a list, for screens that show a page at a time.
- *
- * <p>Deliberately free of Minecraft types so it can be reasoned about and exercised on its own.
- * Filtering and sorting are applied lazily and cached; the page index is always clamped to
- * something valid, so callers never have to guard against an out-of-range page after the source
- * shrinks.
- *
- * @param <T> element type
- */
 public final class Paginator<T> {
 
 	private final List<T> source = new ArrayList<>();

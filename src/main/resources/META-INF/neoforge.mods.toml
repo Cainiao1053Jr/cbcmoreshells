@@ -41,7 +41,21 @@ side="BOTH"
 [[dependencies.cbcmoreshells]]
 modId="createbigcannons"
 type = "required"
-versionRange="[5.11.5,)"
+versionRange="[5.11.7,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.cbcmoreshells]]
+modId="shaolib"
+type = "required"
+versionRange="[0.1.0,)"
+ordering="AFTER"
+side="BOTH"
+
+[[dependencies.cbcmoreshells]]
+modId="shaolib_munitions"
+type = "required"
+versionRange="[0.1.0,)"
 ordering="AFTER"
 side="BOTH"
 

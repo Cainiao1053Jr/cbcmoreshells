@@ -10,13 +10,6 @@ import com.verr1.shaolib.munitions.config.properties.MunitionPropertyType;
 import com.verr1.shaolib.projectile.client.ClientProjectileBehaviors;
 import net.minecraft.resources.ResourceLocation;
 
-/**
- * Client-side rendering hookup for the dual cannon shells. Client only — do not touch from common
- * code.
- *
- * <p>Driven off {@link CBCMSDualCannonMunitionRegistry} rather than a second hand-written list, so a
- * munition cannot end up registered on the server and invisible on the client.
- */
 public final class CBCMSDualCannonProjectileClient {
 
 	private CBCMSDualCannonProjectileClient() {}
@@ -27,11 +20,6 @@ public final class CBCMSDualCannonProjectileClient {
 		}
 	}
 
-	/**
-	 * Uses the same {@code encodedJson} resolver as the server type, so both sides read a shot's
-	 * per-shot overrides identically instead of the client silently falling back to the datapack
-	 * values.
-	 */
 	private static <P extends DualCannonMunitionProperties> void register(ProjectileType<DualCannonState> type,
 																		  MunitionPropertyType<P> propertyType,
 																		  ResourceLocation renderedBlock) {

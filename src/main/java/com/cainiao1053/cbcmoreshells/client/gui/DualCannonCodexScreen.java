@@ -17,9 +17,9 @@ import net.minecraft.world.level.block.Block;
 
 public class DualCannonCodexScreen extends AbstractSimiScreen {
 
-	private static final int PADDING = 8;
+	private static final int PADDING = 50;
 	private static final int ICON_SIZE = 16;
-	private static final int GRID_COLUMNS = 5;
+	private static final int GRID_COLUMNS = 4;
 	private static final int CELL_SIZE = 24;
 	private static final int HEADER_HEIGHT = 34;
 
@@ -56,19 +56,11 @@ public class DualCannonCodexScreen extends AbstractSimiScreen {
 		this.shells = this.source.shells();
 
 		int gridWidth = GRID_COLUMNS * CELL_SIZE;
-		//int gridHeight = Math.max(1, this.rowCount()) * CELL_SIZE;
-		// Wide enough for the grid, but never narrower than the two settings buttons need.
-		//int width = Math.max(gridWidth, 248) + PADDING * 2;
-		this.setWindowSize(300, 200); //PADDING * 2 + HEADER_HEIGHT + gridHeight
+		this.setWindowSize(150, 200); //PADDING * 2 + HEADER_HEIGHT + gridHeight
 		super.init();
 
 		int left = this.guiLeft + PADDING;
 		int top = this.guiTop + PADDING;
-
-//		this.addRenderableWidget(Button.builder(this.filterLabel(), button -> this.cycleFilter())
-//			.bounds(left, top + 12, 150, 16).build());
-//		this.addRenderableWidget(Button.builder(this.columnLabel(), button -> this.cycleColumns())
-//			.bounds(left + 154, top + 12, 90, 16).build());
 
 		this.gridTop = top + HEADER_HEIGHT;
 		this.gridLeft = this.guiLeft + (this.windowWidth - gridWidth) / 2;
