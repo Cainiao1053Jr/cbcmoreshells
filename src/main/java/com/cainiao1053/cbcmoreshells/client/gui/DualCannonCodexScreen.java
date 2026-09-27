@@ -67,7 +67,7 @@ public class DualCannonCodexScreen extends AbstractSimiScreen {
 		int top = this.guiTop + PADDING;
 
 		this.gridTop = top + HEADER_HEIGHT;
-		this.gridLeft = this.guiLeft + (this.windowWidth - gridWidth) / 2;
+		this.gridLeft = this.guiLeft + (this.windowWidth - gridWidth) / 2 + 15;
 	}
 
 	private int rowCount() {
@@ -80,8 +80,8 @@ public class DualCannonCodexScreen extends AbstractSimiScreen {
 
 	@Override
 	protected void renderWindow(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
-		JournalBackground.render(graphics, this.guiLeft, this.guiTop, this.windowWidth, this.windowHeight);
-		graphics.blit(BACKGROUND, this.gridLeft - 6, this.gridTop -6, this.windowWidth + 12,this.windowHeight + 12, 0, 0, 150, 200, 150, 200);
+		//JournalBackground.render(graphics, this.guiLeft, this.guiTop, this.windowWidth, this.windowHeight);
+		graphics.blit(BACKGROUND, this.guiLeft - 6, this.guiTop -6, this.windowWidth + 12,this.windowHeight + 12, 0, 0, 150, 200, 150, 200);
 
 		graphics.drawString(this.font, I18n.get("cbcmoreshells.firing_table.title"),
 			this.guiLeft + PADDING, this.guiTop + PADDING, COLOUR_TITLE, false);
