@@ -6,7 +6,7 @@ import net.minecraft.resources.ResourceLocation;
 public final class JournalBackground {
 
 	public static final ResourceLocation TEXTURE =
-		ResourceLocation.fromNamespaceAndPath("cbcmoreshells", "textures/gui/journal_background.png");
+		ResourceLocation.fromNamespaceAndPath("cbcmoreshells", "textures/gui/journal_page.png");
 
 	private static final int TEXTURE_WIDTH = 450;
 	private static final int TEXTURE_HEIGHT = 300;

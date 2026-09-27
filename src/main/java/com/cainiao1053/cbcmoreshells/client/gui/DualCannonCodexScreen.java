@@ -11,16 +11,17 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.components.Button;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraft.network.chat.Component;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.Block;
 
 
 public class DualCannonCodexScreen extends AbstractSimiScreen {
 
-	private static final int PADDING = 50;
+	private static final int PADDING = 10;
 	private static final int ICON_SIZE = 16;
 	private static final int GRID_COLUMNS = 4;
-	private static final int CELL_SIZE = 24;
+	private static final int CELL_SIZE = 20;
 	private static final int HEADER_HEIGHT = 34;
 
 	private static final int COLOUR_TITLE = 0xFF2B2118;
@@ -35,6 +36,9 @@ public class DualCannonCodexScreen extends AbstractSimiScreen {
 	private DualCannonMaterialFilter filter;
 	private int gridTop;
 	private int gridLeft;
+
+	public static final ResourceLocation BACKGROUND =
+			ResourceLocation.fromNamespaceAndPath("cbcmoreshells", "textures/gui/journal_background.png");
 
 	@Nullable
 	private final Block lastSelection;
@@ -77,6 +81,7 @@ public class DualCannonCodexScreen extends AbstractSimiScreen {
 	@Override
 	protected void renderWindow(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
 		JournalBackground.render(graphics, this.guiLeft, this.guiTop, this.windowWidth, this.windowHeight);
+		graphics.blit(BACKGROUND, this.gridLeft - 6, this.gridTop -6, this.windowWidth + 12,this.windowHeight + 12, 0, 0, 150, 200, 150, 200);
 
 		graphics.drawString(this.font, I18n.get("cbcmoreshells.firing_table.title"),
 			this.guiLeft + PADDING, this.guiTop + PADDING, COLOUR_TITLE, false);
