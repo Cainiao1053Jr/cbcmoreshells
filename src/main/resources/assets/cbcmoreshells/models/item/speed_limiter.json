@@ -1,3 +1,7 @@
 {
-  "parent": "create:block/gearshift/item"
+  "parent": "create:block/gearshift/item",
+  "textures": {
+    "0": "cbcmoreshells:block/speed_limiter",
+    "1": "create:block/brass_gearbox"
+  }
 }

@@ -12,13 +12,25 @@ import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 
 public class SpeedLimiterBlock extends RotatedPillarKineticBlock implements IBE<SpeedLimiterBlockEntity>, IWrenchable {
 
+	public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+
 	public SpeedLimiterBlock(Properties properties) {
 		super(properties);
+		registerDefaultState(defaultBlockState().setValue(POWERED, false));
+	}
+
+	@Override
+	protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+		super.createBlockStateDefinition(builder.add(POWERED));
 	}
 
 	@Override
@@ -45,7 +57,7 @@ public class SpeedLimiterBlock extends RotatedPillarKineticBlock implements IBE<
 		Level level = context.getLevel();
 		BlockPos pos = context.getClickedPos();
 		SpeedLimiterBlockEntity be = getBlockEntity(level, pos);
-		if (be == null || be.getSpeedRatio() >= 1)
+		if (be == null || (be.getSpeedRatio() >= 1 && !state.getValue(POWERED)))
 			return super.onWrenched(state, context);
 		if (!level.isClientSide) {
 			be.resetSpeedRatio();

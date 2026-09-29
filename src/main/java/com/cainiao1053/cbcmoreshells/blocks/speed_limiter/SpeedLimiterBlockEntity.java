@@ -12,6 +12,7 @@ import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -56,7 +57,15 @@ public class SpeedLimiterBlockEntity extends SplitShaftBlockEntity {
 		float newRatio = Mth.clamp(targetOutputSpeed / inputSpeed, MIN_RATIO, 1);
 		if (newRatio >= speedRatio)
 			return;
+		setPowered(true);
 		setSpeedRatio(newRatio);
+	}
+
+	protected void setPowered(boolean powered) {
+		BlockState state = getBlockState();
+		if (!state.hasProperty(SpeedLimiterBlock.POWERED) || state.getValue(SpeedLimiterBlock.POWERED) == powered)
+			return;
+		level.setBlock(worldPosition, state.setValue(SpeedLimiterBlock.POWERED, powered), Block.UPDATE_ALL);
 	}
 
 	public float getSpeedRatio() {
@@ -77,6 +86,7 @@ public class SpeedLimiterBlockEntity extends SplitShaftBlockEntity {
 	}
 
 	public void resetSpeedRatio() {
+		setPowered(false);
 		setSpeedRatio(1);
 	}
 

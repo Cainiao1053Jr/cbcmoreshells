@@ -1,15 +1,28 @@
 {
   "variants": {
-    "axis=x": {
+    "axis=x,powered=false": {
       "model": "cbcmoreshells:block/speed_limiter",
       "x": 90,
       "y": 90
     },
-    "axis=y": {
+    "axis=x,powered=true": {
+      "model": "cbcmoreshells:block/speed_limiter_powered",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y,powered=false": {
       "model": "cbcmoreshells:block/speed_limiter"
     },
-    "axis=z": {
+    "axis=y,powered=true": {
+      "model": "cbcmoreshells:block/speed_limiter_powered"
+    },
+    "axis=z,powered=false": {
       "model": "cbcmoreshells:block/speed_limiter",
+      "x": 90,
+      "y": 180
+    },
+    "axis=z,powered=true": {
+      "model": "cbcmoreshells:block/speed_limiter_powered",
       "x": 90,
       "y": 180
     }

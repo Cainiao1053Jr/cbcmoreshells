@@ -1,9 +1,9 @@
 {
   "parent": "create:block/gearshift/block",
   "textures": {
-    "0": "cbcmoreshells:block/speed_limiter",
+    "0": "cbcmoreshells:block/speed_limiter_powered",
     "1": "create:block/brass_gearbox",
     "2": "create:block/funnel/brass_funnel_frame",
-    "particle": "cbcmoreshells:block/speed_limiter"
+    "particle": "cbcmoreshells:block/speed_limiter_powered"
   }
 }
