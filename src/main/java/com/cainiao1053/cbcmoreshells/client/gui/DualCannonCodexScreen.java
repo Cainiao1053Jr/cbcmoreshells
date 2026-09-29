@@ -5,6 +5,8 @@ import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.table.DualCannonTable
 
 import java.util.List;
 import javax.annotation.Nullable;
+
+import com.cainiao1053.cbcmoreshells.utils.CBCMSGuiUtils;
 import net.createmod.catnip.gui.AbstractSimiScreen;
 import net.createmod.catnip.gui.ScreenOpener;
 import net.minecraft.client.gui.GuiGraphics;
@@ -81,14 +83,16 @@ public class DualCannonCodexScreen extends AbstractSimiScreen {
 	@Override
 	protected void renderWindow(GuiGraphics graphics, int mouseX, int mouseY, float partialTicks) {
 		//JournalBackground.render(graphics, this.guiLeft, this.guiTop, this.windowWidth, this.windowHeight);
-		graphics.blit(BACKGROUND, this.guiLeft - 6, this.guiTop -6, this.windowWidth + 12,this.windowHeight + 12, 0, 0, 150, 200, 150, 200);
+		graphics.blit(BACKGROUND, this.guiLeft - 6, this.guiTop -6, this.windowWidth + 15,this.windowHeight + 12, 0, 0, 150, 200, 150, 200);
 
-		graphics.drawString(this.font, I18n.get("cbcmoreshells.firing_table.title"),
-			this.guiLeft + PADDING, this.guiTop + PADDING, COLOUR_TITLE, false);
+//		graphics.drawString(this.font, I18n.get("cbcmoreshells.firing_table.title"),
+//			this.guiLeft + PADDING, this.guiTop + PADDING, COLOUR_TITLE, false);
+
+		CBCMSGuiUtils.drawCenteredString(graphics, this.font, Component.translatable("cbcmoreshells.firing_table.title"), this.guiLeft + this.windowWidth/2, this.guiTop + PADDING + 12, 0x7c715b, false, 1.6f);
 
 		if (this.shells.isEmpty()) {
-			graphics.drawString(this.font, I18n.get("cbcmoreshells.firing_table.no_shells"),
-				this.guiLeft + PADDING, this.gridTop, COLOUR_LABEL, false);
+//			graphics.drawString(this.font, I18n.get("cbcmoreshells.firing_table.no_shells"),
+//				this.guiLeft + PADDING, this.gridTop, COLOUR_LABEL, false);
 			return;
 		}
 

@@ -7,6 +7,9 @@ public interface DualCannonMomentumModel {
 	DualCannonMomentumModel CAPPED = (loadout, speed) ->
 		DualCannonPenetrationModel.getCappedMomentum(loadout.shell().shell(), loadout.durabilityModifier(), speed, loadout.effectiveMass());
 
+	DualCannonMomentumModel HSAP = (loadout, speed) ->
+			DualCannonPenetrationModel.getPenetrateToughness(loadout.effectiveMass());
+
 	double momentum(DualCannonLoadout loadout, double speed);
 
 }

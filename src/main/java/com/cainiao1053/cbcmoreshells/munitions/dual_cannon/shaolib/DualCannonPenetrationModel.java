@@ -80,7 +80,12 @@ public final class DualCannonPenetrationModel {
 		BlockArmorPropertiesProvider armor = BlockArmorPropertiesHandler.getProperties(state1);
 
 		DualCannonImpactProperties dualImpact = dualProperties.dualImpact();
-		double cappedMomentum = getCappedMomentum(dualProperties, state.durabilityModifier(), speed, mass);
+		double cappedMomentum;// = getCappedMomentum(dualProperties, state.durabilityModifier(), speed, mass);
+		if(kind == DualCannonBehavior.Kind.HSAP){
+			cappedMomentum = getPenetrateToughness(mass);
+		}else{
+			cappedMomentum = getCappedMomentum(dualProperties, state.durabilityModifier(), speed, mass);
+		}
 		// HSAP defeats armour by stacking the plates behind the entry face instead of reading the
 		// entry face alone, and it does so head-on: obliquity plays no part in its momentum.
 		boolean stacked = kind == DualCannonBehavior.Kind.HSAP;
@@ -145,6 +150,10 @@ public final class DualCannonPenetrationModel {
 		double cappedMomentum =
 				dualImpact.maximumMomentum() <= EPSILON ? rawMomentum : Math.min(rawMomentum, dualImpact.maximumMomentum() * dmm);
 		return cappedMomentum;
+	}
+
+	public static double getPenetrateToughness(double mass){
+		return mass * mass * 0.21 + mass * 8.9 - 9;
 	}
 
 	private static <S extends DualCannonState> MunitionImpactOutcome penetrateBlock(ProjectileServerContext<S> context,

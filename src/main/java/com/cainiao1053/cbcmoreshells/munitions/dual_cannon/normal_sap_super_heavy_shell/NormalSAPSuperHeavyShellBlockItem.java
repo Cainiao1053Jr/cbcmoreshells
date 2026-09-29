@@ -3,6 +3,7 @@ package com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_sap_super_hea
 import com.cainiao1053.cbcmoreshells.base.CBCMSTooltip;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.FuzedDualCannonProjectileBlockItem;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.table.DualCannonLoadout;
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.table.DualCannonMomentumModel;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.table.DualCannonStats;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.table.StatSink;
 import net.minecraft.network.chat.Component;
@@ -35,4 +36,8 @@ public class NormalSAPSuperHeavyShellBlockItem extends FuzedDualCannonProjectile
 		sink.add(DualCannonStats.EXPLOSION_POWER);
 	}
 
+	@Override
+	public DualCannonMomentumModel momentumModel() {
+		return DualCannonMomentumModel.HSAP;
+	}
 }

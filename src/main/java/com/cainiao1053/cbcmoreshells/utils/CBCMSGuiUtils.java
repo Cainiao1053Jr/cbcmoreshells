@@ -12,21 +12,12 @@ import net.neoforged.api.distmarker.OnlyIn;
 
 import java.util.List;
 
-/**
- * GUI helpers. Every {@code scale} argument is a text scale factor (1.0 = vanilla size); all positions, widths and
- * heights are in regular screen (GUI) pixels regardless of the scale.
- */
 @OnlyIn(Dist.CLIENT)
 public final class CBCMSGuiUtils {
 
 	private CBCMSGuiUtils() {
 	}
 
-	// ---------------------------------------------------------------------------------------------
-	// Single line
-	// ---------------------------------------------------------------------------------------------
-
-	/** Draws one scaled line with its top-left corner at (x, y). Returns the drawn width in screen pixels. */
 	public static int drawString(GuiGraphics graphics, Font font, FormattedText text, int x, int y,
 								 int colour, boolean shadow, float scale) {
 		FormattedCharSequence line = Language.getInstance().getVisualOrder(text);
@@ -44,7 +35,6 @@ public final class CBCMSGuiUtils {
 		return drawString(graphics, font, FormattedText.of(text), x, y, colour, shadow, scale);
 	}
 
-	/** Draws one scaled line horizontally centred on {@code centreX}. Returns the drawn width in screen pixels. */
 	public static int drawCenteredString(GuiGraphics graphics, Font font, FormattedText text, int centreX, int y,
 										 int colour, boolean shadow, float scale) {
 		int width = Mth.ceil(font.width(text) * scale);
@@ -56,13 +46,6 @@ public final class CBCMSGuiUtils {
 		return drawCenteredString(graphics, font, FormattedText.of(text), centreX, y, colour, shadow, scale);
 	}
 
-	// ---------------------------------------------------------------------------------------------
-	// Wrapped within a box
-	// ---------------------------------------------------------------------------------------------
-
-	/**
-	 * Draws scaled text starting at (x, y), wrapped to {@code maxWidth}. Returns the drawn height in screen pixels.
-	 */
 	public static int drawString(GuiGraphics graphics, Font font, FormattedText text, int x, int y, int maxWidth,
 								 int colour, boolean shadow, float scale) {
 		return drawWrapped(graphics, font, text, x, y, maxWidth, Integer.MAX_VALUE, colour, shadow, scale, false);
@@ -73,10 +56,6 @@ public final class CBCMSGuiUtils {
 		return drawString(graphics, font, FormattedText.of(text), x, y, maxWidth, colour, shadow, scale);
 	}
 
-	/**
-	 * Draws scaled text inside the box (x, y, maxWidth, maxHeight), wrapped to the box width. Lines that would not
-	 * fully fit in the box height are dropped. Returns the drawn height in screen pixels.
-	 */
 	public static int drawString(GuiGraphics graphics, Font font, FormattedText text, int x, int y, int maxWidth,
 								 int maxHeight, int colour, boolean shadow, float scale) {
 		return drawWrapped(graphics, font, text, x, y, maxWidth, maxHeight, colour, shadow, scale, false);
@@ -110,11 +89,6 @@ public final class CBCMSGuiUtils {
 			scale);
 	}
 
-	// ---------------------------------------------------------------------------------------------
-	// Measuring
-	// ---------------------------------------------------------------------------------------------
-
-	/** Splits text into the lines the wrapped draw methods would produce for {@code maxWidth} at {@code scale}. */
 	public static List<FormattedCharSequence> wrapLines(Font font, FormattedText text, int maxWidth, float scale) {
 		return font.split(text, Math.max(1, (int) (maxWidth / scale)));
 	}
@@ -123,10 +97,6 @@ public final class CBCMSGuiUtils {
 	public static int wrappedHeight(Font font, FormattedText text, int maxWidth, float scale) {
 		return Mth.ceil(wrapLines(font, text, maxWidth, scale).size() * font.lineHeight * scale);
 	}
-
-	// ---------------------------------------------------------------------------------------------
-	// Internals
-	// ---------------------------------------------------------------------------------------------
 
 	private static int drawWrapped(GuiGraphics graphics, Font font, FormattedText text, int x, int y, int maxWidth,
 								   int maxHeight, int colour, boolean shadow, float scale, boolean centred) {

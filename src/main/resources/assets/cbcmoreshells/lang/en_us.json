@@ -541,7 +541,7 @@
     "cbcmoreshells.firing_table.column.flight_time": "Flight Time",
     "cbcmoreshells.firing_table.column.impact_speed": "Impact Speed",
 
-    "cbcmoreshells.firing_table.title": "Dual Cannon Firing Tables",
+    "cbcmoreshells.firing_table.title": "Ballistica",
     "cbcmoreshells.firing_table.material": "Material",
     "cbcmoreshells.firing_table.distance": "Distance",
     "cbcmoreshells.firing_table.showing": "Showing: %s",
