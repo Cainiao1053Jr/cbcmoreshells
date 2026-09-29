@@ -622,8 +622,8 @@
     "item.cbcmoreshells.slate_steel_ingot": "板岩合金锭",
     "block.cbcmoreshells.ball": "标准皮球弹",
     "block.cbcmoreshells.ball.main": "这是一个可以发射出去的皮球，能够反复弹跳，伤害不高但是看起来很好玩。(据说是充气铅球，不要被砸到了)",
-    "block.cbcmoreshells.speed_limiter": "限速器",
-    "cbcmoreshells.speed_limiter.goggles.title": "限速器：",
+    "block.cbcmoreshells.speed_limiter": "过载保护器",
+    "cbcmoreshells.speed_limiter.goggles.title": "过载保护器：",
     "cbcmoreshells.speed_limiter.goggles.speed_ratio": "转速比值",
     "cbcmoreshells.speed_limiter.goggles.output_speed": "输出转速"
 }

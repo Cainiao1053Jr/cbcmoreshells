@@ -3549,6 +3549,7 @@ public class CBCMSBlocks {
 			.register();
 
 	public static final BlockEntry<SpeedLimiterBlock> SPEED_LIMITER = REGISTRATE.block("speed_limiter", SpeedLimiterBlock::new)
+			.addLayer(() -> RenderType::cutoutMipped)
 			.initialProperties(SharedProperties::stone)
 			.properties(p -> p.noOcclusion().mapColor(MapColor.PODZOL))
 			.transform(axeOrPickaxe())
