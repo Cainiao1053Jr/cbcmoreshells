@@ -1,0 +1,17 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "cbcmoreshells:block/speed_limiter",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "cbcmoreshells:block/speed_limiter"
+    },
+    "axis=z": {
+      "model": "cbcmoreshells:block/speed_limiter",
+      "x": 90,
+      "y": 180
+    }
+  }
+}

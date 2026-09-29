@@ -553,5 +553,9 @@
     "cbcmoreshells.firing_table.unavailable": "No firing table for this round",
     "cbcmoreshells.firing_table.no_ballistics": "This round's flight cannot be solved",
     "cbcmoreshells.firing_table.no_shells": "No dual cannon rounds are registered",
-    "item.cbcmoreshells.ballistic_journal": "Ballistic Journal"
+    "item.cbcmoreshells.ballistic_journal": "Ballistic Journal",
+    "block.cbcmoreshells.speed_limiter": "Speed Limiter",
+    "cbcmoreshells.speed_limiter.goggles.title": "Speed Limiter:",
+    "cbcmoreshells.speed_limiter.goggles.speed_ratio": "Speed Ratio",
+    "cbcmoreshells.speed_limiter.goggles.output_speed": "Output Speed"
 }

@@ -9,7 +9,10 @@ import com.simibubi.create.content.logistics.funnel.FunnelVisual;
 import com.cainiao1053.cbcmoreshells.blocks.command_deployer.CommandDeployerBlockEntity;
 import com.cainiao1053.cbcmoreshells.blocks.command_deployer.CommandDeployerRenderer;
 import com.cainiao1053.cbcmoreshells.blocks.command_displayer.CommandDisplayerBlockEntity;
+import com.cainiao1053.cbcmoreshells.blocks.speed_limiter.SpeedLimiterBlockEntity;
 import com.cainiao1053.cbcmoreshells.blocks.torpedo_detection_device.TorpedoDetectionDeviceBlockEntity;
+import com.simibubi.create.content.kinetics.transmission.SplitShaftRenderer;
+import com.simibubi.create.content.kinetics.transmission.SplitShaftVisual;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.DualCannonBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.breeches.quick_firing_breech.DualCannonQuickfiringBreechBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.breeches.quick_firing_breech.DualCannonQuickfiringBreechBlockEntityRenderer;
@@ -377,7 +380,14 @@ public class CBCMSBlockEntities {
 			.validBlocks(CBCMSBlocks.TORPEDO_DETECTION_DEVICE)
 			.register();
 
-	public static final BlockEntityEntry<AmmoRackBlockEntity> AMMO_RACK = REGISTRATE
+	public static final BlockEntityEntry<SpeedLimiterBlockEntity> SPEED_LIMITER = REGISTRATE
+			.blockEntity("speed_limiter", SpeedLimiterBlockEntity::new)
+			.visual(() -> SplitShaftVisual::new, false)
+			.validBlocks(CBCMSBlocks.SPEED_LIMITER)
+			.renderer(() -> SplitShaftRenderer::new)
+			.register();
+
+	public static final BlockEntityEntry<AmmoRackBlockEntity> AMMO_RACK =REGISTRATE
 			.blockEntity("ammo_rack", AmmoRackBlockEntity::new)
 			.validBlocks(CBCMSBlocks.AMMO_RACK, CBCMSBlocks.STEEL_AMMO_RACK)
 			.renderer(()-> AmmoRackRenderer::new)

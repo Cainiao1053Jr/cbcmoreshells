@@ -12,6 +12,7 @@ import com.cainiao1053.cbcmoreshells.blocks.command_deployer.CommandDeployerBloc
 import com.cainiao1053.cbcmoreshells.blocks.command_deployer.CommandDeployerBlockItem;
 import com.cainiao1053.cbcmoreshells.blocks.command_displayer.CommandDisplayerBlock;
 import com.cainiao1053.cbcmoreshells.blocks.command_displayer.CommandDisplayerBlockItem;
+import com.cainiao1053.cbcmoreshells.blocks.speed_limiter.SpeedLimiterBlock;
 import com.cainiao1053.cbcmoreshells.blocks.torpedo_detection_device.TorpedoDetectionDeviceBlock;
 import com.cainiao1053.cbcmoreshells.blocks.torpedo_detection_device.TorpedoDetectionDeviceBlockItem;
 import com.cainiao1053.cbcmoreshells.cannons.big_cannon.NethersteelQuickfiringBreechBlock;
@@ -3547,7 +3548,15 @@ public class CBCMSBlocks {
 			.transform(customItemModel())
 			.register();
 
-	public static final BlockEntry<AmmoRackBlock> AMMO_RACK = REGISTRATE.block("ammo_rack", AmmoRackBlock::new)
+	public static final BlockEntry<SpeedLimiterBlock> SPEED_LIMITER = REGISTRATE.block("speed_limiter", SpeedLimiterBlock::new)
+			.initialProperties(SharedProperties::stone)
+			.properties(p -> p.noOcclusion().mapColor(MapColor.PODZOL))
+			.transform(axeOrPickaxe())
+			.item()
+			.build()
+			.register();
+
+	public static final BlockEntry<AmmoRackBlock> AMMO_RACK =REGISTRATE.block("ammo_rack", AmmoRackBlock::new)
 			.initialProperties(SharedProperties::softMetal)
 			.properties(p -> p.sound(SoundType.NETHERITE_BLOCK).noOcclusion())
 			.item(AmmoRackBlockItem::new)

@@ -258,6 +258,7 @@ public class ModGroup {
 				CBCMSBlocks.STEEL_PROJECTILE_RACK_CHAMBER.asStack(),
 
 				CBCMSBlocks.TORPEDO_DETECTION_DEVICE.asStack(),
+				CBCMSBlocks.SPEED_LIMITER.asStack(),
 				CBCMSBlocks.AMMO_RACK.asStack(),
 				CBCMSBlocks.STEEL_AMMO_RACK.asStack(),
 				CBCMSBlocks.SWITCH_FUNNEL.asStack(),
