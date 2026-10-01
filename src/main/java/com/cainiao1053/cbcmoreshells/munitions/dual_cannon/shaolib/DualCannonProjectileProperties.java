@@ -106,10 +106,6 @@ public record DualCannonProjectileProperties(
 			base.impact(), base.effects(), base.damage(), base.dualCannon(), base.dualImpact());
 	}
 
-	// ---------------------------------------------------------------------------------------------
-	// Codecs
-	// ---------------------------------------------------------------------------------------------
-
 	private static DualCannonProjectileProperties fromJson(JsonObject json, DualCannonProjectileProperties fallback) {
 		return new DualCannonProjectileProperties(
 			MunitionPropertyComponents.BallisticsProperties.fromJson(

@@ -21,7 +21,7 @@ import java.util.List;
 public class SpeedLimiterBlockEntity extends SplitShaftBlockEntity {
 
 	public static final float MIN_RATIO = 1 / 256f;
-	private static final int CHECK_INTERVAL = 20;
+	private static final int CHECK_INTERVAL = 15;
 
 	protected float speedRatio = 1;
 	private int checkTimer = CHECK_INTERVAL;

@@ -7,7 +7,7 @@
   "results": [
     {
       "chance": 120.0,
-      "item": "cbcmoreshells:reinforced_torpedo_head"
+      "id": "cbcmoreshells:reinforced_torpedo_head"
     }
   ],
   "sequence": [
@@ -23,7 +23,7 @@
       ],
       "results": [
         {
-          "item": "cbcmoreshells:assembled_reinforced_torpedo_head"
+          "id": "cbcmoreshells:assembled_reinforced_torpedo_head"
         }
       ]
     },
@@ -39,7 +39,7 @@
       ],
       "results": [
         {
-          "item": "cbcmoreshells:assembled_reinforced_torpedo_head"
+          "id": "cbcmoreshells:assembled_reinforced_torpedo_head"
         }
       ]
     },
@@ -55,7 +55,7 @@
       ],
       "results": [
         {
-          "item": "cbcmoreshells:assembled_reinforced_torpedo_head"
+          "id": "cbcmoreshells:assembled_reinforced_torpedo_head"
         }
       ]
     },
@@ -68,12 +68,12 @@
       ],
       "results": [
         {
-          "item": "cbcmoreshells:assembled_reinforced_torpedo_head"
+          "id": "cbcmoreshells:assembled_reinforced_torpedo_head"
         }
       ]
     }
   ],
-  "transitionalItem": {
-    "item": "cbcmoreshells:assembled_reinforced_torpedo_head"
+  "transitional_item": {
+    "id": "cbcmoreshells:assembled_reinforced_torpedo_head"
   }
 }

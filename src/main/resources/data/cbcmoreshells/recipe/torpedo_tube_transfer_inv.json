@@ -1,0 +1,14 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+  	"T"
+  ],
+  "key": {
+  	"T": {
+      "item": "cbcmoreshells:steel_torpedo_tube_barrel"
+    }
+  },
+  "result": {
+    "id": "cbcmoreshells:steel_torpedo_tube_chamber"
+  }
+}

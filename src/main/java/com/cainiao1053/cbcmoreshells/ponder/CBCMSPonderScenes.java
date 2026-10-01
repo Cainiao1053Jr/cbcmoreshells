@@ -166,5 +166,9 @@ public class CBCMSPonderScenes {
                 CBCMSBlocks.AMMO_RACK,
                 CBCMSBlocks.STEEL_AMMO_RACK
         ).addStoryBoard("ammo_rack/ammo_rack_intro", AmmoRackScenes::ammoRackIntro);
+
+        HELPER.forComponents(
+                CBCMSBlocks.SPEED_LIMITER
+        ).addStoryBoard("speed_limiter/speed_limiter_intro", SpeedLimiterScenes::speedLimiterIntro);
     }
 }

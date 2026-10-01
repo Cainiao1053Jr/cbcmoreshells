@@ -7,23 +7,23 @@
   "results": [
     {
       "chance": 120.0,
-      "item": "cbcmoreshells:short_range_torpedo"
+      "id": "cbcmoreshells:short_range_torpedo"
     },
     {
       "chance": 3.0,
-      "item": "create:iron_sheet"
+      "id": "create:iron_sheet"
     },
     {
       "chance": 1.0,
-      "item": "cbcmoreshells:normal_he_shell"
+      "id": "cbcmoreshells:normal_he_shell"
     },
     {
       "chance": 1.0,
-      "item": "minecraft:cod"
+      "id": "minecraft:cod"
     },
     {
       "chance": 5.0,
-      "item": "create:shaft"
+      "id": "create:shaft"
     }
   ],
   "sequence": [
@@ -39,7 +39,7 @@
       ],
       "results": [
         {
-          "item": "cbcmoreshells:assembled_short_range_torpedo_component"
+          "id": "cbcmoreshells:assembled_short_range_torpedo_component"
         }
       ]
     },
@@ -55,7 +55,7 @@
       ],
       "results": [
         {
-          "item": "cbcmoreshells:assembled_short_range_torpedo_component"
+          "id": "cbcmoreshells:assembled_short_range_torpedo_component"
         }
       ]
     },
@@ -71,7 +71,7 @@
       ],
       "results": [
         {
-          "item": "cbcmoreshells:assembled_short_range_torpedo_component"
+          "id": "cbcmoreshells:assembled_short_range_torpedo_component"
         }
       ]
     },
@@ -87,7 +87,7 @@
       ],
       "results": [
         {
-          "item": "cbcmoreshells:assembled_short_range_torpedo_component"
+          "id": "cbcmoreshells:assembled_short_range_torpedo_component"
         }
       ]
     },
@@ -103,7 +103,7 @@
       ],
       "results": [
         {
-          "item": "cbcmoreshells:assembled_short_range_torpedo_component"
+          "id": "cbcmoreshells:assembled_short_range_torpedo_component"
         }
       ]
     },
@@ -116,12 +116,12 @@
       ],
       "results": [
         {
-          "item": "cbcmoreshells:assembled_short_range_torpedo_component"
+          "id": "cbcmoreshells:assembled_short_range_torpedo_component"
         }
       ]
     }
   ],
-  "transitionalItem": {
-    "item": "cbcmoreshells:assembled_short_range_torpedo_component"
+  "transitional_item": {
+    "id": "cbcmoreshells:assembled_short_range_torpedo_component"
   }
 }

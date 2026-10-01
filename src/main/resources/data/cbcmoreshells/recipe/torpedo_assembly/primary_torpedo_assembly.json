@@ -7,11 +7,11 @@
   "results": [
     {
       "chance": 120.0,
-      "item": "cbcmoreshells:primary_torpedo"
+      "id": "cbcmoreshells:primary_torpedo"
     },
     {
       "chance": 8.0,
-      "item": "create:iron_sheet"
+      "id": "create:iron_sheet"
     }
   ],
   "sequence": [
@@ -27,7 +27,7 @@
       ],
       "results": [
         {
-          "item": "cbcmoreshells:assembled_primary_torpedo_component"
+          "id": "cbcmoreshells:assembled_primary_torpedo_component"
         }
       ]
     },
@@ -43,7 +43,7 @@
       ],
       "results": [
         {
-          "item": "cbcmoreshells:assembled_primary_torpedo_component"
+          "id": "cbcmoreshells:assembled_primary_torpedo_component"
         }
       ]
     },
@@ -59,7 +59,7 @@
       ],
       "results": [
         {
-          "item": "cbcmoreshells:assembled_primary_torpedo_component"
+          "id": "cbcmoreshells:assembled_primary_torpedo_component"
         }
       ]
     },
@@ -75,7 +75,7 @@
       ],
       "results": [
         {
-          "item": "cbcmoreshells:assembled_primary_torpedo_component"
+          "id": "cbcmoreshells:assembled_primary_torpedo_component"
         }
       ]
     },
@@ -91,7 +91,7 @@
       ],
       "results": [
         {
-          "item": "cbcmoreshells:assembled_primary_torpedo_component"
+          "id": "cbcmoreshells:assembled_primary_torpedo_component"
         }
       ]
     },
@@ -107,7 +107,7 @@
       ],
       "results": [
         {
-          "item": "cbcmoreshells:assembled_primary_torpedo_component"
+          "id": "cbcmoreshells:assembled_primary_torpedo_component"
         }
       ]
     },
@@ -120,12 +120,12 @@
       ],
       "results": [
         {
-          "item": "cbcmoreshells:assembled_primary_torpedo_component"
+          "id": "cbcmoreshells:assembled_primary_torpedo_component"
         }
       ]
     }
   ],
-  "transitionalItem": {
-    "item": "cbcmoreshells:assembled_primary_torpedo_component"
+  "transitional_item": {
+    "id": "cbcmoreshells:assembled_primary_torpedo_component"
   }
 }

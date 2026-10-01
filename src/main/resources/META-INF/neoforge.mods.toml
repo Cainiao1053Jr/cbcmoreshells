@@ -4,7 +4,7 @@ license="Custom"
 
 [[mods]]
 modId="cbcmoreshells"
-version="2.1.8-1.21.1"
+version="2.1.9-1.21.1"
 displayName="CBC Military Supplement"
 displayURL="https://www.curseforge.com/minecraft/mc-mods/"
 logoFile=""
@@ -20,7 +20,7 @@ config = "cbcmoreshells.mixins.json"
 [[dependencies.cbcmoreshells]] #optional
 modId = "neoforge"
 type = "required"
-versionRange="21.1.228"
+versionRange="[21.1.228,)"
 ordering="AFTER"
 side="SERVER"
 

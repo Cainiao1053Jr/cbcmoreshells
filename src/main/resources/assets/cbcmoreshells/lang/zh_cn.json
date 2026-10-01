@@ -605,7 +605,7 @@
     "block.cbcmoreshells.light_apbc_shell": "轻型增程风帽穿甲榴弹",
     "block.cbcmoreshells.light_apbc_shell.main": "这种炮弹可以同时穿透和爆炸，跳弹角更好，初速更高，射程更远，穿甲和爆炸的威力受到武器和指令影响。无法使用延时引信。炮弹的基础弹头质量为_%s_，爆炸威力为_%s_，出膛速度为_%sm/s_，初始散步为_%s_，最低散步为_%s_，基础存续时间为_%ss_，起始跳弹角为_%s度_，碾压厚度为_%s_，最大动量为_%s toughness_，装填时间系数为 _%s_",
     "block.cbcmoreshells.normal_sap_super_heavy_shell": "标准超重半穿甲弹",
-    "block.cbcmoreshells.normal_sap_super_heavy_shell.main": "这种炮弹可以同时穿透和爆炸，爆炸威力更大但初速度更低，但只能击穿一层装甲，爆炸和穿甲的威力受到武器和指令影响，爆炸受到的影响更小。炮弹的基础弹头质量为_%s_，基础爆炸威力为_%s_，出膛速度为_%sm/s_，初始散步为_%s_，最低散步为_%s_，基础存续时间为_%ss_，起始跳弹角为_%s度_，碾压厚度为_%s_，最大动量为_%s toughness_，装填时间系数为 _%s_",
+    "block.cbcmoreshells.normal_sap_super_heavy_shell.main": "这种炮弹可以同时穿透和爆炸，但只能击穿一层装甲，穿透能力仅取决于弹头质量，不受角度影响，部分内层装甲会对这种炮弹增加额外抗性。炮弹的基础弹头质量为_%s_，基础爆炸威力为_%s_，出膛速度为_%sm/s_，初始散步为_%s_，最低散步为_%s_，基础存续时间为_%ss_，起始跳弹角为_%s度_，碾压厚度为_%s_，最大动量为_%s toughness_，装填时间系数为 _%s_",
     "block.cbcmoreshells.extended_sap_shell": "增程半穿甲弹",
     "block.cbcmoreshells.extended_sap_shell.main": "这种炮弹可以同时穿透和爆炸，但只能击穿一层装甲，爆炸和穿甲的威力受到武器和指令影响，爆炸受到的影响更小。炮弹的基础弹头质量为_%s_，基础爆炸威力为_%s_，出膛速度为_%sm/s_，初始散步为_%s_，最低散步为_%s_，基础存续时间为_%ss_，起始跳弹角为_%s度_，碾压厚度为_%s_，最大动量为_%s toughness_，装填时间系数为 _%s_",
     "block.cbcmoreshells.material.constantan": "康铜",
@@ -625,5 +625,9 @@
     "block.cbcmoreshells.speed_limiter": "过载保护器",
     "cbcmoreshells.speed_limiter.goggles.title": "过载保护器：",
     "cbcmoreshells.speed_limiter.goggles.speed_ratio": "转速比值",
-    "cbcmoreshells.speed_limiter.goggles.output_speed": "输出转速"
+    "cbcmoreshells.speed_limiter.goggles.output_speed": "输出转速",
+    "cbcmoreshells.ponder.speed_limiter/speed_limiter_intro.header": "过载保护器介绍",
+"cbcmoreshells.ponder.speed_limiter/speed_limiter_intro.text_1": "过载保护器用于在应力过载时自动降低输出转速以让应力网络继续运行",
+"cbcmoreshells.ponder.speed_limiter/speed_limiter_intro.text_2": "有时应力不足以带动所有机械元件，持续提供应力能让保护器自动降速并亮起指示灯",
+"cbcmoreshells.ponder.speed_limiter/speed_limiter_intro.text_3": "使用扳手右键亮灯的指示器可以重置回初始设置"
 }
