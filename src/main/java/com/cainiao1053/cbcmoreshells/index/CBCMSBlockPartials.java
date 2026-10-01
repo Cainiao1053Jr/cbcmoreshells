@@ -29,6 +29,7 @@ public class CBCMSBlockPartials {
 		STEEL_TORPEDO_SLIDING_BREECHBLOCK = breechblockPartial(CBCMSTorpedoTubeMaterials.STEEL, "steel_torpedo_sliding_breechblock"),
 
 		QUICKFIRING_BREECH_LEVER = block("quickfiring_breech_lever"),
+		CANNON_COMBO_OVERLAY = PartialModel.of(Cbcmoreshells.resource("item/cannon_combo_overlay")),
 
 	    STEEL_PROJECTILE_RACK_SLIDING_BREECHBLOCK = projectileLockBlockPartial(CBCMSProjectileRackMaterials.STEEL, "steel_projectile_rack_sliding_breechblock"),
 

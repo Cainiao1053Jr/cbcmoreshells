@@ -43,7 +43,7 @@ public class CannonComboItem extends Item {
 		String prefix = Cbcmoreshells.MODID + ":" + material + getCanonType();
 		ItemStack barrel = stackFromItemId(prefix + BARREL, 4);
 		ItemStack chamber = stackFromItemId(prefix + CHAMBER, 2);
-		ItemStack qfb = stackFromItemId(prefix + QFB, 1);
+		ItemStack qfb = getBreechStack(stack);
 		if(barrel.isEmpty() && chamber.isEmpty() && qfb.isEmpty()){
 			return InteractionResultHolder.fail(stack);
 		}
@@ -57,6 +57,13 @@ public class CannonComboItem extends Item {
 
 	protected String getCanonType(){
 		return "_dual_cannon_";
+	}
+
+	/** The quickfiring breech of the stored material, also used as the base of the item's appearance. */
+	public ItemStack getBreechStack(ItemStack stack) {
+		String material = getMaterial(stack);
+		if (material.isEmpty()) return ItemStack.EMPTY;
+		return stackFromItemId(Cbcmoreshells.MODID + ":" + material + getCanonType() + QFB, 1);
 	}
 
 	public static String getMaterial(ItemStack stack) {

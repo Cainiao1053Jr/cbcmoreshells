@@ -1,6 +1,5 @@
 {
-  "parent": "minecraft:builtin/generated",
-  "gui_light": "side",
+  "parent": "minecraft:item/generated",
   "textures": {
     "layer0": "cbcmoreshells:item/cannon_combo"
   }
