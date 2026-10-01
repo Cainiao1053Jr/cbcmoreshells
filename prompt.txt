@@ -1,1 +1,2 @@
-实现这个改动
+ComboRenderer的注册除了能在CBCMSClientNeoForge里面手动注册以外，是否能在物品注册时手动调用一个.transform或者别的内容来避开这种写法?
+把答案写进answer2.txt

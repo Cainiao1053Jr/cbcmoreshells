@@ -10,6 +10,7 @@ import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.combat_command.*;
 import com.cainiao1053.cbcmoreshells.munitions.fuzes.SensitiveImpactFuzeItem;
 import com.cainiao1053.cbcmoreshells.munitions.fuzes.ShipProximityFuzeItem;
 import com.simibubi.create.content.processing.sequenced.SequencedAssemblyItem;
+import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.ItemEntry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
