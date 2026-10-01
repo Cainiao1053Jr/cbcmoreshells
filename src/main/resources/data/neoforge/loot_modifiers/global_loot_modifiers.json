@@ -1,6 +1,7 @@
 {
   "replace": false,
   "entries": [
-    "cbcmoreshells:shipwreck"
+    "cbcmoreshells:shipwreck",
+    "cbcmoreshells:bastion"
   ]
 }

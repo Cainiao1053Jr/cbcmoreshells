@@ -16,10 +16,6 @@ import net.minecraft.world.item.ItemStack;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Renders the quickfiring breech of the combo's material as the base, with the combo icon layered on top.
- * The combo's own item model has no display transforms, so each layer is posed by its own model.
- */
 public class CannonComboItemRenderer extends CustomRenderedItemModelRenderer {
 
 	private final Map<String, ItemStack> breechCache = new HashMap<>();
@@ -36,7 +32,7 @@ public class CannonComboItemRenderer extends CustomRenderedItemModelRenderer {
 
 		ms.pushPose();
 		// ItemRenderer already centered the model, undo that as the nested renders center it again
-		ms.translate(0.5f, 0.5f, 0.5f);
+		//ms.translate(0.5f, 0.5f, 0.5f);
 
 		if (!breech.isEmpty()) {
 			BakedModel breechModel = itemRenderer.getModel(breech, null, null, 0);

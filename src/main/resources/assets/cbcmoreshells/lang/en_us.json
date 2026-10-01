@@ -544,7 +544,7 @@
     "cbcmoreshells.firing_table.title": "Ballistica",
     "cbcmoreshells.firing_table.material": "Material",
     "cbcmoreshells.firing_table.distance": "Distance",
-    "cbcmoreshells.firing_table.showing": "Showing: %s",
+    "cbcmoreshells.firing_table.showing": "%s",
     "cbcmoreshells.firing_table.filter": "Barrels: %s",
     "cbcmoreshells.firing_table.filter.single_only": "Single only",
     "cbcmoreshells.firing_table.filter.single_plus_gaps": "Single + gaps",

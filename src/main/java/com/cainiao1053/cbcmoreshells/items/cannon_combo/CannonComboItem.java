@@ -41,8 +41,8 @@ public class CannonComboItem extends Item {
 			return InteractionResultHolder.fail(stack);
 		}
 		String prefix = Cbcmoreshells.MODID + ":" + material + getCanonType();
-		ItemStack barrel = stackFromItemId(prefix + BARREL, 4);
-		ItemStack chamber = stackFromItemId(prefix + CHAMBER, 2);
+		ItemStack barrel = stackFromItemId(prefix + BARREL, 6);
+		ItemStack chamber = stackFromItemId(prefix + CHAMBER, 3);
 		ItemStack qfb = getBreechStack(stack);
 		if(barrel.isEmpty() && chamber.isEmpty() && qfb.isEmpty()){
 			return InteractionResultHolder.fail(stack);
@@ -68,7 +68,7 @@ public class CannonComboItem extends Item {
 
 	public static String getMaterial(ItemStack stack) {
 		CustomData cd = stack.get(DataComponents.CUSTOM_DATA);
-		if (cd == null) return "";
+		if (cd == null) return "steel";
 		String material = cd.copyTag().getString("Material");
 		int i = material.indexOf(':');
 		return i >= 0 ? material.substring(i + 1) : material;

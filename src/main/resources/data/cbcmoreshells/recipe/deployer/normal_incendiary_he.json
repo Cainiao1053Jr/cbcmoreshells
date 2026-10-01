@@ -1,0 +1,17 @@
+{
+  "type": "create:deploying",
+  "ingredients": [
+    {
+      "item": "cbcmoreshells:normal_he_shell"
+    },
+    {
+      "item": "minecraft:blaze_powder"
+    }
+  ],
+  "results": [
+    {
+      "id": "cbcmoreshells:normal_incendiary_he_shell",
+      "count": 1
+    }
+  ]
+}

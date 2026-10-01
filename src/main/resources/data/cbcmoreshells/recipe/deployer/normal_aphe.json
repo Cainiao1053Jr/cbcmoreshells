@@ -2,7 +2,7 @@
   "type": "create:deploying",
   "ingredients": [
     {
-      "item": "minecraft:iron_ingot"
+      "item": "createbigcannons:ap_shell"
     },
     {
       "item": "createbigcannons:powder_charge"
@@ -10,8 +10,8 @@
   ],
   "results": [
     {
-      "id": "cbcmoreshells:normal_ap_shot",
-      "count": 8
+      "id": "cbcmoreshells:normal_ap_shell",
+      "count": 4
     }
   ]
 }

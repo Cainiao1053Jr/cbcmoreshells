@@ -1,0 +1,26 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+  "key": {
+    "F": {
+      "item": "create:metal_girder"
+    },
+    "C": {
+      "item": "create:railway_casing"
+    },
+    "M": {
+      "item": "create:precision_mechanism"
+    },
+    "P": {
+      "item": "create:piston_extension_pole"
+    }
+  },
+  "pattern": [
+    "PMCFF"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cbcmoreshells:steel_projectile_rack_quickfiring_breech"
+  }
+}

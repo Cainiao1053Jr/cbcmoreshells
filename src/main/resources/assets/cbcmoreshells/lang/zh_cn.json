@@ -543,7 +543,7 @@
     "cbcmoreshells.firing_table.title": "弹道学期刊",
     "cbcmoreshells.firing_table.material": "材料",
     "cbcmoreshells.firing_table.distance": "距离",
-    "cbcmoreshells.firing_table.showing": "显示：%s",
+    "cbcmoreshells.firing_table.showing": "%s",
     "cbcmoreshells.firing_table.filter": "炮管：%s",
     "cbcmoreshells.firing_table.filter.single_only": "仅单管",
     "cbcmoreshells.firing_table.filter.single_plus_gaps": "单管+补漏",

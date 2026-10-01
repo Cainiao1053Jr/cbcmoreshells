@@ -1,0 +1,26 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+  "key": {
+    "H": {
+      "item": "cbcmoreshells:normal_ap_shell"
+    },
+    "P": {
+      "tag": "c:plates/iron"
+    },
+    "F": {
+      "item": "minecraft:firework_rocket"
+    }
+  },
+  "pattern": [
+    " P ",
+    "PHP",
+    " P ",
+    " F "
+  ],
+  "result": {
+    "count": 1,
+    "id": "cbcmoreshells:aphe_rocket"
+  }
+}

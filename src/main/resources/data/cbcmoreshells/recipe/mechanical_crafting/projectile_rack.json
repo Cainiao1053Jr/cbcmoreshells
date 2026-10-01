@@ -1,0 +1,20 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+  "key": {
+    "F": {
+      "item": "create:metal_girder"
+    },
+    "C": {
+      "item": "create:railway_casing"
+    }
+  },
+  "pattern": [
+    "FFCFF"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cbcmoreshells:steel_projectile_rack_chamber"
+  }
+}

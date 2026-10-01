@@ -134,7 +134,7 @@ dependencies {
     // Create Big Cannons (NeoForge 1.21.1) — update cbc_file_id in gradle.properties
     implementation("curse.maven:createbigcannons-646668:${cbc_file_id}")
 
-    implementation "curse.maven:shaolib-1427600:8728420"
+    implementation "curse.maven:shaolib-1427600:9028490"
     implementation "curse.maven:shaolib-munitions-1667342:8728437"
     //implementation "curse.maven:synaxis-1526348:8606652"
     //implementation "curse.maven:ldlib-626676:8813684"

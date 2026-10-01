@@ -1,0 +1,373 @@
+{
+  "type": "minecraft:chest",
+  "pools": [
+    {
+      "rolls": {
+        "min": 1,
+        "max": 1
+      },
+      "entries": [
+{
+  "type": "minecraft:item",
+  "name": "cbcmoreshells:reinforced_reductive_short_range_torpedo_mold",
+  "weight": 1,
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  ]
+},
+{
+  "type": "minecraft:item",
+  "name": "cbcmoreshells:reinforced_short_range_torpedo_mold",
+  "weight": 2,
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  ]
+},
+{
+  "type": "minecraft:item",
+  "name": "cbcmoreshells:reductive_medium_range_torpedo_mold",
+  "weight": 5,
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  ]
+},
+{
+  "type": "minecraft:item",
+  "name": "cbcmoreshells:reinforced_medium_range_torpedo_mold",
+  "weight": 2,
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  ]
+},
+{
+  "type": "minecraft:item",
+  "name": "cbcmoreshells:slow_long_range_torpedo_mold",
+  "weight": 3,
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  ]
+},
+{
+  "type": "minecraft:item",
+  "name": "cbcmoreshells:reductive_highspeed_torpedo_mold",
+  "weight": 3,
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  ]
+},
+{
+  "type": "minecraft:item",
+  "name": "cbcmoreshells:highspeed_long_range_torpedo_mold",
+  "weight": 4,
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  ]
+},
+{
+  "type": "minecraft:item",
+  "name": "cbcmoreshells:ultraspeed_torpedo_mold",
+  "weight": 3,
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "min": 1,
+        "max": 1
+      }
+    }
+  ]
+},
+{
+  "type": "minecraft:item",
+  "name": "cbcmoreshells:dual_cannon_combo",
+  "weight": 1,
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "min": 1,
+        "max": 4
+      }
+    },
+    {
+      "function": "minecraft:set_custom_data",
+      "tag": "{Material:brass}"
+    }
+  ]
+},
+{
+  "type": "minecraft:item",
+  "name": "cbcmoreshells:single_cannon_combo",
+  "weight": 1,
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "min": 1,
+        "max": 4
+      }
+    },
+    {
+      "function": "minecraft:set_custom_data",
+      "tag": "{Material:brass}"
+    }
+  ]
+},
+{
+  "type": "minecraft:item",
+  "name": "minecraft:iron_ingot",
+  "weight": 10,
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "min": 16,
+        "max": 32
+      }
+    }
+  ]
+},
+{
+  "type": "minecraft:item",
+  "name": "cbcmoreshells:dual_cannon_combo",
+  "weight": 5,
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "min": 2,
+        "max": 4
+      }
+    },
+    {
+      "function": "minecraft:set_custom_data",
+      "tag": "{Material:nether_steel}"
+    }
+  ]
+},
+{
+  "type": "minecraft:item",
+  "name": "cbcmoreshells:dual_cannon_combo",
+  "weight": 3,
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "min": 2,
+        "max": 4
+      }
+    },
+    {
+      "function": "minecraft:set_custom_data",
+      "tag": "{Material:wide_nether_steel}"
+    }
+  ]
+},
+{
+  "type": "minecraft:item",
+  "name": "cbcmoreshells:single_cannon_combo",
+  "weight": 1,
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "min": 2,
+        "max": 4
+      }
+    },
+    {
+      "function": "minecraft:set_custom_data",
+      "tag": "{Material:large_steel}"
+    }
+  ]
+},
+{
+  "type": "minecraft:item",
+  "name": "cbcmoreshells:dual_cannon_combo",
+  "weight": 4,
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "min": 2,
+        "max": 4
+      }
+    },
+    {
+      "function": "minecraft:set_custom_data",
+      "tag": "{Material:slate_alloy}"
+    }
+  ]
+},
+{
+  "type": "minecraft:item",
+  "name": "cbcmoreshells:single_cannon_combo",
+  "weight": 4,
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "min": 2,
+        "max": 4
+      }
+    },
+    {
+      "function": "minecraft:set_custom_data",
+      "tag": "{Material:slate_alloy}"
+    }
+  ]
+},
+{
+  "type": "minecraft:item",
+  "name": "cbcmoreshells:dual_cannon_combo",
+  "weight": 3,
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "min": 2,
+        "max": 4
+      }
+    },
+    {
+      "function": "minecraft:set_custom_data",
+      "tag": "{Material:military_slate_alloy}"
+    }
+  ]
+},
+{
+  "type": "minecraft:item",
+  "name": "cbcmoreshells:single_cannon_combo",
+  "weight": 3,
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "min": 2,
+        "max": 4
+      }
+    },
+    {
+      "function": "minecraft:set_custom_data",
+      "tag": "{Material:military_slate_alloy}"
+    }
+  ]
+},
+{
+  "type": "minecraft:item",
+  "name": "cbcmoreshells:dual_cannon_combo",
+  "weight": 2,
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "min": 2,
+        "max": 4
+      }
+    },
+    {
+      "function": "minecraft:set_custom_data",
+      "tag": "{Material:wide_slate_alloy}"
+    }
+  ]
+},
+{
+  "type": "minecraft:item",
+  "name": "cbcmoreshells:single_cannon_combo",
+  "weight": 2,
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "min": 2,
+        "max": 4
+      }
+    },
+    {
+      "function": "minecraft:set_custom_data",
+      "tag": "{Material:wide_slate_alloy}"
+    }
+  ]
+},
+{
+  "type": "minecraft:item",
+  "name": "cbcmoreshells:dual_cannon_combo",
+  "weight": 1,
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "min": 2,
+        "max": 4
+      }
+    },
+    {
+      "function": "minecraft:set_custom_data",
+      "tag": "{Material:wide_military_slate_alloy}"
+    }
+  ]
+},
+{
+  "type": "minecraft:item",
+  "name": "cbcmoreshells:single_cannon_combo",
+  "weight": 1,
+  "functions": [
+    {
+      "function": "minecraft:set_count",
+      "count": {
+        "min": 2,
+        "max": 4
+      }
+    },
+    {
+      "function": "minecraft:set_custom_data",
+      "tag": "{Material:wide_military_slate_alloy}"
+    }
+  ]
+}
+]
+    }
+  ]
+}

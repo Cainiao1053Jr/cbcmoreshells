@@ -1,0 +1,26 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+  "key": {
+    "H": {
+      "item": "createbigcannons:ap_shell"
+    },
+    "P": {
+      "tag": "c:plates/iron"
+    },
+    "F": {
+      "item": "create:propeller"
+    }
+  },
+  "pattern": [
+    " P ",
+    "PHP",
+    "PHP",
+    " F "
+  ],
+  "result": {
+    "count": 1,
+    "id": "cbcmoreshells:aphe_bomb"
+  }
+}

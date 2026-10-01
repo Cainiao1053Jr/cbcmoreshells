@@ -48,7 +48,7 @@ side="BOTH"
 [[dependencies.cbcmoreshells]]
 modId="shaolib"
 type = "required"
-versionRange="[0.1.0,)"
+versionRange="[0.1.1,)"
 ordering="AFTER"
 side="BOTH"
 
