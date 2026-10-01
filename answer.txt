@@ -1,0 +1,118 @@
+CannonCombo 物品动态贴图 —— 实现方案
+=====================================
+
+目标
+----
+dual_cannon_combo / single_cannon_combo 的外观随 NBT 中的 Material 变化：
+  底层 = 对应材料的 quickfiring_breech 物品模型（即炮闩方块的物品形态）
+  上层 = 一张自定义的平面贴图（套件标记）
+
+现状（已确认）
+--------------
+1. 炮闩物品模型都已存在，例如
+   assets/cbcmoreshells/models/item/steel_dual_cannon_quickfiring_breech.json
+   它们是 3D 方块模型（parent 为 block/dual_cannon_quickfiring_breech 等），不是平面贴图。
+2. 材料 -> 炮闩注册名的规则与 use() 里完全一致：
+   cbcmoreshells:<material> + "_dual_cannon_" / "_single_cannon_" + "quickfiring_breech"
+3. 现在的 dual_cannon_combo.json / single_cannon_combo.json 的 parent 是
+   taov_core:item/stock_item，这个模型不在本工程里（来自外部 mod），
+   没装 taov_core 时会是紫黑块。需要一并改掉。
+4. 叠加层贴图可以直接用已有的 textures/item/cannon_combo.png，或者换一张新的。
+5. Material 存在 CUSTOM_DATA 组件里，该组件会同步到客户端，渲染端可以直接读。
+6. 工程里目前没有任何自定义物品渲染器；Create 6.0.10 提供了
+   CustomRenderedItemModel / CustomRenderedItemModelRenderer / SimpleCustomRenderer /
+   CustomRenderedItems，工程里也已经在用 Flywheel 的 PartialModel（CBCMSBlockPartials）。
+
+方案选择
+--------
+因为底层是 3D 方块模型、上层是平面贴图，两层需要各自独立的 display 变换，
+所以不能用纯 JSON 的办法：
+  - 原版 overrides + 自定义 ItemProperty：只能在预先写好的模型之间切换，
+    42 种炮闩就要手写 42 个 "炮闩+叠加层" 的合成模型，而且新增材料要同步维护。不采用。
+  - NeoForge 的 BakedModel#getRenderPasses：多层共用外层模型的 display 变换，
+    方块层和平面层必有一层姿态不对。不采用。
+
+采用：Create 的自定义物品渲染器（BEWLR），在渲染时动态取炮闩模型再叠一层。
+优点是新增材料不用改任何资源文件，只要炮闩物品存在就自动生效。
+
+具体改动
+--------
+A. CannonComboItem（服务端/公共代码）
+   - 抽出一个公共方法，供 use() 和渲染器共用，避免规则写两份：
+       public ResourceLocation getBreechId(ItemStack stack)
+     Material 为空时返回 null。use() 里的 qfb 改为调用它。
+
+B. 新增 client 类 items/cannon_combo/CannonComboItemRenderer
+   extends CustomRenderedItemModelRenderer，render(...) 的逻辑：
+   1) 用 getBreechId 解析出炮闩 Item（BuiltInRegistries.ITEM.getOptional）。
+      结果按 ResourceLocation 缓存到一个 Map<ResourceLocation, ItemStack>，
+      避免每帧查注册表、每帧 new ItemStack。
+   2) 解析失败（没有 Material、材料名写错）-> 直接渲染物品自己的原始模型
+      （renderer.render(model.getOriginalModel(), light)），即一张默认图标。
+   3) 解析成功 ->
+      a. 底层：用 Minecraft.getInstance().getItemRenderer() 以同一个 ItemDisplayContext
+         渲染炮闩 ItemStack。这样炮闩自己的 display 变换（GUI 里的等轴测角度、
+         手持姿态等）会被正确应用，看起来和真正的炮闩物品完全一样。
+      b. 上层：渲染叠加层模型（PartialModel，见 C）。
+         - GUI / FIXED（物品栏、展示框）：沿 Z 轴向前平移一点保证压在方块上面，
+           可选缩小并移到角落做成"角标"效果。
+         - 手持 / 地面掉落物等 3D 场景：见"待确认 1"。
+   注意点：
+   - 外层模型的 display 变换必须是单位变换，否则炮闩会被变换两次（见 D）。
+   - GUI 中方块物品用 3D 光照、平面物品用平面光照。外层物品声明为方块光照
+     （保证炮闩明暗正确），叠加层用 FULL_BRIGHT 且渲染前 flush 一次 buffer，
+     避免叠加层发暗。
+   - 附魔光效：两层都传 stack.hasFoil()，或者干脆不处理（套件不可附魔）。
+
+C. 叠加层模型
+   - 新增 assets/cbcmoreshells/models/item/cannon_combo_overlay.json
+       parent: item/generated, layer0: cbcmoreshells:item/cannon_combo（或新贴图）
+   - 在 CBCMSBlockPartials（或新建 CBCMSItemPartials）里声明
+       PartialModel.of(Cbcmoreshells.resource("item/cannon_combo_overlay"))
+     PartialModel 会自动把模型加入烘焙，不需要另外监听 ModelEvent.RegisterAdditional。
+   - 如果单管 / 双管想用不同的标记，就做两个 overlay 模型，
+     由 CannonComboItem 的一个 protected 方法返回对应的那个。
+
+D. 物品模型 JSON（dual_cannon_combo.json / single_cannon_combo.json）
+   - 去掉 taov_core 的 parent，改为 item/generated + layer0 = cannon_combo 贴图，
+     作为没有 Material 时的默认外观。
+   - display 不要写任何变换（Create 的 CustomRenderedItemModel 包装后由渲染器接管）。
+     如果实测发现 item/generated 自带的 display 影响了炮闩姿态，
+     就在渲染器里对"原始模型"单独应用变换，外层保持单位变换。
+
+E. 注册（CBCMSItems）
+   两个 combo 的注册链加一行：
+     .transform(CreateRegistrate.customRenderedItem(() -> CannonComboItemRenderer::new))
+   它会同时完成两件事：注册 IClientItemExtensions（SimpleCustomRenderer）
+   以及把物品登记到 CustomRenderedItems，让 Create 在模型烘焙后用
+   CustomRenderedItemModel 包装它。渲染器类只在 client 侧被 lambda 引用，专用服务端安全。
+   （实现时先确认 6.0.10 里这个方法的确切签名；若不可用，就手动在
+     RegisterClientExtensionsEvent 里注册 SimpleCustomRenderer 并调用
+     CustomRenderedItems.register。）
+
+F. 可选：创造模式物品栏
+   目前 tab 里只有一个不带 Material 的空套件。可以在 ModGroup 里按已注册的
+   材料列表为每种材料各放一个带 Material 的 stack，这样能直接看到所有外观。
+   不属于本次需求，按需再做。
+
+不需要改的地方
+--------------
+- 不需要新增任何 per-material 的模型或贴图文件。
+- 不需要网络包，CUSTOM_DATA 已经同步。
+- BigCannonComboItem 仍处于注释状态，本方案不涉及；将来恢复时可以复用同一个
+  渲染器，只需要它也实现 getBreechId（它的炮闩来自 createbigcannons 命名空间）。
+
+待确认
+------
+1. 手持 / 掉落在地上 / 第三人称时，叠加层要不要显示？
+   建议：只在 GUI 和展示框里显示叠加层，其它场景只渲染炮闩本体。
+   理由：平面贴图悬浮在 3D 方块前面，从侧面看会穿帮。
+2. 叠加层是铺满整个图标，还是缩小成角落的角标？
+   建议：角标（例如右下角 1/2 大小），否则会把炮闩挡住，看不出材料。
+   这取决于你的贴图怎么画——如果贴图本身大部分透明，铺满也可以。
+3. 叠加层用现有的 cannon_combo.png 还是你另外画一张？单管 / 双管是否区分？
+
+工作量预估
+----------
+新增 1 个渲染器类、1 个 overlay 模型 JSON、1 处 PartialModel 声明；
+修改 CannonComboItem（抽方法）、CBCMSItems（两行 transform）、两个物品模型 JSON。
