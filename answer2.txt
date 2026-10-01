@@ -1,0 +1,87 @@
+ComboRenderer 能否在物品注册链上注册？
+====================================
+
+结论：可以。Registrate 的 ItemBuilder 自带 .clientExtension(...)，可以直接写在注册链上，
+CBCMSClientNeoForge 里的 onRegisterClientExtensions 就可以整个删掉。
+
+依据（已用 javap 对着工程实际依赖的 jar 确认，不是凭印象）
+--------------------------------------------------------
+Registrate MC1.21-1.3.0+67 的 ItemBuilder 有两个重载：
+
+  clientExtension(NonNullSupplier<Supplier<IClientItemExtensions>>)
+  clientExtension(Function<T, NonNullSupplier<Supplier<IClientItemExtensions>>>)
+
+第二个会把注册好的物品实例传进来，正好满足 SimpleCustomRenderer.create(item, renderer)
+需要 item 的要求。它内部做的事情和现在手写的完全一样：只在客户端监听
+RegisterClientExtensionsEvent 并调用 event.registerItem(...)。
+所以这只是换了写法，运行时行为不变。
+
+另外 SimpleCustomRenderer.create 内部会调用 CustomRenderedItems.register(item)，
+Create 靠这个集合在模型烘焙后用 CustomRenderedItemModel 包装物品模型，
+所以不需要再额外登记什么。
+
+（上次方案里提到的 CreateRegistrate.customRenderedItem 在 Create 6.0.10 里不存在，
+  那是旧版 Create 的写法，这里不能用。）
+
+推荐写法
+--------
+1) 在 CannonComboItemRenderer（纯客户端类）里加一个静态工厂：
+
+     public static IClientItemExtensions clientExtension(Item item) {
+         return SimpleCustomRenderer.create(item, new CannonComboItemRenderer());
+     }
+
+2) CBCMSItems 的两个 combo 注册链各加一行：
+
+     public static final ItemEntry<DualCannonComboItem> DUAL_CANNON_COMBO =
+             REGISTRATE.item("dual_cannon_combo", DualCannonComboItem::new)
+             .properties(properties -> properties.stacksTo(8))
+             .clientExtension(item -> () -> () -> CannonComboItemRenderer.clientExtension(item))
+             .register();
+
+   single_cannon_combo 同理。
+
+3) 删除 CBCMSClientNeoForge 里的 onRegisterClientExtensions 及对应的 addListener 和 import。
+
+为什么要多绕一层静态工厂，而不是直接在 lambda 里写
+  SimpleCustomRenderer.create(item, new CannonComboItemRenderer())
+--------------------------------------------------------------
+CBCMSItems 是公共类，专用服务端也会加载它。如果 lambda 体里直接出现
+"把 CannonComboItemRenderer 当作 CustomRenderedItemModelRenderer 传参"，
+JVM 在校验 CBCMSItems 的字节码时可能为了检查类型兼容性去加载渲染器类及其父类
+BlockEntityWithoutLevelRenderer，而服务端没有这个类，有 NoClassDefFoundError 的风险。
+把 new 渲染器的动作收进客户端类的静态方法后，CBCMSItems 里只剩一次
+"返回接口类型"的静态调用，校验时不需要加载任何客户端类。
+那两层 () -> () -> 也是 Registrate 出于同样目的设计的，不能省。
+
+（Create 自己的 PotatoCannonItem 是直接在 Item.initializeClient 里 new 渲染器的，
+  说明直接写大概率也不会出问题；但多一个三行的静态方法就能彻底避开，建议加上。）
+
+可选：做成可复用的 transform
+----------------------------
+如果以后还有别的物品要挂 Create 的自定义渲染器（比如恢复 BigCannonComboItem），
+可以在 CBCMSBuilderTransformers 里加一个通用的：
+
+     public static <T extends Item, P> NonNullUnaryOperator<ItemBuilder<T, P>> cannonComboRenderer() {
+         return b -> b.clientExtension(item -> () -> () -> CannonComboItemRenderer.clientExtension(item));
+     }
+
+注册链上就变成 .transform(CBCMSBuilderTransformers.cannonComboRenderer())，
+和工程里其它 .transform(CBCMSBuilderTransformers.xxx) 的风格一致。
+只有两个物品的话，直接写 .clientExtension 就够了，没必要加这一层。
+
+不建议的做法
+------------
+- 在 CannonComboItem 里重写 Item.initializeClient(Consumer<IClientItemExtensions>)：
+  能用（Create 就这么写），但 NeoForge 21.1 已经把它标成 deprecated for removal，
+  会多出编译警告，以后升级还得再改。
+- 用 .onRegister(item -> ...)：onRegister 在服务端也会执行，
+  需要自己再包一层客户端判断，等于重新实现 clientExtension。
+
+两种写法的差别
+--------------
+- 现在的手动注册：两个物品共用一个渲染器实例。
+- clientExtension 写法：每个物品各一个渲染器实例（各自有一份很小的炮闩缓存）。
+  对功能和性能都没有可感知的影响。
+
+本次只回答问题，代码没有改动。需要的话我可以按"推荐写法"改过去。
