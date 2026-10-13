@@ -1,22 +1,17 @@
 package com.cainiao1053.cbcmoreshells.compat.sable;
 
 import com.cainiao1053.cbcmoreshells.CBCMSCompatTransformers;
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.shaolib.CBCMSIncendiaryEffectService;
 import dev.ryanhcode.sable.Sable;
 import dev.ryanhcode.sable.companion.math.BoundingBox3d;
 import dev.ryanhcode.sable.sublevel.SubLevel;
 import net.minecraft.core.BlockPos;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.joml.Vector3dc;
-import rbasamoyai.createbigcannons.munitions.big_cannon.fluid_shell.FluidBlobBurst;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -70,62 +65,18 @@ public class CBCMSSableCompat {
         Iterable<SubLevel> sublevels = Sable.HELPER.getAllIntersecting(level, new BoundingBox3d(box));
         for (SubLevel sublevel : sublevels) {
             Vec3 localPos = sublevel.logicalPose().transformPositionInverse(pos);
-            spawnFire(new BlockPos((int) localPos.x(),(int) localPos.y(), (int) localPos.z()), level, radius);
+            CBCMSIncendiaryEffectService.spawnFire(BlockPos.containing(localPos), level, radius);
         }
-        spawnFire(new BlockPos((int) pos.x(),(int) pos.y(),(int) pos.z()), level, radius);
-    }
-
-    public static void spawnFire(BlockPos root, Level level, int radius) {
-        float chance = FluidBlobBurst.getBlockAffectChance();
-        if (chance == 0)
-            return;
-        AABB bounds = new AABB(root).inflate(radius);
-        BlockPos pos1 = BlockPos.containing(bounds.minX, bounds.minY, bounds.minZ);
-        BlockPos pos2 = BlockPos.containing(bounds.maxX, bounds.maxY, bounds.maxZ);
-        for (BlockPos pos : BlockPos.betweenClosed(pos1, pos2)) {
-            if (level.getRandom().nextFloat() > chance)
-                continue;
-            BlockState state = level.getBlockState(pos);
-            if (level.isEmptyBlock(pos)) {
-                level.setBlockAndUpdate(pos, BaseFireBlock.getState(level, pos));
-            } else if (CandleBlock.canLight(state) || CampfireBlock.canLight(state) || CandleCakeBlock.canLight(state)) {
-                level.playSound(null, pos, SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
-                level.setBlock(pos, state.setValue(BlockStateProperties.LIT, true), 11);
-                level.gameEvent(null, GameEvent.BLOCK_PLACE, pos);
-            }
-        }
+        CBCMSIncendiaryEffectService.spawnFire(BlockPos.containing(pos), level, radius);
     }
 
     public static void extinguishFireOnShip(Level level, AABB box, int radius, Vec3 pos) {
         Iterable<SubLevel> sublevels = Sable.HELPER.getAllIntersecting(level, new BoundingBox3d(box));
         for (SubLevel sublevel : sublevels) {
             Vec3 localPos = sublevel.logicalPose().transformPositionInverse(pos);
-            extinguishFire(new BlockPos((int) localPos.x(),(int) localPos.y(), (int) localPos.z()), level, radius);
+            CBCMSIncendiaryEffectService.extinguishFire(BlockPos.containing(localPos), level, radius);
         }
-        extinguishFire(new BlockPos((int) pos.x(),(int) pos.y(),(int) pos.z()), level, radius);
-    }
-
-    public static void extinguishFire(BlockPos root, Level level, int radius) {
-        AABB bounds = new AABB(root).inflate(radius);
-        BlockPos pos1 = BlockPos.containing(bounds.minX, bounds.minY, bounds.minZ);
-        BlockPos pos2 = BlockPos.containing(bounds.maxX, bounds.maxY, bounds.maxZ);
-        for (BlockPos pos : BlockPos.betweenClosed(pos1, pos2)) {
-            BlockState state = level.getBlockState(pos);
-            if(state.getBlock() instanceof BaseFireBlock){
-                level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
-            }else if(CandleBlock.canLight(state) || CampfireBlock.canLight(state) || CandleCakeBlock.canLight(state)){
-                level.setBlock(pos, state.setValue(BlockStateProperties.LIT, false), 11);
-                level.gameEvent(null, GameEvent.BLOCK_PLACE, pos);
-            }
-            //level.playSound(null, pos, SoundEvents., SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
-//            if (level.isEmptyBlock(pos)) {
-//                level.setBlockAndUpdate(pos, BaseFireBlock.getState(level, pos));
-//            } else if (CandleBlock.canLight(state) || CampfireBlock.canLight(state) || CandleCakeBlock.canLight(state)) {
-//                level.playSound(null, pos, SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
-//                level.setBlock(pos, state.setValue(BlockStateProperties.LIT, true), 11);
-//                level.gameEvent(null, GameEvent.BLOCK_PLACE, pos);
-//            }
-        }
+        CBCMSIncendiaryEffectService.extinguishFire(BlockPos.containing(pos), level, radius);
     }
 
     public static boolean isOnSublevel(Level level, Vec3 pos){

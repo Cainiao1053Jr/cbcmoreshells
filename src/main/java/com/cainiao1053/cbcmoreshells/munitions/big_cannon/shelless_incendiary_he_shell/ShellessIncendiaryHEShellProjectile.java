@@ -2,29 +2,21 @@ package com.cainiao1053.cbcmoreshells.munitions.big_cannon.shelless_incendiary_h
 
 import com.cainiao1053.cbcmoreshells.CBCMSBlocks;
 import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
+import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.shaolib.CBCMSIncendiaryEffectService;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.ShellessFuzedBigCannonProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.BigCannonIncendiaryShellProperties;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.Position;
-import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.BaseFireBlock;
-import net.minecraft.world.level.block.CampfireBlock;
-import net.minecraft.world.level.block.CandleBlock;
-import net.minecraft.world.level.block.CandleCakeBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
-import net.minecraft.world.level.gameevent.GameEvent;
-import net.minecraft.world.phys.AABB;
 import rbasamoyai.createbigcannons.CreateBigCannons;
 import rbasamoyai.createbigcannons.config.CBCConfigs;
 import rbasamoyai.createbigcannons.munitions.ShellExplosion;
 import rbasamoyai.createbigcannons.munitions.big_cannon.config.BigCannonFuzePropertiesComponent;
 import rbasamoyai.createbigcannons.munitions.big_cannon.config.BigCannonProjectilePropertiesComponent;
-import rbasamoyai.createbigcannons.munitions.big_cannon.fluid_shell.FluidBlobBurst;
 import rbasamoyai.createbigcannons.munitions.config.components.BallisticPropertiesComponent;
 import rbasamoyai.createbigcannons.munitions.config.components.EntityDamagePropertiesComponent;
 
@@ -50,7 +42,7 @@ public class ShellessIncendiaryHEShellProjectile extends ShellessFuzedBigCannonP
 
 		if(doFire){
 			if(!level().isClientSide){
-				spawnFire(pos,level(),this.getAllProperties().fireRange());
+				CBCMSIncendiaryEffectService.spawnFire(pos,level(),this.getAllProperties().fireRange());
 			}
 		}
 	}
@@ -90,27 +82,6 @@ public class ShellessIncendiaryHEShellProjectile extends ShellessFuzedBigCannonP
 	@Override
 	protected BallisticPropertiesComponent getBallisticProperties() {
 		return this.getAllProperties().ballistics();
-	}
-
-	public static void spawnFire(BlockPos root, Level level, int radius) {
-		float chance = FluidBlobBurst.getBlockAffectChance();
-		if (chance == 0)
-			return;
-		AABB bounds = new AABB(root).inflate(radius);
-		BlockPos pos1 = BlockPos.containing(bounds.minX, bounds.minY, bounds.minZ);
-		BlockPos pos2 = BlockPos.containing(bounds.maxX, bounds.maxY, bounds.maxZ);
-		for (BlockPos pos : BlockPos.betweenClosed(pos1, pos2)) {
-			if (level.getRandom().nextFloat() > chance)
-				continue;
-			BlockState state = level.getBlockState(pos);
-			if (level.isEmptyBlock(pos)) {
-				level.setBlockAndUpdate(pos, BaseFireBlock.getState(level, pos));
-			} else if (CandleBlock.canLight(state) || CampfireBlock.canLight(state) || CandleCakeBlock.canLight(state)) {
-				level.playSound(null, pos, SoundEvents.FIRECHARGE_USE, SoundSource.BLOCKS, 1.0F, level.getRandom().nextFloat() * 0.4F + 0.8F);
-				level.setBlock(pos, state.setValue(BlockStateProperties.LIT, true), 11);
-				level.gameEvent(null, GameEvent.BLOCK_PLACE, pos);
-			}
-		}
 	}
 
 	protected BigCannonIncendiaryShellProperties getAllProperties() {
