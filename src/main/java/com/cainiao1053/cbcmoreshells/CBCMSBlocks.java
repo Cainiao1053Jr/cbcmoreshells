@@ -1209,6 +1209,10 @@ public class CBCMSBlocks {
 			.block("normal_incendiary_he_shell_block", Block::new)
 			.register();
 
+	public static final BlockEntry<Block> PACKAGE_SHELL_BLOCK = REGISTRATE
+			.block("package_shell_block", Block::new)
+			.register();
+
 
 
 

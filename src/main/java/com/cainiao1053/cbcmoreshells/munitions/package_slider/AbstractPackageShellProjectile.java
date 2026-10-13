@@ -1,5 +1,6 @@
 package com.cainiao1053.cbcmoreshells.munitions.package_slider;
 
+import com.cainiao1053.cbcmoreshells.CBCMSBlocks;
 import com.cainiao1053.cbcmoreshells.config.CBCMSConfigs;
 import com.cainiao1053.cbcmoreshells.utils.CBCMSMassiveBlockUtil;
 import com.simibubi.create.AllItems;
@@ -69,6 +70,11 @@ public abstract class AbstractPackageShellProjectile extends AbstractCannonProje
 
 	public Item getDisplayItem() {
 		return this.displayItem;
+	}
+
+	/** The block drawn by PackageShellProjectileRenderer. */
+	public BlockState getRenderedBlockState() {
+		return CBCMSBlocks.PACKAGE_SHELL_BLOCK.getDefaultState();
 	}
 
 	public boolean hitShip(BlockPos pos) {
