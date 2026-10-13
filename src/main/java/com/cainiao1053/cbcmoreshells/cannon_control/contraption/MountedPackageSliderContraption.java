@@ -44,14 +44,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * A cannon that fires Create packages. A package loaded through the breech sits in the barrel block right in front
- * of it and is fired as a {@link PackageShellProjectile}: no propellant, no recoil, and a muzzle velocity set by
- * the cannon length, {@code (length - 1) * 0.5 + 1} blocks per tick.
- *
- * <p>Package contents stay on the server: client copies of the cannon blocks only carry the package item
- * (see {@link PackageSliderBehavior#stripForClient}).
- */
 public class MountedPackageSliderContraption extends AbstractMountedCannonContraption {
 
 	private PackageSliderMaterial cannonMaterial;

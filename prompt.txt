@@ -1,12 +1,2 @@
-接下来完成炮的contraption和炮管
-继承AbstractMountedCannonContraption做MountedPackageSliderContraption
-这个炮里面装填的是包裹物品，发射时转化为包裹炮弹实体，装填就能发射，不用装药，没有后坐力
-初速度由炮管长度决定，公式为(总长度-1)*0.5 +1 m/tick
-不考虑铸造等内容
-炮管(cannon)的部分，只有quickfiringBreech没有slidingBreech，也不考虑互相转换
-quickfiringBreech也不考虑可以移动的breechBlock和lever，但是由内置的装填时间，默认20tick，但是要加上长度*reloadPerSection
-整个火炮只有quickfiringBreech一种炮闩
-材料只注册steel, 材料属性只有weight 默认2, maxLength 默认12, reloadPerSection 默认5 tick
-connectsInSurvival直接true
-对于渲染，装填时把物品装到炮管里，然后在炮管渲染物品
-先把block相关的类和MountedPackageSliderContraption写好
+把机械手的MountPoint装填也做好，在CannonMountPointMixin里面添加PackageSlider的装填
+然后注册方块，breech和barrel各一个并添加进ModGroup
