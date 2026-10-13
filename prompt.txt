@@ -1,1 +1,2 @@
-给packageSlider也加上DualCannonPlacementHelper那样的放置辅助
+把PackageShellProjectileRenderer的渲染改为和bigCannon一样的方块渲染
+然后注册packageShellBlock用于渲染，这个block的模型直接用create:cardboard_package_12x10

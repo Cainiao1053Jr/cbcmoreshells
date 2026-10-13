@@ -227,7 +227,7 @@ public class MountedPackageSliderContraption extends AbstractMountedCannonContra
 		breech.setReloadCooldown(baseReload + length * this.cannonMaterial.properties().reloadPerSection());
 		this.syncBlocks(List.of(this.startPos, breechPos), entity);
 
-		level.playSound(null, spawnPos.x, spawnPos.y, spawnPos.z, SoundEvents.DISPENSER_LAUNCH, SoundSource.BLOCKS, 2.0f, 0.6f);
+		level.playSound(null, spawnPos.x, spawnPos.y, spawnPos.z, SoundEvents.CROSSBOW_SHOOT, SoundSource.BLOCKS, 5.5f, 0.8f);
 
 		if (CBCConfigs.server().munitions.projectilesCanChunkload.get()) {
 			ChunkPos cpos = new ChunkPos(BlockPos.containing(projectile.position()));
