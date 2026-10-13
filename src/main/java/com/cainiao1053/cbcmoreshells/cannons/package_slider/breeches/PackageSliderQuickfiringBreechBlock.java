@@ -26,11 +26,6 @@ import rbasamoyai.createbigcannons.cannon_control.contraption.PitchOrientedContr
 import rbasamoyai.createbigcannons.crafting.casting.CannonCastShape;
 import com.simibubi.create.content.contraptions.Contraption;
 
-/**
- * The only breech of the package slider. It has no moving breech block or lever: a package is loaded by hand
- * straight into the barrel in front of it, and after firing it needs {@code baseReloadTicks} plus the
- * material's reload per section for every cannon block before it accepts another one.
- */
 public class PackageSliderQuickfiringBreechBlock extends PackageSliderBaseBlock implements IBE<PackageSliderQuickfiringBreechBlockEntity> {
 
 	public static final int DEFAULT_BASE_RELOAD_TICKS = 20;

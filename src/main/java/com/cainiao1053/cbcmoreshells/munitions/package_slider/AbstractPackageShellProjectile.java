@@ -138,6 +138,8 @@ public abstract class AbstractPackageShellProjectile extends AbstractCannonProje
 				this.breakApart(this.position());
 			} else {
 				this.spawnPackage(this.position());
+				AllSoundEvents.CARDBOARD_SWORD.play(this.level(), null,
+						this.position(), 1.0f, 1.0f);
 			}
 		}
 		return true;
@@ -182,6 +184,8 @@ public abstract class AbstractPackageShellProjectile extends AbstractCannonProje
 			: CBCMSConfigs.server().packageHatchSearchRadius.get();
 		if (this.insertIntoNearestHatch(hitPos, blockHitResult.getLocation(), radius)) return;
 		this.spawnPackage(this.blockSpawnPos(blockHitResult));
+		AllSoundEvents.CARDBOARD_SWORD.play(this.level(), null,
+				this.position(), 1.0f, 1.0f);
 	}
 
 	protected Vec3 blockSpawnPos(BlockHitResult blockHitResult) {

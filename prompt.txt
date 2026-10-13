@@ -1,2 +1,1 @@
-把PackageShellProjectileRenderer的渲染改为和bigCannon一样的方块渲染
-然后注册packageShellBlock用于渲染，这个block的模型直接用create:cardboard_package_12x10
+把命中目标附近后搜索并放进hatch改为放进chute

@@ -12,7 +12,7 @@ public class CBCMSCfgServer extends ConfigBase {
 	public final ConfigFloat recoilScale = f(1, 0, 100, "recoilScale", "Scale of recoil of all cannon materials");
 	public final ConfigInt packageHatchSearchRadius = i(3, 0, 16, "packageHatchSearchRadius",
 		"Radius of the cube searched for Item Hatches when a package shell hits the ground");
-	public final ConfigInt packageHatchSearchRadiusShip = i(9, 0, 32, "packageHatchSearchRadiusShip",
+	public final ConfigInt packageHatchSearchRadiusShip = i(5, 0, 32, "packageHatchSearchRadiusShip",
 		"Radius of the cube searched for Item Hatches when a package shell hits a ship");
 	public final ConfigFloat packageBreakSpeed = f(120, 0, 10000, "packageBreakSpeed",
 		"Impact speed in m/s above which a package shell breaks apart and drops its contents");
