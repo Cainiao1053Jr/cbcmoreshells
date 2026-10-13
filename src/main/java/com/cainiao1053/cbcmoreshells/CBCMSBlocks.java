@@ -21,6 +21,10 @@ import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.*;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.breeches.quick_firing_breech.DualCannonQuickfiringBreechBlock;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.breeches.sliding_breech.DualCannonSlidingBreechBlock;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.ProjectileRackBlockItem;
+import com.cainiao1053.cbcmoreshells.cannons.package_slider.PackageSliderBlockItem;
+import com.cainiao1053.cbcmoreshells.cannons.package_slider.PackageSliderBodyBlock;
+import com.cainiao1053.cbcmoreshells.cannons.package_slider.breeches.PackageSliderQuickfiringBreechBlock;
+import com.cainiao1053.cbcmoreshells.index.CBCMSPackageSliderMaterials;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.ProjectileRackBodyBlock;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.breeches.quick_firing_breech.ProjectileRackQuickfiringBreechBlock;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.breeches.sliding_breech.ProjectileRackSlidingBreechBlock;
@@ -1343,6 +1347,22 @@ public class CBCMSBlocks {
 	private static NonNullSupplier<? extends Block> steelProjectileRackSlidingBreech() {
 		return STEEL_PROJECTILE_RACK_SLIDING_BREECH;
 	}
+
+	public static final BlockEntry<PackageSliderBodyBlock> STEEL_PACKAGE_SLIDER_BARREL = REGISTRATE
+			.block("steel_package_slider_barrel", p -> PackageSliderBodyBlock.barrel(p, CBCMSPackageSliderMaterials.STEEL))
+			.lang("Steel Package Slider Barrel")
+			.properties(p -> p.strength(5.0f, 14f).sound(SoundType.NETHERITE_BLOCK).noOcclusion())
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.item(PackageSliderBlockItem::new).build()
+			.register();
+
+	public static final BlockEntry<PackageSliderQuickfiringBreechBlock> STEEL_PACKAGE_SLIDER_QUICKFIRING_BREECH = REGISTRATE
+			.block("steel_package_slider_quickfiring_breech", p -> new PackageSliderQuickfiringBreechBlock(p, CBCMSPackageSliderMaterials.STEEL))
+			.lang("Steel Package Slider Quick-Firing Breech")
+			.properties(p -> p.strength(5.0f, 14f).sound(SoundType.NETHERITE_BLOCK))
+			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.item(PackageSliderBlockItem::new).build()
+			.register();
 
 	public static final BlockEntry<ProjectileRackSlidingBreechBlock> STEEL_PROJECTILE_RACK_SLIDING_BREECH = REGISTRATE
 			.block("steel_projectile_rack_sliding_breech", p -> new ProjectileRackSlidingBreechBlock(p, CBCMSProjectileRackMaterials.STEEL, STEEL_TORPEDO_QUICKFIRING_BREECH))

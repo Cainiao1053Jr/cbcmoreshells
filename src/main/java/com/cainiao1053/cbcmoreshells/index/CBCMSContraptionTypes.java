@@ -2,6 +2,7 @@ package com.cainiao1053.cbcmoreshells.index;
 
 import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
 import com.cainiao1053.cbcmoreshells.cannon_control.contraption.MountedDualCannonContraption;
+import com.cainiao1053.cbcmoreshells.cannon_control.contraption.MountedPackageSliderContraption;
 import com.cainiao1053.cbcmoreshells.cannon_control.contraption.MountedProjectileRackContraption;
 import com.cainiao1053.cbcmoreshells.cannon_control.contraption.MountedTorpedoTubeContraption;
 import com.simibubi.create.api.contraption.ContraptionType;
@@ -19,7 +20,8 @@ public class CBCMSContraptionTypes {
 	public static final Holder.Reference<ContraptionType>
 		TORPEDO_TUBE = register("mounted_torpedo_tube", MountedTorpedoTubeContraption::new),
 	    PROJECTILE_RACK = register("mounted_projectile_rack", MountedProjectileRackContraption::new),
-		DUAL_CANNON = register("mounted_dual_cannon", MountedDualCannonContraption::new);
+		DUAL_CANNON = register("mounted_dual_cannon", MountedDualCannonContraption::new),
+		PACKAGE_SLIDER = register("mounted_package_slider", MountedPackageSliderContraption::new);
 
 	private static Holder.Reference<ContraptionType> register(String name, Supplier<? extends Contraption> factory) {
 		ContraptionType type = new ContraptionType(factory);

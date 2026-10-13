@@ -16,7 +16,8 @@ import rbasamoyai.createbigcannons.cannon_control.cannon_types.ICannonContraptio
 public enum CBCMSCannonContraptionTypes implements ICannonContraptionType {
 	TORPEDO_TUBE,
 	PROJECTILE_RACK,
-	DUAL_CANNON;
+	DUAL_CANNON,
+	PACKAGE_SLIDER;
 
 
 	private static final Map<ResourceLocation, CBCMSCannonContraptionTypes> BY_ID =

@@ -20,6 +20,9 @@ import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.breeches.quick_firing_b
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.breeches.sliding_breech.DualCannonSlidingBreechBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.breeches.sliding_breech.DualCannonSlidingBreechBlockEntityRenderer;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.dual_cannon_end.DualCannonEndBlockEntity;
+import com.cainiao1053.cbcmoreshells.cannons.package_slider.PackageSliderBlockEntity;
+import com.cainiao1053.cbcmoreshells.cannons.package_slider.PackageSliderBlockRenderer;
+import com.cainiao1053.cbcmoreshells.cannons.package_slider.breeches.PackageSliderQuickfiringBreechBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.ProjectileRackBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.ProjectileRackBlockRenderer;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.breeches.quick_firing_breech.ProjectileRackQuickfiringBreechBlockEntity;
@@ -393,6 +396,17 @@ public class CBCMSBlockEntities {
 			.visual(() -> ProjectileRackQuickfiringBreechVisual::new)
 			.renderer(() -> ProjectileRackQuickfiringBreechBlockEntityRenderer::new)
 			.validBlocks(CBCMSBlocks.STEEL_PROJECTILE_RACK_QUICKFIRING_BREECH)
+			.register();
+
+	public static final BlockEntityEntry<PackageSliderBlockEntity> PACKAGE_SLIDER_BODY = REGISTRATE
+			.blockEntity("package_slider_body", PackageSliderBlockEntity::new)
+			.validBlocks(CBCMSBlocks.STEEL_PACKAGE_SLIDER_BARREL)
+			.renderer(() -> PackageSliderBlockRenderer::new)
+			.register();
+
+	public static final BlockEntityEntry<PackageSliderQuickfiringBreechBlockEntity> PACKAGE_SLIDER_QUICKFIRING_BREECH = REGISTRATE
+			.blockEntity("package_slider_quickfiring_breech", PackageSliderQuickfiringBreechBlockEntity::new)
+			.validBlocks(CBCMSBlocks.STEEL_PACKAGE_SLIDER_QUICKFIRING_BREECH)
 			.register();
 
 	public static final BlockEntityEntry<ProjectileRackSlidingBreechBlockEntity> PROJECTILE_RACK_SLIDING_BREECH = REGISTRATE
