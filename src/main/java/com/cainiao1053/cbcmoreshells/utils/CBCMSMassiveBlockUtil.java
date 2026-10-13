@@ -19,22 +19,6 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-/**
- * Batch block access over a box region. Chunks are fetched once per chunk and blocks are
- * read straight from their 16x16x16 sections, so whole sections can be skipped when they are
- * all air or their palette cannot contain the wanted states.
- *
- * <p>Reads only: writes must still go through {@link Level#setBlock} so neighbour updates,
- * lighting, client sync and block entities are handled.
- *
- * <p>Must be called on the thread that owns the level (server thread / client render thread).
- *
- * <p>{@code loadChunks}: {@code false} skips chunks that are not loaded (never triggers loading);
- * {@code true} loads (and if needed generates) them synchronously.
- *
- * <p>Visitors receive a shared {@link BlockPos.MutableBlockPos}; call {@code pos.immutable()}
- * before storing it.
- */
 public final class CBCMSMassiveBlockUtil {
 
     private CBCMSMassiveBlockUtil() {
@@ -45,26 +29,20 @@ public final class CBCMSMassiveBlockUtil {
         void visit(BlockPos.MutableBlockPos pos, BlockState state);
     }
 
-    /** Return {@code false} to stop the scan. */
     @FunctionalInterface
     public interface BlockSearcher {
         boolean visit(BlockPos.MutableBlockPos pos, BlockState state);
     }
 
-    /** Bounds are inclusive and already clipped to the chunk and the box (Y is not clipped to build height). */
     @FunctionalInterface
     public interface ChunkVisitor {
         void visit(LevelChunk chunk, int minX, int minY, int minZ, int maxX, int maxY, int maxZ);
     }
 
-    // ---- regions ----
-
-    /** Inclusive box between two corners, in any order. */
     public static BoundingBox box(BlockPos a, BlockPos b) {
         return BoundingBox.fromCorners(a, b);
     }
 
-    /** All blocks whose cells intersect the AABB. A zero-size AABB yields the block containing it. */
     public static BoundingBox box(AABB aabb) {
         int minX = Mth.floor(aabb.minX);
         int minY = Mth.floor(aabb.minY);
@@ -75,12 +53,9 @@ public final class CBCMSMassiveBlockUtil {
         return new BoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
-    /** Symmetric cube [center - radius, center + radius], i.e. (2r+1)^3 blocks. */
     public static BoundingBox cube(BlockPos center, int radius) {
         return new BoundingBox(center).inflatedBy(Math.max(radius, 0));
     }
-
-    // ---- chunks ----
 
     @Nullable
     public static LevelChunk getChunk(Level level, int chunkX, int chunkZ, boolean loadChunks) {
@@ -99,8 +74,6 @@ public final class CBCMSMassiveBlockUtil {
         }
     }
 
-    // ---- block iteration ----
-
     public static void forEachBlock(Level level, BoundingBox box, boolean loadChunks, BlockVisitor visitor) {
         scan(level, box, loadChunks, false, null, toSearcher(visitor));
     }
@@ -113,7 +86,6 @@ public final class CBCMSMassiveBlockUtil {
         forEachBlock(level, box(a, b), loadChunks, visitor);
     }
 
-    /** Like {@link #forEachBlock} but skips air, including whole all-air sections. */
     public static void forEachNonAir(Level level, BoundingBox box, boolean loadChunks, BlockVisitor visitor) {
         scan(level, box, loadChunks, true, null, toSearcher(visitor));
     }
@@ -126,10 +98,6 @@ public final class CBCMSMassiveBlockUtil {
         forEachNonAir(level, box(a, b), loadChunks, visitor);
     }
 
-    /**
-     * Visits only blocks matching {@code filter}. Sections whose palette cannot contain a matching
-     * state are skipped without reading any block, so the filter must depend on the state alone.
-     */
     public static void forEachMatching(Level level, BoundingBox box, boolean loadChunks,
                                        Predicate<BlockState> filter, BlockVisitor visitor) {
         scan(level, box, loadChunks, false, filter, toSearcher(visitor));
@@ -145,7 +113,6 @@ public final class CBCMSMassiveBlockUtil {
         forEachMatching(level, box(a, b), loadChunks, filter, visitor);
     }
 
-    /** Visits every block until the searcher returns {@code false}. Returns {@code true} if it ran to the end. */
     public static boolean search(Level level, BoundingBox box, boolean loadChunks, BlockSearcher searcher) {
         return scan(level, box, loadChunks, false, null, searcher);
     }
@@ -157,8 +124,6 @@ public final class CBCMSMassiveBlockUtil {
     public static boolean search(Level level, BlockPos a, BlockPos b, boolean loadChunks, BlockSearcher searcher) {
         return search(level, box(a, b), loadChunks, searcher);
     }
-
-    // ---- convenience ----
 
     public static boolean anyMatch(Level level, BoundingBox box, boolean loadChunks, Predicate<BlockState> filter) {
         return !scan(level, box, loadChunks, false, filter, (pos, state) -> false);
@@ -176,10 +141,6 @@ public final class CBCMSMassiveBlockUtil {
         return result;
     }
 
-    /**
-     * Scans first, then writes every changed state through {@link Level#setBlock}, so updates caused
-     * by the writes cannot affect what the scan sees. Returns the number of blocks actually changed.
-     */
     public static int replace(Level level, BoundingBox box, boolean loadChunks, Predicate<BlockState> filter,
                               Function<BlockState, BlockState> mapper, int flags) {
         List<BlockPos> positions = new ArrayList<>();
@@ -198,8 +159,6 @@ public final class CBCMSMassiveBlockUtil {
         return changed;
     }
 
-    // ---- block entities / fluids ----
-
     public static <T extends BlockEntity> void forEachBlockEntity(Level level, BoundingBox box, boolean loadChunks,
                                                                   Class<T> type, Consumer<T> consumer) {
         forEachChunk(level, box, loadChunks, (chunk, minX, minY, minZ, maxX, maxY, maxZ) -> {
@@ -210,7 +169,6 @@ public final class CBCMSMassiveBlockUtil {
         });
     }
 
-    /** Visits non-empty fluid states only (source/flowing fluids and waterlogged blocks). */
     public static void forEachFluid(Level level, BoundingBox box, boolean loadChunks,
                                     BiConsumer<BlockPos.MutableBlockPos, FluidState> consumer) {
         scan(level, box, loadChunks, true, state -> !state.getFluidState().isEmpty(), (pos, state) -> {
@@ -228,7 +186,6 @@ public final class CBCMSMassiveBlockUtil {
         };
     }
 
-    /** Returns {@code false} if the searcher stopped the scan early. */
     private static boolean scan(Level level, BoundingBox box, boolean loadChunks, boolean skipAir,
                                 @Nullable Predicate<BlockState> filter, BlockSearcher searcher) {
         int minY = Math.max(box.minY(), level.getMinBuildHeight());

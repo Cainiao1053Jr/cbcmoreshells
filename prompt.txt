@@ -1,1 +1,4 @@
-我修好了更新gradle的bug，现在更新一次gradle
+我需要新做一种cannon类型，功能是把create的cardboard package装填并打出去
+装填的炮弹就是cardboard package的item本身，但是打出去时生成的需要是一个使用shaolib的炮弹，且带有这个包裹的内容存储
+先告诉我shaolib能不能做到对这种炮弹单独做存储，我需要单独对这种炮做一个炮弹，如果能，告诉我怎么做
+把答案写进answer4.txt
