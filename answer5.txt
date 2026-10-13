@@ -1,0 +1,144 @@
+包裹炮弹继承 CBC AbstractCannonProjectile 时，怎样只把内容物存在服务端、不发包
+=========================================================================
+
+结论
+----
+很简单：把包裹 ItemStack 存成弹体类里的一个普通 Java 字段，
+只在 addAdditionalSaveData / readAdditionalSaveData 里读写，
+不放进 SynchedEntityData，不写进 spawn 数据。
+实体 NBT 本来就只在服务端用于存盘，原版和 NeoForge 都不会把它发给客户端。
+
+CBC 自己就是这么做的：FuzedBigCannonProjectile 的引信是
+  private ItemStack fuze;
+只在存档里用 ItemStack.saveOptional(level().registryAccess()) / ItemStack.parseOptional(...) 读写，
+从不同步给客户端。包裹照抄这个模式即可。
+（以上是用 javap 对着工程实际用的 CBC jar（curse 8303106）查过的。）
+
+客户端只需要知道"画哪种包裹"（Create 每种包裹样式是一个单独的 Item），
+在 spawn 数据里多写一个物品 id 就够了，生成时发一次，之后不再同步。
+
+
+一、CBC 弹体现在会发给客户端的东西（查过的）
+-----------------------------------------
+  AbstractCannonProjectile
+    - 实现了 NeoForge 的 IEntityWithComplexSpawn，writeSpawnData 只写：
+      速度、朝向、xRot/yRot 等运动信息（baseWriteSpawnData）
+    - SynchedEntityData：ID_FLAGS、PROJECTILE_MASS、ORIENTATION
+  AbstractBigCannonProjectile
+    - SynchedEntityData：TRACER（ItemStack，曳光弹用）
+  FuzedBigCannonProjectile
+    - fuze 是普通字段，只进 NBT，不同步   ← 要照抄的就是这个
+
+所以只要我们不往上面这几条通道里塞包裹，包裹内容就不会离开服务端。
+
+
+二、具体写法
+----------
+继承哪一层：
+  包裹不需要引信和爆炸，所以直接继承 AbstractBigCannonProjectile（不要继承 FuzedBigCannonProjectile）。
+  它要求实现 getRenderedBlockState()，但包裹不是方块，所以渲染要自己写（见第三节）；
+  这个方法随便返回一个方块状态（比如 AIR）即可，我们的渲染器不会用它。
+
+public class PackageShellProjectile extends AbstractBigCannonProjectile {
+
+    private static final String PACKAGE_KEY = "Package";
+
+    // 只在服务端有值；客户端上永远是 EMPTY
+    private ItemStack contents = ItemStack.EMPTY;
+
+    // 只用于客户端渲染：包裹样式对应的物品，生成时随 spawn 数据发一次
+    private Item displayItem = Items.AIR;
+
+    public void setContents(ItemStack stack) {
+        this.contents = stack.copyWithCount(1);
+        this.displayItem = stack.getItem();
+    }
+
+    public Item getDisplayItem() { return this.displayItem; }
+
+    // ---- 存盘：只有服务端会调用 ----
+    @Override
+    public void addAdditionalSaveData(CompoundTag tag) {
+        super.addAdditionalSaveData(tag);
+        tag.put(PACKAGE_KEY, this.contents.saveOptional(this.level().registryAccess()));
+    }
+
+    @Override
+    public void readAdditionalSaveData(CompoundTag tag) {
+        super.readAdditionalSaveData(tag);
+        this.contents = ItemStack.parseOptional(this.level().registryAccess(), tag.getCompound(PACKAGE_KEY));
+        this.displayItem = this.contents.getItem();
+    }
+
+    // ---- spawn 数据：只多发一个物品 id ----
+    @Override
+    public void writeSpawnData(RegistryFriendlyByteBuf buf) {
+        super.writeSpawnData(buf);
+        ByteBufCodecs.registry(Registries.ITEM).encode(buf, this.displayItem);
+    }
+
+    @Override
+    public void readSpawnData(RegistryFriendlyByteBuf buf) {
+        super.readSpawnData(buf);
+        this.displayItem = ByteBufCodecs.registry(Registries.ITEM).decode(buf);
+    }
+
+    // 命中时把包裹交给 Create（见第四节）
+}
+
+要点：
+  1) writeSpawnData / readSpawnData 必须先调 super，并且读写顺序完全对称，
+     否则 CBC 后面读运动数据会错位，客户端直接报错断线。
+  2) 物品 id 用注册表网络 id（ByteBufCodecs.registry），只占几个字节；
+     不要写 ItemStack.STREAM_CODEC，那样会把数据组件（也就是包裹内容）一起发出去。
+  3) 不要调用 setTracer(包裹)，TRACER 是同步字段。如果包裹炮也想支持曳光，照常传曳光物品即可。
+  4) 不要为了"让客户端拿到样式"去加 EntityDataAccessor<ItemStack>。样式不会变，
+     放 spawn 数据里只发一次就够了，也不用每 tick 检查脏数据。
+  5) 装填阶段（炮的方块实体 / contraption 存的包裹）同理：
+     存盘写 NBT，客户端同步（getUpdateTag / 方块实体同步包）里只写 displayItem，不写完整 ItemStack。
+     否则省了飞行阶段，装填阶段还是会把内容发出去。
+
+
+三、渲染
+------
+CBC 的大炮弹渲染器画的是 getRenderedBlockState() 的方块模型，包裹用不了。
+需要给 PackageShellProjectile 注册一个自己的 EntityRenderer：
+  - 读 entity.getDisplayItem()，用 ItemRenderer 按 new ItemStack(displayItem) 渲染
+    （模型只取决于物品本身，不需要数据组件，所以客户端没有内容也能画对）；
+  - 朝向用 entity.getOrientation() / 插值后的 xRot、yRot，和 CBC 渲染器保持一致。
+
+
+四、命中后
+--------
+在 onImpact / 落地逻辑里（服务端）：
+    if (!this.level().isClientSide && !this.contents.isEmpty()) {
+        PackageEntity box = PackageEntity.fromItemStack(this.level(), 命中位置, this.contents);
+        this.level().addFreshEntity(box);
+        this.contents = ItemStack.EMPTY;   // 防止重复掉落
+    }
+    this.discard();
+
+注意：落地后生成的 Create PackageEntity 自己的 writeSpawnData 会把完整的包裹 ItemStack
+（含内容）发给客户端。这是 Create 本身的行为，和玩家手扔包裹一样，我们控制不了。
+所以这个优化只覆盖"装填 + 飞行"阶段，落地之后就是 Create 原生的包裹实体了。
+
+还要处理弹体不经过命中就消失的情况：
+  - 超出寿命 / CBC 的 removeNextTick 等路径：重写 remove(RemovalReason)，
+    当 reason 是 KILLED / DISCARDED 且 contents 不为空时，原地生成包裹。
+  - reason 是 UNLOADED_TO_CHUNK / UNLOADED_WITH_PLAYER / CHANGED_DIMENSION 时不要掉落。
+    这几种情况是实体随区块存盘或换维度，contents 已经通过 NBT 跟着走了。
+
+
+五、和 shaolib 方案（answer4）的对比
+--------------------------------
+  - 持久化：CBC 弹体是普通实体，会随区块存盘，重启后包裹还在；
+    shaolib 炮弹在内存里，停服会丢，需要自己做 SavedData。这一点 CBC 方案更省事。
+  - 网络：两种方案都能做到"内容只在服务端"。CBC 方案每 tick 还有实体位置同步，
+    shaolib 方案的同步间隔可配（syncIntervalTicks），弹多的时候 shaolib 更省带宽。
+  - 物理和命中：CBC 方案沿用 CBC 的穿深、碰撞、实体命中逻辑，
+    要在 calculateBlockPenetration 里把包裹改成"不穿透、直接停下"。
+
+需要你定的
+--------
+  1) 命中实体时：直接掉包裹，还是先按 CBC 规则造成伤害再掉？
+  2) 曳光要不要支持（TRACER 字段本身是同步的，但同步的是曳光物品，不会泄露包裹）？
