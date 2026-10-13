@@ -1,2 +1,17 @@
-如果包裹依然使用Create big cannons自带的AbstractCannonProjectile并继承，该如何只把内容物存在服务端不走发包以优化
-把答案写进answer5.txt
+在munition\package_slider\ 路径下写AbstractPackageShellProjectile和PackageShellProjectile
+抽象类里面写基本功能, 命中时没有任何伤害，包裹飞行时没有曳光和烟雾但是入水时有水花
+命中实体时直接在原地生成包裹，包裹速度是0
+命中方块时要分情况判断，先用一个方法判断是不是在载具结构上
+public boolean hitShip(BlockPos pos){
+		if(Math.abs(pos.getX()) > 10000000 || Math.abs(pos.getZ()) > 10000000){
+			return true;
+		}
+		return false;
+	}
+这个方法能直接知道是不是在载具上
+然后遍历寻找范围内有没有ItemHatch，用instance of，遍历时用CBCMSMassiveBlockUtil获取一定范围内的ItemHatch,如果在地面，获取命中点位半径3的正方体，如果在载具上，范围是9
+这两个范围写进server config的配置
+然后获取ItemHatch的blockpos并丢进距离命中点最近的一个,用距离平方对比
+剩下的情况里直接在所在方块blockPos中心处生成package
+同时要考虑兼容sable的情况
+开始写
