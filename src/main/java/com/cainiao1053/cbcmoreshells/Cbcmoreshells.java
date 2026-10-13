@@ -2,6 +2,7 @@ package com.cainiao1053.cbcmoreshells;
 
 import com.cainiao1053.cbcmoreshells.cannon_control.cannon_types.CBCMSCannonContraptionTypes;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.placement.DualCannonPlacementHelper;
+import com.cainiao1053.cbcmoreshells.cannons.package_slider.placement.PackageSliderPlacementHelper;
 import com.cainiao1053.cbcmoreshells.index.*;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.shaolib.CBCMSDualCannonProjectiles;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.shaolib.CBCMSDualCannonPropertyTypes;
@@ -71,6 +72,7 @@ public class Cbcmoreshells {
         CBCMSSoundEvents.prepare();
         CBCMSRootNetwork.init();
         DualCannonPlacementHelper.init();
+        PackageSliderPlacementHelper.init();
         //CBCMSArmInteractionPointTypes.register();
         //CBCMSDataComponents.init();
 

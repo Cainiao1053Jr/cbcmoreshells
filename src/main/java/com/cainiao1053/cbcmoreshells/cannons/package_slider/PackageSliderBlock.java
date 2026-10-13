@@ -12,6 +12,7 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
@@ -39,6 +40,32 @@ public interface PackageSliderBlock extends CannonContraptionProviderBlock, Inte
 	@Override
 	default boolean isComplete(BlockState state) {
 		return true;
+	}
+
+	/** Whether this block closes its end of the cannon, i.e. is the breech. */
+	default boolean closesCannonEnd() {
+		return this.getDefaultOpeningType() != PackageSliderEnd.OPEN;
+	}
+
+	/** Whether this block may be placed by the placement assist while held. */
+	default boolean supportsPlacementAssist() {
+		return true;
+	}
+
+	/** Whether this block counts as the cannon's single breech for the placement assist. */
+	default boolean isPlacementAssistBreech() {
+		return this.closesCannonEnd();
+	}
+
+	/**
+	 * Orientation of a block placed by the placement assist.
+	 *
+	 * @param state        the default state of the block being placed
+	 * @param placementDir the direction the cannon is being extended in
+	 * @param cannonFacing {@link #getFacing} of the block the new one will sit against
+	 */
+	default BlockState getAssistedPlacementState(BlockState state, Direction placementDir, Direction cannonFacing) {
+		return state.setValue(DirectionalBlock.FACING, cannonFacing);
 	}
 
 	/** Drops the loaded package and disconnects the neighbours. Only for player breaking, not contraption assembly. */

@@ -20,6 +20,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import rbasamoyai.createbigcannons.cannon_control.contraption.PitchOrientedContraptionEntity;
 import rbasamoyai.createbigcannons.crafting.casting.CannonCastShape;
@@ -56,6 +57,13 @@ public class PackageSliderQuickfiringBreechBlock extends PackageSliderBaseBlock 
 	@Override public PackageSliderEnd getDefaultOpeningType() { return PackageSliderEnd.CLOSED; }
 
 	@Override public CannonCastShape getCannonShape() { return CannonCastShape.SLIDING_BREECH; }
+
+	@Override
+	public BlockState getAssistedPlacementState(BlockState state, Direction placementDir, Direction cannonFacing) {
+		// The breech sits at the closed end and faces back into the barrel, which is how
+		// MountedPackageSliderContraption orients the assembled cannon.
+		return state.setValue(FACING, placementDir.getOpposite());
+	}
 
 	@Override
 	public boolean onInteractWhileAssembled(Player player, BlockPos localPos, Direction side, InteractionHand interactionHand,
