@@ -1,9 +1,11 @@
 package com.cainiao1053.cbcmoreshells.mixin;
 
 import com.cainiao1053.cbcmoreshells.cannon_control.contraption.MountedDualCannonContraption;
+import com.cainiao1053.cbcmoreshells.cannon_control.contraption.MountedPackageSliderContraption;
 import com.cainiao1053.cbcmoreshells.cannon_control.contraption.MountedProjectileRackContraption;
 import com.cainiao1053.cbcmoreshells.cannon_control.contraption.MountedTorpedoTubeContraption;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.breeches.quick_firing_breech.DualCannonMountPoint;
+import com.cainiao1053.cbcmoreshells.cannons.package_slider.breeches.PackageSliderMountPoint;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.breeches.quick_firing_breech.ProjectileRackCannonMountPoint;
 import com.cainiao1053.cbcmoreshells.cannons.torpedo_tube.breeches.quick_firing_breech.TorpedoCannonMountPoint;
 import net.minecraft.world.item.ItemStack;
@@ -35,6 +37,8 @@ public class CannonMountPointMixin {
 			cir.setReturnValue(ProjectileRackCannonMountPoint.projectileRackInsert(stack, simulate, rack, poce));
 		}else if (cannon instanceof MountedDualCannonContraption dualCannon){
 			cir.setReturnValue(DualCannonMountPoint.dualCannonInsert(stack, simulate, dualCannon, poce));
+		}else if (cannon instanceof MountedPackageSliderContraption packageSlider){
+			cir.setReturnValue(PackageSliderMountPoint.packageSliderInsert(stack, simulate, packageSlider, poce));
 		}
 
 	}

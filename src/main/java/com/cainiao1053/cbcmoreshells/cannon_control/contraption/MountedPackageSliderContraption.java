@@ -14,6 +14,7 @@ import com.cainiao1053.cbcmoreshells.index.CBCMSPackageSliderMaterials;
 import com.cainiao1053.cbcmoreshells.munitions.package_slider.PackageShellProjectile;
 import com.simibubi.create.api.contraption.ContraptionType;
 import com.simibubi.create.content.contraptions.AssemblyException;
+import com.simibubi.create.content.logistics.box.PackageItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
@@ -167,13 +168,18 @@ public class MountedPackageSliderContraption extends AbstractMountedCannonContra
 
 	// ---- loading ----
 
+	/** Whether a package can go in now: the breech has finished reloading and the loading barrel is empty. */
+	public boolean canLoadPackage() {
+		return this.presentBlockEntities.get(this.getBreechPos()) instanceof PackageSliderQuickfiringBreechBlockEntity breech
+			&& !breech.isReloading()
+			&& this.presentBlockEntities.get(this.startPos) instanceof IPackageSliderBlockEntity barrel
+			&& !barrel.cannonBehavior().isLoaded();
+	}
+
 	/** Loads one package into the barrel in front of the breech. Server side only. */
 	public boolean tryLoadPackage(ItemStack stack, PitchOrientedContraptionEntity entity) {
-		if (!(this.presentBlockEntities.get(this.getBreechPos()) instanceof PackageSliderQuickfiringBreechBlockEntity breech)
-			|| breech.isReloading()
-			|| !(this.presentBlockEntities.get(this.startPos) instanceof IPackageSliderBlockEntity barrel)
-			|| barrel.cannonBehavior().isLoaded()) return false;
-		barrel.cannonBehavior().setLoaded(stack);
+		if (!PackageItem.isPackage(stack) || !this.canLoadPackage()) return false;
+		((IPackageSliderBlockEntity) this.presentBlockEntities.get(this.startPos)).cannonBehavior().setLoaded(stack);
 		this.syncBlocks(List.of(this.startPos), entity);
 		return true;
 	}
