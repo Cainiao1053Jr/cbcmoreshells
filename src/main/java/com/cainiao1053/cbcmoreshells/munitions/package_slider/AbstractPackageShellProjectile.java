@@ -7,9 +7,7 @@ import com.simibubi.create.AllItems;
 import com.simibubi.create.AllSoundEvents;
 import com.simibubi.create.content.logistics.box.PackageEntity;
 import com.simibubi.create.content.logistics.box.PackageItem;
-import com.simibubi.create.content.logistics.itemHatch.ItemHatchBlock;
-import com.simibubi.create.foundation.blockEntity.behaviour.BlockEntityBehaviour;
-import com.simibubi.create.foundation.blockEntity.behaviour.filtering.FilteringBehaviour;
+import com.simibubi.create.content.logistics.chute.AbstractChuteBlock;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.nbt.CompoundTag;
@@ -177,12 +175,12 @@ public abstract class AbstractPackageShellProjectile extends AbstractCannonProje
 
 	protected void deliverToBlock(BlockHitResult blockHitResult) {
 		if (this.contents.isEmpty()) return;
-		// On a Sable sub-level the hit position is in its plot coordinates, so the hatch search runs there too.
+		// On a Sable sub-level the hit position is in its plot coordinates, so the chute search runs there too.
 		BlockPos hitPos = blockHitResult.getBlockPos();
 		int radius = this.hitShip(hitPos)
-			? CBCMSConfigs.server().packageHatchSearchRadiusShip.get()
-			: CBCMSConfigs.server().packageHatchSearchRadius.get();
-		if (this.insertIntoNearestHatch(hitPos, blockHitResult.getLocation(), radius)) return;
+			? CBCMSConfigs.server().packageChuteSearchRadiusShip.get()
+			: CBCMSConfigs.server().packageChuteSearchRadius.get();
+		if (this.insertIntoNearestChute(hitPos, blockHitResult.getLocation(), radius)) return;
 		this.spawnPackage(this.blockSpawnPos(blockHitResult));
 		AllSoundEvents.CARDBOARD_SWORD.play(this.level(), null,
 				this.position(), 1.0f, 1.0f);
@@ -194,39 +192,39 @@ public abstract class AbstractPackageShellProjectile extends AbstractCannonProje
 		return this.hitShip(hitPos) ? CBCCompatTransformers.transformVec3(this.level(), pos) : pos;
 	}
 
-	protected boolean insertIntoNearestHatch(BlockPos center, Vec3 hitLocation, int radius) {
-		List<BlockPos> hatches = new ArrayList<>();
+	/** Tries the chutes in the cube from nearest to farthest; returns true once one takes the package. */
+	protected boolean insertIntoNearestChute(BlockPos center, Vec3 hitLocation, int radius) {
+		List<BlockPos> chutes = new ArrayList<>();
 		CBCMSMassiveBlockUtil.forEachMatching(this.level(), CBCMSMassiveBlockUtil.cube(center, radius), false,
-			state -> state.getBlock() instanceof ItemHatchBlock,
-			(pos, state) -> hatches.add(pos.immutable()));
-		if (hatches.isEmpty()) return false;
+			state -> state.getBlock() instanceof AbstractChuteBlock,
+			(pos, state) -> chutes.add(pos.immutable()));
+		if (chutes.isEmpty()) return false;
 
-		hatches.sort(Comparator.comparingDouble(pos -> Vec3.atCenterOf(pos).distanceToSqr(hitLocation)));
-		for (BlockPos hatchPos : hatches) {
-			if (this.insertIntoHatch(hatchPos)) return true;
+		chutes.sort(Comparator.comparingDouble(pos -> Vec3.atCenterOf(pos).distanceToSqr(hitLocation)));
+		for (BlockPos chutePos : chutes) {
+			if (this.insertIntoChute(chutePos)) return true;
 		}
 		return false;
 	}
 
-	protected boolean insertIntoHatch(BlockPos hatchPos) {
+	/**
+	 * Puts the package into a chute or smart chute through its item handler, which only accepts while the chute
+	 * is empty (and, for a smart chute, when its filter matches). The chute then moves it on as usual.
+	 */
+	protected boolean insertIntoChute(BlockPos chutePos) {
 		Level level = this.level();
-		BlockState state = level.getBlockState(hatchPos);
-		if (!(state.getBlock() instanceof ItemHatchBlock)) return false;
+		if (!(level.getBlockState(chutePos).getBlock() instanceof AbstractChuteBlock)) return false;
+		IItemHandler chuteInv = level.getCapability(Capabilities.ItemHandler.BLOCK, chutePos, null);
+		if (chuteInv == null) return false;
+		if (!ItemHandlerHelper.insertItem(chuteInv, this.contents, true).isEmpty()) return false;
 
-		BlockPos targetPos = hatchPos.relative(state.getValue(ItemHatchBlock.FACING));
-		IItemHandler targetInv = level.getCapability(Capabilities.ItemHandler.BLOCK, targetPos, null);
-		if (targetInv == null) return false;
-		FilteringBehaviour filter = BlockEntityBehaviour.get(level, hatchPos, FilteringBehaviour.TYPE);
-		if (filter == null || !(filter.getFilter().isEmpty() || filter.test(this.contents))) return false;
-		if (!ItemHandlerHelper.insertItemStacked(targetInv, this.contents, true).isEmpty()) return false;
-
-		// Anything not inserted stays in contents, so the caller falls through to the next hatch or the ground.
-		this.contents = ItemHandlerHelper.insertItemStacked(targetInv, this.contents, false);
+		// Anything not inserted stays in contents, so the caller falls through to the next chute or the ground.
+		this.contents = ItemHandlerHelper.insertItem(chuteInv, this.contents, false);
 		if (!this.contents.isEmpty()) return false;
 
-		AllSoundEvents.ITEM_HATCH.playOnServer(level, hatchPos);
-		level.setBlockAndUpdate(hatchPos, state.setValue(ItemHatchBlock.OPEN, true));
-		level.scheduleTick(hatchPos, state.getBlock(), 10);
+		Vec3 soundPos = Vec3.atCenterOf(chutePos);
+		if (this.hitShip(chutePos)) soundPos = CBCCompatTransformers.transformVec3(level, soundPos);
+		AllSoundEvents.CARDBOARD_SWORD.play(level, null, soundPos, 1.0f, 1.0f);
 		return true;
 	}
 
