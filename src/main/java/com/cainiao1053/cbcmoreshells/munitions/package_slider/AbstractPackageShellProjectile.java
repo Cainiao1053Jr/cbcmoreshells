@@ -33,23 +33,12 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-/**
- * A shell that carries a Create cardboard package and delivers it on impact instead of dealing damage.
- *
- * <p>Extends {@link AbstractCannonProjectile} directly rather than the big cannon projectile so it has no
- * smoke trail, flyby effects or tracer. Fluid entry still goes through CBC's fluid impact, which plays the splash.
- *
- * <p>The package itself only lives on the server (entity NBT); clients only receive the package item,
- * once in the spawn data, so they can render the right package style.
- */
 public abstract class AbstractPackageShellProjectile extends AbstractCannonProjectile {
 
 	private static final String PACKAGE_KEY = "Package";
 	private static final StreamCodec<RegistryFriendlyByteBuf, Item> ITEM_CODEC = ByteBufCodecs.registry(Registries.ITEM);
 
-	/** Server only; always empty on the client. */
 	private ItemStack contents = ItemStack.EMPTY;
-	/** The package item, used by the client to pick the package model. */
 	private Item displayItem = Items.AIR;
 
 	protected AbstractPackageShellProjectile(EntityType<? extends AbstractPackageShellProjectile> type, Level level) {
@@ -71,8 +60,6 @@ public abstract class AbstractPackageShellProjectile extends AbstractCannonProje
 		}
 		return false;
 	}
-
-	// ---- impacts ----
 
 	@Override
 	protected boolean onHitEntity(Entity entity, ProjectileContext projectileContext) {
@@ -108,7 +95,6 @@ public abstract class AbstractPackageShellProjectile extends AbstractCannonProje
 		this.spawnPackage(spawnPos);
 	}
 
-	/** Tries the hatches in the cube from nearest to farthest; returns true once one accepts the package. */
 	protected boolean insertIntoNearestHatch(BlockPos center, Vec3 hitLocation, int radius) {
 		List<BlockPos> hatches = new ArrayList<>();
 		CBCMSMassiveBlockUtil.forEachMatching(this.level(), CBCMSMassiveBlockUtil.cube(center, radius), false,
@@ -123,7 +109,6 @@ public abstract class AbstractPackageShellProjectile extends AbstractCannonProje
 		return false;
 	}
 
-	/** Mirrors ItemHatchBlock#useItemOn: insert into the inventory the hatch faces, respecting its filter. */
 	protected boolean insertIntoHatch(BlockPos hatchPos) {
 		Level level = this.level();
 		BlockState state = level.getBlockState(hatchPos);
@@ -146,7 +131,6 @@ public abstract class AbstractPackageShellProjectile extends AbstractCannonProje
 		return true;
 	}
 
-	/** Drops the package as a Create package entity at rest, at a world position. */
 	protected void spawnPackage(Vec3 worldPos) {
 		if (this.contents.isEmpty()) return;
 		PackageEntity box = PackageEntity.fromItemStack(this.level(), worldPos, this.contents);
@@ -166,8 +150,6 @@ public abstract class AbstractPackageShellProjectile extends AbstractCannonProje
 		super.remove(reason);
 	}
 
-	// ---- persistence (server only) ----
-
 	@Override
 	public void addAdditionalSaveData(CompoundTag tag) {
 		super.addAdditionalSaveData(tag);
@@ -180,8 +162,6 @@ public abstract class AbstractPackageShellProjectile extends AbstractCannonProje
 		this.contents = ItemStack.parseOptional(this.level().registryAccess(), tag.getCompound(PACKAGE_KEY));
 		this.displayItem = this.contents.getItem();
 	}
-
-	// ---- spawn data: only the package item, never its contents ----
 
 	@Override
 	public void writeSpawnData(RegistryFriendlyByteBuf buffer) {
