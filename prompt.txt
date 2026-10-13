@@ -1,3 +1,3 @@
-minecraft的getBlock方法很低效，需要先getChunk然后再get到block，对于一个范围内的批量getBlock处理非常麻烦
-因此，需要写一个CBCMSMassiveBlockUtil，里面放一系列便捷方法用于对批量方块执行内容，需要输入AABB或者对角的blockPos，然后根据位置获取所有参与的区块，先获取区块，拿到区块后在区块里面获取方块
-先不改代码，讨论如何实现这种便捷util，把答案写进answer3.txt
+在输入里面额外增加一个boolean，用于决定是否在getChunk阶段触发一次加载，因为是炮弹，所以可能会打到未加载区域，这里需要一个boolean决定是否去加载
+如果是false就不加载，true的时候，getChunk里面调用的方法需要能加载区块
+剩下的没问题，开始实施
