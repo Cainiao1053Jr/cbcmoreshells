@@ -607,5 +607,6 @@
 "block.cbcmoreshells.wide_constantan_single_cannon_chamber_shielded": "Wide Constantan Single Cannon Shielded Chamber",
 "block.cbcmoreshells.wide_constantan_single_cannon_quickfiring_breech": "Wide Constantan Single Cannon Quick-Firing Breech",
 "block.cbcmoreshells.wide_constantan_single_cannon_magazine_breech": "Wide Constantan Single Cannon Magazine Breech",
-"item.cbcmoreshells.fire_extinguisher": "Fire Extinguisher"
+"item.cbcmoreshells.fire_extinguisher": "Fire Extinguisher",
+"entity.cbcmoreshells.package_shell": "Package Shell"
 }

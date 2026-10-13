@@ -14,6 +14,8 @@ public class CBCMSCfgServer extends ConfigBase {
 		"Radius of the cube searched for Item Hatches when a package shell hits the ground");
 	public final ConfigInt packageHatchSearchRadiusShip = i(9, 0, 32, "packageHatchSearchRadiusShip",
 		"Radius of the cube searched for Item Hatches when a package shell hits a ship");
+	public final ConfigFloat packageBreakSpeed = f(6, 0, 10000, "packageBreakSpeed",
+		"Impact speed in m/s above which a package shell breaks apart and drops its contents");
 	
 	@Override public String getName() { return "server"; }
 

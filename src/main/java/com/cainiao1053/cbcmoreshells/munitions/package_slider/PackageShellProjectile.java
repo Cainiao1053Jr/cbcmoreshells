@@ -1,7 +1,7 @@
 package com.cainiao1053.cbcmoreshells.munitions.package_slider;
 
 import com.cainiao1053.cbcmoreshells.index.CBCMSMunitionPropertiesHandlers;
-import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.ShellessInertBigCannonProperties;
+import com.cainiao1053.cbcmoreshells.munitions.package_slider.config.PackageShellProperties;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.level.Level;
 import rbasamoyai.createbigcannons.munitions.config.components.BallisticPropertiesComponent;
@@ -15,10 +15,11 @@ public class PackageShellProjectile extends AbstractPackageShellProjectile {
 		super(type, level);
 	}
 
+	/** Package shells never deal damage; CBC only needs a non-null value. */
 	@Nonnull
 	@Override
 	public EntityDamagePropertiesComponent getDamageProperties() {
-		return this.getAllProperties().damage();
+		return EntityDamagePropertiesComponent.DEFAULT;
 	}
 
 	@Nonnull
@@ -27,8 +28,13 @@ public class PackageShellProjectile extends AbstractPackageShellProjectile {
 		return this.getAllProperties().ballistics();
 	}
 
-	protected ShellessInertBigCannonProperties getAllProperties() {
-		return CBCMSMunitionPropertiesHandlers.SHELLESS_INERT_BIG_CANNON_PROJECTILE.getPropertiesOf(this);
+	@Override
+	protected int getLifetime() {
+		return this.getAllProperties().lifetime();
+	}
+
+	protected PackageShellProperties getAllProperties() {
+		return CBCMSMunitionPropertiesHandlers.PACKAGE_SHELL.getPropertiesOf(this);
 	}
 
 }

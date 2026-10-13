@@ -51,6 +51,8 @@ import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_apbc_shell.Nor
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_he_shell.NormalHEShellProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_incendiary_he_shell.NormalIncendiaryHEShellProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.normal_sap_shell.NormalSAPShellProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.package_slider.PackageShellProjectile;
+import com.cainiao1053.cbcmoreshells.munitions.package_slider.PackageShellProjectileRenderer;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.AbstractRackedProjectile;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.RackedProjectileRenderer;
 import com.cainiao1053.cbcmoreshells.munitions.racked_projectile.aphe_bomb.APHEBombProjectile;
@@ -184,6 +186,15 @@ public class CBCMSEntityTypes {
 
 
 	public static final EntityEntry<AntiairMachineGunProjectile> ANTIAIR_MACHINE_GUN_BULLET = autocannonProjectile("antiair_machine_gun_bullet", AntiairMachineGunProjectile::new, CBCMSMunitionPropertiesHandlers.ANTIAIR_AUTOCANNON);
+
+	public static final EntityEntry<PackageShellProjectile> PACKAGE_SHELL = REGISTRATE
+			.entity("package_shell", PackageShellProjectile::new, MobCategory.MISC)
+			.properties(cannonProperties())
+			.renderer(() -> PackageShellProjectileRenderer::new)
+			.lang("Package Shell")
+			.tag(RPLTags.PRECISE_MOTION)
+			.onRegister(type -> MunitionPropertiesHandler.registerProjectileHandler(type, CBCMSMunitionPropertiesHandlers.PACKAGE_SHELL))
+			.register();
 
 
 
