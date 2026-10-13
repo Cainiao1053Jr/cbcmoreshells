@@ -1,2 +1,3 @@
-ComboRenderer的注册除了能在CBCMSClientNeoForge里面手动注册以外，是否能在物品注册时手动调用一个.transform或者别的内容来避开这种写法?
-把答案写进answer2.txt
+minecraft的getBlock方法很低效，需要先getChunk然后再get到block，对于一个范围内的批量getBlock处理非常麻烦
+因此，需要写一个CBCMSMassiveBlockUtil，里面放一系列便捷方法用于对批量方块执行内容，需要输入AABB或者对角的blockPos，然后根据位置获取所有参与的区块，先获取区块，拿到区块后在区块里面获取方块
+先不改代码，讨论如何实现这种便捷util，把答案写进answer3.txt
