@@ -69,12 +69,13 @@ public class CBCMSTooltip {
 		float spread = material.minimumSpread();
 		float spreadReduction = material.spreadReductionPerBarrel();
 		int caliber = material.refCaliber();
+		double weight = material.weight();
 
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(rootKey + ".accuracy.info", spreadReduction, spread),
 				palette.primary(), palette.highlight(), 2));
 
 		tooltip.add(Component.literal(" " + I18n.get(rootKey + ".damageMultiplier")).withStyle(ChatFormatting.GRAY));
-		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(rootKey + ".damageMultiplier.info", caliber, material.durabilityMassModifier()),
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(rootKey + ".damageMultiplier.info", caliber, material.durabilityMassModifier(), weight),
 				palette.primary(), palette.highlight(), 2));
 
 		tooltip.add(Component.literal(" " + I18n.get(rootKey + ".addedLifetime")).withStyle(ChatFormatting.GRAY));
@@ -110,12 +111,13 @@ public class CBCMSTooltip {
 		float spread = material.minimumSpread();
 		float spreadReduction = material.spreadReductionPerBarrel();
 		int caliber = material.refCaliber();
+		double weight = material.weight();
 
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(rootKey + ".accuracy.info", spreadReduction, spread),
 				palette.primary(), palette.highlight(), 2));
 
 		tooltip.add(Component.literal(" " + I18n.get(rootKey + ".damageMultiplier")).withStyle(ChatFormatting.GRAY));
-		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(rootKey + ".damageMultiplier.info", caliber, material.durabilityMassModifier()),
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(rootKey + ".damageMultiplier.info", caliber, material.durabilityMassModifier(), weight),
 				palette.primary(), palette.highlight(), 2));
 
 		tooltip.add(Component.literal(" " + I18n.get(rootKey + ".addedLifetime")).withStyle(ChatFormatting.GRAY));

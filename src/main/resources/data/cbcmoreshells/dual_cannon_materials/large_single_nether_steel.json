@@ -1,6 +1,6 @@
 {
   "minimum_velocity_per_barrel": 1.0,
-  "weight": 1.0,
+  "weight": 15.0,
   "max_safe_propellant_stress": 10,
   "failure_mode": "rupture",
   "connects_in_survival": true,
@@ -10,7 +10,7 @@
   "minimum_spread": 0.45,
   "spread_reduction_per_barrel": 2.5,
   "added_lifetime": 160.0,
-  "reload_time_modifier": 3.22,
+  "reload_time_modifier": 3.14,
   "durability_mass_modifier": 2.02,
   "barrel_gap": 0.0,
   "combat_command_cooldown": 2400,

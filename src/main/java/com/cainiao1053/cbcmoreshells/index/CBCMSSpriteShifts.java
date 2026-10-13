@@ -31,7 +31,9 @@ public class CBCMSSpriteShifts {
 	ELECTRUM_DUAL_CANNON_CHAMBER = dualCannon("dual_cannon/electrum_dual_cannon_chamber"),
 	CONSTANTAN_DUAL_CANNON_BARREL = dualCannon("dual_cannon/constantan_dual_cannon_barrel"),
 	CONSTANTAN_DUAL_CANNON_CHAMBER = dualCannon("dual_cannon/constantan_dual_cannon_chamber"),
-	SLATE_STEEL_BLOCK = omnidirectional("slate_steel/slate_steel_block");
+	SLATE_STEEL_BLOCK = omnidirectional("slate_steel/slate_steel_block"),
+			ANDESITE_DUAL_CANNON_CHAMBER = dualCannon("dual_cannon/andesite_dual_cannon_chamber"),
+			ANDESITE_DUAL_CANNON_BARREL = dualCannon("dual_cannon/andesite_dual_cannon_barrel");
 
 
 

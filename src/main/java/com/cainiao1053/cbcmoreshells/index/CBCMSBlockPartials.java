@@ -64,7 +64,16 @@ public class CBCMSBlockPartials {
 				ELECTRUM_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.SINGLE_ELECTRUM, "steel_single_cannon_sliding_breechblock"),
 				CONSTANTAN_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.SINGLE_CONSTANTAN, "steel_single_cannon_sliding_breechblock"),
 				WIDE_ELECTRUM_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.WIDE_SINGLE_ELECTRUM, "wide_steel_single_cannon_sliding_breechblock"),
-				WIDE_CONSTANTAN_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.WIDE_SINGLE_CONSTANTAN, "wide_steel_single_cannon_sliding_breechblock")
+				WIDE_CONSTANTAN_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.WIDE_SINGLE_CONSTANTAN, "wide_steel_single_cannon_sliding_breechblock"),
+				LARGE_CAST_IRON_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.LARGE_SINGLE_CAST_IRON, "large_steel_single_cannon_sliding_breechblock"),
+				LARGE_BRONZE_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.LARGE_SINGLE_BRONZE, "large_steel_single_cannon_sliding_breechblock"),
+				LARGE_ANDESITE_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.LARGE_SINGLE_ANDESITE, "large_steel_single_cannon_sliding_breechblock"),
+				CAST_IRON_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.SINGLE_CAST_IRON, "steel_single_cannon_sliding_breechblock"),
+				BRONZE_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.SINGLE_BRONZE, "steel_single_cannon_sliding_breechblock"),
+				ANDESITE_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.SINGLE_ANDESITE, "steel_single_cannon_sliding_breechblock"),
+				WIDE_ANDESITE_DUAL_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.WIDE_ANDESITE, "wide_steel_dual_cannon_sliding_breechblock"),
+				WIDE_ANDESITE_SINGLE_CANNON_SLIDING_BREECHBLOCK = dualCannonBreechblockPartial(CBCMSDualCannonMaterials.WIDE_ANDESITE, "wide_steel_single_cannon_sliding_breechblock")
+
 	;
 
 
