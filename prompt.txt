@@ -1,2 +1,1 @@
-把机械手的MountPoint装填也做好，在CannonMountPointMixin里面添加PackageSlider的装填
-然后注册方块，breech和barrel各一个并添加进ModGroup
+给packageSlider也加上DualCannonPlacementHelper那样的放置辅助
