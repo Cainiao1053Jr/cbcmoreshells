@@ -10,6 +10,10 @@ public class CBCMSCfgServer extends ConfigBase {
 	public final ConfigInt extinguisherRange = i(2, 0, 16, "extinguisherRange", "Extinguisher Range");
 	public final ConfigBool notifyOnHit = b(true, "notifyOnHit");
 	public final ConfigFloat recoilScale = f(1, 0, 100, "recoilScale", "Scale of recoil of all cannon materials");
+	public final ConfigInt packageHatchSearchRadius = i(3, 0, 16, "packageHatchSearchRadius",
+		"Radius of the cube searched for Item Hatches when a package shell hits the ground");
+	public final ConfigInt packageHatchSearchRadiusShip = i(9, 0, 32, "packageHatchSearchRadiusShip",
+		"Radius of the cube searched for Item Hatches when a package shell hits a ship");
 	
 	@Override public String getName() { return "server"; }
 
