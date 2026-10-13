@@ -1,0 +1,170 @@
+包裹炮（发射 Create 纸箱包裹）的 shaolib 炮弹：能否单独存储、怎么做
+=====================================================================
+
+结论
+----
+能。shaolib 的每种炮弹类型（ProjectileType）都可以带一个自己的"服务端状态"类，
+每一发炮弹实例各有一份独立的状态对象，再配一个自己的序列化器。
+包裹 ItemStack 放进这个状态里，就是"这一发炮弹单独存着这个包裹"。
+
+以下结论都是对着工程实际依赖的 jar 用 javap 查过的
+（shaolib-1427600-9028490、shaolib-munitions-1667342-8728437、create-1.21.1-6.0.10-280），
+不是凭印象。
+
+但有一个必须处理的坑：shaolib 不会在服务器重启时保存飞行中的炮弹（见第三节），
+普通炮弹丢了无所谓，包裹丢了就是玩家丢东西，需要我们自己补。
+
+
+一、shaolib 提供的两种"数据存放"方式
+----------------------------------
+
+1) 服务端状态 ProjectileServerState + ProjectileSerializer   ← 存包裹用这个
+   - ProjectileType.builder(id, (projectile, level) -> new 我们的State())
+     每发炮弹生成时调用工厂，得到一个独立的 State 对象。
+   - ProjectileHandle.state() / ProjectileServerContext.state() 拿到它。
+   - .serializer(ProjectileSerializer<S>) 的 save/load 会拿到
+     ProjectileSerializationContext.registries()（HolderLookup.Provider），
+     所以可以正确地 ItemStack.save(registries) / ItemStack.parseOptional(registries, tag)，
+     包裹的所有数据组件（内容、地址、订单信息）都能完整保存。
+   - 只在服务端，不会发给客户端。
+   - 工程里的 DualCannonState / DualCannonSerializer 就是这个模式，可以照抄结构。
+
+2) 同步数据表 ProjectileDataSchema + ProjectileDataAccessor   ← 只放客户端渲染需要的东西
+   - define(name, serializer, default, ProjectileSyncPolicy)，会同步到客户端。
+   - 内置序列化器只有 BOOLEAN/BYTE/INT/LONG/FLOAT/DOUBLE/STRING/VEC3。
+   - 可以自定义 ProjectileDataSerializer<ItemStack>（网络部分用 RegistryFriendlyByteBuf 没问题），
+     但它的 writeNbt(CompoundTag, String, T) 拿不到 registries，
+     带数据组件的 ItemStack 没法在这里正确存 NBT（supportsNbt() 默认 false）。
+   - 所以包裹内容不要放这里。也没必要把内容发给客户端（浪费带宽，还会泄露包裹内容）。
+   - 只需要同步"画什么"：包裹的物品 id（Create 每种包裹样式是一个单独的 Item），
+     用 STRING + SPAWN_ONLY 即可。
+
+
+二、推荐实现结构
+--------------
+
+新建 munitions/package_cannon/（或放在现有 shaolib 包旁边）：
+
+  PackageShellState implements ProjectileServerState
+      private ItemStack contents = ItemStack.EMPTY;   // 整个包裹物品，count = 1
+      private boolean delivered;                       // 防止重复掉落
+      getter / setter
+
+  PackageShellSerializer implements ProjectileSerializer<PackageShellState>
+      save(ctx, projectile, state, tag):
+          if (!state.contents().isEmpty())
+              tag.put("Package", state.contents().save(ctx.registries()));
+          tag.putBoolean("Delivered", state.delivered());
+      load(ctx, projectile, state, tag):
+          state.setContents(ItemStack.parseOptional(ctx.registries(), tag.getCompound("Package")));
+          state.setDelivered(tag.getBoolean("Delivered"));
+
+  CBCMSPackageShellData
+      SCHEMA = ProjectileDataSchema.builder()
+      PACKAGE_ITEM = define("cbcms_package_item", STRING, "", SPAWN_ONLY)   // 物品注册名，给客户端选模型
+
+  CBCMSPackageShellProjectiles
+      PACKAGE_SHELL = ShaolibProjectiles.register(
+          ProjectileType.<PackageShellState>builder(Cbcmoreshells.resource("package_shell"),
+                  (projectile, level) -> new PackageShellState())
+              .schema(CBCMSPackageShellData.SCHEMA)
+              .motionModel(ProjectileMotionModels.constantAcceleration(new Vec3(0, -g, 0)))
+              .behavior(new PackageShellBehavior())
+              .serializer(new PackageShellSerializer())
+              .syncIntervalTicks(10)
+              .maxLifetimeTicks(600)
+              .build());
+
+  发射时（炮的 contraption 里，参照 MountedDualCannonContraption.spawnRound）：
+      ItemStack box = loaded.copyWithCount(1);
+      ShaolibProjectiles.spawn(level, PACKAGE_SHELL, worldPos, velocity,
+          ProjectileSpawnInitializer.both(
+              projectile -> projectile.set(CBCMSPackageShellData.PACKAGE_ITEM,
+                      BuiltInRegistries.ITEM.getKey(box.getItem()).toString()),
+              handle -> handle.state().setContents(box)));
+      spawn 返回 null 或 !alive() 时，要把包裹退回炮里或原地掉落，不能吞掉。
+
+  PackageShellBehavior implements ProjectileBehavior<PackageShellState>
+      tickServer(ctx):
+          ProjectileSweepResult sweep = ctx.steps().integrateAndRaycast(1.0, raycastOptions);
+          if (sweep.hit()) deliver(ctx, 命中点稍微往回退一点的位置);
+      onRemove(ctx, reason):
+          // "expired"（超过 maxLifetimeTicks）也会走这里：在当前位置掉落包裹
+          // "below_min_build_height"：掉进虚空，按原版逻辑可以视为丢失，或改成退回，需要你定
+          deliver(...)，前提是 !state.delivered()
+      deliver:
+          state.setDelivered(true);
+          PackageEntity entity = PackageEntity.fromItemStack(level, pos, state.contents());
+          level.addFreshEntity(entity);
+          projectile.discard("delivered");
+
+  落地用 Create 自己的 PackageEntity.fromItemStack(level, Vec3, ItemStack)，
+  这样落地后就是一个正常的 Create 包裹实体：能捡、能拆，地址和订单信息都保留，
+  包裹相关的 Create 物流机制照常工作。
+
+  基类选择：
+  不建议继承 shaolib-munitions 的 AbstractFuzedShellBehavior / FuzedShellState（双联炮用的那套）。
+  那套是给"引信 + 穿甲 + 爆炸"设计的，会破坏方块、对实体造成伤害、嵌入船体。
+  包裹炮只需要"飞 → 碰到东西 → 掉包裹"，直接实现 ProjectileBehavior 更干净，
+  用 ctx.steps().integrateAndRaycast 就够了。
+  如果以后想让包裹打人有伤害，再单独加实体命中检测（ProjectileEntityHitQueries）。
+
+
+三、必须处理的坑：重启时飞行中的包裹会丢
+------------------------------------
+
+查过 shaolib 的 ServerProjectileRuntime：
+  - 所有炮弹存在一个内存里的 ConcurrentMap 里；
+  - ServerStoppedEvent 时直接 map.clear()，不会调用 onRemove；
+  - ShaolibProjectiles.save(instance) / restore(level, tag) 这两个 API 存在，
+    但 shaolib 自己从来不调用，也没有 SavedData。
+
+也就是说：服务器关闭/崩溃的那一刻，空中的包裹连同里面的物品会直接消失，
+我们的 onRemove 也收不到通知。
+
+解决方案（推荐 A）：
+  A) 自己做持久化：
+     - 监听 ServerStoppingEvent（此时世界还在），遍历
+       ShaolibProjectiles.activeProjectiles() 中 type == PACKAGE_SHELL 的，
+       用 ShaolibProjectiles.save(instance) 得到 CompoundTag（会调用我们的 serializer，包裹在里面），
+       按维度存进我们自己的 SavedData。
+     - 服务器启动后（ServerStartedEvent，或对应维度加载时）
+       用 ShaolibProjectiles.restore(level, tag) 恢复，然后清空 SavedData。
+     - 炮弹飞行时间很短（最多 600 tick），这份数据通常是空的，开销可以忽略。
+  B) 简化版：ServerStoppingEvent 时直接在当前位置生成 PackageEntity。
+     问题是炮弹可能飞到未加载区块，往那里加实体不可靠，仍可能丢。
+  崩溃（非正常关闭）两种方案都救不回来，这是 shaolib 的运行时设计决定的。
+
+
+四、客户端渲染
+------------
+
+现有的 DualCannonProjectileClientBehavior 继承的是 CbcShellBlockModelProjectileClientBehavior，
+只能画 CBC 炮弹的方块模型，包裹用不了。
+
+需要写一个 PackageShellClientBehavior implements ClientProjectileBehavior<...>：
+  - render(ctx, projectile, state)：读 projectile.get(PACKAGE_ITEM) 得到物品，
+    用物品渲染器画包裹模型（或参考 Create 的 PackageRenderer 画包裹实体模型），
+    位置用 projectile.interpolatedPosition(partialTick)。
+  - 用 ClientProjectileBehaviors.register(PACKAGE_SHELL, new PackageShellClientBehavior()) 注册，
+    和 CBCMSDualCannonProjectileClient.register() 一样在客户端初始化时调用。
+具体渲染接口（ClientProjectileRenderContext 里有什么）写代码时再查。
+
+
+五、炮这一侧（简述）
+-----------------
+  - 装填判定：PackageItem.isPackage(stack)。
+  - 炮里存的是 ItemStack（count = 1，用 copyWithCount(1)），方块实体 / contraption 存档时
+    同样要用 registries 保存，保证内容不丢。
+  - 发射时把这个 ItemStack 交给第二节的 spawn，成功后再从炮里清掉。
+  - 炮的方块、contraption、装填交互可以参照现有 dual cannon 的结构，这部分和 shaolib 无关，
+    确认方案后再细化。
+
+
+需要你定的问题
+------------
+  1) 命中后的效果：完整掉落包裹实体（推荐，最简单），还是摔碎、散出里面的物品？
+     要不要对实体造成伤害或击退？
+  2) 掉进虚空（below_min_build_height）算丢失，还是退回？
+  3) 重启保护用方案 A（自己做 SavedData，推荐）还是方案 B（停服时原地掉落）？
+  4) 弹道参数（初速、重力、寿命）写死、走 server config，还是像双联炮一样走数据包 munition 配置？
