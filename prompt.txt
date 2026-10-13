@@ -1,7 +1,12 @@
-给package shell单独做一个PropertiesHandler, 里面只有BallisticPropertiesComponent和lifetime
-在projectile的类里面，累积时间，当超时的时候在原地生成包裹并移除自己
-projectile的弹道和big cannon一样，且增加一个功能
-如果速度大于6m/s, 包裹直接解体，也就是原地生成里面的物品, 播放音效createbigcannpns:wood_splinters, pitch 1.8
-解体速度写进config
-当入射角度大于80度(角度很sharp, 这部分用数据的deflection)且速度大于3 m/tick时,包裹弹开且elasticity 为1.5并播放create:cardboard_bonk音效
-然后把渲染和剩余内容写好并注册实体
+接下来完成炮的contraption和炮管
+继承AbstractMountedCannonContraption做MountedPackageSliderContraption
+这个炮里面装填的是包裹物品，发射时转化为包裹炮弹实体，装填就能发射，不用装药，没有后坐力
+初速度由炮管长度决定，公式为(总长度-1)*0.5 +1 m/tick
+不考虑铸造等内容
+炮管(cannon)的部分，只有quickfiringBreech没有slidingBreech，也不考虑互相转换
+quickfiringBreech也不考虑可以移动的breechBlock和lever，但是由内置的装填时间，默认20tick，但是要加上长度*reloadPerSection
+整个火炮只有quickfiringBreech一种炮闩
+材料只注册steel, 材料属性只有weight 默认2, maxLength 默认12, reloadPerSection 默认5 tick
+connectsInSurvival直接true
+对于渲染，装填时把物品装到炮管里，然后在炮管渲染物品
+先把block相关的类和MountedPackageSliderContraption写好
