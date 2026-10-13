@@ -1,0 +1,239 @@
+CBCMSMassiveBlockUtil 设计讨论（批量方块访问工具）
+==================================================
+
+先说结论
+--------
+可以做，而且值得做。但要实事求是地看收益在哪里：
+
+  1. 单纯"先拿区块再拿方块"省掉的只是每次 getBlockState 的区块查找开销。
+     在服务端主线程上 ServerChunkCache.getChunk 本身有一个 4 格的"最近区块"缓存，
+     小范围扫描（半径 2~5）大部分都会命中，所以这部分只是常数级提速，不会是数量级。
+  2. 真正大的收益来自"按区块段（16x16x16 section）遍历"之后才能做的事：
+       - 整段全是空气（section.hasOnlyAir()）直接跳过 4096 个方块；
+       - 用调色板预判（section.getStates().maybeHas(predicate)）：
+         段里根本不存在目标方块（比如找火）时整段跳过，一个方块都不用读；
+       - 不触发区块加载：level.getBlockState 遇到未加载区块会同步加载/生成，
+         炮弹在加载边缘爆炸时可能卡服；util 改为"未加载区块直接跳过"。
+  3. 写方块（setBlock）不能绕过 Level。邻居更新、光照、客户端同步、方块实体、
+     高度图都在 Level.setBlock 里，直接改 LevelChunk 会出一堆问题。
+     所以 util 的定位是："读走区块，写走 Level"。
+  4. 顺便能把现在重复了 4~5 份的 spawnFire / extinguishFire 合并掉。
+
+
+现状（工程里实际的批量方块代码）
+------------------------------
+以下几处都是同一种写法：AABB -> 两个角 -> BlockPos.betweenClosed -> 逐个 level.getBlockState
+
+  munitions/dual_cannon/shaolib/CBCMSIncendiaryEffectService.java      spawnFire
+  munitions/big_cannon/incendiary_he_shell/IncendiaryHEShellProjectile.java   spawnFire
+  munitions/big_cannon/shelless_incendiary_he_shell/ShellessIncendiaryHEShellProjectile.java   spawnFire
+  munitions/dual_cannon/normal_incendiary_he_shell/NormalIncendiaryHEShellProjectile.java     spawnFire
+  compat/sable/CBCMSSableCompat.java   spawnFire / extinguishFire
+
+顺带发现的小问题（和 util 设计相关，util 里要一次性定义清楚）：
+
+  a) new AABB(root).inflate(r) 的范围是 [x-r, x+1+r)，
+     而 BlockPos.containing(bounds.maxX) 取到的是 x+1+r 这一格，
+     所以实际扫的是 (2r+2)^3，正方向多了一层，范围不对称。
+  b) spawnFire 里先 getBlockState(pos) 又 isEmptyBlock(pos)，同一格查了两次。
+  c) CBCMSSableCompat 用 new BlockPos((int) x, (int) y, (int) z)，
+     (int) 是向 0 截断，负坐标会偏一格，应该用 BlockPos.containing。
+
+
+一、Minecraft 里一次 getBlockState 实际做了什么（1.21.1）
+------------------------------------------------------
+  Level.getBlockState(pos)
+    -> isOutsideBuildHeight 检查
+    -> getChunk(x>>4, z>>4, FULL, true)        // 服务端：查 4 格缓存，未命中查 ChunkHolder；
+                                                // 区块未加载会同步加载；非主线程会丢给主线程执行器排队（极慢）
+    -> LevelChunk.getBlockState(pos)
+         -> 算 section 下标 -> LevelChunkSection.getBlockState(x&15, y&15, z&15)
+              -> PalettedContainer 取值（位运算 + 调色板查表）
+
+批量版本要做的就是把前两步从"每个方块一次"降到"每个区块一次"，
+把第三步里的 section 定位降到"每个 section 一次"，然后在 section 内直接 (x,y,z) 取值。
+
+
+二、核心遍历算法
+--------------
+输入统一转成一个"闭区间方块盒" BoundingBox(minX,minY,minZ,maxX,maxY,maxZ)（用原版的
+net.minecraft.world.level.levelgen.structure.BoundingBox 即可，正好是 int 闭区间）。
+
+  1) 把 Y 裁剪到 [level.getMinBuildHeight(), level.getMaxBuildHeight()-1]，空了直接返回
+  2) for cx in [minX>>4, maxX>>4]
+       for cz in [minZ>>4, maxZ>>4]
+         chunk = level.getChunkSource().getChunkNow(cx, cz)   // 不加载，未加载返回 null
+         if chunk == null -> 跳过（或按策略处理，见第五节）
+         本区块内的局部范围：x0 = max(minX, cx<<4), x1 = min(maxX, (cx<<4)+15)，z 同理
+         for 每个和 [minY,maxY] 相交的 section（chunk.getSectionIndex(y)）
+           section = chunk.getSection(i)
+           if 只要非空气 && section.hasOnlyAir() -> 跳过整段
+           if 有调色板预判 && !section.getStates().maybeHas(filter) -> 跳过整段
+           y0/y1 = 与本 section 的交集
+           for y in y0..y1            // 顺序按 section 内存布局 (y<<8 | z<<4 | x)，x 最内层
+             for z in z0..z1
+               for x in x0..x1
+                 state = section.getBlockState(x&15, y&15, z&15)
+                 mutablePos.set(x, y, z)
+                 visitor.visit(mutablePos, state)
+
+注意点：
+  - 回调里给的是 MutableBlockPos，要存下来必须 pos.immutable()。必须在文档里写明。
+  - 遍历顺序会和 betweenClosed 不同（按区块分组）。对放火这类逻辑没有语义影响，
+    只是随机数分配到的格子顺序变了。
+  - getChunkNow 在 ChunkSource 上，客户端/服务端都能用。
+
+
+三、"边扫边写"还是"先扫后写"
+-------------------------
+现在的 spawnFire 是边扫边 setBlockAndUpdate。问题是 setBlock 会触发邻居更新，
+可能改变尚未扫到的方块（比如放火 -> 邻居更新 -> 某些方块掉落/变化），
+扫描结果就和"爆炸那一刻的世界状态"不一致。
+
+建议 util 提供两种：
+  - forEachBlock：只读回调，回调里写不写由调用方决定（兼容现有写法，最简单）
+  - replaceBlocks / collect：先扫描收集 (pos, newState) 列表，扫描结束后统一通过
+    level.setBlock(pos, state, flags) 写回。语义更干净，也方便以后做"每 tick 最多改 N 个"的分帧处理。
+
+写入一律走 Level.setBlock。不建议做"直接改 LevelChunkSection"的快速写，
+那需要自己处理光照、发包、邻居更新、方块实体、unsaved 标记，收益不值得风险。
+
+
+四、建议的 API
+-------------
+public final class CBCMSMassiveBlockUtil {
+
+    // ---- 区域构造（统一语义，修掉上面的 off-by-one） ----
+    static BoundingBox box(BlockPos a, BlockPos b)          // 两个对角，顺序随意，闭区间
+    static BoundingBox box(AABB aabb)                        // 取所有"与 AABB 相交"的方块：
+                                                             //   min = floor(min), max = ceil(max) - 1
+    static BoundingBox cube(BlockPos center, int radius)     // [c-r, c+r]，对称，替代 new AABB(root).inflate(r)
+
+    // ---- 回调接口 ----
+    @FunctionalInterface interface BlockVisitor {
+        void visit(BlockPos.MutableBlockPos pos, BlockState state);
+    }
+    @FunctionalInterface interface BlockSearcher {          // 返回 false 提前终止
+        boolean visit(BlockPos.MutableBlockPos pos, BlockState state);
+    }
+
+    // ---- 遍历 ----
+    static void forEachBlock(Level level, BoundingBox box, BlockVisitor v)
+    static void forEachNonAir(Level level, BoundingBox box, BlockVisitor v)          // 跳过全空气 section
+    static void forEachMatching(Level level, BoundingBox box,
+                                Predicate<BlockState> filter, BlockVisitor v)        // 用 maybeHas 跳段 + 逐格再判一次
+    static boolean search(Level level, BoundingBox box, BlockSearcher s)             // 可提前终止
+    // 以上每个都提供 (Level, AABB, ...) 和 (Level, BlockPos, BlockPos, ...) 重载
+
+    // ---- 常用便捷 ----
+    static boolean anyMatch(Level, BoundingBox, Predicate<BlockState>)
+    static int     count(Level, BoundingBox, Predicate<BlockState>)
+    static List<BlockPos> collect(Level, BoundingBox, Predicate<BlockState>)          // 返回 immutable pos
+    static int replace(Level, BoundingBox, Predicate<BlockState>,
+                       Function<BlockState, BlockState> mapper, int flags)          // 先扫后写，返回改动数
+
+    // ---- 低层：按区块访问，给特殊需求用 ----
+    @FunctionalInterface interface ChunkVisitor {
+        void visit(LevelChunk chunk, int minX, int minY, int minZ, int maxX, int maxY, int maxZ);
+    }
+    static void forEachChunk(Level, BoundingBox, ChunkVisitor)
+
+    // ---- 附带：方块实体 / 流体 ----
+    static <T extends BlockEntity> void forEachBlockEntity(Level, BoundingBox, Class<T>, Consumer<T>)
+        // 遍历 chunk.getBlockEntities()（Map），按坐标过滤；区域大、BE 少时远快于逐格查
+    static void forEachFluid(Level, BoundingBox, BiConsumer<MutableBlockPos, FluidState>)
+        // section.getFluidState(x,y,z)
+}
+
+其中 forEachMatching 的 filter 有一个限制要写进文档：
+maybeHas 是对"调色板里出现过的状态"做判断，所以 filter 只能依赖 BlockState 本身，
+不能依赖位置/周围环境（例如 CandleBlock.canLight(state) 可以，isEmptyBlock(pos) 也等价于 state.isAir()，可以）。
+注意调色板可能包含已经不存在的旧状态，所以 maybeHas 只是"可能有"，逐格仍需再判一次。
+
+
+五、未加载区块策略
+----------------
+默认：跳过（getChunkNow 返回 null 就不处理）。这对爆炸/放火/灭火是正确行为，
+也避免了在加载边界同步加载区块导致的卡顿。
+
+如果确实有"必须读到"的场景，可以加一个枚举参数：
+  enum UnloadedPolicy { SKIP, LOAD }
+LOAD 时用 level.getChunk(cx, cz)（会加载）。不建议默认开。
+
+
+六、随机访问场景（不是盒子扫描的情况）
+------------------------------------
+射线步进、洪水填充、穿甲路径这类"在一个范围内跳着读"的需求，盒子遍历用不上。
+这种情况可以提供一个区域缓存：
+
+  CBCMSMassiveBlockUtil.region(Level, BoundingBox) -> BlockGetter
+    构造时把覆盖到的 LevelChunk 放进二维数组 chunks[cx - minCx][cz - minCz]，
+    getBlockState(pos) = 数组下标取区块 -> 取 section -> 取值，范围外返回 AIR。
+
+原版其实已经有一个几乎一样的东西：PathNavigationRegion(Level, BlockPos, BlockPos)，
+实现了 BlockGetter，构造时用 getChunk(x, z, FULL, false) 缓存区块数组、不加载区块。
+可以先直接用它，不够用（比如要 section 级缓存）再自己写。
+
+
+七、线程安全
+----------
+只能在拥有该 Level 的线程（服务端主线程 / 客户端渲染线程）调用。
+非主线程调 level.getBlockState 在服务端会被排队到主线程执行（每次调用都等一次），
+批量化以后虽然次数少了，但从别的线程读 LevelChunkSection 本身就不是线程安全的。
+建议在 util 入口加一个开发期断言（或者至少写在 Javadoc 里）。
+
+
+八、Sable / VS 子世界
+-------------------
+CBCMSSableCompat 的做法是把世界坐标变换到子世界的局部坐标，然后仍然对同一个 level 读写，
+即子世界方块存在 level 的某块区域里。所以 util 不需要特殊处理，
+调用方传入变换后的局部坐标盒即可。（注意用 BlockPos.containing 而不是 (int) 强转。）
+如果子世界方块不在常规区块里（取决于 Sable 的实现），需要单独确认，这点我没有核实。
+
+
+九、迁移示例（放火）
+------------------
+现在：
+    AABB bounds = new AABB(root).inflate(radius);
+    ... BlockPos.betweenClosed(pos1, pos2) ... getBlockState ... isEmptyBlock ...
+
+改为（只读回调 + 先收集后写的版本）：
+    BoundingBox box = CBCMSMassiveBlockUtil.cube(root, radius);
+    List<BlockPos> toIgnite = new ArrayList<>();
+    List<BlockPos> toLight  = new ArrayList<>();
+    CBCMSMassiveBlockUtil.forEachBlock(level, box, (pos, state) -> {
+        if (level.getRandom().nextFloat() > chance) return;
+        if (state.isAir()) toIgnite.add(pos.immutable());
+        else if (canLight(state)) toLight.add(pos.immutable());
+    });
+    for (BlockPos p : toIgnite) level.setBlockAndUpdate(p, BaseFireBlock.getState(level, p));
+    for (BlockPos p : toLight)  { ...原有点燃逻辑... }
+
+灭火（只关心火和可点燃方块，大部分 section 里没有）正好用 forEachMatching，
+大多数 section 会被调色板预判直接跳过：
+    CBCMSMassiveBlockUtil.forEachMatching(level, box,
+        s -> s.getBlock() instanceof BaseFireBlock || isLitCandleLike(s),
+        (pos, state) -> ...);
+
+然后把 5 处重复的 spawnFire/extinguishFire 合并成一份（放进 CBCMSIncendiaryEffectService），
+各弹种和 Sable compat 都调这一份。
+
+注意：cube(root, r) 是对称的 (2r+1)^3，比现在少扫正方向一层。
+如果想保持现有手感完全不变，迁移时可以把 r 视情况调整，或者先保留原始范围语义再单独修。
+
+
+十、实现与验证顺序建议
+--------------------
+  1) 写 util 的 box 构造 + forEachChunk + forEachBlock（核心遍历），其余方法都基于它
+  2) 正确性对拍：随机生成若干盒子（含负坐标、跨区块边界、贴着建筑高度上下限、
+     含未加载区块），比较 util 结果与 betweenClosed + getBlockState 的结果集合（未加载区块除外）
+  3) 加 forEachNonAir / forEachMatching / collect / replace 等便捷方法
+  4) 迁移 spawnFire / extinguishFire 并去重
+  5) 如有需要，用调试命令在实际存档里计时对比（半径 3 / 8 / 16 各测一次），
+     确认收益再决定是否推广到其它地方
+
+待确认的问题
+----------
+  - 未加载区块默认跳过，是否同意？
+  - 放火范围修正为对称 (2r+1)^3 是否可以，还是要保持现有的 (2r+2)^3？
+  - 是否需要 replace 的"分帧写入"（每 tick 限量）能力，还是先不做？
