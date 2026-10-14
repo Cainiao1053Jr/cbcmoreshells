@@ -53,7 +53,7 @@ import java.util.Map;
 public class MountedPackageSliderContraption extends AbstractMountedCannonContraption {
 
 	/** Entities in front of the breech leave at this fraction of the muzzle velocity. */
-	private static final double ENTITY_LAUNCH_FRACTION = 0.25;
+	private static final double ENTITY_LAUNCH_FRACTION = 1;
 
 	private PackageSliderMaterial cannonMaterial;
 

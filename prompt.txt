@@ -1,1 +1,1 @@
-给MountedPackageSliderContraption加一个功能，当发射时，会把站在炮闩前面那一格的玩家或其他实体也发射出去，初速度是发射速度的四分之一
+把MountedPackageSliderContraption里面发射时根据玩家的距离播放并考虑sable的兼容，初始音量为5.5，最大距离为200格线性递减到0
