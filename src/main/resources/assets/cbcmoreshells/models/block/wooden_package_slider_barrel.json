@@ -1,0 +1,6 @@
+{
+	"parent": "cbcmoreshells:block/package_slider",
+	"textures": {
+		"side": "cbcmoreshells:block/package_slider/wooden_package_slider_barrel_side"
+	}
+}

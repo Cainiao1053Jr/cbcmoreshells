@@ -20,6 +20,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -82,7 +83,7 @@ public class MountedPackageSliderContraption extends AbstractMountedCannonContra
 			positiveEndPos = next;
 			cannonBlocks.add(new StructureBlockInfo(next, nextState, this.getBlockEntityNBT(level, next)));
 			++this.frontExtensionLength;
-			if (cannonBlocks.size() > maxLength) throw cannonTooLarge();
+			if (cannonBlocks.size() > maxLength) throw new AssemblyException(Component.translatable("exception.createbigcannons.cannon_mount.cannonTooLarge", material.properties().maxLength()));
 			positiveEnd = ((PackageSliderBlock) nextState.getBlock()).getOpeningType(nextState);
 			if (positiveEnd != PackageSliderEnd.OPEN) break;
 		}
@@ -242,9 +243,6 @@ public class MountedPackageSliderContraption extends AbstractMountedCannonContra
 		}
 	}
 
-	// ---- client sync: package contents never leave the server ----
-
-	/** Stores the full block entity data on the server and sends clients a copy without package contents. */
 	private void syncBlocks(List<BlockPos> positions, PitchOrientedContraptionEntity entity) {
 		HolderLookup.Provider registries = entity.level().registryAccess();
 		Map<BlockPos, StructureBlockInfo> changes = new HashMap<>(positions.size());

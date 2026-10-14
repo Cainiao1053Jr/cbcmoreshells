@@ -36,7 +36,8 @@ public class CBCMSSpriteShifts {
 			ANDESITE_DUAL_CANNON_BARREL = dualCannon("dual_cannon/andesite_dual_cannon_barrel"),
 
 			STEEL_PACKAGE_SLIDER_BARREL = dualCannon("package_slider/steel_package_slider_barrel"),
-			STEEL_PACKAGE_SLIDER_BREECH = dualCannon("package_slider/steel_package_slider_barrel");
+			NETHER_STEEL_PACKAGE_SLIDER_BARREL = dualCannon("package_slider/nether_steel_package_slider_barrel"),
+					WOODEN_PACKAGE_SLIDER_BARREL = dualCannon("package_slider/wooden_package_slider_barrel");
 
 
 

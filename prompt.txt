@@ -1,1 +1,1 @@
-改一下slider的barrel和breech放置时的朝向，只放置水平朝向，然后再impl一个IWrenchable用于方便拆卸和旋转
+把slider的breech的voxel box改的和body一样
