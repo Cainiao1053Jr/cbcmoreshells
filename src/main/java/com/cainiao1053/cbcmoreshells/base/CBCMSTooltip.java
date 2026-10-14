@@ -4,6 +4,9 @@ import com.cainiao1053.cbcmoreshells.Cbcmoreshells;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.DualCannonBlock;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.equipments.DualCannonChargerAttachment;
 import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.material.DualCannonMaterialProperties;
+import com.cainiao1053.cbcmoreshells.cannons.package_slider.PackageSliderBlock;
+import com.cainiao1053.cbcmoreshells.cannons.package_slider.material.PackageSliderMaterial;
+import com.cainiao1053.cbcmoreshells.cannons.package_slider.material.PackageSliderMaterialProperties;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.ReductiveTorpedoProperties;
 import com.cainiao1053.cbcmoreshells.munitions.big_cannon.config.TorpedoProperties;
 import com.cainiao1053.cbcmoreshells.munitions.dual_cannon.shaolib.CBCMSDualCannonMunitionRegistry;
@@ -130,6 +133,43 @@ public class CBCMSTooltip {
 
 		tooltip.add(Component.literal(" " + I18n.get(rootKey + ".combatCommand")).withStyle(ChatFormatting.GRAY));
 		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(rootKey + ".combatCommand.info", String.format("%.0f",(float)material.combatCommandDuration()/20),String.format("%.0f",(float)material.combatCommandCooldown()/20)),
+				palette.primary(), palette.highlight(), 2));
+	}
+
+	public static <T extends Block & PackageSliderBlock> void appendPackageSliderBlockText(ItemStack stack, TooltipContext ctx,
+	                                                                                       List<Component> tooltip, TooltipFlag flag, T block) {
+		boolean desc = Screen.hasShiftDown();
+		addHoldShift(desc, tooltip);
+		if (!desc) {
+			return;
+		}
+
+		FontHelper.Palette palette = getPalette();
+		PackageSliderMaterialProperties material = block.getCannonMaterial().properties();
+		String rootKey = "block." + Cbcmoreshells.MODID + ".package_slider.tooltip";
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(rootKey + ".info"),
+				palette.primary(), palette.highlight(), 2));
+		tooltip.add(Component.literal(I18n.get(rootKey + ".materialProperties")).withStyle(ChatFormatting.GRAY));
+
+		float spread = material.spread();
+		int length = material.maxLength();
+		int reload = material.reloadPerSection();
+		double weight = material.weight();
+		tooltip.add(Component.literal(" " + I18n.get(rootKey + ".spread")).withStyle(ChatFormatting.GRAY));
+
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(rootKey + ".spread.info", String.format("%.1f", spread)),
+				palette.primary(), palette.highlight(), 2));
+
+		tooltip.add(Component.literal(" " + I18n.get(rootKey + ".length")).withStyle(ChatFormatting.GRAY));
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(rootKey + ".length.info", length),
+				palette.primary(), palette.highlight(), 2));
+
+		tooltip.add(Component.literal(" " + I18n.get(rootKey + ".reload")).withStyle(ChatFormatting.GRAY));
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(rootKey + ".reload.info", String.format("%.1f",(float) reload/20)),
+				palette.primary(), palette.highlight(), 2));
+
+		tooltip.add(Component.literal(" " + I18n.get(rootKey + ".weight")).withStyle(ChatFormatting.GRAY));
+		tooltip.addAll(TooltipHelper.cutStringTextComponent(I18n.get(rootKey + ".weight.info", String.format("%.1f",weight)),
 				palette.primary(), palette.highlight(), 2));
 	}
 

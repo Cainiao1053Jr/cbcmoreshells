@@ -673,5 +673,15 @@
     "block.cbcmoreshells.nether_steel_package_slider_quickfiring_breech": "下界钢包裹发射架装填口",
     "block.cbcmoreshells.nether_steel_package_slider_barrel": "下界钢包裹发射架",
     "block.cbcmoreshells.wooden_package_slider_quickfiring_breech": "木制包裹发射架装填口",
-    "block.cbcmoreshells.wooden_package_slider_barrel": "木制包裹发射架"
+    "block.cbcmoreshells.wooden_package_slider_barrel": "木制包裹发射架",
+    "block.cbcmoreshells.package_slider.tooltip.info": "用于发射包裹，可以投射进漏斗中",
+    "block.cbcmoreshells.package_slider.tooltip.materialProperties": "材料属性",
+    "block.cbcmoreshells.dual_cannon.tooltip.spread": "精度",
+    "block.cbcmoreshells.dual_cannon.tooltip.spread.info": "发射时的随机散步为_%s_",
+    "block.cbcmoreshells.dual_cannon.tooltip.length": "长度",
+    "block.cbcmoreshells.dual_cannon.tooltip.length.info": "发射架的最大长度为_%s_格，每格增加_10m/s_的初速度，基础提供_20m/s_的初速度",
+    "block.cbcmoreshells.dual_cannon.tooltip.reload": "装填",
+    "block.cbcmoreshells.dual_cannon.tooltip.reload.info": "每格长度增加_%s s_装填时间",
+    "block.cbcmoreshells.dual_cannon.tooltip.weight": "重量",
+    "block.cbcmoreshells.dual_cannon.tooltip.weight.info": "每格发射架需求应力_%s x RPM_"
 }

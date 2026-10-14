@@ -15,12 +15,6 @@ import org.joml.Vector3f;
 
 import java.util.function.Consumer;
 
-/**
- * Draws the slider block of the package slider breech. The partial is modelled for a breech facing up, sitting
- * centred on the bottom face (10 x 10 wide, 8 tall); it is rotated to the breech facing, so at rest it sits centred
- * on the breech's back face. When the cannon fires it is pushed to the centre of the frontmost barrel and travels
- * back to rest as the reload progresses.
- */
 public class PackageSliderQuickfiringBreechVisual extends AbstractBlockEntityVisual<PackageSliderQuickfiringBreechBlockEntity>
 	implements SimpleDynamicVisual {
 
@@ -47,7 +41,7 @@ public class PackageSliderQuickfiringBreechVisual extends AbstractBlockEntityVis
 	private void transformModels(float partialTick) {
 		Vector3f offset = this.facing.step().mul(this.blockEntity.getSliderOffset(partialTick));
 		this.slider.position(this.getVisualPosition())
-			.translatePosition(offset.x(), offset.y(), offset.z())
+			.translatePosition(offset.x(), offset.y() + 0.125f, offset.z())
 			.setChanged();
 	}
 

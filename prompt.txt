@@ -1,2 +1,1 @@
-packageSlider的材质复用了dualCannon的纹理和ConnectedTexture
-给package slider的barrel和breech也做一个类似dual cannon的Connected Texture，命名格式都是一样的
+把sliderBlock的位置在visual里面向前移动0.0625
