@@ -24,6 +24,8 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ChunkPos;
 import net.minecraft.world.level.Level;
@@ -31,6 +33,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import rbasamoyai.createbigcannons.cannon_control.ControlPitchContraption;
 import rbasamoyai.createbigcannons.cannon_control.cannon_types.ICannonContraptionType;
@@ -48,6 +51,9 @@ import java.util.List;
 import java.util.Map;
 
 public class MountedPackageSliderContraption extends AbstractMountedCannonContraption {
+
+	/** Entities in front of the breech leave at this fraction of the muzzle velocity. */
+	private static final double ENTITY_LAUNCH_FRACTION = 0.25;
 
 	private PackageSliderMaterial cannonMaterial;
 
@@ -225,6 +231,7 @@ public class MountedPackageSliderContraption extends AbstractMountedCannonContra
 		projectile.addUntouchableEntity(entity, 6);
 		level.addFreshEntity(projectile);
 		// No recoil: the controller is never told about this shot.
+		this.launchEntitiesInBarrel(level, entity, dir);
 
 		StructureBlockInfo breechInfo = this.blocks.get(breechPos);
 		int baseReload = breechInfo != null && breechInfo.state().getBlock() instanceof PackageSliderQuickfiringBreechBlock qfb
@@ -240,6 +247,21 @@ public class MountedPackageSliderContraption extends AbstractMountedCannonContra
 		if (CBCConfigs.server().munitions.projectilesCanChunkload.get()) {
 			ChunkPos cpos = new ChunkPos(BlockPos.containing(projectile.position()));
 			RitchiesProjectileLib.queueForceLoad(level, cpos.x, cpos.z);
+		}
+	}
+
+	/** Throws whatever stands in the barrel block right in front of the breech out of the muzzle. */
+	private void launchEntitiesInBarrel(ServerLevel level, PitchOrientedContraptionEntity entity, Vec3 dir) {
+		Vec3 centre = entity.toGlobalVector(Vec3.atCenterOf(this.startPos), 0);
+		AABB box = AABB.ofSize(centre, 1, 1, 1);
+		Vec3 velocity = dir.scale(this.getMuzzleVelocity() * ENTITY_LAUNCH_FRACTION);
+		for (Entity target : level.getEntities(entity, box, EntitySelector.NO_SPECTATORS)) {
+			if (target instanceof PackageShellProjectile || target.isPassenger() || target.noPhysics) continue;
+			target.setDeltaMovement(velocity);
+			target.hasImpulse = true;
+			// Players move client-side; this sends them the new motion.
+			target.hurtMarked = true;
+			target.resetFallDistance();
 		}
 	}
 
