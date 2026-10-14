@@ -10,7 +10,7 @@ public class CBCMSPackageSliderMaterials {
 		new PackageSliderMaterialProperties(1.5f, 16, 5, 0));
 
 	public static final PackageSliderMaterial WOODEN = PackageSliderMaterial.register(Cbcmoreshells.resource("wooden"),
-			new PackageSliderMaterialProperties(1.0f, 6, 5, 1.8f));
+			new PackageSliderMaterialProperties(1.0f, 6, 5, 1.5f));
 
 	public static final PackageSliderMaterial NETHER_STEEL = PackageSliderMaterial.register(Cbcmoreshells.resource("nether_steel"),
 			new PackageSliderMaterialProperties(3.0f, 24, 5, 0));

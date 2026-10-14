@@ -1,1 +1,1 @@
-把slider的breech的voxel box改的和body一样
+给MountedPackageSliderContraption加一个功能，当发射时，会把站在炮闩前面那一格的玩家或其他实体也发射出去，初速度是发射速度的一半
