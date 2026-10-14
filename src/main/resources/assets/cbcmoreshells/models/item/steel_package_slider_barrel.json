@@ -1,6 +1,6 @@
 {
 	"parent": "cbcmoreshells:block/package_slider",
 	"textures": {
-		"side": "cbcmoreshells:block/dual_cannon/steel_dual_cannon_chamber_side"
+		"side": "cbcmoreshells:block/package_slider/steel_package_slider_barrel_side"
 	}
 }

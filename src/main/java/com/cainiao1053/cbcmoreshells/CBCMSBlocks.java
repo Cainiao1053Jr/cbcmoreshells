@@ -23,6 +23,7 @@ import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.breeches.sliding_breech
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.ProjectileRackBlockItem;
 import com.cainiao1053.cbcmoreshells.cannons.package_slider.PackageSliderBlockItem;
 import com.cainiao1053.cbcmoreshells.cannons.package_slider.PackageSliderBodyBlock;
+import com.cainiao1053.cbcmoreshells.cannons.package_slider.PackageSliderCTBehavior;
 import com.cainiao1053.cbcmoreshells.cannons.package_slider.breeches.PackageSliderQuickfiringBreechBlock;
 import com.cainiao1053.cbcmoreshells.index.CBCMSPackageSliderMaterials;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.ProjectileRackBodyBlock;
@@ -1357,6 +1358,7 @@ public class CBCMSBlocks {
 			.lang("Steel Package Slider Barrel")
 			.properties(p -> p.strength(5.0f, 14f).sound(SoundType.NETHERITE_BLOCK).noOcclusion())
 			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new PackageSliderCTBehavior(CBCMSSpriteShifts.STEEL_PACKAGE_SLIDER_BARREL)))
 			.item(PackageSliderBlockItem::new).build()
 			.register();
 
@@ -1365,6 +1367,7 @@ public class CBCMSBlocks {
 			.lang("Steel Package Slider Quick-Firing Breech")
 			.properties(p -> p.strength(5.0f, 14f).sound(SoundType.NETHERITE_BLOCK).noOcclusion())
 			.tag(BlockTags.MINEABLE_WITH_PICKAXE)
+			.onRegister(CreateRegistrate.connectedTextures(() -> new PackageSliderCTBehavior(CBCMSSpriteShifts.STEEL_PACKAGE_SLIDER_BREECH)))
 			.item(PackageSliderBlockItem::new).build()
 			.register();
 
