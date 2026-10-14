@@ -17,6 +17,8 @@ public class PackageSliderQuickfiringBreechBlockEntity extends SmartBlockEntity 
 
 	private PackageSliderBehavior cannonBehavior;
 	private int reloadCooldown;
+	private int reloadDuration;
+	private float sliderStroke;
 
 	public PackageSliderQuickfiringBreechBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
@@ -40,6 +42,23 @@ public class PackageSliderQuickfiringBreechBlockEntity extends SmartBlockEntity 
 		this.reloadCooldown = Math.max(0, ticks);
 	}
 
+	/**
+	 * Starts a reload after a shot. The slider block is pushed {@code sliderStroke} blocks forward along the breech
+	 * facing and travels back to rest over the reload.
+	 */
+	public void startReload(int ticks, float sliderStroke) {
+		this.setReloadCooldown(ticks);
+		this.reloadDuration = this.reloadCooldown;
+		this.sliderStroke = Math.max(0, sliderStroke);
+	}
+
+	/** How far the slider block is pushed forward from rest, in blocks along the breech facing. */
+	public float getSliderOffset(float partialTicks) {
+		if (this.reloadDuration <= 0 || this.reloadCooldown <= 0) return 0;
+		float remaining = Math.max(0, this.reloadCooldown - partialTicks);
+		return this.sliderStroke * remaining / this.reloadDuration;
+	}
+
 	public boolean isReloading() {
 		return this.reloadCooldown > 0;
 	}
@@ -53,12 +72,16 @@ public class PackageSliderQuickfiringBreechBlockEntity extends SmartBlockEntity 
 	protected void write(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
 		super.write(tag, registries, clientPacket);
 		tag.putInt("ReloadCooldown", this.reloadCooldown);
+		tag.putInt("ReloadDuration", this.reloadDuration);
+		tag.putFloat("SliderStroke", this.sliderStroke);
 	}
 
 	@Override
 	protected void read(CompoundTag tag, HolderLookup.Provider registries, boolean clientPacket) {
 		super.read(tag, registries, clientPacket);
 		this.reloadCooldown = Math.max(0, tag.getInt("ReloadCooldown"));
+		this.reloadDuration = Math.max(0, tag.getInt("ReloadDuration"));
+		this.sliderStroke = Math.max(0, tag.getFloat("SliderStroke"));
 	}
 
 }

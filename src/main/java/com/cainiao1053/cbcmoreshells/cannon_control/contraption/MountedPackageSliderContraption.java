@@ -155,8 +155,12 @@ public class MountedPackageSliderContraption extends AbstractMountedCannonContra
 	@Override
 	public void tick(Level level, PitchOrientedContraptionEntity entity) {
 		super.tick(level, entity);
-		if (!level.isClientSide && this.presentBlockEntities.get(this.getBreechPos()) instanceof PackageSliderQuickfiringBreechBlockEntity breech)
+		BlockPos breechPos = this.getBreechPos();
+		if (!level.isClientSide && this.presentBlockEntities.get(breechPos) instanceof PackageSliderQuickfiringBreechBlockEntity breech)
 			breech.tickCooldown();
+		// The rendered copy of the breech is a separate block entity; tick it too so the slider animates.
+		if (level.isClientSide && this.getBlockEntityClientSide(breechPos) instanceof PackageSliderQuickfiringBreechBlockEntity clientBreech)
+			clientBreech.tickCooldown();
 	}
 
 	@Override
@@ -224,7 +228,9 @@ public class MountedPackageSliderContraption extends AbstractMountedCannonContra
 		int baseReload = breechInfo != null && breechInfo.state().getBlock() instanceof PackageSliderQuickfiringBreechBlock qfb
 			? qfb.getBaseReloadTicks()
 			: PackageSliderQuickfiringBreechBlock.DEFAULT_BASE_RELOAD_TICKS;
-		breech.setReloadCooldown(baseReload + length * this.cannonMaterial.properties().reloadPerSection());
+		// The slider block rests centred 0.25 blocks behind the breech centre and is pushed to the centre of the
+		// frontmost barrel, length - 1 blocks ahead of the breech.
+		breech.startReload(baseReload + length * this.cannonMaterial.properties().reloadPerSection(), length - 0.75f);
 		this.syncBlocks(List.of(this.startPos, breechPos), entity);
 
 		level.playSound(null, spawnPos.x, spawnPos.y, spawnPos.z, SoundEvents.CROSSBOW_SHOOT, SoundSource.BLOCKS, 5.5f, 0.8f);

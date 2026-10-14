@@ -23,6 +23,7 @@ import com.cainiao1053.cbcmoreshells.cannons.dual_cannon.dual_cannon_end.DualCan
 import com.cainiao1053.cbcmoreshells.cannons.package_slider.PackageSliderBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.package_slider.PackageSliderBlockRenderer;
 import com.cainiao1053.cbcmoreshells.cannons.package_slider.breeches.PackageSliderQuickfiringBreechBlockEntity;
+import com.cainiao1053.cbcmoreshells.cannons.package_slider.breeches.PackageSliderQuickfiringBreechVisual;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.ProjectileRackBlockEntity;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.ProjectileRackBlockRenderer;
 import com.cainiao1053.cbcmoreshells.cannons.projectile_rack.breeches.quick_firing_breech.ProjectileRackQuickfiringBreechBlockEntity;
@@ -410,6 +411,7 @@ public class CBCMSBlockEntities {
 
 	public static final BlockEntityEntry<PackageSliderQuickfiringBreechBlockEntity> PACKAGE_SLIDER_QUICKFIRING_BREECH = REGISTRATE
 			.blockEntity("package_slider_quickfiring_breech", PackageSliderQuickfiringBreechBlockEntity::new)
+			.visual(() -> PackageSliderQuickfiringBreechVisual::new)
 			.validBlocks(
 					CBCMSBlocks.STEEL_PACKAGE_SLIDER_QUICKFIRING_BREECH,
 					CBCMSBlocks.WOODEN_PACKAGE_SLIDER_QUICKFIRING_BREECH,
