@@ -18,10 +18,15 @@ import com.simibubi.create.content.contraptions.AssemblyException;
 import com.simibubi.create.content.logistics.box.PackageItem;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.network.protocol.game.ClientboundSoundPacket;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
@@ -35,6 +40,7 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.levelgen.structure.templatesystem.StructureTemplate.StructureBlockInfo;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import rbasamoyai.createbigcannons.CBCCompatTransformers;
 import rbasamoyai.createbigcannons.cannon_control.ControlPitchContraption;
 import rbasamoyai.createbigcannons.cannon_control.cannon_types.ICannonContraptionType;
 import rbasamoyai.createbigcannons.cannon_control.contraption.AbstractMountedCannonContraption;
@@ -54,6 +60,8 @@ public class MountedPackageSliderContraption extends AbstractMountedCannonContra
 
 	/** Entities in front of the breech leave at this fraction of the muzzle velocity. */
 	private static final double ENTITY_LAUNCH_FRACTION = 1;
+	private static final float LAUNCH_SOUND_VOLUME = 5.5f;
+	private static final double LAUNCH_SOUND_RANGE = 200;
 
 	private PackageSliderMaterial cannonMaterial;
 
@@ -242,11 +250,31 @@ public class MountedPackageSliderContraption extends AbstractMountedCannonContra
 		breech.startReload(baseReload + length * this.cannonMaterial.properties().reloadPerSection(), length - 0.75f);
 		this.syncBlocks(List.of(this.startPos, breechPos), entity);
 
-		level.playSound(null, spawnPos.x, spawnPos.y, spawnPos.z, CBCMSSoundEvents.PACKAGE_SLIDER_LAUNCH.getMainEvent(), SoundSource.BLOCKS, 5.0f, 1f);
+		this.playLaunchSound(level, CBCCompatTransformers.transformVec3(level, spawnPos, entity.position()));
 
 		if (CBCConfigs.server().munitions.projectilesCanChunkload.get()) {
 			ChunkPos cpos = new ChunkPos(BlockPos.containing(projectile.position()));
 			RitchiesProjectileLib.queueForceLoad(level, cpos.x, cpos.z);
+		}
+	}
+
+	/**
+	 * Plays the launch sound to each player with a volume falling linearly from {@link #LAUNCH_SOUND_VOLUME} at the
+	 * muzzle to 0 at {@link #LAUNCH_SOUND_RANGE} blocks. {@code soundPos} must already be in world coordinates, i.e.
+	 * moved off a Sable sub-level.
+	 */
+	private void playLaunchSound(ServerLevel level, Vec3 soundPos) {
+		Holder<SoundEvent> sound = BuiltInRegistries.SOUND_EVENT.wrapAsHolder(CBCMSSoundEvents.PACKAGE_SLIDER_LAUNCH.getMainEvent());
+		long seed = level.getRandom().nextLong();
+		for (ServerPlayer player : level.players()) {
+			Vec3 ear = player.getEyePosition();
+			double dist = ear.distanceTo(soundPos);
+			if (dist >= LAUNCH_SOUND_RANGE) continue;
+			float volume = (float) (LAUNCH_SOUND_VOLUME * (1 - dist / LAUNCH_SOUND_RANGE));
+			// The client would attenuate again over 16 * volume blocks, so the sound is played just in front of the
+			// player, towards the muzzle, which keeps its direction and leaves the falloff to the volume alone.
+			Vec3 pos = dist < 1 ? soundPos : ear.add(soundPos.subtract(ear).scale(1 / dist));
+			player.connection.send(new ClientboundSoundPacket(sound, SoundSource.BLOCKS, pos.x, pos.y, pos.z, volume, 1f, seed));
 		}
 	}
 
