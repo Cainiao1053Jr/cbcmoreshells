@@ -668,10 +668,10 @@
     "block.cbcmoreshells.bronze_single_cannon_barrel": "黄铜单管炮管",
     "block.cbcmoreshells.bronze_single_cannon_chamber": "黄铜单管炮腔",
     "block.cbcmoreshells.bronze_single_cannon_quickfiring_breech": "黄铜单管炮速射炮闩",
-    "block.cbcmoreshells.steel_package_slider_quickfiring_breech": "钢制包裹发射架",
-    "block.cbcmoreshells.steel_package_slider__barrel": "钢制包裹发射架装填口",
-    "block.cbcmoreshells.nether_steel_package_slider_quickfiring_breech": "下界钢包裹发射架",
-    "block.cbcmoreshells.nether_steel_package_slider__barrel": "下界钢包裹发射架装填口",
-    "block.cbcmoreshells.wooden_package_slider_quickfiring_breech": "木制包裹发射架",
-    "block.cbcmoreshells.wooden_package_slider__barrel": "木制包裹发射架装填口"
+    "block.cbcmoreshells.steel_package_slider_quickfiring_breech": "钢制包裹发射架装填口",
+    "block.cbcmoreshells.steel_package_slider_barrel": "钢制包裹发射架",
+    "block.cbcmoreshells.nether_steel_package_slider_quickfiring_breech": "下界钢包裹发射架装填口",
+    "block.cbcmoreshells.nether_steel_package_slider_barrel": "下界钢包裹发射架",
+    "block.cbcmoreshells.wooden_package_slider_quickfiring_breech": "木制包裹发射架装填口",
+    "block.cbcmoreshells.wooden_package_slider_barrel": "木制包裹发射架"
 }
