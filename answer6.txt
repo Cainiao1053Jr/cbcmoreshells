@@ -1,0 +1,28 @@
+sliderBlock（CBCMSBlockPartials.PACKAGE_SLIDER_SLIDER_BLOCK，模型 block/package_slider_slider_block）建模朝向
+
+结论：按"朝上（UP）"建模。模型的 +Y 方向（顶面，Y=16 那一侧）= 炮口方向（炮弹射出的一侧）；
+模型的 Y=0（底面）= 炮闩的后端（远离炮口的一面）。
+
+依据（代码）：
+1. 组装后炮闩的 FACING 会被统一设成 initialOrientation，也就是射击方向
+   （MountedPackageSliderContraption 第 111/119 行：alignedState = FACING -> initialOrientation，
+   startPos = breechPos.relative(initialOrientation)，即炮闩前方的第一节炮管）。
+2. PackageSliderQuickfiringBreechVisual 里 slider.rotation(facing.getRotation())。
+   Direction#getRotation 的含义是把 UP(+Y) 绕方块中心旋转到 facing 方向。
+   所以模型里的 +Y 会被转到 FACING，也就是炮口方向。
+3. 发射时滑块沿 facing.step() 平移 getSliderOffset()（最大为 炮长 - 0.75 格），
+   即沿模型 +Y 方向推出去，再随装填进度退回原位。
+
+建模建议：
+- 静止时滑块贴着炮闩后端，模型盒子目前约定为 [3,0,3] - [13,8,13]（10x10 截面，高 8），
+  底面贴 Y=0，顶面（Y=8）是朝向炮口、推动包裹的那一面。
+- 截面在 X/Z 上居中（3~13），这样旋转到任意方向都和炮膛对齐。
+- 在 Blockbench 里就像建一个"朝上的方块"即可，不需要考虑 north/south；
+  不要再在 blockstate 或模型里额外加旋转（partial 不读 blockstate，旋转全由代码完成）。
+
+关于侧面贴图方向（只有侧面有非对称细节时才需要关心）：
+- 炮朝上（UP）：不旋转，模型原样。
+- 炮朝下（DOWN）：绕 X 轴转 180°，模型北面(-Z) 会转到南面(+Z)。
+- 炮水平（N/S/E/W）：模型北面(-Z) 都会转到世界的上方(+Y)，
+  也就是说水平放置时，模型的 north 面是"朝天"的那一侧，south 面朝地。
+  如果滑块侧面有需要朝上的细节（例如把手、标记），画在模型的 north 面上。
