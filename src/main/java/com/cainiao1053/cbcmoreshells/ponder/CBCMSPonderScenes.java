@@ -163,6 +163,15 @@ public class CBCMSPonderScenes {
         ).addStoryBoard("projectile_rack/projectile_rack_intro", ProjectileRackScenes::projectileRackIntro);
 
         HELPER.forComponents(
+                CBCMSBlocks.STEEL_PACKAGE_SLIDER_BARREL,
+                CBCMSBlocks.STEEL_PACKAGE_SLIDER_QUICKFIRING_BREECH,
+                CBCMSBlocks.WOODEN_PACKAGE_SLIDER_BARREL,
+                CBCMSBlocks.WOODEN_PACKAGE_SLIDER_QUICKFIRING_BREECH,
+                CBCMSBlocks.NETHER_STEEL_PACKAGE_SLIDER_BARREL,
+                CBCMSBlocks.NETHER_STEEL_PACKAGE_SLIDER_QUICKFIRING_BREECH
+        ).addStoryBoard("package_slider/package_slider_intro", PackageSliderScenes::packageSliderIntro);
+
+        HELPER.forComponents(
                 CBCMSBlocks.AMMO_RACK,
                 CBCMSBlocks.STEEL_AMMO_RACK
         ).addStoryBoard("ammo_rack/ammo_rack_intro", AmmoRackScenes::ammoRackIntro);
