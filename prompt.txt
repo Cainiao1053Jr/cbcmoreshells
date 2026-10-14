@@ -1,1 +1,2 @@
-在ponder\ 路径下新建PackageSliderScenes并给packageSliderIntro写好基础
+对于sliderBlock这个BlockPartial，建模的时候应该朝着哪个方形建模，面向火炮射出一侧应该对应哪个方向
+把答案写进answer6.txt

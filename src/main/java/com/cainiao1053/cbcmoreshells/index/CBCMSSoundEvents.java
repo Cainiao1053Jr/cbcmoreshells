@@ -53,6 +53,11 @@ public class CBCMSSoundEvents {
 			.category(SoundSource.BLOCKS)
 			.build();
 
+	public static final SoundEntry
+			PACKAGE_SLIDER_LAUNCH = create("package_slider_launch").subtitle("Package Slider Launch")
+			.category(SoundSource.BLOCKS)
+			.build();
+
 
 	private static SoundEntryBuilder create(String id) {
 		return new CBCMSSoundEntryBuilder(Cbcmoreshells.resource(id));

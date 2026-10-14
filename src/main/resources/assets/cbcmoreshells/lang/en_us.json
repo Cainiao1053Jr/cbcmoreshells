@@ -504,13 +504,6 @@
 "cbcmoreshells.ponder.projectile_rack/projectile_rack_intro.text_3": "Projectile racks can carry and launch bombs, rockets, and other munitions. Different munition types have their own features",
 "cbcmoreshells.ponder.projectile_rack/projectile_rack_intro.text_4": "Note that torpedoes loaded on projectile racks are different from those launched from torpedo tubes",
 "cbcmoreshells.ponder.projectile_rack/projectile_rack_intro.text_5": "Projectile racks can also be loaded automatically using mechanical arms",
-"cbcmoreshells.ponder.package_slider/package_slider_intro.header": "Package Slider",
-"cbcmoreshells.ponder.package_slider/package_slider_intro.text_1": "Package sliders fire Create packages. They must be assembled on a cannon mount, and need one quick-firing breech and at least one barrel",
-"cbcmoreshells.ponder.package_slider/package_slider_intro.text_2": "Right-click the breech with a package to load it. No propellant is needed; right-click with an empty hand to take the package back out",
-"cbcmoreshells.ponder.package_slider/package_slider_intro.text_3": "Longer cannons fire packages faster, but take longer to reload after each shot",
-"cbcmoreshells.ponder.package_slider/package_slider_intro.text_4": "Power the cannon mount with redstone to fire. The package slider has no recoil",
-"cbcmoreshells.ponder.package_slider/package_slider_intro.text_5": "Mechanical arms can load packages through the cannon mount once the breech has finished reloading",
-"cbcmoreshells.ponder.package_slider/package_slider_intro.text_6": "On landing, the package goes into the nearest chute around the impact point, or drops to the ground if there is none. Packages that hit too fast break apart and spill their contents",
 "cbcmoreshells.ponder.ammo_rack/ammo_rack_intro.header": "Ammo Rack",
 "cbcmoreshells.ponder.ammo_rack/ammo_rack_intro.text_1": "Ammo racks are used to store munition and supply loading for cannons",
 "cbcmoreshells.ponder.ammo_rack/ammo_rack_intro.text_2": "Mechanical arms can take munition directly from ammo racks",
@@ -615,5 +608,7 @@
 "block.cbcmoreshells.wide_constantan_single_cannon_quickfiring_breech": "Wide Constantan Single Cannon Quick-Firing Breech",
 "block.cbcmoreshells.wide_constantan_single_cannon_magazine_breech": "Wide Constantan Single Cannon Magazine Breech",
 "item.cbcmoreshells.fire_extinguisher": "Fire Extinguisher",
-"entity.cbcmoreshells.package_shell": "Package Shell"
+"entity.cbcmoreshells.package_shell": "Package Shell",
+"cbcmoreshells.ponder.package_slider/package_slider_intro.header": "Package Slider",
+"cbcmoreshells.ponder.package_slider/package_slider_intro.text_1": "Package sliders fire Create packages. They must be assembled on a cannon mount, and need one quick-firing breech and at least one barrel"
 }

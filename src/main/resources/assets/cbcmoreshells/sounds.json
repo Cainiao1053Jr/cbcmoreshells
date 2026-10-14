@@ -52,5 +52,14 @@
       }
     ],
     "subtitle": "cbcmoreshells.subtitle.dual_cannon_3"
+  },
+  "package_slider_launch": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "cbcmoreshells:package_slider_launch"
+      }
+    ],
+    "subtitle": "cbcmoreshells.subtitle.package_slider_launch"
   }
 }

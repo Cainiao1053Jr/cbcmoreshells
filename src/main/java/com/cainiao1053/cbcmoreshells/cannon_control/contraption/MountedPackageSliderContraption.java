@@ -11,6 +11,7 @@ import com.cainiao1053.cbcmoreshells.cannons.package_slider.breeches.PackageSlid
 import com.cainiao1053.cbcmoreshells.cannons.package_slider.material.PackageSliderMaterial;
 import com.cainiao1053.cbcmoreshells.index.CBCMSContraptionTypes;
 import com.cainiao1053.cbcmoreshells.index.CBCMSPackageSliderMaterials;
+import com.cainiao1053.cbcmoreshells.index.CBCMSSoundEvents;
 import com.cainiao1053.cbcmoreshells.munitions.package_slider.PackageShellProjectile;
 import com.simibubi.create.api.contraption.ContraptionType;
 import com.simibubi.create.content.contraptions.AssemblyException;
@@ -233,7 +234,7 @@ public class MountedPackageSliderContraption extends AbstractMountedCannonContra
 		breech.startReload(baseReload + length * this.cannonMaterial.properties().reloadPerSection(), length - 0.75f);
 		this.syncBlocks(List.of(this.startPos, breechPos), entity);
 
-		level.playSound(null, spawnPos.x, spawnPos.y, spawnPos.z, SoundEvents.CROSSBOW_SHOOT, SoundSource.BLOCKS, 5.5f, 0.8f);
+		level.playSound(null, spawnPos.x, spawnPos.y, spawnPos.z, CBCMSSoundEvents.PACKAGE_SLIDER_LAUNCH.getMainEvent(), SoundSource.BLOCKS, 5.5f, 0.9f);
 
 		if (CBCConfigs.server().munitions.projectilesCanChunkload.get()) {
 			ChunkPos cpos = new ChunkPos(BlockPos.containing(projectile.position()));
