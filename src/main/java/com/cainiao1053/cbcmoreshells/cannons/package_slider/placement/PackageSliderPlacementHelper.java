@@ -77,6 +77,8 @@ public class PackageSliderPlacementHelper implements IPlacementHelper {
 		if (heldBlock.getCannonMaterial() != material) return PlacementOffset.fail();
 
 		Direction.Axis axis = anchorBlock.getFacing(anchorState).getAxis();
+		// Package sliders only lie horizontally.
+		if (axis.isVertical()) return PlacementOffset.fail();
 		Direction positive = Direction.get(Direction.AxisDirection.POSITIVE, axis);
 
 		PackageSliderCannonRun runPositive = PackageSliderCannonRun.scan(level, anchorPos, anchorState, positive, material, MAX_SCAN);
