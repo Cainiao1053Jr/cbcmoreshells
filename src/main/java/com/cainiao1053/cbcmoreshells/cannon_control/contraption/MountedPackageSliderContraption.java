@@ -60,8 +60,8 @@ public class MountedPackageSliderContraption extends AbstractMountedCannonContra
 
 	/** Entities in front of the breech leave at this fraction of the muzzle velocity. */
 	private static final double ENTITY_LAUNCH_FRACTION = 1;
-	private static final float LAUNCH_SOUND_VOLUME = 5.5f;
-	private static final double LAUNCH_SOUND_RANGE = 200;
+	private static final float LAUNCH_SOUND_VOLUME = 1.25f;
+	private static final double LAUNCH_SOUND_RANGE = 10000;
 
 	private PackageSliderMaterial cannonMaterial;
 
@@ -258,17 +258,12 @@ public class MountedPackageSliderContraption extends AbstractMountedCannonContra
 		}
 	}
 
-	/**
-	 * Plays the launch sound to each player with a volume falling linearly from {@link #LAUNCH_SOUND_VOLUME} at the
-	 * muzzle to 0 at {@link #LAUNCH_SOUND_RANGE} blocks. {@code soundPos} must already be in world coordinates, i.e.
-	 * moved off a Sable sub-level.
-	 */
 	private void playLaunchSound(ServerLevel level, Vec3 soundPos) {
 		Holder<SoundEvent> sound = BuiltInRegistries.SOUND_EVENT.wrapAsHolder(CBCMSSoundEvents.PACKAGE_SLIDER_LAUNCH.getMainEvent());
 		long seed = level.getRandom().nextLong();
 		for (ServerPlayer player : level.players()) {
 			Vec3 ear = player.getEyePosition();
-			double dist = ear.distanceTo(soundPos);
+			double dist = ear.distanceToSqr(soundPos);
 			if (dist >= LAUNCH_SOUND_RANGE) continue;
 			float volume = (float) (LAUNCH_SOUND_VOLUME * (1 - dist / LAUNCH_SOUND_RANGE));
 			// The client would attenuate again over 16 * volume blocks, so the sound is played just in front of the
@@ -278,7 +273,6 @@ public class MountedPackageSliderContraption extends AbstractMountedCannonContra
 		}
 	}
 
-	/** Throws whatever stands in the barrel block right in front of the breech out of the muzzle. */
 	private void launchEntitiesInBarrel(ServerLevel level, PitchOrientedContraptionEntity entity, Vec3 dir) {
 		Vec3 centre = entity.toGlobalVector(Vec3.atCenterOf(this.startPos), 0);
 		AABB box = AABB.ofSize(centre, 1, 1, 1);

@@ -30,18 +30,16 @@ public class ModGroup {
 		.icon(CBCMSBlocks.WIDE_MILITARY_SLATE_ALLOY_DUAL_CANNON_CHAMBER_SHIELDED::asStack)
 		.displayItems((param, output) -> {
 			output.acceptAll(Arrays.asList(
-				CBCMSBlocks.Inferior_HE_SHELL.asStack(),
-				CBCMSBlocks.SAP_SHELL.asStack(),
-				CBCMSBlocks.HESH_SHELL.asStack(),
-				CBCMSBlocks.APFSDS_SHOT.asStack(),
-				CBCMSBlocks.ANTIAIR_HE_SHELL.asStack(),
-				CBCMSBlocks.ANTIAIR_SHRAPNEL_SHELL.asStack(),
-				CBCMSBlocks.APBC_SHOT.asStack(),
-				CBCMSBlocks.APBC_SHELL.asStack(),
-				CBCMSBlocks.AP_SUPER_HEAVY_SHOT.asStack(),
-				CBCMSBlocks.BAKED_APFSDS_SHOT.asStack(),
-				CBCMSBlocks.BAGUETTE_SHOT.asStack(),
-				CBCMSBlocks.INCENDIARY_HE_SHELL.asStack(),
+					CBCMSBlocks.WOODEN_PACKAGE_SLIDER_BARREL.asStack(),
+					CBCMSBlocks.WOODEN_PACKAGE_SLIDER_QUICKFIRING_BREECH.asStack(),
+					CBCMSBlocks.STEEL_PACKAGE_SLIDER_BARREL.asStack(),
+					CBCMSBlocks.STEEL_PACKAGE_SLIDER_QUICKFIRING_BREECH.asStack(),
+					CBCMSBlocks.NETHER_STEEL_PACKAGE_SLIDER_BARREL.asStack(),
+					CBCMSBlocks.NETHER_STEEL_PACKAGE_SLIDER_QUICKFIRING_BREECH.asStack(),
+
+					CBCMSBlocks.STEEL_TORPEDO_QUICKFIRING_BREECH.asStack(),
+					CBCMSBlocks.STEEL_TORPEDO_CHAMBER.asStack(),
+					CBCMSBlocks.STEEL_TORPEDO_BARREL.asStack(),
 
 				CBCMSBlocks.MEDIUM_RANGE_TORPEDO_TYPEB.asStack(),
 				CBCMSBlocks.MEDIUM_RANGE_DEEPWATER_TORPEDO_TYPEB.asStack(),
@@ -272,6 +270,9 @@ public class ModGroup {
 				CBCMSItems.SNIPER_COMBAT_COMMAND.asStack(),
 				CBCMSItems.ASSASSIN_COMBAT_COMMAND.asStack(),
 
+					CBCMSBlocks.STEEL_PROJECTILE_RACK_QUICKFIRING_BREECH.asStack(),
+					CBCMSBlocks.STEEL_PROJECTILE_RACK_CHAMBER.asStack(),
+
 				CBCMSBlocks.HE_LOITERING_ROCKET.asStack(),
 				CBCMSBlocks.APHE_LOITERING_ROCKET.asStack(),
 				CBCMSBlocks.HE_BOMB.asStack(),
@@ -289,21 +290,21 @@ public class ModGroup {
 				CBCMSItems.SHIP_PROXIMITY_FUZE.asStack(),
 				CBCMSItems.SENSITIVE_IMPACT_FUZE.asStack(),
 
-
-
-				CBCMSBlocks.STEEL_TORPEDO_QUICKFIRING_BREECH.asStack(),
-				CBCMSBlocks.STEEL_TORPEDO_CHAMBER.asStack(),
-				CBCMSBlocks.STEEL_TORPEDO_BARREL.asStack(),
 				CBCMSBlocks.NETHERSTEEL_SLIDING_BREECH.asStack(),
 				CBCMSBlocks.NETHERSTEEL_QUICKFIRING_BREECH.asStack(),
-				CBCMSBlocks.STEEL_PROJECTILE_RACK_QUICKFIRING_BREECH.asStack(),
-				CBCMSBlocks.STEEL_PROJECTILE_RACK_CHAMBER.asStack(),
-				CBCMSBlocks.WOODEN_PACKAGE_SLIDER_BARREL.asStack(),
-				CBCMSBlocks.WOODEN_PACKAGE_SLIDER_QUICKFIRING_BREECH.asStack(),
-				CBCMSBlocks.STEEL_PACKAGE_SLIDER_BARREL.asStack(),
-				CBCMSBlocks.STEEL_PACKAGE_SLIDER_QUICKFIRING_BREECH.asStack(),
-				CBCMSBlocks.NETHER_STEEL_PACKAGE_SLIDER_BARREL.asStack(),
-				CBCMSBlocks.NETHER_STEEL_PACKAGE_SLIDER_QUICKFIRING_BREECH.asStack(),
+
+					CBCMSBlocks.Inferior_HE_SHELL.asStack(),
+					CBCMSBlocks.SAP_SHELL.asStack(),
+					CBCMSBlocks.HESH_SHELL.asStack(),
+					CBCMSBlocks.APFSDS_SHOT.asStack(),
+					CBCMSBlocks.ANTIAIR_HE_SHELL.asStack(),
+					CBCMSBlocks.ANTIAIR_SHRAPNEL_SHELL.asStack(),
+					CBCMSBlocks.APBC_SHOT.asStack(),
+					CBCMSBlocks.APBC_SHELL.asStack(),
+					CBCMSBlocks.AP_SUPER_HEAVY_SHOT.asStack(),
+					CBCMSBlocks.BAKED_APFSDS_SHOT.asStack(),
+					CBCMSBlocks.BAGUETTE_SHOT.asStack(),
+					CBCMSBlocks.INCENDIARY_HE_SHELL.asStack(),
 
 				CBCMSBlocks.TORPEDO_DETECTION_DEVICE.asStack(),
 				CBCMSBlocks.SPEED_LIMITER.asStack(),
@@ -312,11 +313,6 @@ public class ModGroup {
 				CBCMSBlocks.SWITCH_FUNNEL.asStack(),
 				CBCMSItems.FIRE_EXTINGUISHER.asStack(),
 				CBCMSItems.BALLISTIC_JOURNAL.asStack(),
-//				CBCMSBlocks.LANDING_INDICATOR.asStack(),
-//				CBCMSBlocks.DISH_PLATE.asStack(),
-//				CBCMSBlocks.ROUND_DISH_PLATE.asStack(),
-
-//				CBCMSBlocks.ANTIBLAST_COPYCAT_PANEL.asStack(),
 
 					CBCMSItems.TORPEDO_HEAD.asStack(),
 					CBCMSItems.REINFORCED_TORPEDO_HEAD.asStack()
