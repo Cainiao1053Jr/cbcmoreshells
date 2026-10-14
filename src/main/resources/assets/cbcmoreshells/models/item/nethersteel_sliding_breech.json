@@ -1,10 +1,6 @@
 {
-  "parent": "createbigcannons:block/sliding_breech_item",
+  "parent": "createbigcannons:block/sliding_breech",
   "textures": {
-    "breechblock_bottom": "createbigcannons:block/sliding_breech/steel_sliding_breech_breechblock_bottom",
-    "breechblock_end": "createbigcannons:block/sliding_breech/steel_sliding_breech_breechblock_end",
-    "breechblock_side": "cbcmoreshells:block/sliding_breech/nethersteel_sliding_breech_breechblock_side",
-    "breechblock_top": "createbigcannons:block/sliding_breech/steel_sliding_breech_breechblock_top",
     "hole": "cbcmoreshells:block/sliding_breech/nethersteel_sliding_breech_hole",
     "inside": "cbcmoreshells:block/sliding_breech/nethersteel_sliding_breech_inside",
     "side": "cbcmoreshells:block/sliding_breech/nethersteel_sliding_breech_side",

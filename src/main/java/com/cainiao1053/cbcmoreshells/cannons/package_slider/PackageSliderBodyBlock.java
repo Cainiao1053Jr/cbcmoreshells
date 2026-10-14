@@ -30,7 +30,7 @@ public class PackageSliderBodyBlock extends PackageSliderBaseBlock implements IB
 	}
 
 	public static PackageSliderBodyBlock barrel(Properties properties, PackageSliderMaterial material) {
-		return new PackageSliderBodyBlock(properties, material, Block.box(1, 0, 1, 15, 16, 15));
+		return new PackageSliderBodyBlock(properties, material, Block.box(1, 0, 10, 15, 16, 16));
 	}
 
 	private PackageSliderBodyBlock fromSelf(Properties properties) {
