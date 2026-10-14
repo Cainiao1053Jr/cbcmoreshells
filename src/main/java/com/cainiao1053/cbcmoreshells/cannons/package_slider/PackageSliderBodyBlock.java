@@ -20,6 +20,9 @@ import rbasamoyai.createbigcannons.crafting.casting.CannonCastShape;
 /** A barrel section; the one right in front of the breech holds the loaded package. */
 public class PackageSliderBodyBlock extends PackageSliderBaseBlock implements IBE<PackageSliderBlockEntity> {
 
+	/** Shape of a barrel facing up; the breech uses it too. */
+	public static final VoxelShape BARREL_SHAPE = Block.box(1, 0, 10, 15, 16, 16);
+
 	private final VoxelShaper shapes;
 	private final MapCodec<? extends DirectionalBlock> codec;
 
@@ -30,7 +33,7 @@ public class PackageSliderBodyBlock extends PackageSliderBaseBlock implements IB
 	}
 
 	public static PackageSliderBodyBlock barrel(Properties properties, PackageSliderMaterial material) {
-		return new PackageSliderBodyBlock(properties, material, Block.box(1, 0, 10, 15, 16, 16));
+		return new PackageSliderBodyBlock(properties, material, BARREL_SHAPE);
 	}
 
 	private PackageSliderBodyBlock fromSelf(Properties properties) {
