@@ -70,7 +70,6 @@ public abstract class AbstractPackageShellProjectile extends AbstractCannonProje
 		return this.displayItem;
 	}
 
-	/** The block drawn by PackageShellProjectileRenderer. */
 	public BlockState getRenderedBlockState() {
 		return CBCMSBlocks.PACKAGE_SHELL_BLOCK.getDefaultState();
 	}
@@ -81,8 +80,6 @@ public abstract class AbstractPackageShellProjectile extends AbstractCannonProje
 		}
 		return false;
 	}
-
-	// ---- flight ----
 
 	@Override
 	public void tick() {
@@ -137,7 +134,7 @@ public abstract class AbstractPackageShellProjectile extends AbstractCannonProje
 			} else {
 				this.spawnPackage(this.position());
 				AllSoundEvents.CARDBOARD_SWORD.play(this.level(), null,
-						this.position(), 1.0f, 1.0f);
+						this.position(), 2.5f, 1.2f);
 			}
 		}
 		return true;
@@ -158,7 +155,7 @@ public abstract class AbstractPackageShellProjectile extends AbstractCannonProje
 			this.bounceVelocity = trajectory.subtract(normal.scale(normal.dot(trajectory) * BOUNCE_ELASTICITY));
 			if (!this.level().isClientSide) {
 				AllSoundEvents.CARDBOARD_SWORD.play(this.level(), null,
-					CBCCompatTransformers.transformVec3(this.level(), blockHitResult.getLocation()), 1.0f, 1.0f);
+					CBCCompatTransformers.transformVec3(this.level(), blockHitResult.getLocation()), 2.5f, 1.2f);
 			}
 			return new ImpactResult(ImpactResult.KinematicOutcome.BOUNCE, false);
 		}
@@ -180,10 +177,10 @@ public abstract class AbstractPackageShellProjectile extends AbstractCannonProje
 		int radius = this.hitShip(hitPos)
 			? CBCMSConfigs.server().packageChuteSearchRadiusShip.get()
 			: CBCMSConfigs.server().packageChuteSearchRadius.get();
+		AllSoundEvents.CARDBOARD_SWORD.play(this.level(), null,
+				this.position(), 2.5f, 1.2f);
 		if (this.insertIntoNearestChute(hitPos, blockHitResult.getLocation(), radius)) return;
 		this.spawnPackage(this.blockSpawnPos(blockHitResult));
-		AllSoundEvents.CARDBOARD_SWORD.play(this.level(), null,
-				this.position(), 1.0f, 1.0f);
 	}
 
 	protected Vec3 blockSpawnPos(BlockHitResult blockHitResult) {
@@ -192,7 +189,6 @@ public abstract class AbstractPackageShellProjectile extends AbstractCannonProje
 		return this.hitShip(hitPos) ? CBCCompatTransformers.transformVec3(this.level(), pos) : pos;
 	}
 
-	/** Tries the chutes in the cube from nearest to farthest; returns true once one takes the package. */
 	protected boolean insertIntoNearestChute(BlockPos center, Vec3 hitLocation, int radius) {
 		List<BlockPos> chutes = new ArrayList<>();
 		CBCMSMassiveBlockUtil.forEachMatching(this.level(), CBCMSMassiveBlockUtil.cube(center, radius), false,
@@ -207,10 +203,6 @@ public abstract class AbstractPackageShellProjectile extends AbstractCannonProje
 		return false;
 	}
 
-	/**
-	 * Puts the package into a chute or smart chute through its item handler, which only accepts while the chute
-	 * is empty (and, for a smart chute, when its filter matches). The chute then moves it on as usual.
-	 */
 	protected boolean insertIntoChute(BlockPos chutePos) {
 		Level level = this.level();
 		if (!(level.getBlockState(chutePos).getBlock() instanceof AbstractChuteBlock)) return false;
@@ -224,7 +216,7 @@ public abstract class AbstractPackageShellProjectile extends AbstractCannonProje
 
 		Vec3 soundPos = Vec3.atCenterOf(chutePos);
 		if (this.hitShip(chutePos)) soundPos = CBCCompatTransformers.transformVec3(level, soundPos);
-		AllSoundEvents.CARDBOARD_SWORD.play(level, null, soundPos, 1.0f, 1.0f);
+		AllSoundEvents.CARDBOARD_SWORD.play(level, null, soundPos, 2.5f, 1.2f);
 		return true;
 	}
 
@@ -246,13 +238,11 @@ public abstract class AbstractPackageShellProjectile extends AbstractCannonProje
 			this.level().addFreshEntity(new ItemEntity(this.level(), worldPos.x, worldPos.y, worldPos.z, stack.copy(),
 				0.0, 0.0, 0.0));
 		}
-		CBCSoundEvents.WOOD_SPLINTERS.play(this.level(), null, worldPos, 1.0f, 1.8f);
+		CBCSoundEvents.WOOD_SPLINTERS.play(this.level(), null, worldPos, 3.0f, 1.8f);
 	}
 
 	@Override
 	public void remove(RemovalReason reason) {
-		// Killed or discarded without delivering (e.g. after bouncing to rest): drop the package where the shell is.
-		// Unloading or changing dimension keeps it, since the package is saved with the entity.
 		if (!this.level().isClientSide && reason.shouldDestroy() && !this.contents.isEmpty()
 			&& this.getY() >= this.level().getMinBuildHeight()) {
 			this.spawnPackage(this.position());

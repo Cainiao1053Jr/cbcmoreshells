@@ -13,7 +13,6 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.List;
 
-/** Fixed quick-firing breech: no breech block or lever, only a reload cooldown after each shot. */
 public class PackageSliderQuickfiringBreechBlockEntity extends SmartBlockEntity implements IPackageSliderBlockEntity, IReloadCooldown {
 
 	private PackageSliderBehavior cannonBehavior;
@@ -33,7 +32,6 @@ public class PackageSliderQuickfiringBreechBlockEntity extends SmartBlockEntity 
 		return this.cannonBehavior;
 	}
 
-	/** Called every tick by the mounted contraption. */
 	public void tickCooldown() {
 		if (this.reloadCooldown > 0) --this.reloadCooldown;
 	}

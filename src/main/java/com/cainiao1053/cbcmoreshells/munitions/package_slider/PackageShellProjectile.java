@@ -15,7 +15,6 @@ public class PackageShellProjectile extends AbstractPackageShellProjectile {
 		super(type, level);
 	}
 
-	/** Package shells never deal damage; CBC only needs a non-null value. */
 	@Nonnull
 	@Override
 	public EntityDamagePropertiesComponent getDamageProperties() {

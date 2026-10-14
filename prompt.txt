@@ -1,1 +1,4 @@
-把命中目标附近后搜索并放进hatch改为放进chute
+给PackageSliderQuickfiringBreech加一个blockPartial和Visual
+blockPartial为sliberBlock，尺寸为长10宽10高8
+在visual里面给他放在breech的底面正中心，发射时位置位于火炮最前端的炮管中心，之后按装填进度回归到初始位置
+只写代码，模型之后再做

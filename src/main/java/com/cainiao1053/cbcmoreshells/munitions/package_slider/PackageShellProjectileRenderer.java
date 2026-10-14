@@ -12,7 +12,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import rbasamoyai.createbigcannons.utils.CBCUtils;
 
-/** Same as CBC's BigCannonProjectileRenderer: the rendered block state, pointed along the shell's orientation. */
 public class PackageShellProjectileRenderer<T extends AbstractPackageShellProjectile> extends EntityRenderer<T> {
 
 	public PackageShellProjectileRenderer(EntityRendererProvider.Context context) {

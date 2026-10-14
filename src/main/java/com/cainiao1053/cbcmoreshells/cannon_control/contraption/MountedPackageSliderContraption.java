@@ -213,7 +213,7 @@ public class MountedPackageSliderContraption extends AbstractMountedCannonContra
 		Vec3 spawnPos = entity.toGlobalVector(Vec3.atCenterOf(this.startPos.relative(this.initialOrientation, length - 2)), 0);
 
 		projectile.setPos(spawnPos);
-		projectile.shoot(dir.x, dir.y, dir.z, this.getMuzzleVelocity(), 0);
+		projectile.shoot(dir.x, dir.y, dir.z, this.getMuzzleVelocity(), this.cannonMaterial.properties().spread());
 		projectile.xRotO = projectile.getXRot();
 		projectile.yRotO = projectile.getYRot();
 		projectile.addUntouchableEntity(entity, 6);

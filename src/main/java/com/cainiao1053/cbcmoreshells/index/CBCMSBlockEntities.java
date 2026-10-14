@@ -400,13 +400,21 @@ public class CBCMSBlockEntities {
 
 	public static final BlockEntityEntry<PackageSliderBlockEntity> PACKAGE_SLIDER_BODY = REGISTRATE
 			.blockEntity("package_slider_body", PackageSliderBlockEntity::new)
-			.validBlocks(CBCMSBlocks.STEEL_PACKAGE_SLIDER_BARREL)
+			.validBlocks(
+					CBCMSBlocks.STEEL_PACKAGE_SLIDER_BARREL,
+					CBCMSBlocks.WOODEN_PACKAGE_SLIDER_BARREL,
+					CBCMSBlocks.NETHER_STEEL_PACKAGE_SLIDER_BARREL
+			)
 			.renderer(() -> PackageSliderBlockRenderer::new)
 			.register();
 
 	public static final BlockEntityEntry<PackageSliderQuickfiringBreechBlockEntity> PACKAGE_SLIDER_QUICKFIRING_BREECH = REGISTRATE
 			.blockEntity("package_slider_quickfiring_breech", PackageSliderQuickfiringBreechBlockEntity::new)
-			.validBlocks(CBCMSBlocks.STEEL_PACKAGE_SLIDER_QUICKFIRING_BREECH)
+			.validBlocks(
+					CBCMSBlocks.STEEL_PACKAGE_SLIDER_QUICKFIRING_BREECH,
+					CBCMSBlocks.WOODEN_PACKAGE_SLIDER_QUICKFIRING_BREECH,
+					CBCMSBlocks.NETHER_STEEL_PACKAGE_SLIDER_QUICKFIRING_BREECH
+			)
 			.register();
 
 	public static final BlockEntityEntry<ProjectileRackSlidingBreechBlockEntity> PROJECTILE_RACK_SLIDING_BREECH = REGISTRATE
