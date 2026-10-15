@@ -1,5 +1,6 @@
 package com.cainiao1053.cbcmoreshells.cannon_control.contraption;
 
+import com.cainiao1053.cbcmoreshells.CBCMSCompatTransformers;
 import com.cainiao1053.cbcmoreshells.CBCMSEntityTypes;
 import com.cainiao1053.cbcmoreshells.cannon_control.cannon_types.CBCMSCannonContraptionTypes;
 import com.cainiao1053.cbcmoreshells.cannons.package_slider.IPackageSliderBlockEntity;
@@ -274,9 +275,13 @@ public class MountedPackageSliderContraption extends AbstractMountedCannonContra
 	}
 
 	private void launchEntitiesInBarrel(ServerLevel level, PitchOrientedContraptionEntity entity, Vec3 dir) {
-		Vec3 centre = entity.toGlobalVector(Vec3.atCenterOf(this.startPos), 0);
+		Vec3 localCentre = entity.toGlobalVector(Vec3.atCenterOf(this.startPos), 0);
+		// On a Sable sub-level the cannon sits in plot space while the entities to launch are in the world: search
+		// around the world position, and turn the launch direction by the sub-level's orientation.
+		Vec3 centre = CBCCompatTransformers.transformVec3(level, localCentre, entity.position());
+		Vec3 worldDir = CBCMSCompatTransformers.rotateOnSublevel(level, localCentre, dir);
 		AABB box = AABB.ofSize(centre, 1, 1, 1);
-		Vec3 velocity = dir.scale(this.getMuzzleVelocity() * ENTITY_LAUNCH_FRACTION * (0.6 + 0.4 * Math.random()));
+		Vec3 velocity = worldDir.scale(this.getMuzzleVelocity() * ENTITY_LAUNCH_FRACTION * (0.6 + 0.4 * Math.random()));
 		for (Entity target : level.getEntities(entity, box, EntitySelector.NO_SPECTATORS)) {
 			if (target instanceof PackageShellProjectile || target.isPassenger() || target.noPhysics) continue;
 			target.setDeltaMovement(velocity);

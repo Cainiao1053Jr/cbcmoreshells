@@ -11,6 +11,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.levelgen.structure.BoundingBox;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.joml.Vector3d;
 import org.joml.Vector3dc;
 
 import javax.annotation.Nullable;
@@ -86,6 +87,13 @@ public class CBCMSSableCompat {
         return false;
     }
 
+    public static Vec3 rotateOnSublevel(Level level, Vec3 pos, Vec3 vec) {
+        SubLevel sublevel = Sable.HELPER.getContaining(level, pos);
+        if (sublevel == null) return vec;
+        Vector3d rotated = sublevel.logicalPose().orientation().transform(new Vector3d(vec.x, vec.y, vec.z));
+        return new Vec3(rotated.x, rotated.y, rotated.z);
+    }
+
     @Nullable
     public static CBCMSCompatTransformers.SubLevelTarget findTarget(Level level, Vec3 pos, Vec3 dir,
                                                                      int searchLength, int searchWidth, float scanAngle) {
@@ -142,6 +150,7 @@ public class CBCMSSableCompat {
         CBCMSCompatTransformers.addhasShipsAroundHandler(CBCMSSableCompat::hasShipsAround);
         CBCMSCompatTransformers.addExtinguishFireOnSublevelHandler(CBCMSSableCompat::extinguishFireOnShip);
         CBCMSCompatTransformers.addGetShipAABBHandler(CBCMSSableCompat::getShipAABB);
+        CBCMSCompatTransformers.addRotateOnSublevelHandler(CBCMSSableCompat::rotateOnSublevel);
 //        CBCCompatTransformers.addBlockPosTransformer(SableCompat::transformFromShip);
 //        CBCCompatTransformers.addVec3Transformer(SableCompat::transformFromShip);
 //        CBCCompatTransformers.addNormalTransformer(new SableCannonProjectileCompat.NormalTransformer());

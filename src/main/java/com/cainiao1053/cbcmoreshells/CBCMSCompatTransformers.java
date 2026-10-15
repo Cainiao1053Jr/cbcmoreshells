@@ -153,6 +153,27 @@ public class CBCMSCompatTransformers {
         AABB getShipAABB(Level level,  Vec3 pos);
     }
 
+    private static final List<rotateOnSublevelHandler> ROTATE_ON_SUBLEVEL = new ReferenceArrayList<>();
+
+    public static void addRotateOnSublevelHandler(rotateOnSublevelHandler handler) {
+        ROTATE_ON_SUBLEVEL.add(handler);
+    }
+
+    /**
+     * Rotates {@code vec} by the orientation of the sublevel containing {@code pos}, i.e. from sublevel-local to
+     * world space. Returns {@code vec} unchanged when {@code pos} is not on a sublevel.
+     */
+    public static Vec3 rotateOnSublevel(Level level, Vec3 pos, Vec3 vec) {
+        for (rotateOnSublevelHandler t : ROTATE_ON_SUBLEVEL) {
+            return t.rotateOnSublevel(level, pos, vec);
+        }
+        return vec;
+    }
+
+    public interface rotateOnSublevelHandler {
+        Vec3 rotateOnSublevel(Level level, Vec3 pos, Vec3 vec);
+    }
+
 
 
 }
