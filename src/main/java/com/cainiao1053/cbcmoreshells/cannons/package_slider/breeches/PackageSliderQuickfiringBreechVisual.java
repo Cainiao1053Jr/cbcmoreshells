@@ -18,7 +18,10 @@ import java.util.function.Consumer;
 public class PackageSliderQuickfiringBreechVisual extends AbstractBlockEntityVisual<PackageSliderQuickfiringBreechBlockEntity>
 	implements SimpleDynamicVisual {
 
-	private static final float REST_OFFSET = 0.0625f;
+	/** Forward offset of the slider at rest, in blocks. */
+	static final float REST_OFFSET = 0.0625f;
+	/** Upward offset of the slider, in blocks. */
+	static final float VERTICAL_OFFSET = 0.125f;
 
 	private final OrientedInstance slider;
 	private final Direction facing;
@@ -43,7 +46,7 @@ public class PackageSliderQuickfiringBreechVisual extends AbstractBlockEntityVis
 	private void transformModels(float partialTick) {
 		Vector3f offset = this.facing.step().mul(REST_OFFSET + this.blockEntity.getSliderOffset(partialTick));
 		this.slider.position(this.getVisualPosition())
-			.translatePosition(offset.x(), offset.y() + 0.125f, offset.z())
+			.translatePosition(offset.x(), offset.y() + VERTICAL_OFFSET, offset.z())
 			.setChanged();
 	}
 
