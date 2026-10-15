@@ -18,7 +18,6 @@ import java.util.function.Consumer;
 public class PackageSliderQuickfiringBreechVisual extends AbstractBlockEntityVisual<PackageSliderQuickfiringBreechBlockEntity>
 	implements SimpleDynamicVisual {
 
-	/** Forward offset of the slider at rest, in blocks. */
 	private static final float REST_OFFSET = 0.0625f;
 
 	private final OrientedInstance slider;

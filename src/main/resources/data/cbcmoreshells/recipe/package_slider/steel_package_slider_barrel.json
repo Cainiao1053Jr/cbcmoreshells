@@ -1,0 +1,22 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+  "key": {
+    "P": {
+      "tag": "c:plates/iron"
+    },
+    "R": {
+      "item": "create:controller_rail"
+    }
+  },
+  "pattern": [
+    "PRP",
+    "PRP",
+    "PRP"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cbcmoreshells:steel_package_slider_barrel"
+  }
+}

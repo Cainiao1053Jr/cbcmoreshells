@@ -276,7 +276,7 @@ public class MountedPackageSliderContraption extends AbstractMountedCannonContra
 	private void launchEntitiesInBarrel(ServerLevel level, PitchOrientedContraptionEntity entity, Vec3 dir) {
 		Vec3 centre = entity.toGlobalVector(Vec3.atCenterOf(this.startPos), 0);
 		AABB box = AABB.ofSize(centre, 1, 1, 1);
-		Vec3 velocity = dir.scale(this.getMuzzleVelocity() * ENTITY_LAUNCH_FRACTION);
+		Vec3 velocity = dir.scale(this.getMuzzleVelocity() * ENTITY_LAUNCH_FRACTION * (0.6 + 0.4 * Math.random()));
 		for (Entity target : level.getEntities(entity, box, EntitySelector.NO_SPECTATORS)) {
 			if (target instanceof PackageShellProjectile || target.isPassenger() || target.noPhysics) continue;
 			target.setDeltaMovement(velocity);

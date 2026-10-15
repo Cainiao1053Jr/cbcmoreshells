@@ -683,5 +683,11 @@
     "block.cbcmoreshells.package_slider.tooltip.reload": "装填",
     "block.cbcmoreshells.package_slider.tooltip.reload.info": "每格长度增加_%s s_装填时间",
     "block.cbcmoreshells.package_slider.tooltip.weight": "重量",
-    "block.cbcmoreshells.package_slider.tooltip.weight.info": "每格发射架需求应力_%s x RPM_"
+    "block.cbcmoreshells.package_slider.tooltip.weight.info": "每格发射架需求应力_%s x RPM_",
+    "cbcmoreshells.ponder.package_slider/package_slider_intro.header": "包裹发射架",
+    "cbcmoreshells.ponder.package_slider/package_slider_intro.text_1": "包裹发射架用于远程投送包裹，完整的发射架需要至少一个支架和装填口在炮座上组装，组装后可以像火炮一样旋转",
+    "cbcmoreshells.ponder.package_slider/package_slider_intro.text_2": "手持包裹右键装填口可以放在架子上",
+    "cbcmoreshells.ponder.package_slider/package_slider_intro.text_3": "也可以使用动力臂对炮座进行装填",
+    "cbcmoreshells.ponder.package_slider/package_slider_intro.text_4": "对炮座通入红石进行开火。当包裹击中方块时会停在原地，如果速度过快则会解体。",
+    "cbcmoreshells.ponder.package_slider/package_slider_intro.text_5": "当包裹命中溜槽附近时，会被自动吸附。这一特性使得投送包裹时对精度有一定的容错。"
 }

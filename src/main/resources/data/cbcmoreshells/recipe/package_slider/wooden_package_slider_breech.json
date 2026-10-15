@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "S": {
+      "item": "cbcmoreshells:wooden_package_slider_barrel"
+    },
+    "I": {
+      "tag": "c:plates/iron"
+    },
+    "T": {
+      "item": "create:fluid_tank"
+    },
+    "G": {
+      "item": "create:metal_girder"
+    }
+  },
+  "pattern": [
+    "IG",
+    "ST"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cbcmoreshells:wooden_package_slider_quickfiring_breech"
+  }
+}

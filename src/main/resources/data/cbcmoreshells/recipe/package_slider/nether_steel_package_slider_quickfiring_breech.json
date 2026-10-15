@@ -1,0 +1,30 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+  "key": {
+    "S": {
+      "item": "cbcmoreshells:nether_steel_package_slider_barrel"
+    },
+    "T": {
+      "item": "create:fluid_tank"
+    },
+    "G": {
+      "item": "create:metal_girder"
+    },
+    "P": {
+      "tag": "c:plates/iron"
+    },
+    "M": {
+      "item": "create:precision_mechanism"
+    }
+  },
+  "pattern": [
+    "PGG",
+    "SMT"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cbcmoreshells:nether_steel_package_slider_quickfiring_breech"
+  }
+}

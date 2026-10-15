@@ -1,0 +1,25 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+  "key": {
+    "P": {
+      "item": "minecraft:netherite_scrap"
+    },
+    "R": {
+      "item": "create:controller_rail"
+    },
+    "T": {
+      "item": "create:electron_tube"
+    }
+  },
+  "pattern": [
+    "PRP",
+    "PRP",
+    "PTP"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cbcmoreshells:nether_steel_package_slider_barrel"
+  }
+}

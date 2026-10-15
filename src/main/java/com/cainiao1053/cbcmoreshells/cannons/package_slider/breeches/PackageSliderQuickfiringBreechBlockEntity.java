@@ -42,17 +42,12 @@ public class PackageSliderQuickfiringBreechBlockEntity extends SmartBlockEntity 
 		this.reloadCooldown = Math.max(0, ticks);
 	}
 
-	/**
-	 * Starts a reload after a shot. The slider block is pushed {@code sliderStroke} blocks forward along the breech
-	 * facing and travels back to rest over the reload.
-	 */
 	public void startReload(int ticks, float sliderStroke) {
 		this.setReloadCooldown(ticks);
 		this.reloadDuration = this.reloadCooldown;
 		this.sliderStroke = Math.max(0, sliderStroke);
 	}
 
-	/** How far the slider block is pushed forward from rest, in blocks along the breech facing. */
 	public float getSliderOffset(float partialTicks) {
 		if (this.reloadDuration <= 0 || this.reloadCooldown <= 0) return 0;
 		float remaining = Math.max(0, this.reloadCooldown - partialTicks);

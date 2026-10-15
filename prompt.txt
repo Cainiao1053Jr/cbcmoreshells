@@ -1,3 +1,2 @@
-阅读crash.txt,寻找问题，先告诉我原因，写进answer.txt
-如果要找Taov Arcade,
-位于C:\Minecraft\MODS\Taovmod2\ 的项目里
+根据PackageSliderQuickfiringBreechVisual给breech写一个renderer，使用时依然优先visual
+这个renderer的行为和visual一样，用于兼容无法使用visual的情况，比如shader

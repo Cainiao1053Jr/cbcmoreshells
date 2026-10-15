@@ -1,0 +1,27 @@
+{
+  "type": "create:mechanical_crafting",
+  "accept_mirrored": true,
+  "category": "misc",
+  "key": {
+    "P": {
+      "tag": "c:plates/iron"
+    },
+    "S": {
+      "item": "cbcmoreshells:steel_package_slider_barrel"
+    },
+    "T": {
+      "item": "create:fluid_tank"
+    },
+    "G": {
+      "item": "create:metal_girder"
+    }
+  },
+  "pattern": [
+    "PG",
+    "ST"
+  ],
+  "result": {
+    "count": 1,
+    "id": "cbcmoreshells:steel_package_slider_quickfiring_breech"
+  }
+}
