@@ -1,5 +1,5 @@
 {
-	"parent": "cbcmoreshells:block/package_slider_breech",
+	"parent": "cbcmoreshells:item/package_slider_breech_item",
 	"textures": {
 		"side": "cbcmoreshells:block/package_slider/steel_package_slider_barrel_side"
 	}

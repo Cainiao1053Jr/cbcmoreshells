@@ -13,6 +13,6 @@ public class CBCMSPackageSliderMaterials {
 			new PackageSliderMaterialProperties(1.0f, 6, 5, 1.5f));
 
 	public static final PackageSliderMaterial NETHER_STEEL = PackageSliderMaterial.register(Cbcmoreshells.resource("nether_steel"),
-			new PackageSliderMaterialProperties(3.0f, 24, 5, 0));
+			new PackageSliderMaterialProperties(3.0f, 32, 5, 0));
 
 }

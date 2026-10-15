@@ -1,2 +1,2 @@
-根据PackageSliderQuickfiringBreechVisual给breech写一个renderer，使用时依然优先visual
-这个renderer的行为和visual一样，用于兼容无法使用visual的情况，比如shader
+package slider中的launchEntitiesInBarrel方法在投送实体时，需要再兼容一次sable
+这里需要去sable的兼容层，获得所在物理体的旋转信息然后叠加进发射时的矢量
